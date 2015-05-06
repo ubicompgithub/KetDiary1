@@ -1,9 +1,9 @@
 package com.ubicomp.ketdiary;
 
+import com.ubicomp.ketdiary.test.bluetoothle.BLEWrapper;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,6 +12,8 @@ public class TestActivity extends Activity {
 
 	TextView label_btn, label_subtitle, label_title;
 	
+	Activity that;
+	
 	private class TestState{
 		public void onStart(){return;}
 		public void onExit(){return;}
@@ -19,7 +21,8 @@ public class TestActivity extends Activity {
 	}
 	
 	TestState CertainState = null;
-	
+	BLEWrapper ble_wrapper = null;
+
 	protected void setState(TestState sts){
 		if(CertainState != null)
 			CertainState.onExit();
@@ -42,21 +45,23 @@ public class TestActivity extends Activity {
 	private class ConnState extends TestState{
 		@Override
 		public void onStart(){
-			label_btn.setText("5");
+			label_btn.setText("10");
 			label_subtitle.setText("請準備口水");
 			label_title.setText("準備中....");
-			new CountDownTimer(5000, 1000){
+			new CountDownTimer(10000, 1000){
 		        public void onTick(long ms){
 		           label_btn.setText(String.valueOf(ms/1000));                 
 		        }
 		        public void onFinish() {
-		        	if(BLEConn()){
+		        	if(ble_wrapper.isConn()){
 		        		setState(new EmbedState());
 		        	}else{
 		        		setState(new InfoReConnState());
 		        	}
 		        }
 		    }.start();
+		    
+		    ble_wrapper = new BLEWrapper(that);
 		}
 	}	
 	private class InfoReConnState extends TestState{
@@ -74,7 +79,10 @@ public class TestActivity extends Activity {
 	private class EmbedState extends TestState{
 		@Override
 		public void onStart(){
-			if(BLEEmbed()){
+			label_btn.setText("");
+			label_subtitle.setText("");
+			label_title.setText("");
+			if(ble_wrapper.getState() >= ble_wrapper.STATE_EMBED){
 				setState(new CamStage1State());
 			}else{
 				setState(new InfoEmbedState());
@@ -94,21 +102,84 @@ public class TestActivity extends Activity {
 		}
 	}
 	private class CamStage1State extends TestState{
+		private CountDownTimer test_timer = null;
 		@Override
 		public void onStart(){
 			// TODO: setup camera
-			// TODO: setup animate
-			// TODO: setup clean up middle
+			label_btn.setText("");
 			label_subtitle.setText("請將臉對準中央，並吐口水");
 			label_title.setText("請吐口水");
 			// TODO: BLE msg handler
-			// Excess 1min has no slava -> judge to 
+			test_timer = new CountDownTimer(60000, 500){
+		        public void onTick(long ms){
+		        	if(ble_wrapper.getState() >= ble_wrapper.STATE_1PASS){
+		        		setState(new CamStage2State());
+		        		test_timer.cancel();
+		        	}
+		        }
+		        public void onFinish() {
+		        	if(ble_wrapper.getState() >= ble_wrapper.STATE_1PASS){
+		        		setState(new CamStage2State());
+		        	}else{
+		        		setState(new NoSavilaState());
+		        	}
+		        }
+		    };
+		    test_timer.start();
+		}
+		@Override
+		public void onExit(){
+			if(test_timer != null)
+				test_timer.cancel();
+		}
+	}
+	private class NoSavilaState extends TestState{
+		@Override
+		public void onStart(){
+			label_btn.setText("確認");
+			label_title.setText("沒口水？");
+			label_subtitle.setText("請按確認回到吐口水階段");
+		}
+		@Override 
+		public void onClick(){
+			setState(new CamStage1State());
 		}
 	}
 	private class CamStage2State extends TestState{
 		@Override
 		public void onStart(){
-			
+			// TODO: setup animate
+			new CountDownTimer(60000, 500){
+		        public void onTick(long ms){
+		        	// TODO: running bar
+		        }
+		        public void onFinish() {
+		        	if(ble_wrapper.getState() >= ble_wrapper.STATE_2PASS){
+		        		setState(new FormState());
+		        	}else{
+		        		setState(new NoSavilaState());
+		        	}
+		        }
+		    };
+		}
+	}
+	private class NoMuchSavilaState extends TestState{
+		@Override
+		public void onStart(){
+			label_btn.setText("確認");
+			label_title.setText("口水量不足");
+			label_subtitle.setText("請多吐口水");
+		}
+		@Override
+		public void onClick(){
+			setState(new CamStage2State());
+		}
+	}
+	private class FormState extends TestState{
+		@Override
+		public void onStart(){
+			label_title.setText("form stage");
+			// TODO: setup form
 		}
 	}
 	
@@ -128,19 +199,6 @@ public class TestActivity extends Activity {
 				CertainState.onClick();
 			}
 		});
-	}
-	
-	public boolean BLEEmbed(){
-		// TODO: true BLE implement
-		return true;
-	}
-	
-	public boolean BLEConn(){
-		// TODO: true BLE implement
-		return true;
-	}
-	
-	public int BLEState(){
-		return 1;
+		that = this;
 	}
 }
