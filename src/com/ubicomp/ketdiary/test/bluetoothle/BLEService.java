@@ -3,6 +3,7 @@ package com.ubicomp.ketdiary.test.bluetoothle;
 import java.util.List;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -59,6 +60,7 @@ public class BLEService extends Service{
                 mConnectionState = STATE_CONNECTED;
                 broadcastUpdate(intentAction);
                 Log.i(TAG, "Connected to GATT server.");
+                gatt.discoverServices();
 
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 intentAction = ACTION_GATT_DISCONNECTED;
@@ -91,13 +93,13 @@ public class BLEService extends Service{
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt,
                 BluetoothGattCharacteristic characteristic, int status) {
-            broadcastUpdate(ACTION_WRITE_PROTOCOL_DATA_AVAILABLE, characteristic);
+        	broadcastUpdate(ACTION_WRITE_PROTOCOL_DATA_AVAILABLE, characteristic);
         };
 
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic) {
-            broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
+        	broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
         }
     };
     
@@ -110,9 +112,10 @@ public class BLEService extends Service{
     private void broadcastUpdate(final String action,
                                  final BluetoothGattCharacteristic characteristic) {
         Log.d(TAG, action);
-    	final Intent intent = new Intent(action);
-        final byte[] data = characteristic.getValue();
-        if(data != null && data.length > 0){
+    	Log.d(TAG, String.valueOf(characteristic.getUuid()));
+        final Intent intent = new Intent(action);
+    	final byte[] data = characteristic.getValue();
+    	if(data != null && data.length > 0){
         	intent.putExtra(EXTRA_DATA, data);
         }
         sendBroadcast(intent);
@@ -145,7 +148,7 @@ public class BLEService extends Service{
      *
      * @return Return true if the initialization is successful.
      */
-    public boolean initialize() {
+    public boolean initialize(Activity activity) {
         // For API level 18 and above, get a reference to BluetoothAdapter through
         // BluetoothManager.
         if (mBluetoothManager == null) {
@@ -157,8 +160,10 @@ public class BLEService extends Service{
         }
 
         mBluetoothAdapter = mBluetoothManager.getAdapter();
-        if(mBluetoothAdapter == null){
+        if(mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()){
             Log.e(TAG, "Unable to obtain a BluetoothAdapter.");
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            activity.startActivityForResult(enableBtIntent, 1);
             return false;
         }
 
@@ -181,8 +186,6 @@ public class BLEService extends Service{
             return false;
         }
         Log.w(TAG, "enter connected");
-        //o directly connect to the device, so we are setting the autoConnect
-        // parameter to false.
         mBluetoothGatt = device.connectGatt(this, false, mGattCallback);
         mConnectionState = STATE_CONNECTING;
         return true;

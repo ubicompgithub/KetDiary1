@@ -22,7 +22,7 @@ import android.util.Log;
 
 @SuppressWarnings("deprecation")
 @SuppressLint("NewApi")
-public class BLEWrapper{
+public class BLEWrapper extends Wrapper{
 	
     private static final UUID SERVICE4_CONFIG_CHAR = UUID.fromString("0000fff4-0000-1000-8000-00805f9b34fb");
 	
@@ -41,13 +41,14 @@ public class BLEWrapper{
     
     BluetoothGattCharacteristic write_chara;
     
+    public final int STATE_NULL = -1;
     public final int STATE_NO_EMBED = 0;
     public final int STATE_EMBED = 1;
     public final int STATE_NO_SALIVA = 2;
     public final int STATE_1PASS = 3;
     public final int STATE_2PASS = 4;
     public final int STATE_COLOR = 5;
-    public int _state = -1;
+    public int _state = STATE_NULL;
     
 	public BLEWrapper(Activity _activity){
 		is_conn = false;
@@ -63,7 +64,7 @@ public class BLEWrapper{
             public void run() {
             	ble_adapter.stopLeScan(scan_cb);
             }
-        }, 5000);
+        }, 10000);
         Log.d(TAG, "start le scan");
         ble_adapter.startLeScan(scan_cb);
 	}
@@ -85,13 +86,19 @@ public class BLEWrapper{
         public void onServiceConnected(ComponentName componentName, IBinder service) {
             ble_service = ((BLEService.LocalBinder) service).getService();
             Log.d(TAG, "Enter service conn");
-            if (!ble_service.initialize()) {
+            
+            if (!ble_service.initialize(activity)) {
                 Log.e(TAG, "Unable to initialize Bluetooth");
                 activity.finish();
             }
             Log.d(TAG, "Enter service conn");
             // Automatically connects to the device upon successful start-up initialization.
-            ble_service.connect(ble_device);
+            if(ble_service.connect(ble_device) == false){
+            	Log.d(TAG, "call connect but fail");
+            }else{
+            	Log.d(TAG, "connect ok");
+            }
+            
         }
     
         @Override
@@ -100,21 +107,20 @@ public class BLEWrapper{
         }
     };
 	
-	
 	private BluetoothAdapter.LeScanCallback scan_cb =
 	        new BluetoothAdapter.LeScanCallback() {
 	    @Override
 	    public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
-	        Log.d(TAG, device.getName() + "]");
-	        Log.d(TAG, ble_name + "[");
-	    	if(device.getName().equals(ble_name)){
-	    		Log.d(TAG, "[db]");
+	        //Log.d(TAG, device.getName() + "]");
+	        //Log.d(TAG, ble_name + "[");
+	    	if(ble_name.equals(device.getName())){
+	    		//Log.d(TAG, "[db]");
 	        	ble_device = device;
 	        	Intent gattServiceIntent = new Intent(activity, BLEService.class);
 	            activity.bindService(gattServiceIntent, srv_conn, Context.BIND_AUTO_CREATE);
 	            activity.registerReceiver(gatt_cb, makeGattUpdateIntentFilter());
 	        	ble_adapter.stopLeScan(scan_cb);
-	        	Log.d(TAG, "[db2]");
+	        	//Log.d(TAG, "[db2]");
 	    	}
 	    }
 	};
@@ -127,22 +133,22 @@ public class BLEWrapper{
 	            is_conn = true;
 	        }else if(action.equals(BLEService.ACTION_GATT_DISCONNECTED)){
 	            is_conn = false;
-	        }else if(action.equals(BLEService.ACTION_GATT_SERVICES_DISCOVERED)) {
+            }else if(action.equals(BLEService.ACTION_GATT_SERVICES_DISCOVERED)) {
 	        	List<BluetoothGattService> gattServices = ble_service.getSupportedGattServices();
 	        	ble_service.setNotify(gattServices.get(3).getCharacteristic(SERVICE4_CONFIG_CHAR));
 	        }else if (action.equals(BLEService.ACTION_DATA_AVAILABLE)) {
-	            //displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
-	        }else if (action.equals(BLEService.ACTION_DATA_AVAILABLE)) {
             	byte[] data = intent.getByteArrayExtra(BLEService.EXTRA_DATA);
+            	//Log.d(TAG, "data = " + data);
                 String currentDeviceState = String.format("%02X ", data[0]);
-                if(currentDeviceState.equals("FC ") || currentDeviceState.equals("FD ")){
-                    String currentVoltage = String.format("%02X ", data[1]);
-                    Log.i( "FORTEST", "##data[0]: " + currentDeviceState + "data[1]: " + currentVoltage );
+                //Log.d(TAG, "data0 = " + currentDeviceState);
+                /*if(currentDeviceState.equals("FC ") || currentDeviceState.equals("FD ")){
+                    //String currentVoltage = String.format("%02X ", data[1]);
+                    //Log.i( "FORTEST", "##data[0]: " + currentDeviceState + "data[1]: " + currentVoltage );
                 }else if( currentDeviceState.equals("FB ") ){
-                    Log.i( "FORTEST", "##data[0]: " + currentDeviceState + "data[6]: " + data[6] );
+                    //Log.i( "FORTEST", "##data[0]: " + currentDeviceState + "data[6]: " + data[6] );
                 }else{
                     Log.i( "FORTEST", "##data[0]: " + currentDeviceState);
-                }
+                }*/
                 
                 if(currentDeviceState.equals("FA ")){
                     // No connection
@@ -188,21 +194,31 @@ public class BLEWrapper{
 	        }
 	    }
 	};
-
+	
+	@Override
 	public int getState(){
 		return _state;
 	}
 	
+	@Override
 	public boolean isConn(){
 		return is_conn;
+	}
+	
+	@Override
+	public void Close(){
+		if(ble_device != null){
+			activity.unbindService(srv_conn);
+            activity.unregisterReceiver(gatt_cb);
+		}
 	}
 	
 	public boolean Write(byte write_byte){
 		boolean isWriteSuccess = false;
 		List<BluetoothGattService> gattServices = ble_service.getSupportedGattServices();
-        if (gattServices == null) return false;
+		if (gattServices == null) return false;
         for (BluetoothGattService gattService : gattServices) {
-            List<BluetoothGattCharacteristic> gattCharacteristics =
+        	List<BluetoothGattCharacteristic> gattCharacteristics =
                     gattService.getCharacteristics();
             for (BluetoothGattCharacteristic gattCharacteristic :
                     gattCharacteristics) {
@@ -214,12 +230,9 @@ public class BLEWrapper{
                     isWriteSuccess = true;
                 }
             }
-            
         }
         return isWriteSuccess;
 	}
 	
-	public void Close(){
-		
-	}
+	
 }

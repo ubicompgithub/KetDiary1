@@ -1,6 +1,8 @@
 package com.ubicomp.ketdiary;
 
+import com.ubicomp.ketdiary.dialog.NoteDialog;
 import com.ubicomp.ketdiary.test.bluetoothle.BLEWrapper;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -39,6 +41,7 @@ public class TestActivity extends Activity {
 		}
 		@Override
 		public void onClick(){
+			//new NoteDialog(that).show();
 			setState(new ConnState());
 		}
 	}
@@ -60,7 +63,8 @@ public class TestActivity extends Activity {
 		        	}
 		        }
 		    }.start();
-		    
+		    if(ble_wrapper != null)
+		    	ble_wrapper.Close();
 		    ble_wrapper = new BLEWrapper(that);
 		}
 	}	
@@ -179,7 +183,7 @@ public class TestActivity extends Activity {
 		@Override
 		public void onStart(){
 			label_title.setText("form stage");
-			// TODO: setup form
+			new NoteDialog(that).show();
 		}
 	}
 	
