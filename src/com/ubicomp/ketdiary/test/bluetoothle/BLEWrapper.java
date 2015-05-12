@@ -41,13 +41,13 @@ public class BLEWrapper extends Wrapper{
     
     BluetoothGattCharacteristic write_chara;
     
-    public final int STATE_NULL = -1;
-    public final int STATE_NO_EMBED = 0;
-    public final int STATE_EMBED = 1;
-    public final int STATE_NO_SALIVA = 2;
-    public final int STATE_1PASS = 3;
-    public final int STATE_2PASS = 4;
-    public final int STATE_COLOR = 5;
+    public static int STATE_NULL = -1;
+    public static int STATE_NO_EMBED = 0;
+    public static int STATE_EMBED = 1;
+    public static int STATE_NO_SALIVA = 2;
+    public static int STATE_1PASS = 3;
+    public static int STATE_2PASS = 4;
+    public static int STATE_COLOR = 5;
     public int _state = STATE_NULL;
     
 	public BLEWrapper(Activity _activity){

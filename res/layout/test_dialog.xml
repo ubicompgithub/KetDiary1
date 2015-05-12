@@ -20,14 +20,13 @@
 
         <ImageView
             android:id="@+id/imageView1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="73dp"
+            android:layout_height="81dp"
             android:layout_marginLeft="10dp"
-            android:layout_weight="0.48"
-            android:src="@drawable/ic_launcher" />
+            android:src="@drawable/alarm_clock_off" />
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/qtip_tv_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.56"
@@ -39,7 +38,9 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp" >
 
         <View
             android:layout_width="fill_parent"
@@ -50,18 +51,42 @@
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/dev_btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="39dp"
+            android:text="自己" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/qtip_btn_know"
+            android:text="其他" />
+
+        <Button
+            android:id="@+id/qtip_btn_know"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/dev_btn_cancel"
+            android:text="他人" />
+
+    </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="5dp" >
-
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:text="自己" />
 
     </LinearLayout>
 
@@ -79,12 +104,35 @@
             android:text="類別："
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <Spinner
-            android:id="@+id/sp_class"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="10dp"
-            android:layout_weight="0.97" />
+        <ImageView
+            android:id="@+id/iv_bar_bg"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/note_smile" />
+
+        <ImageView
+            android:id="@+id/iv_bar_ac"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/note_not_good" />
+
+        <ImageView
+            android:id="@+id/ImageView02"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/note_cry" />
+
+        <ImageView
+            android:id="@+id/ImageView03"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/note_urge" />
+
+        <ImageView
+            android:id="@+id/ImageView04"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/note_try" />
 
     </LinearLayout>
 
@@ -101,6 +149,12 @@
             android:text="項目："
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
+        <Spinner
+            android:id="@+id/sp_class"
+            android:layout_width="wrap_content"
+            android:layout_height="47dp"
+            android:layout_marginRight="10dp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -109,12 +163,28 @@
         android:layout_marginTop="5dp" >
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/TextView01"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:text="時間："
             android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <EditText
+            android:id="@+id/et_boxid"
+            android:layout_width="108dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="date" >
+
+            <requestFocus />
+        </EditText>
+
+        <Spinner
+            android:id="@+id/sp_trunk"
+            android:layout_width="wrap_content"
+            android:layout_height="46dp"
+            android:layout_weight="0.50" />
 
     </LinearLayout>
 
@@ -132,34 +202,31 @@
             android:text="簡述："
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <Button
-            android:id="@+id/button4"
-            style="?android:attr/buttonStyleSmall"
+        <EditText
+            android:id="@+id/et_explain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_weight="0.82"
-            android:text="簡述記事內容" />
+            android:layout_weight="1"
+            android:ems="10" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp" >
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp" >
 
         <Button
-            android:id="@+id/button5"
+            android:id="@+id/btn_enter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
             android:text="確認" />
 
         <Button
-            android:id="@+id/button6"
+            android:id="@+id/btn_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
             android:layout_weight="0"
             android:text="取消" />
 

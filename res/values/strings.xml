@@ -3,5 +3,11 @@
 
     <string name="app_name">KetDiary</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_timer">TImerActivity</string>
+    <string name="title_activity_qtip">QTipActivity</string>
+    <string name="title_activity_tips">TipsActivity</string>
+    <string name="title_activity_info">InfoActivity</string>
+    <string name="title_activity_dev">DevActivity</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
