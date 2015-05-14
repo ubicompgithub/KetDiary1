@@ -1,11 +1,9 @@
 package com.ubicomp.ketdiary;
 
-import java.text.ParseException;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;

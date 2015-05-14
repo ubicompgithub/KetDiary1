@@ -85,7 +85,7 @@
                             android:layout_centerHorizontal="true"
                             android:adjustViewBounds="true"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/affiliation_logo_1" />
+                            android:src="@drawable/intel_logo" />
                     </RelativeLayout>
 
                 </RelativeLayout>

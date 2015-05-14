@@ -78,14 +78,6 @@
             android:src="@drawable/tab_bar" /> -->
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/test_camera_mask"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:src="@drawable/test_camera_mask"
-        android:visibility="invisible" />
-
     <FrameLayout
         android:id="@+id/cameraLayout"
         android:layout_width="wrap_content"

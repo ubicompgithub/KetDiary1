@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -32,7 +34,12 @@ public class TestActivity extends Activity {
 	private Camera mCamera = null;
 	private CameraPreview mCamPreview;
 	private FrameLayout cameraLayout;
-	private ImageView camera_mask;
+	//TODO: private ImageView camera_mask;
+	
+	private SoundPool soundPool;
+	
+	private int count_down_audio_id;
+	private int preview_audio_id;
 
 	private class TestState{
 		public void onStart(){return;}
@@ -72,6 +79,8 @@ public class TestActivity extends Activity {
 			label_btn.setText("確認");
 			label_subtitle.setText("");
 			label_title.setText(err_msg);
+			if(ble_wrapper != null)
+				ble_wrapper.Close();
 		}
 		@Override
 		public void onClick(){
@@ -79,43 +88,56 @@ public class TestActivity extends Activity {
 		}
 	}
 	private class ConnState extends TestState{
-		private boolean is_conn = false;
+		private volatile boolean is_conn = false;
 		@Override
 		public void onStart(){
 			label_btn.setText("...");
 			label_subtitle.setText("");
-			if(ble_wrapper != null)
-				ble_wrapper.Close();
 		    if(DBControl.inst.getIsDev(getApplicationContext()))
 		    	ble_wrapper = new DBGWrapper();
 		    else	
 		    	ble_wrapper = new BLEWrapper(that);
 			
 			label_title.setText("準備中....");
-			new CountDownTimer(10000, 500){
-		        public void onTick(long ms){
+			ToConn();
+		}
+		
+		public int conn_time = 0;
+		public void ToConn(){
+			Log.d("FORTEST", "Conn" + String.valueOf(conn_time));
+			conn_time += 1;
+			if(is_conn) return;
+			if(conn_time >= 10){
+				if(ble_wrapper.isConn() == false){
+					setState(new FailState("BLE連線逾時"));
+				}else{
+	        		ble_wrapper.RetToInitState();
+	        		is_conn = true;
+	        		setState(new PlugCheckState());
+				}
+				return;
+			}
+			new CountDownTimer(6000, 6000){
+				@Override
+		        public void onTick(long ms){}
+		        @Override
+				public void onFinish() {
 		        	if(is_conn) return;
-		        	if(ble_wrapper.isConn()){
-		        		is_conn = true;
-		        		ble_wrapper.RetToInitState();
-		        		setState(new PlugCheckState());
-		        		cancel();
-		        	}
-		        }
-		        public void onFinish() {
 		        	if(ble_wrapper.isConn()){
 		        		ble_wrapper.RetToInitState();
 		        		is_conn = true;
 		        		setState(new PlugCheckState());
 		        	}else{
-		        		setState(new FailState("BLE連線逾時"));
+						ble_wrapper.Close();
+						ble_wrapper = new BLEWrapper(that);
+		        		ToConn();
 		        	}
 		        }
 		    }.start();
 		}
 	}
 	private class PlugCheckState extends TestState{
-		public boolean plug_ok = false;
+		public volatile boolean plug_ok = false;
 		@Override
 		public void onStart(){
 			label_btn.setText("");
@@ -159,7 +181,7 @@ public class TestActivity extends Activity {
 		}
 	}
 	private class FiveSecondState extends TestState{
-		private int count_down;
+		private volatile int count_down;
 		@Override
 		public void onStart(){
 			Log.d("Main", "Enter FiveSecond");
@@ -170,6 +192,7 @@ public class TestActivity extends Activity {
 				@Override
 				public void onTick(long ms) {
 					count_down--;
+					soundPool.play(count_down_audio_id, 1.0F, 1.0F, 0, 0, 1.0F);
 					label_btn.setText(String.valueOf(count_down));
 				}
 				@Override
@@ -183,11 +206,11 @@ public class TestActivity extends Activity {
 	
 	private class Stage1State extends TestState{
 		private CountDownTimer test_timer = null;
-		private boolean move_to_stage2 = false;
+		private volatile boolean move_to_stage2 = false;
 		@Override
 		public void onStart(){
+			soundPool.play(preview_audio_id, 1.0F, 1.0F, 0, 0, 1.0F);
 			Log.d("Main", "Enter Stage1");
-			
 			// Search for the front facing camera
 			int cameraId = -1;
 			int numberOfCameras = Camera.getNumberOfCameras();
@@ -199,7 +222,6 @@ public class TestActivity extends Activity {
 					break;
 				}
 			}
-
 			
 			mCamPreview = new CameraPreview(that);
 			cameraLayout.addView(mCamPreview);
@@ -207,7 +229,7 @@ public class TestActivity extends Activity {
 			mCamera = Camera.open(cameraId);
 			mCamPreview.set(that, mCamera);
 			cameraLayout.setVisibility(0);
-			camera_mask.bringToFront();
+			// TODO: camera_mask.bringToFront();
 			
 			label_btn.setText("");
 			label_subtitle.setText("請將臉對準中央，並吐口水");
@@ -235,6 +257,12 @@ public class TestActivity extends Activity {
 		@Override
 		public void onExit(){
 			move_to_stage2 = true;
+			cameraLayout.setVisibility(4);
+			if(mCamera != null){
+				mCamera.stopPreview();
+				mCamera.release();
+				mCamera = null;
+			}
 			//if(test_timer != null)
 			//	test_timer.cancel();
 		}
@@ -245,21 +273,10 @@ public class TestActivity extends Activity {
 		@Override
 		public void onStart(){
 			Log.d("hi", "hi");
-			// TODO: setup animate
-			
-			cameraLayout.setVisibility(4);
-			if(mCamera != null){
-				mCamera.stopPreview();
-				mCamera.release();
-				mCamera = null;
-			}
-			
-			label_btn.setText("Stage2");
+			label_btn.setText("");
 			img_bg.setVisibility(0);
 			img_ac.setVisibility(0);
 			img_btn.setVisibility(4);
-			//img_bg.bringToFront();
-			//img_ac.bringToFront();
 			ptr = 0;
 			pids = new int[5];
 			pids[0] = R.drawable.test_progress_1;
@@ -335,8 +352,10 @@ public class TestActivity extends Activity {
 		img_ac = (ImageView)findViewById(R.id.iv_bar_ac);
 		img_btn = (ImageView)findViewById(R.id.imageView1);
 		cameraLayout = (FrameLayout)findViewById(R.id.cameraLayout);
-		camera_mask = (ImageView)findViewById(R.id.test_camera_mask);
-
+		//TODO: camera_mask = (ImageView)findViewById(R.id.test_camera_mask);
+		soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 5);
+		count_down_audio_id = soundPool.load(this, R.raw.short_beep, 1); 
+		preview_audio_id = soundPool.load(this, R.raw.din_ding, 1);
 		setState(new IdleState());
 		
 		img_btn.setOnClickListener(new View.OnClickListener() {
@@ -373,14 +392,13 @@ public class TestActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
     
-    @Override
+    /* TODO: @Override
 	public void onPause() {
 		if(mCamera != null){
 			mCamera.stopPreview();
 			mCamera.release();
 			mCamera = null;
 		}
-		
 		super.onPause();
-	}
+	}*/
 }

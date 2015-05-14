@@ -1,7 +1,11 @@
 package com.ubicomp.ketdiary.test.bluetoothle;
 
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
+
+import com.ubicomp.ketdiary.App;
+import com.ubicomp.ketdiary.db.DBControl;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -16,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
@@ -26,12 +31,11 @@ public class BLEWrapper extends Wrapper{
 	
     private static final UUID SERVICE4_CONFIG_CHAR = UUID.fromString("0000fff4-0000-1000-8000-00805f9b34fb");
 	
-	private boolean is_conn;
+	private volatile boolean is_conn;
 	
 	private String ble_name;
-    private Handler conn_handler;
     private BluetoothAdapter ble_adapter;
-    BluetoothDevice ble_device = null;
+    volatile BluetoothDevice ble_device = null;
 
     private BLEService ble_service = null;
     
@@ -54,21 +58,44 @@ public class BLEWrapper extends Wrapper{
     
     public static Color color1, color2;
     
+    private volatile int scan_time = 0;
+    private void ScanStage(){
+    	scan_time += 1;
+    	ble_adapter.stopLeScan(scan_cb);
+    	if(scan_time >= 10){
+    		return;
+    	}
+    	if(ble_device == null){
+    		int toap = (int)(Math.random()*100) + 100;
+    		new CountDownTimer(toap, toap){
+				@Override
+				public void onTick(long millisUntilFinished) {}
+				@Override
+				public void onFinish() {
+					Log.d(TAG, "start stage" + String.valueOf(scan_time) + " scan");
+			        ble_adapter.startLeScan(scan_cb);
+			        new CountDownTimer(500, 500){
+						@Override
+						public void onTick(long millisUntilFinished) {}
+						@Override
+						public void onFinish() {
+							ScanStage();
+						}
+			        }.start();
+				}
+    		}.start();
+    	}
+    }
+    
 	public BLEWrapper(Activity _activity){
 		is_conn = false;
-		ble_name = "SimpleBLEPeripheral";
+		ble_name = DBControl.inst.getDeviceID(_activity.getApplicationContext());
 		activity = _activity;
-		conn_handler = new Handler();
 		final BluetoothManager bluetoothManager = 
 		        (BluetoothManager) activity.getSystemService(Context.BLUETOOTH_SERVICE);
 		ble_adapter = bluetoothManager.getAdapter();
 		// TODO: Error handling
-		conn_handler.postDelayed(new Runnable() {
-			@Override
-            public void run() {
-            	ble_adapter.stopLeScan(scan_cb);
-            }
-        }, 10000);
+		ScanStage();
         Log.d(TAG, "start le scan");
         ble_adapter.startLeScan(scan_cb);
 	}
@@ -115,8 +142,8 @@ public class BLEWrapper extends Wrapper{
 	        new BluetoothAdapter.LeScanCallback() {
 	    @Override
 	    public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
-	        //Log.d(TAG, device.getName() + "]");
-	        //Log.d(TAG, ble_name + "[");
+	        Log.d(TAG, device.getName() + "]");
+	        Log.d(TAG, ble_name + "[");
 	    	if(ble_name.equals(device.getName())){
 	    		//Log.d(TAG, "[db]");
 	        	ble_device = device;
@@ -153,6 +180,11 @@ public class BLEWrapper extends Wrapper{
                     // Connected
                 	_state = STATE_EMBED;
                 	//Write((byte)0x02);
+                	Log.i("FORTEST", String.format("%02X ", data[1]));
+                	Log.i("FORTEST", String.format("%02X ", data[2]));
+                	Log.i("FORTEST", String.format("%02X ", data[3]));
+                	Log.i("FORTEST", String.format("%02X ", data[4]));
+                	Log.i("FORTEST", String.format("%02X ", data[5]));
                     Log.i("FORTEST", "## Connected!");
                 }
                 else if(currentDeviceState.equals("FC ")){
@@ -208,15 +240,42 @@ public class BLEWrapper extends Wrapper{
 	
 	@Override
 	public void RetToInitState(){
-		Write((byte)0x01);
+		//Write((byte)0x01);
 	}
 	
 	@Override
 	public void SendStartMsg(){
 		Write((byte)0x02);
+		//Write((byte)0x02);
+		//Write((byte)0x02);
+		//Write((byte)0x02);
+		//Write((byte)0x02);
+	}
+
+	private int write_count;
+	private byte write_byte_;
+	private void Write(byte _write_byte){
+		write_count = 0;
+		write_byte_ = _write_byte;
+		WriteLoop();
 	}
 	
-	private boolean Write(byte write_byte){
+	private void WriteLoop(){
+		write_count+=1;
+		if(write_count >= 5) return;
+		long toap = ((int)Math.random()*49) + 100;
+		new CountDownTimer(toap, toap){
+			@Override
+			public void onTick(long millisUntilFinished) {}
+			@Override
+			public void onFinish() {
+				_Write(write_byte_);
+				WriteLoop();
+			}
+		};
+	}
+	
+	private boolean _Write(byte write_byte){
 		boolean isWriteSuccess = false;
 		List<BluetoothGattService> gattServices = ble_service.getSupportedGattServices();
 		if (gattServices == null) return false;

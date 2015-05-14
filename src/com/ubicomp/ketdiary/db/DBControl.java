@@ -13,7 +13,8 @@ public class DBControl {
 	
 	private String TAG = "DBControl";
 	
-	private String PREFILE_STR_USERID = "user_id";
+	private String PREFILE_STR_USERID = "user_id_1";
+	private String PREFILE_STR_DEVICEID = "device_id";
 	private String PREFILE_STR_ISDEV = "is_dev";
 		
 	private String PREFILE_STR_ISTESTING = "is_testing";
@@ -36,14 +37,14 @@ public class DBControl {
 	
 	public DBControl(){}
 	
-	public int getUserID(Context context){
+	public String getUserID(Context context){
 		SharedPreferences settings = context.getSharedPreferences(PREFILE_NAME, 0);
-        return settings.getInt(PREFILE_STR_USERID, -1);
+		return settings.getString(PREFILE_STR_USERID, "guest");
 	}
 	
-	public void setUserID(Context context, int _user_id){
+	public void setUserID(Context context, String _user_id){
 		SharedPreferences settings = context.getSharedPreferences(PREFILE_NAME, 0);
-        settings.edit().putInt(PREFILE_STR_USERID, _user_id).commit();
+        settings.edit().putString(PREFILE_STR_USERID, _user_id).commit();
 	}
 	
 	public boolean getIsDev(Context context){
@@ -54,6 +55,16 @@ public class DBControl {
 	public void setIsDev(Context context, boolean _is_dev){
 		SharedPreferences settings = context.getSharedPreferences(PREFILE_NAME, 0);
         settings.edit().putBoolean(PREFILE_STR_ISDEV, _is_dev).commit();
+	}
+	
+	public String getDeviceID(Context context){
+		SharedPreferences settings = context.getSharedPreferences(PREFILE_NAME, 0);
+		return settings.getString(PREFILE_STR_DEVICEID, "SimpleBLEPeripheral");
+	}
+	
+	public void setDeviceID(Context context, String _device_id){
+		SharedPreferences settings = context.getSharedPreferences(PREFILE_NAME, 0);
+        settings.edit().putString(PREFILE_STR_DEVICEID, _device_id).commit();
 	}
 	
 	public void startTesting(Context context){
