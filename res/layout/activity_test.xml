@@ -68,15 +68,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:orientation="vertical" >
+        android:background="@drawable/tab_bar"
+        android:orientation="horizontal" >
 
-        <ImageView
+       <!-- <ImageView
             android:id="@+id/imageView2"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:src="@drawable/tab_bar" />
-
+            android:src="@drawable/tab_bar" /> -->
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/test_camera_mask"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/test_camera_mask"
+        android:visibility="invisible" />
+
+    <FrameLayout
+        android:id="@+id/cameraLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/iv_bar_bg"
+        android:layout_alignLeft="@+id/iv_bar_bg"
+        android:layout_alignRight="@+id/iv_bar_bg"
+        android:layout_alignTop="@+id/iv_bar_bg" >
+
+    </FrameLayout>
 
 </RelativeLayout>

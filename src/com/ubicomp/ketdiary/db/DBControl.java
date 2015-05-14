@@ -23,6 +23,17 @@ public class DBControl {
 	
 	public static DBControl inst = new DBControl();
 	
+	
+	public class TypeTestDetail{
+		public boolean is_filled;
+		public Date date;
+		public int time_trunk;
+		public int catagory_id;
+		public int type_id;
+		public int reason_id;
+		public String description;
+	}
+	
 	public DBControl(){}
 	
 	public int getUserID(Context context){
@@ -70,11 +81,8 @@ public class DBControl {
 		Date dt;
 		try {
 			String get_start_dt = settings.getString(PREFILE_STR_TESTDATETIME, "");
-			Log.d(TAG, get_start_dt);
 			dt = df.parse(get_start_dt);
 			Date dnow = new Date();
-			Log.d(TAG, dt.toString());
-			Log.d(TAG, dnow.toString());
 			return (dnow.getTime()-dt.getTime());
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -83,7 +91,7 @@ public class DBControl {
 		
 	}
 	
-	void addTestResult(){
+	void addTestResult(Context context, TypeTestDetail ttd){
 		
 	}
 }

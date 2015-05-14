@@ -117,6 +117,7 @@ public class BLEService extends Service{
     	final byte[] data = characteristic.getValue();
     	if(data != null && data.length > 0){
         	intent.putExtra(EXTRA_DATA, data);
+        	Log.d(TAG, String.valueOf(data) + "]]");
         }
         sendBroadcast(intent);
     }
@@ -256,6 +257,6 @@ public class BLEService extends Service{
     }
     
     public void unsetNotify(BluetoothGattCharacteristic chara){
-    	mBluetoothGatt.setCharacteristicNotification(chara, true);
+    	mBluetoothGatt.setCharacteristicNotification(chara, false);
     }
 }

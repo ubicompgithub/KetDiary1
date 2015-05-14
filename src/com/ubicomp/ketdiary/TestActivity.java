@@ -1,27 +1,39 @@
 package com.ubicomp.ketdiary;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.hardware.Camera;
+import android.hardware.Camera.CameraInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ubicomp.ketdiary.camera.CameraPreview;
 import com.ubicomp.ketdiary.db.DBControl;
 import com.ubicomp.ketdiary.test.bluetoothle.BLEWrapper;
 import com.ubicomp.ketdiary.test.bluetoothle.DBGWrapper;
 import com.ubicomp.ketdiary.test.bluetoothle.Wrapper;
 
+@SuppressWarnings("deprecation")
+@SuppressLint("NewApi")
 public class TestActivity extends Activity {
 
-	TextView label_btn, label_subtitle, label_title;
-	ImageView img_bg, img_ac, img_btn;
+	private TextView label_btn, label_subtitle, label_title;
+	private ImageView img_bg, img_ac, img_btn;
 	Activity that;
 	
+	private Camera mCamera = null;
+	private CameraPreview mCamPreview;
+	private FrameLayout cameraLayout;
+	private ImageView camera_mask;
+
 	private class TestState{
 		public void onStart(){return;}
 		public void onExit(){return;}
@@ -38,7 +50,7 @@ public class TestActivity extends Activity {
 		CertainState.onStart();
 	}
 	
-	private class InitState extends TestState{
+	private class IdleState extends TestState{
 		@Override
 		public void onStart(){
 			label_btn.setText("開始");
@@ -47,99 +59,174 @@ public class TestActivity extends Activity {
 		}
 		@Override
 		public void onClick(){
-			//new NoteDialog(that).show();
 			setState(new ConnState());
 		}
 	}
-	private class ConnState extends TestState{
+	private class FailState extends TestState{
+		private String err_msg;
+		public FailState(String _err_msg){
+			err_msg = _err_msg;
+		}
 		@Override
 		public void onStart(){
-			label_btn.setText("10");
-			label_subtitle.setText("請準備口水");
-			label_title.setText("準備中....");
-			new CountDownTimer(10000, 1000){
-		        public void onTick(long ms){
-		           label_btn.setText(String.valueOf(ms/1000));                 
-		        }
-		        public void onFinish() {
-		        	if(ble_wrapper.isConn()){
-		        		setState(new EmbedState());
-		        	}else{
-		        		setState(new InfoReConnState());
-		        	}
-		        }
-		    }.start();
-		    if(ble_wrapper != null)
-		    	ble_wrapper.Close();
-		    
+			label_btn.setText("確認");
+			label_subtitle.setText("");
+			label_title.setText(err_msg);
+		}
+		@Override
+		public void onClick(){
+			setState(new IdleState());
+		}
+	}
+	private class ConnState extends TestState{
+		private boolean is_conn = false;
+		@Override
+		public void onStart(){
+			label_btn.setText("...");
+			label_subtitle.setText("");
+			if(ble_wrapper != null)
+				ble_wrapper.Close();
 		    if(DBControl.inst.getIsDev(getApplicationContext()))
 		    	ble_wrapper = new DBGWrapper();
 		    else	
 		    	ble_wrapper = new BLEWrapper(that);
-		    
-		}
-	}	
-	private class InfoReConnState extends TestState{
-		@Override
-		public void onStart(){
-			label_btn.setText("確認");
-			label_subtitle.setText("請點選確認鍵");
-			label_title.setText("連線錯誤");
-		}
-		@Override
-		public void onClick(){
-			setState(new InitState());
+			
+			label_title.setText("準備中....");
+			new CountDownTimer(10000, 500){
+		        public void onTick(long ms){
+		        	if(is_conn) return;
+		        	if(ble_wrapper.isConn()){
+		        		is_conn = true;
+		        		ble_wrapper.RetToInitState();
+		        		setState(new PlugCheckState());
+		        		cancel();
+		        	}
+		        }
+		        public void onFinish() {
+		        	if(ble_wrapper.isConn()){
+		        		ble_wrapper.RetToInitState();
+		        		is_conn = true;
+		        		setState(new PlugCheckState());
+		        	}else{
+		        		setState(new FailState("BLE連線逾時"));
+		        	}
+		        }
+		    }.start();
 		}
 	}
-	private class EmbedState extends TestState{
+	private class PlugCheckState extends TestState{
+		public boolean plug_ok = false;
 		@Override
 		public void onStart(){
 			label_btn.setText("");
 			label_subtitle.setText("");
 			label_title.setText("");
-			if(ble_wrapper.getState() >= BLEWrapper.STATE_EMBED){
-				setState(new CamStage1State());
-			}else{
-				setState(new InfoEmbedState());
-			}
+			new CountDownTimer(1000, 200){
+				@Override
+				public void onTick(long millisUntilFinished) {
+					if(plug_ok) return;
+					if(ble_wrapper.getState() >= BLEWrapper.STATE_EMBED){
+						setState(new CheckIDState());
+						plug_ok = true;
+					}
+				}
+				@Override
+				public void onFinish() {
+					if(plug_ok) return;
+					if(ble_wrapper.getState() >= BLEWrapper.STATE_EMBED){
+						setState(new CheckIDState());
+						plug_ok = true;
+					}else{
+						setState(new FailState("請檢查試紙匣是否有插入"));
+					}
+				}
+			}.start();
+			
 		}
 	}
-	private class InfoEmbedState extends TestState{
+	private class CheckIDState extends TestState{
 		@Override
 		public void onStart(){
-			label_btn.setText("確認");
-			label_subtitle.setText("請插入試紙後按下確認");
-			label_title.setText("無試紙插入");
-		}
-		@Override
-		public void onClick(){
-			setState(new EmbedState());
+			label_btn.setText("");
+			label_subtitle.setText("");
+			label_title.setText("");
+			// TODO: to check id
+			boolean tester = false;
+			if(tester)
+				setState(new FailState("試紙匣ID錯誤"));
+			else
+				setState(new FiveSecondState());
 		}
 	}
-	private class CamStage1State extends TestState{
+	private class FiveSecondState extends TestState{
+		private int count_down;
+		@Override
+		public void onStart(){
+			Log.d("Main", "Enter FiveSecond");
+			label_btn.setText("5");
+			label_subtitle.setText("請蓄積口水");
+			count_down = 5;
+			new CountDownTimer(5000, 1000){
+				@Override
+				public void onTick(long ms) {
+					count_down--;
+					label_btn.setText(String.valueOf(count_down));
+				}
+				@Override
+				public void onFinish() {
+					ble_wrapper.SendStartMsg();
+					setState(new Stage1State());
+				}
+			}.start();
+		}
+	}
+	
+	private class Stage1State extends TestState{
 		private CountDownTimer test_timer = null;
 		private boolean move_to_stage2 = false;
 		@Override
 		public void onStart(){
-			// TODO: setup camera
+			Log.d("Main", "Enter Stage1");
+			
+			// Search for the front facing camera
+			int cameraId = -1;
+			int numberOfCameras = Camera.getNumberOfCameras();
+			for (int i = 0; i < numberOfCameras; i++) {
+				CameraInfo info = new CameraInfo();
+				Camera.getCameraInfo(i, info);
+				if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
+					cameraId = i;
+					break;
+				}
+			}
+
+			
+			mCamPreview = new CameraPreview(that);
+			cameraLayout.addView(mCamPreview);
+			Log.i("FORTEST", "cameraId: " + cameraId);
+			mCamera = Camera.open(cameraId);
+			mCamPreview.set(that, mCamera);
+			cameraLayout.setVisibility(0);
+			camera_mask.bringToFront();
+			
 			label_btn.setText("");
 			label_subtitle.setText("請將臉對準中央，並吐口水");
 			label_title.setText("請吐口水");
-			test_timer = new CountDownTimer(60000, 500){
+			test_timer = new CountDownTimer(60000, 10000){
 		        public void onTick(long ms){
 		        	if(move_to_stage2) return;
 		        	if(ble_wrapper.getState() >= BLEWrapper.STATE_1PASS){
-		        		test_timer.cancel();
 		        		move_to_stage2 = true;
-		        		setState(new CamStage2State());
+		        		setState(new Stage2State());
 		        	}
 		        }
 		        public void onFinish() {
 		        	if(move_to_stage2) return;
 		        	if(ble_wrapper.getState() >= BLEWrapper.STATE_1PASS){
-		        		setState(new CamStage2State());
+		        		move_to_stage2 = true;
+		        		setState(new Stage2State());
 		        	}else{
-		        		setState(new TLEState());
+		        		setState(new FailState("口水逾時"));
 		        	}
 		        }
 		    };
@@ -147,21 +234,32 @@ public class TestActivity extends Activity {
 		}
 		@Override
 		public void onExit(){
-			if(test_timer != null)
-				test_timer.cancel();
+			move_to_stage2 = true;
+			//if(test_timer != null)
+			//	test_timer.cancel();
 		}
 	}
-	private class CamStage2State extends TestState{
+	private class Stage2State extends TestState{
 		private int ptr;
 		private int[] pids;
 		@Override
 		public void onStart(){
 			Log.d("hi", "hi");
 			// TODO: setup animate
+			
+			cameraLayout.setVisibility(4);
+			if(mCamera != null){
+				mCamera.stopPreview();
+				mCamera.release();
+				mCamera = null;
+			}
+			
 			label_btn.setText("Stage2");
 			img_bg.setVisibility(0);
 			img_ac.setVisibility(0);
 			img_btn.setVisibility(4);
+			//img_bg.bringToFront();
+			//img_ac.bringToFront();
 			ptr = 0;
 			pids = new int[5];
 			pids[0] = R.drawable.test_progress_1;
@@ -176,6 +274,7 @@ public class TestActivity extends Activity {
 		        	img_ac.setImageResource(pids[ptr]);
 		        }
 		        public void onFinish() {
+		        	// prevent connection close
 		        	if(ble_wrapper.getState() >= BLEWrapper.STATE_2PASS){
 		        		setState(new FormState());
 		        	}else{
@@ -199,11 +298,11 @@ public class TestActivity extends Activity {
 			label_btn.setText("確認");
 			label_title.setText("口水量不足，請再多吐一些");
 			label_subtitle.setText("仍在檢測中");
-			timer = new CountDownTimer(60000, 60000){
+			timer = new CountDownTimer(10000, 10000){
 				public void onTick(long ms){}
 				public void onFinish(){
 					if(move_to_init) return;
-					setState(new TLEState());
+					setState(new FailState("二階段口水逾時"));
 				}
 			};
 			timer.start();
@@ -212,20 +311,10 @@ public class TestActivity extends Activity {
 		public void onClick(){
 			move_to_init = true;
 			timer.cancel();
-			setState(new CamStage2State());
+			setState(new Stage2State());
 		}
 	}
-	private class TLEState extends TestState{
-		@Override
-		public void onStart(){
-			label_btn.setText("確定");
-			label_title.setText("測試超時");
-		}
-		@Override
-		public void onClick(){
-			setState(new InitState());
-		}
-	}
+	
 	private class FormState extends TestState{
 		@Override
 		public void onStart(){
@@ -245,8 +334,10 @@ public class TestActivity extends Activity {
 		img_bg = (ImageView)findViewById(R.id.iv_bar_bg);
 		img_ac = (ImageView)findViewById(R.id.iv_bar_ac);
 		img_btn = (ImageView)findViewById(R.id.imageView1);
-		
-		setState(new InitState());
+		cameraLayout = (FrameLayout)findViewById(R.id.cameraLayout);
+		camera_mask = (ImageView)findViewById(R.id.test_camera_mask);
+
+		setState(new IdleState());
 		
 		img_btn.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -281,5 +372,15 @@ public class TestActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
-
+    
+    @Override
+	public void onPause() {
+		if(mCamera != null){
+			mCamera.stopPreview();
+			mCamera.release();
+			mCamera = null;
+		}
+		
+		super.onPause();
+	}
 }

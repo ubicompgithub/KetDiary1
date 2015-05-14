@@ -50,6 +50,10 @@ public class BLEWrapper extends Wrapper{
     public static int STATE_COLOR = 5;
     public int _state = STATE_NULL;
     
+    public class Color{ int R, G, B, A; }
+    
+    public static Color color1, color2;
+    
 	public BLEWrapper(Activity _activity){
 		is_conn = false;
 		ble_name = "SimpleBLEPeripheral";
@@ -138,18 +142,8 @@ public class BLEWrapper extends Wrapper{
 	        	ble_service.setNotify(gattServices.get(3).getCharacteristic(SERVICE4_CONFIG_CHAR));
 	        }else if (action.equals(BLEService.ACTION_DATA_AVAILABLE)) {
             	byte[] data = intent.getByteArrayExtra(BLEService.EXTRA_DATA);
-            	//Log.d(TAG, "data = " + data);
                 String currentDeviceState = String.format("%02X ", data[0]);
-                //Log.d(TAG, "data0 = " + currentDeviceState);
-                /*if(currentDeviceState.equals("FC ") || currentDeviceState.equals("FD ")){
-                    //String currentVoltage = String.format("%02X ", data[1]);
-                    //Log.i( "FORTEST", "##data[0]: " + currentDeviceState + "data[1]: " + currentVoltage );
-                }else if( currentDeviceState.equals("FB ") ){
-                    //Log.i( "FORTEST", "##data[0]: " + currentDeviceState + "data[6]: " + data[6] );
-                }else{
-                    Log.i( "FORTEST", "##data[0]: " + currentDeviceState);
-                }*/
-                
+                Log.d(TAG, "[" + currentDeviceState + "]");
                 if(currentDeviceState.equals("FA ")){
                     // No connection
                 	_state = STATE_NO_EMBED;
@@ -158,13 +152,12 @@ public class BLEWrapper extends Wrapper{
                 else if(currentDeviceState.equals("FB ")){
                     // Connected
                 	_state = STATE_EMBED;
-                	Write((byte)0x02);
+                	//Write((byte)0x02);
                     Log.i("FORTEST", "## Connected!");
                 }
                 else if(currentDeviceState.equals("FC ")){
                     // No saliva
                 	_state = STATE_NO_SALIVA;
-                	
                     Log.i("FORTEST", "## No saliva!");
                 }
                 else if(currentDeviceState.equals("FD ")){
@@ -175,8 +168,8 @@ public class BLEWrapper extends Wrapper{
                 else if(currentDeviceState.equals("FE ")){
                     // 1 pass, 2 pass
                 	_state = STATE_2PASS;
-                	Write((byte)0x03);
                     Log.i("FORTEST", "## 1 pass, 2 pass!");
+                	//Write((byte)0x03);
                 }
                 else if(currentDeviceState.equals("FF ")){
                     // Color
@@ -213,7 +206,17 @@ public class BLEWrapper extends Wrapper{
 		}
 	}
 	
-	public boolean Write(byte write_byte){
+	@Override
+	public void RetToInitState(){
+		Write((byte)0x01);
+	}
+	
+	@Override
+	public void SendStartMsg(){
+		Write((byte)0x02);
+	}
+	
+	private boolean Write(byte write_byte){
 		boolean isWriteSuccess = false;
 		List<BluetoothGattService> gattServices = ble_service.getSupportedGattServices();
 		if (gattServices == null) return false;

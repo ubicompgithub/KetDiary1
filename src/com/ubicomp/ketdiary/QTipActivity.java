@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.ubicomp.ketdiary.db.DBControl;
+import com.ubicomp.ketdiary.db.DBTip;
 import com.ubicomp.ketdiary.dialog.NoteDialog;
 
 public class QTipActivity extends Activity {
@@ -21,22 +22,45 @@ public class QTipActivity extends Activity {
 	private Activity that;
 	
 	TextView tv_timer;
+	TextView tv_tips;
+	Button btn_know;
+	Button btn_tipup;
+	Button btn_tipdown;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		new NoteDialog(this).show();
 		setContentView(R.layout.activity_qtip);
-		Button btn_know = (Button)findViewById(R.id.qtip_btn_know);
 		that = this;
 		tv_timer = (TextView)findViewById(R.id.qtip_tv_timer);
-		
+		tv_tips = (TextView)findViewById(R.id.qtip_tv_tips);
+		btn_know = (Button)findViewById(R.id.qtip_btn_know);
+		btn_tipup = (Button)findViewById(R.id.qtip_btn_tipup);
+		btn_tipdown = (Button)findViewById(R.id.qtip_btn_tipdown);
 		btn_know.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(that, TipsActivity.class));
+				btn_know.setVisibility(8);
+				btn_tipup.setVisibility(0);
+				btn_tipdown.setVisibility(0);
+				tv_tips.setText(DBTip.inst.getTip());
 			}
 		});;
+		
+		btn_tipup.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				tv_tips.setText(DBTip.inst.getTip());
+			}
+		});
+		
+		btn_tipdown.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				tv_tips.setText(DBTip.inst.getTip());
+			}
+		});
 		
 		new Timer().schedule(task, 0, 1000);
 		
