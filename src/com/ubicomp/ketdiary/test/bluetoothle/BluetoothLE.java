@@ -204,7 +204,7 @@ public class BluetoothLE extends BluetoothLEWrapper{
 	}
 	
 	@Override
-	public boolean isConn(){
+	public boolean isConnected(){
 		return is_conn;
 	}
 	
@@ -218,16 +218,12 @@ public class BluetoothLE extends BluetoothLEWrapper{
 	
 	@Override
 	public void RetToInitState(){
-		//Write((byte)0x01);
+		Write((byte)0x01);
 	}
 	
 	@Override
 	public void SendStartMsg(){
 		Write((byte)0x02);
-		//Write((byte)0x02);
-		//Write((byte)0x02);
-		//Write((byte)0x02);
-		//Write((byte)0x02);
 	}
 
 	private int write_count;

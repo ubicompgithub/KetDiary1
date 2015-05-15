@@ -40,12 +40,12 @@
         </service>
 
         <activity
-            android:name=".TImerActivity"
+            android:name=".TimerActivity"
             android:label="@string/title_activity_timer" 
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".QTipActivity"
+            android:name=".QCopeSkillActivity"
             android:label="@string/title_activity_qtip" 
             android:screenOrientation="portrait" >
         </activity>

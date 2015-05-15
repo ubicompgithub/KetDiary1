@@ -15,7 +15,7 @@ import com.ubicomp.ketdiary.db.DBControl;
 import com.ubicomp.ketdiary.db.DBTip;
 import com.ubicomp.ketdiary.dialog.NoteDialog;
 
-public class QTipActivity extends Activity {
+public class QCopeSkillActivity extends Activity {
 
 	private Activity that;
 	
@@ -76,7 +76,7 @@ public class QTipActivity extends Activity {
 			super.handleMessage(msg);
 			switch(msg.what){
 			case 1:
-				long ms = 600 - (DBControl.inst.getTestMs(getApplicationContext()))/1000;
+				long ms = 600 - (DBControl.inst.getTestMs())/1000;
 				long minutes = ms/60;
 				long second = ms%60;
 				tv_timer.setText(String.valueOf(minutes) + ":" + String.valueOf(second));

@@ -22,17 +22,17 @@ public class DevActivity extends Activity {
 		cb_is_dev = (CheckBox)findViewById(R.id.dev_cb_is_dev);
 		et_user_id = (EditText)findViewById(R.id.dev_et_user_id);
 		et_device_id = (EditText)findViewById(R.id.dev_et_device_id);
-		cb_is_dev.setChecked(DBControl.inst.getIsDev(getApplicationContext()));
-		et_user_id.setText(DBControl.inst.getUserID(getApplicationContext()));
-		et_device_id.setText(DBControl.inst.getDeviceID(getApplicationContext()));
+		cb_is_dev.setChecked(DBControl.inst.getIsDev());
+		et_user_id.setText(DBControl.inst.getUserID());
+		et_device_id.setText(DBControl.inst.getDeviceID());
 		Button btn_enter = (Button)findViewById(R.id.dev1_btn_enter);
 		Button btn_cancel = (Button)findViewById(R.id.dev1_btn_cancel);
 		btn_enter.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				DBControl.inst.setIsDev(getApplicationContext(), cb_is_dev.isChecked());
-				DBControl.inst.setUserID(getApplicationContext(), et_user_id.getText().toString());
-				DBControl.inst.setDeviceID(getApplicationContext(), et_device_id.getText().toString());
+				DBControl.inst.setIsDev(cb_is_dev.isChecked());
+				DBControl.inst.setUserID(et_user_id.getText().toString());
+				DBControl.inst.setDeviceID(et_device_id.getText().toString());
 				finish();
 			}
 		});

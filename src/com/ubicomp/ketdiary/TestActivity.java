@@ -94,10 +94,10 @@ public class TestActivity extends Activity {
 		public void onStart(){
 			label_btn.setText("...");
 			label_subtitle.setText("");
-		    if(DBControl.inst.getIsDev(getApplicationContext()))
+		    if(DBControl.inst.getIsDev())
 		    	bluetoothle = new DebugBluetoothLE();
 		    else	
-		    	bluetoothle = new BluetoothLE(that, DBControl.inst.getDeviceID(getApplicationContext()));
+		    	bluetoothle = new BluetoothLE(that, DBControl.inst.getDeviceID());
 			
 			label_title.setText("準備中....");
 			ToConn();
@@ -109,7 +109,7 @@ public class TestActivity extends Activity {
 			conn_time += 1;
 			if(is_conn) return;
 			if(conn_time >= 10){
-				if(bluetoothle.isConn() == false){
+				if(bluetoothle.isConnected() == false){
 					setState(new FailState("BLE連線逾時"));
 				}else{
 	        		bluetoothle.RetToInitState();
@@ -124,13 +124,13 @@ public class TestActivity extends Activity {
 		        @Override
 				public void onFinish() {
 		        	if(is_conn) return;
-		        	if(bluetoothle.isConn()){
+		        	if(bluetoothle.isConnected()){
 		        		bluetoothle.RetToInitState();
 		        		is_conn = true;
 		        		setState(new PlugCheckState());
 		        	}else{
 						bluetoothle.Close();
-						bluetoothle = new BluetoothLE(that, DBControl.inst.getDeviceID(getApplicationContext()));
+						bluetoothle = new BluetoothLE(that, DBControl.inst.getDeviceID());
 		        		ToConn();
 		        	}
 		        }
@@ -336,8 +336,8 @@ public class TestActivity extends Activity {
 	private class FormState extends TestState{
 		@Override
 		public void onStart(){
-			DBControl.inst.startTesting(getApplicationContext());
-			startActivity(new Intent(that, QTipActivity.class));		
+			DBControl.inst.startTesting();
+			startActivity(new Intent(that, QCopeSkillActivity.class));		
 		}
 	}
 	

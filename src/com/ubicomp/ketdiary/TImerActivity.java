@@ -6,7 +6,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Button;
 
-public class TImerActivity extends Activity {
+public class TimerActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
