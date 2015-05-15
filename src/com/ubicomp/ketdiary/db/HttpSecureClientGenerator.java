@@ -11,6 +11,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpConnectionParams;
 
+import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.R;
 
 import android.app.Application;
@@ -30,9 +31,7 @@ public class HttpSecureClientGenerator {
 	public static DefaultHttpClient getSecureHttpClient() {
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		KeyStore trustStore;
-		InputStream instream = (new Application())
-								.getApplicationContext()
-								.getResources()
+		InputStream instream = App.getContext().getResources()
 								.openRawResource(R.raw.keys);
 		try {
 			trustStore = KeyStore.getInstance(KeyStore.getDefaultType());

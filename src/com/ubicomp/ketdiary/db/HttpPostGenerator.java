@@ -1,9 +1,7 @@
 package com.ubicomp.ketdiary.db;
 
-import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -12,8 +10,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.Context;
 
 /**
  * Used for generating Http POST
@@ -21,8 +18,10 @@ import android.content.pm.PackageManager.NameNotFoundException;
  * @author Stanley Wang
  */
 public class HttpPostGenerator {
-
+	
+	/** Instancelize */
 	public HttpPostGenerator inst = new HttpPostGenerator();
+	private HttpPostGenerator(){}
 	
 	/**
 	 * Generate POST of User Information
@@ -51,5 +50,26 @@ public class HttpPostGenerator {
 
 		return httpPost;
 	}*/
+	
+	public static HttpPost genPost(Datatype.TestDetail ttd){
+		HttpPost httpPost = new HttpPost(ServerUrl.inst.getTestDetailUrl());
+		String uid = DBControl.inst.getUserID();
+		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+		nvps.add(new BasicNameValuePair("USERNAME", uid));
+		nvps.add(new BasicNameValuePair("RESULT", String.valueOf(ttd.result)));
+		nvps.add(new BasicNameValuePair("DATE", String.valueOf(ttd.date)));
+		nvps.add(new BasicNameValuePair("TIMESLOT", String.valueOf(ttd.time_trunk)));
+		nvps.add(new BasicNameValuePair("ISFILLED", String.valueOf(ttd.is_filled)));
+		nvps.add(new BasicNameValuePair("CATAID", String.valueOf(ttd.catagory_id)));
+		nvps.add(new BasicNameValuePair("TYPEID", String.valueOf(ttd.type_id)));
+		nvps.add(new BasicNameValuePair("REASONID", String.valueOf(ttd.reason_id)));
+		
+		try {
+			httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
+		} catch (UnsupportedEncodingException e) {
+		}
+		return httpPost;
+	}
+	
 	
 }

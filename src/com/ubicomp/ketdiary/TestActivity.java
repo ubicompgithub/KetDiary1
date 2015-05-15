@@ -1,5 +1,7 @@
 package com.ubicomp.ketdiary;
 
+import java.util.Date;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 
 import com.ubicomp.ketdiary.camera.CameraPreview;
 import com.ubicomp.ketdiary.db.DBControl;
+import com.ubicomp.ketdiary.db.Datatype;
 import com.ubicomp.ketdiary.test.bluetoothle.BluetoothLE;
 import com.ubicomp.ketdiary.test.bluetoothle.DebugBluetoothLE;
 import com.ubicomp.ketdiary.test.bluetoothle.BluetoothLEWrapper;
@@ -66,6 +69,16 @@ public class TestActivity extends Activity {
 		}
 		@Override
 		public void onClick(){
+			Datatype.TestDetail ttd = Datatype.inst.newTestDetail();
+			ttd.is_filled = true;
+			ttd.date = new Date();
+			ttd.time_trunk = 1;
+			ttd.result = 1;
+			ttd.catagory_id = 1;
+			ttd.type_id = 1;
+			ttd.reason_id = 1;
+			ttd.description = "abc";
+			//DBControl.inst.addTestResult(ttd);
 			setState(new ConnState());
 		}
 	}
@@ -88,6 +101,7 @@ public class TestActivity extends Activity {
 			setState(new IdleState());
 		}
 	}
+	
 	private class ConnState extends TestState{
 		private volatile boolean is_conn = false;
 		@Override
@@ -137,6 +151,7 @@ public class TestActivity extends Activity {
 		    }.start();
 		}
 	}
+	
 	private class PlugCheckState extends TestState{
 		public volatile boolean plug_ok = false;
 		@Override
@@ -167,6 +182,7 @@ public class TestActivity extends Activity {
 			
 		}
 	}
+	
 	private class CheckIDState extends TestState{
 		@Override
 		public void onStart(){
@@ -181,6 +197,7 @@ public class TestActivity extends Activity {
 				setState(new FiveSecondState());
 		}
 	}
+	
 	private class FiveSecondState extends TestState{
 		private volatile int count_down;
 		@Override
@@ -212,6 +229,7 @@ public class TestActivity extends Activity {
 		public void onStart(){
 			soundPool.play(preview_audio_id, 1.0F, 1.0F, 0, 0, 1.0F);
 			Log.d("Main", "Enter Stage1");
+			
 			// Search for the front facing camera
 			int cameraId = -1;
 			int numberOfCameras = Camera.getNumberOfCameras();
@@ -268,12 +286,12 @@ public class TestActivity extends Activity {
 			//	test_timer.cancel();
 		}
 	}
+
 	private class Stage2State extends TestState{
 		private int ptr;
 		private int[] pids;
 		@Override
 		public void onStart(){
-			Log.d("hi", "hi");
 			label_btn.setText("");
 			img_bg.setVisibility(0);
 			img_ac.setVisibility(0);
@@ -308,6 +326,7 @@ public class TestActivity extends Activity {
 			img_btn.setVisibility(0);
 		}
 	}
+	
 	private class NoMuchSavilaState extends TestState{
 		private CountDownTimer timer;
 		private boolean move_to_init = false;
@@ -336,6 +355,7 @@ public class TestActivity extends Activity {
 	private class FormState extends TestState{
 		@Override
 		public void onStart(){
+			bluetoothle.Close();
 			DBControl.inst.startTesting();
 			startActivity(new Intent(that, QCopeSkillActivity.class));		
 		}

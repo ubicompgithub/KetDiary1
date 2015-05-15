@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Vector;
 
 import com.ubicomp.ketdiary.App;
 
@@ -26,23 +27,13 @@ public class DBControl {
 	
 	public static DBControl inst = new DBControl();
 	
-	
-	public class TypeTestDetail{
-		public boolean is_filled;
-		public Date date;
-		public int time_trunk;
-		public int catagory_id;
-		public int type_id;
-		public int reason_id;
-		public String description;
-	}
-	
-	public DBControl(){}
+	private DBControl(){}
 	
 	public String getUserID(){
+		Log.d("asdasd", "GetUserID");
 		Context context = App.getContext();
 		SharedPreferences settings = context.getSharedPreferences(PREFILE_NAME, 0);
-		return settings.getString(PREFILE_STR_USERID, "guest");
+		return settings.getString(PREFILE_STR_USERID, "guest1");
 	}
 	
 	public void setUserID(String _user_id){
@@ -65,7 +56,6 @@ public class DBControl {
 	
 	public String getDeviceID(){
 		Context context = App.getContext();
-
 		SharedPreferences settings = context.getSharedPreferences(PREFILE_NAME, 0);
 		return settings.getString(PREFILE_STR_DEVICEID, "SimpleBLEPeripheral");
 	}
@@ -115,7 +105,20 @@ public class DBControl {
 		
 	}
 	
-	void addTestResult(Context context, TypeTestDetail ttd){
+	// TODO: truely use sqlite
+	
+	Vector<Datatype.TestDetail> not_uploaded_testdetail = new Vector<Datatype.TestDetail>();
+	
+	public void addTestResult(Datatype.TestDetail ttd){
+		not_uploaded_testdetail.add(ttd);
+		DataUploader.upload();
+	}
 		
+	public Vector<Datatype.TestDetail> getNotUploadedTestDetail(){
+		Vector<Datatype.TestDetail> ret = new Vector<Datatype.TestDetail>();
+		for(int lx = 0;lx < not_uploaded_testdetail.size();lx++)
+			ret.add(not_uploaded_testdetail.get(lx));
+		not_uploaded_testdetail.clear();
+		return ret;
 	}
 }

@@ -17,6 +17,8 @@ public class NoteDialog extends Dialog{
 	private Dialog that;
 	
 	private Button btn_enter, btn_cancel;
+	
+	/** 設定Spinner的Item */
 	private void SetItem(Context cxt, Spinner sp, String[] strs){
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 			cxt, android.R.layout.simple_spinner_item, strs );

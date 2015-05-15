@@ -53,10 +53,8 @@ public class BluetoothLE extends BluetoothLEWrapper{
     public static int STATE_2PASS = 4;
     public static int STATE_COLOR = 5;
     public int _state = STATE_NULL;
-    
-    public class Color{ int R, G, B, A; }
-    
-    public static Color color1, color2;
+        
+    public static int[] color1, color2;
     
 	public BluetoothLE(Activity _activity, String _ble_name){
 		is_conn = false;
@@ -75,7 +73,7 @@ public class BluetoothLE extends BluetoothLEWrapper{
         	public void onFinish(){
             	ble_adapter.stopLeScan(scan_cb);
         	}
-        };
+        }.start();
 	}
 
 	private static IntentFilter makeGattUpdateIntentFilter() {
@@ -157,7 +155,6 @@ public class BluetoothLE extends BluetoothLEWrapper{
                 else if(currentDeviceState.equals("FB ")){
                     // Connected
                 	_state = STATE_EMBED;
-                	//Write((byte)0x02);
                 	Log.i("FORTEST", String.format("%02X ", data[1]));
                 	Log.i("FORTEST", String.format("%02X ", data[2]));
                 	Log.i("FORTEST", String.format("%02X ", data[3]));
@@ -179,20 +176,21 @@ public class BluetoothLE extends BluetoothLEWrapper{
                     // 1 pass, 2 pass
                 	_state = STATE_2PASS;
                     Log.i("FORTEST", "## 1 pass, 2 pass!");
-                	//Write((byte)0x03);
                 }
                 else if(currentDeviceState.equals("FF ")){
                     // Color
                 	_state = STATE_COLOR;
                     Log.i("FORTEST", "## Color!");
                 	Write((byte)0x04);
-                    int color_sensor0[] = new int[4];
-                    int color_sensor1[] = new int[4];
+                	color1 = new int[4];
+                    color2 = new int[4];
                     for(int i=0; i<4; i++) {
-                        color_sensor0[i] = data[(i*2)+2]*256 + data[i*2+1];
-                        color_sensor1[i] = data[(i*2)+10]*256 + data[i*2+9];
+                        color1[i] = data[(i*2)+2]*256 + data[i*2+1];
+                        color2[i] = data[(i*2)+10]*256 + data[i*2+9];
                     }
-                    Log.i("FORTEST", " "+color_sensor0[0]+" "+color_sensor0[1]+" "+color_sensor0[2]+" "+color_sensor0[3]+" "+color_sensor1[0]+" "+color_sensor1[1]+" "+color_sensor1[2]+" "+color_sensor1[3]);
+                    
+                    
+                    Log.i("FORTEST", " "+color1[0]+" "+color1[1]+" "+color1[2]+" "+color1[3]+" "+color2[0]+" "+color2[1]+" "+color2[2]+" "+color2[3]);
                 }
 	        }
 	    }
@@ -225,6 +223,17 @@ public class BluetoothLE extends BluetoothLEWrapper{
 	public void SendStartMsg(){
 		Write((byte)0x02);
 	}
+	
+	@Override
+	public void RequestColor(){
+		Write((byte)0x03);
+	}
+	
+	@Override
+	public void CloseDevice(){
+		Write((byte)0x04);
+		
+	}
 
 	private int write_count;
 	private byte write_byte_;
@@ -236,17 +245,23 @@ public class BluetoothLE extends BluetoothLEWrapper{
 	
 	private void WriteLoop(){
 		write_count+=1;
-		if(write_count >= 5) return;
-		long toap = ((int)Math.random()*49) + 100;
+		if(write_count >= 50) return;
+		long toap = ((int)Math.random()*30) + 20;
 		new CountDownTimer(toap, toap){
 			@Override
 			public void onTick(long millisUntilFinished) {}
 			@Override
 			public void onFinish() {
-				_Write(write_byte_);
+				Log.d(TAG, "write" + String.valueOf(write_byte_));
+				boolean succ = _Write(write_byte_);
+				if(succ){
+					Log.d(TAG, "write succ!");
+				}else{
+					Log.d(TAG, "write un succ!");
+				}
 				WriteLoop();
 			}
-		};
+		}.start();
 	}
 	
 	private boolean _Write(byte write_byte){
