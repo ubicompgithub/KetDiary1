@@ -19,9 +19,9 @@ import android.widget.TextView;
 
 import com.ubicomp.ketdiary.camera.CameraPreview;
 import com.ubicomp.ketdiary.db.DBControl;
-import com.ubicomp.ketdiary.test.bluetoothle.BLEWrapper;
-import com.ubicomp.ketdiary.test.bluetoothle.DBGWrapper;
-import com.ubicomp.ketdiary.test.bluetoothle.Wrapper;
+import com.ubicomp.ketdiary.test.bluetoothle.BluetoothLE;
+import com.ubicomp.ketdiary.test.bluetoothle.DebugBluetoothLE;
+import com.ubicomp.ketdiary.test.bluetoothle.BluetoothLEWrapper;
 
 @SuppressWarnings("deprecation")
 @SuppressLint("NewApi")
@@ -48,7 +48,7 @@ public class TestActivity extends Activity {
 	}
 	
 	TestState CertainState = null;
-	Wrapper ble_wrapper = null;
+	BluetoothLEWrapper bluetoothle = null;
 
 	protected void setState(TestState sts){
 		if(CertainState != null)
@@ -69,6 +69,7 @@ public class TestActivity extends Activity {
 			setState(new ConnState());
 		}
 	}
+	
 	private class FailState extends TestState{
 		private String err_msg;
 		public FailState(String _err_msg){
@@ -79,8 +80,8 @@ public class TestActivity extends Activity {
 			label_btn.setText("確認");
 			label_subtitle.setText("");
 			label_title.setText(err_msg);
-			if(ble_wrapper != null)
-				ble_wrapper.Close();
+			if(bluetoothle != null)
+				bluetoothle.Close();
 		}
 		@Override
 		public void onClick(){
@@ -94,9 +95,9 @@ public class TestActivity extends Activity {
 			label_btn.setText("...");
 			label_subtitle.setText("");
 		    if(DBControl.inst.getIsDev(getApplicationContext()))
-		    	ble_wrapper = new DBGWrapper();
+		    	bluetoothle = new DebugBluetoothLE();
 		    else	
-		    	ble_wrapper = new BLEWrapper(that);
+		    	bluetoothle = new BluetoothLE(that, DBControl.inst.getDeviceID(getApplicationContext()));
 			
 			label_title.setText("準備中....");
 			ToConn();
@@ -108,10 +109,10 @@ public class TestActivity extends Activity {
 			conn_time += 1;
 			if(is_conn) return;
 			if(conn_time >= 10){
-				if(ble_wrapper.isConn() == false){
+				if(bluetoothle.isConn() == false){
 					setState(new FailState("BLE連線逾時"));
 				}else{
-	        		ble_wrapper.RetToInitState();
+	        		bluetoothle.RetToInitState();
 	        		is_conn = true;
 	        		setState(new PlugCheckState());
 				}
@@ -123,13 +124,13 @@ public class TestActivity extends Activity {
 		        @Override
 				public void onFinish() {
 		        	if(is_conn) return;
-		        	if(ble_wrapper.isConn()){
-		        		ble_wrapper.RetToInitState();
+		        	if(bluetoothle.isConn()){
+		        		bluetoothle.RetToInitState();
 		        		is_conn = true;
 		        		setState(new PlugCheckState());
 		        	}else{
-						ble_wrapper.Close();
-						ble_wrapper = new BLEWrapper(that);
+						bluetoothle.Close();
+						bluetoothle = new BluetoothLE(that, DBControl.inst.getDeviceID(getApplicationContext()));
 		        		ToConn();
 		        	}
 		        }
@@ -147,7 +148,7 @@ public class TestActivity extends Activity {
 				@Override
 				public void onTick(long millisUntilFinished) {
 					if(plug_ok) return;
-					if(ble_wrapper.getState() >= BLEWrapper.STATE_EMBED){
+					if(bluetoothle.getState() >= BluetoothLE.STATE_EMBED){
 						setState(new CheckIDState());
 						plug_ok = true;
 					}
@@ -155,7 +156,7 @@ public class TestActivity extends Activity {
 				@Override
 				public void onFinish() {
 					if(plug_ok) return;
-					if(ble_wrapper.getState() >= BLEWrapper.STATE_EMBED){
+					if(bluetoothle.getState() >= BluetoothLE.STATE_EMBED){
 						setState(new CheckIDState());
 						plug_ok = true;
 					}else{
@@ -197,7 +198,7 @@ public class TestActivity extends Activity {
 				}
 				@Override
 				public void onFinish() {
-					ble_wrapper.SendStartMsg();
+					bluetoothle.SendStartMsg();
 					setState(new Stage1State());
 				}
 			}.start();
@@ -237,14 +238,14 @@ public class TestActivity extends Activity {
 			test_timer = new CountDownTimer(60000, 10000){
 		        public void onTick(long ms){
 		        	if(move_to_stage2) return;
-		        	if(ble_wrapper.getState() >= BLEWrapper.STATE_1PASS){
+		        	if(bluetoothle.getState() >= BluetoothLE.STATE_1PASS){
 		        		move_to_stage2 = true;
 		        		setState(new Stage2State());
 		        	}
 		        }
 		        public void onFinish() {
 		        	if(move_to_stage2) return;
-		        	if(ble_wrapper.getState() >= BLEWrapper.STATE_1PASS){
+		        	if(bluetoothle.getState() >= BluetoothLE.STATE_1PASS){
 		        		move_to_stage2 = true;
 		        		setState(new Stage2State());
 		        	}else{
@@ -292,7 +293,7 @@ public class TestActivity extends Activity {
 		        }
 		        public void onFinish() {
 		        	// prevent connection close
-		        	if(ble_wrapper.getState() >= BLEWrapper.STATE_2PASS){
+		        	if(bluetoothle.getState() >= BluetoothLE.STATE_2PASS){
 		        		setState(new FormState());
 		        	}else{
 		        		setState(new NoMuchSavilaState());

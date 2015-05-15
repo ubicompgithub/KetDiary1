@@ -27,7 +27,7 @@ import android.util.Log;
 
 @SuppressWarnings("deprecation")
 @SuppressLint("NewApi")
-public class BLEWrapper extends Wrapper{
+public class BluetoothLE extends BluetoothLEWrapper{
 	
     private static final UUID SERVICE4_CONFIG_CHAR = UUID.fromString("0000fff4-0000-1000-8000-00805f9b34fb");
 	
@@ -58,46 +58,24 @@ public class BLEWrapper extends Wrapper{
     
     public static Color color1, color2;
     
-    private volatile int scan_time = 0;
-    private void ScanStage(){
-    	scan_time += 1;
-    	ble_adapter.stopLeScan(scan_cb);
-    	if(scan_time >= 10){
-    		return;
-    	}
-    	if(ble_device == null){
-    		int toap = (int)(Math.random()*100) + 100;
-    		new CountDownTimer(toap, toap){
-				@Override
-				public void onTick(long millisUntilFinished) {}
-				@Override
-				public void onFinish() {
-					Log.d(TAG, "start stage" + String.valueOf(scan_time) + " scan");
-			        ble_adapter.startLeScan(scan_cb);
-			        new CountDownTimer(500, 500){
-						@Override
-						public void onTick(long millisUntilFinished) {}
-						@Override
-						public void onFinish() {
-							ScanStage();
-						}
-			        }.start();
-				}
-    		}.start();
-    	}
-    }
-    
-	public BLEWrapper(Activity _activity){
+	public BluetoothLE(Activity _activity, String _ble_name){
 		is_conn = false;
-		ble_name = DBControl.inst.getDeviceID(_activity.getApplicationContext());
+		ble_name = _ble_name;
 		activity = _activity;
 		final BluetoothManager bluetoothManager = 
 		        (BluetoothManager) activity.getSystemService(Context.BLUETOOTH_SERVICE);
 		ble_adapter = bluetoothManager.getAdapter();
 		// TODO: Error handling
-		ScanStage();
         Log.d(TAG, "start le scan");
         ble_adapter.startLeScan(scan_cb);
+        new CountDownTimer(10000, 10000){
+        	@Override
+        	public void onTick(long ms){}
+        	@Override
+        	public void onFinish(){
+            	ble_adapter.stopLeScan(scan_cb);
+        	}
+        };
 	}
 
 	private static IntentFilter makeGattUpdateIntentFilter() {
@@ -124,11 +102,11 @@ public class BLEWrapper extends Wrapper{
             }
             Log.d(TAG, "Enter service conn");
             // Automatically connects to the device upon successful start-up initialization.
-            if(ble_service.connect(ble_device) == false){
-            	Log.d(TAG, "call connect but fail");
-            }else{
-            	Log.d(TAG, "connect ok");
-            }
+            for(int lx = 0;lx < 10;lx++)
+            	if(ble_service.connect(ble_device)){
+            		Log.d(TAG, "connect");
+            		break;
+            	}
             
         }
     

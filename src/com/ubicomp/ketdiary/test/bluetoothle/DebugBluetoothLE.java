@@ -1,7 +1,7 @@
 package com.ubicomp.ketdiary.test.bluetoothle;
 
-public class DBGWrapper extends Wrapper {
-	public DBGWrapper(){}
+public class DebugBluetoothLE extends BluetoothLEWrapper {
+	public DebugBluetoothLE(){}
 	public int getState(){return 10;}
 	public boolean isConn(){return true;}
 	public void Close(){}
