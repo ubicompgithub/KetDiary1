@@ -77,7 +77,7 @@ public class NoteDialog extends Dialog{
 		vPager.setAdapter(mAdapter);
 	}
 	
-	private void CLick(){
+	private void Click(){
 		/*Datatype.TestDetail ttd = Datatype.inst.newTestDetail();
 		ttd.is_filled = true;
 		ttd.date = new Date();
