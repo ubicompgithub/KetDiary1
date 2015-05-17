@@ -3,8 +3,18 @@ package com.ubicomp.ketdiary.db;
 import java.util.Vector;
 
 public class NoteCatagory {
-	public static NoteCatagory inst = new NoteCatagory();
 	
+	/** create instance*/
+	public static NoteCatagory inst = new NoteCatagory();
+	private NoteCatagory(){
+		note = new _note();	
+	}
+	
+	/**
+	 * data of pair<String, int>
+	 * @author mudream
+	 *
+	 */
 	public class data{
 		String str;
 		int id;
@@ -14,6 +24,11 @@ public class NoteCatagory {
 		}
 	}
 	
+	/**
+	 * Vector<String> -> String[]
+	 * @param inp
+	 * @return
+	 */
 	public String[] VectorDataToStringArr(Vector<data> inp){
 		String[] ret_val = new String[inp.size()];
 		for(int lx = 0;lx < inp.size();lx++){
@@ -23,6 +38,8 @@ public class NoteCatagory {
 	}
 	
 	public class _note{
+		
+		/** Data of Catagory -> items*/
 		public Vector<data> negative = new Vector<data>();
 		public Vector<data> notgood = new Vector<data>();
 		public Vector<data> positive = new Vector<data>();
@@ -31,6 +48,10 @@ public class NoteCatagory {
 		public Vector<data> conflict = new Vector<data>();
 		public Vector<data> social = new Vector<data>();
 		public Vector<data> play = new Vector<data>();
+		
+		/**
+		 * Setup data of NoteCatagory
+		 */
 		public _note(){
 			negative.add(new data("沮喪", 0));
 			negative.add(new data("走投無路", 1));
@@ -94,12 +115,4 @@ public class NoteCatagory {
 	}
 	
 	public _note note;
-	
-	
-	
-	
-	public NoteCatagory(){
-		note = new _note();
-		
-	}
 }

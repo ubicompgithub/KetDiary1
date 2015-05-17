@@ -25,33 +25,10 @@ public class HttpPostGenerator {
 	private HttpPostGenerator(){}
 	
 	/**
-	 * Generate POST of User Information
-	 * 
-	 * @return HttpPost contains User Information
+	 * Generate POST of TestDetail
+	 * @param ttd
+	 * @return
 	 */
-	/*public static HttpPost genPost() {
-		SERVER_URL_USER = ServerUrl.SERVER_URL_USER();
-		HttpPost httpPost = new HttpPost(SERVER_URL_USER);
-		String uid = PreferenceControl.getUID();
-		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-
-		nvps.add(new BasicNameValuePair("uid", uid));
-
-		Calendar c = PreferenceControl.getStartDate();
-		String joinDate = c.get(Calendar.YEAR) + "-" + (c.get(Calendar.MONTH) + 1) + "-" + c.get(Calendar.DAY_OF_MONTH);
-
-		nvps.add(new BasicNameValuePair("userData[]", joinDate));
-		nvps.add(new BasicNameValuePair("userData[]", PreferenceControl.getSensorID()));
-		nvps.add(new BasicNameValuePair("userData[]", String.valueOf(PreferenceControl.getUsedCounter())));
-		
-		try {
-			httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
-		} catch (UnsupportedEncodingException e) {
-		}
-
-		return httpPost;
-	}*/
-	
 	public static HttpPost genPost(Datatype.TestDetail ttd){
 		HttpPost httpPost = new HttpPost(ServerUrl.inst.getTestDetailUrl());
 		String uid = DBControl.inst.getUserID();
