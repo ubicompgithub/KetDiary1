@@ -22,9 +22,10 @@ import android.widget.TextView;
 import com.ubicomp.ketdiary.camera.CameraPreview;
 import com.ubicomp.ketdiary.db.DBControl;
 import com.ubicomp.ketdiary.db.Datatype;
+import com.ubicomp.ketdiary.dialog.NoteDialog;
 import com.ubicomp.ketdiary.test.bluetoothle.BluetoothLE;
-import com.ubicomp.ketdiary.test.bluetoothle.DebugBluetoothLE;
 import com.ubicomp.ketdiary.test.bluetoothle.BluetoothLEWrapper;
+import com.ubicomp.ketdiary.test.bluetoothle.DebugBluetoothLE;
 
 @SuppressWarnings("deprecation")
 @SuppressLint("NewApi")
@@ -79,7 +80,9 @@ public class TestActivity extends Activity {
 			ttd.reason_id = 1;
 			ttd.description = "abc";
 			//DBControl.inst.addTestResult(ttd);
-			setState(new ConnState());
+			//setState(new ConnState());
+			new NoteDialog(that).show();
+			
 		}
 	}
 	
@@ -357,7 +360,7 @@ public class TestActivity extends Activity {
 		public void onStart(){
 			bluetoothle.Close();
 			DBControl.inst.startTesting();
-			startActivity(new Intent(that, QCopeSkillActivity.class));		
+			startActivity(new Intent(that, EventCopeSkillActivity.class));		
 		}
 	}
 	
@@ -371,7 +374,7 @@ public class TestActivity extends Activity {
 		
 		img_bg = (ImageView)findViewById(R.id.iv_bar_bg);
 		img_ac = (ImageView)findViewById(R.id.iv_bar_ac);
-		img_btn = (ImageView)findViewById(R.id.imageView1);
+		img_btn = (ImageView)findViewById(R.id.vts_iv_cry);
 		cameraLayout = (FrameLayout)findViewById(R.id.cameraLayout);
 		//TODO: camera_mask = (ImageView)findViewById(R.id.test_camera_mask);
 		soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 5);

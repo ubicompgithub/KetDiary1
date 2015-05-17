@@ -13,9 +13,10 @@ import android.widget.TextView;
 
 import com.ubicomp.ketdiary.db.DBControl;
 import com.ubicomp.ketdiary.db.DBTip;
+//import com.ubicomp.ketdiary.dialog.NoteDialog;
 import com.ubicomp.ketdiary.dialog.NoteDialog;
 
-public class QCopeSkillActivity extends Activity {
+public class EventCopeSkillActivity extends Activity {
 
 	private Activity that;
 	

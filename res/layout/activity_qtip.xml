@@ -25,7 +25,7 @@
             android:layout_height="wrap_content" >
 
             <ImageView
-                android:id="@+id/imageView1"
+                android:id="@+id/vts_iv_cry"
                 android:layout_width="73dp"
                 android:layout_height="81dp"
                 android:layout_marginLeft="10dp"

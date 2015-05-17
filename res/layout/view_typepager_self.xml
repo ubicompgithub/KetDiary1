@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/vts_iv_cry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/note_cry" />
+
+        <ImageView
+            android:id="@+id/vts_iv_not_good"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/note_not_good" />
+
+        <ImageView
+            android:id="@+id/vts_iv_smile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/note_smile" />
+
+        <ImageView
+            android:id="@+id/vts_iv_try"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/note_try" />
+
+        <ImageView
+            android:id="@+id/vts_iv_urge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/note_urge" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -15,7 +15,6 @@ public class App extends Application {
 	private static Context context;
 	/** SharedPreferences */
 	private static SharedPreferences sp;
-	//private static App inst = new App();
 	@Override
 	/**Triggered when the Application onCreate*/
 	public void onCreate() {
