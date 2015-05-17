@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.camera;
+	package com.ubicomp.ketdiary.camera;
 
 import java.io.File;
 import java.io.FileOutputStream;

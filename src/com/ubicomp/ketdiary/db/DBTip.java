@@ -2,6 +2,11 @@ package com.ubicomp.ketdiary.db;
 
 import java.util.Vector;
 
+/** Store some tips
+ * 
+ * @author mudream
+ *
+ */
 public class DBTip {
 	public static DBTip inst = new DBTip();
 	private Vector<String> vec_str;

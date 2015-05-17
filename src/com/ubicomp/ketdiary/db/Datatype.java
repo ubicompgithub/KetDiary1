@@ -2,14 +2,14 @@ package com.ubicomp.ketdiary.db;
 
 import java.util.Date;
 
-/** Database type define
- * 
+/**
+ * Database type define
  * @author mudream
  *
  */
-
 public class Datatype {
 	
+	/** create instance */
 	public static Datatype inst = new Datatype();
 	private Datatype(){}
 	
@@ -24,6 +24,11 @@ public class Datatype {
 		public String description;
 		public TestDetail(){}
 	}
+	
+	/**
+	 * Get a new TestDetail
+	 * @return new TestDetail
+	 */
 	public TestDetail newTestDetail(){
 		return new TestDetail();
 	}

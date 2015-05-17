@@ -16,8 +16,14 @@ import com.ubicomp.ketdiary.db.DBTip;
 //import com.ubicomp.ketdiary.dialog.NoteDialog;
 import com.ubicomp.ketdiary.dialog.NoteDialog;
 
+/** Event Cope Skill Page
+ * 
+ * @author mudream
+ *
+ */
 public class EventCopeSkillActivity extends Activity {
-
+	
+	/** self activity*/
 	private Activity that;
 	
 	TextView tv_timer;

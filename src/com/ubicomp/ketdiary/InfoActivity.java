@@ -8,8 +8,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+/** Information Page
+ * 
+ * @author mudream
+ *
+ */
 public class InfoActivity extends Activity {
 
+	/** self activity*/
 	private Activity that;
 	
 	@Override

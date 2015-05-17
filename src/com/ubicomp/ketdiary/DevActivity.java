@@ -9,6 +9,11 @@ import android.widget.EditText;
 
 import com.ubicomp.ketdiary.db.DBControl;
 
+/** Setting Page
+ * 
+ * @author mudream
+ *
+ */
 public class DevActivity extends Activity {
 	
 	private CheckBox cb_is_dev;

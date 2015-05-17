@@ -22,6 +22,12 @@ import android.widget.Spinner;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.db.NoteCatagory;
 
+
+/**
+ * Note after testing
+ * @author mudream
+ *
+ */
 public class NoteDialog extends Dialog{
 	
 	private ViewPager vPager;

@@ -1,7 +1,5 @@
 package com.ubicomp.ketdiary;
 
-import java.util.Date;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -21,11 +19,10 @@ import android.widget.TextView;
 
 import com.ubicomp.ketdiary.camera.CameraPreview;
 import com.ubicomp.ketdiary.db.DBControl;
-import com.ubicomp.ketdiary.db.Datatype;
-import com.ubicomp.ketdiary.dialog.NoteDialog;
 import com.ubicomp.ketdiary.test.bluetoothle.BluetoothLE;
 import com.ubicomp.ketdiary.test.bluetoothle.BluetoothLEWrapper;
 import com.ubicomp.ketdiary.test.bluetoothle.DebugBluetoothLE;
+
 
 @SuppressWarnings("deprecation")
 @SuppressLint("NewApi")
@@ -33,18 +30,29 @@ public class TestActivity extends Activity {
 
 	private TextView label_btn, label_subtitle, label_title;
 	private ImageView img_bg, img_ac, img_btn;
+	
+	/** self activity*/
 	Activity that;
 	
+	/** Camare variables */
 	private Camera mCamera = null;
 	private CameraPreview mCamPreview;
 	private FrameLayout cameraLayout;
 	//TODO: private ImageView camera_mask;
 	
+	/** Sound playing variables */
 	private SoundPool soundPool;
 	
+	/** Sound id*/
 	private int count_down_audio_id;
 	private int preview_audio_id;
-
+	
+	
+	/**
+	 * Define state's function
+	 * @author mudream
+	 *
+	 */
 	private class TestState{
 		public void onStart(){return;}
 		public void onExit(){return;}
@@ -54,6 +62,10 @@ public class TestActivity extends Activity {
 	TestState CertainState = null;
 	BluetoothLEWrapper bluetoothle = null;
 
+	/**
+	 * Set the state of certain state machine
+	 * @param sts
+	 */
 	protected void setState(TestState sts){
 		if(CertainState != null)
 			CertainState.onExit();
@@ -71,12 +83,15 @@ public class TestActivity extends Activity {
 		@Override
 		public void onClick(){
 			setState(new ConnState());
-			
 		}
 	}
 	
 	private class FailState extends TestState{
 		private String err_msg;
+		/**
+		 * A Fail state with error msg
+		 * @param _err_msg
+		 */
 		public FailState(String _err_msg){
 			err_msg = _err_msg;
 		}
@@ -110,6 +125,10 @@ public class TestActivity extends Activity {
 		}
 		
 		public int conn_time = 0;
+		
+		/**
+		 * Try many time to connect
+		 */
 		public void ToConn(){
 			Log.d("FORTEST", "Conn" + String.valueOf(conn_time));
 			conn_time += 1;
@@ -118,7 +137,7 @@ public class TestActivity extends Activity {
 				if(bluetoothle.isConnected() == false){
 					setState(new FailState("BLE連線逾時"));
 				}else{
-	        		bluetoothle.RetToInitState();
+	        		bluetoothle.ReturnToInitState();
 	        		is_conn = true;
 	        		setState(new PlugCheckState());
 				}
@@ -131,7 +150,7 @@ public class TestActivity extends Activity {
 				public void onFinish() {
 		        	if(is_conn) return;
 		        	if(bluetoothle.isConnected()){
-		        		bluetoothle.RetToInitState();
+		        		bluetoothle.ReturnToInitState();
 		        		is_conn = true;
 		        		setState(new PlugCheckState());
 		        	}else{
@@ -222,7 +241,7 @@ public class TestActivity extends Activity {
 			soundPool.play(preview_audio_id, 1.0F, 1.0F, 0, 0, 1.0F);
 			Log.d("Main", "Enter Stage1");
 			
-			// Search for the front facing camera
+			/** Search for the front facing camera */
 			int cameraId = -1;
 			int numberOfCameras = Camera.getNumberOfCameras();
 			for (int i = 0; i < numberOfCameras; i++) {
@@ -240,6 +259,7 @@ public class TestActivity extends Activity {
 			mCamera = Camera.open(cameraId);
 			mCamPreview.set(that, mCamera);
 			cameraLayout.setVisibility(0);
+			
 			// TODO: camera_mask.bringToFront();
 			
 			label_btn.setText("");
@@ -290,6 +310,8 @@ public class TestActivity extends Activity {
 			img_btn.setVisibility(4);
 			ptr = 0;
 			pids = new int[5];
+			
+			/** Load id of progress bar*/
 			pids[0] = R.drawable.test_progress_1;
 			pids[1] = R.drawable.test_progress_2;
 			pids[2] = R.drawable.test_progress_3;
@@ -302,7 +324,6 @@ public class TestActivity extends Activity {
 		        	img_ac.setImageResource(pids[ptr]);
 		        }
 		        public void onFinish() {
-		        	// prevent connection close
 		        	if(bluetoothle.getState() >= BluetoothLE.STATE_2PASS){
 		        		setState(new FormState());
 		        	}else{
@@ -366,11 +387,14 @@ public class TestActivity extends Activity {
 		img_btn = (ImageView)findViewById(R.id.vts_iv_cry);
 		cameraLayout = (FrameLayout)findViewById(R.id.cameraLayout);
 		//TODO: camera_mask = (ImageView)findViewById(R.id.test_camera_mask);
+		
+		/** Load sound into sound pool*/
 		soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 5);
 		count_down_audio_id = soundPool.load(this, R.raw.short_beep, 1); 
 		preview_audio_id = soundPool.load(this, R.raw.din_ding, 1);
 		setState(new IdleState());
-		
+			
+		/** State onclick function use here*/
 		img_btn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -404,14 +428,4 @@ public class TestActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
-    
-    /* TODO: @Override
-	public void onPause() {
-		if(mCamera != null){
-			mCamera.stopPreview();
-			mCamera.release();
-			mCamera = null;
-		}
-		super.onPause();
-	}*/
 }

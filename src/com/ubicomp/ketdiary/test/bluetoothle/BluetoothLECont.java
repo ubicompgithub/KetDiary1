@@ -5,7 +5,11 @@ import android.os.CountDownTimer;
 
 import com.ubicomp.ketdiary.db.DBControl;
 
-
+/**
+ * 10 mins client part
+ * @author mudream
+ *
+ */
 public class BluetoothLECont{
 	
 	private static String TAG = "BLECont";

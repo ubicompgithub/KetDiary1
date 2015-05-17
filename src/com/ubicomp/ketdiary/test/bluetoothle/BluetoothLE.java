@@ -53,8 +53,16 @@ public class BluetoothLE extends BluetoothLEWrapper{
     public static int STATE_2PASS = 4;
     public static int STATE_COLOR = 5;
     public int _state = STATE_NULL;
-        
+    
+    public static byte SIGNAL_INIT = 0x01;
+    public static byte SIGNAL_START = 0x02;
+    public static byte SIGNAL_GETCOLOR = 0x03;
+    public static byte SIGNAL_CLOSE = 0x04;
+    
     public static int[] color1, color2;
+    
+    
+    
     
 	public BluetoothLE(Activity _activity, String _ble_name){
 		is_conn = false;
@@ -215,34 +223,41 @@ public class BluetoothLE extends BluetoothLEWrapper{
 	}
 	
 	@Override
-	public void RetToInitState(){
-		Write((byte)0x01);
+	public void ReturnToInitState(){
+		Write((byte)SIGNAL_INIT);
 	}
 	
 	@Override
 	public void SendStartMsg(){
-		Write((byte)0x02);
+		Write((byte)SIGNAL_START);
 	}
 	
 	@Override
 	public void RequestColor(){
-		Write((byte)0x03);
+		Write((byte)SIGNAL_GETCOLOR);
 	}
 	
 	@Override
 	public void CloseDevice(){
-		Write((byte)0x04);
-		
+		Write((byte)SIGNAL_CLOSE);
 	}
 
 	private int write_count;
 	private byte write_byte_;
+	
+	/**
+	 * Write a byte many times on ble protocol
+	 * @param _write_byte
+	 */
 	private void Write(byte _write_byte){
 		write_count = 0;
 		write_byte_ = _write_byte;
 		WriteLoop();
 	}
 	
+	/**
+	 * Perform a write loop on ble protocol
+	 */
 	private void WriteLoop(){
 		write_count+=1;
 		if(write_count >= 50) return;
@@ -264,6 +279,11 @@ public class BluetoothLE extends BluetoothLEWrapper{
 		}.start();
 	}
 	
+	/**
+	 * To write a byte on ble protocol
+	 * @param write_byte
+	 * @return is write ok?
+	 */
 	private boolean _Write(byte write_byte){
 		boolean isWriteSuccess = false;
 		List<BluetoothGattService> gattServices = ble_service.getSupportedGattServices();

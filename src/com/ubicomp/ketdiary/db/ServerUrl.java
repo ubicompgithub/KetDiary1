@@ -1,8 +1,8 @@
 package com.ubicomp.ketdiary.db;
 
 
-/** Return Server's Url
- * 
+/** 
+ * Return Server's Url
  * @author mudream
  *
  */
