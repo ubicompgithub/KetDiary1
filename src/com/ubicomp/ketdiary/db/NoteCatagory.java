@@ -14,6 +14,14 @@ public class NoteCatagory {
 		}
 	}
 	
+	public String[] VectorDataToStringArr(Vector<data> inp){
+		String[] ret_val = new String[inp.size()];
+		for(int lx = 0;lx < inp.size();lx++){
+			ret_val[lx] = inp.get(lx).str;
+		}
+		return ret_val;
+	}
+	
 	public class _note{
 		public Vector<data> negative = new Vector<data>();
 		public Vector<data> notgood = new Vector<data>();
@@ -86,6 +94,8 @@ public class NoteCatagory {
 	}
 	
 	public _note note;
+	
+	
 	
 	
 	public NoteCatagory(){

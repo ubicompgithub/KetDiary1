@@ -70,18 +70,7 @@ public class TestActivity extends Activity {
 		}
 		@Override
 		public void onClick(){
-			Datatype.TestDetail ttd = Datatype.inst.newTestDetail();
-			ttd.is_filled = true;
-			ttd.date = new Date();
-			ttd.time_trunk = 1;
-			ttd.result = 1;
-			ttd.catagory_id = 1;
-			ttd.type_id = 1;
-			ttd.reason_id = 1;
-			ttd.description = "abc";
-			//DBControl.inst.addTestResult(ttd);
-			//setState(new ConnState());
-			new NoteDialog(that).show();
+			setState(new ConnState());
 			
 		}
 	}
