@@ -13,8 +13,8 @@ import android.widget.TextView;
 
 import com.ubicomp.ketdiary.db.DBControl;
 import com.ubicomp.ketdiary.db.DBTip;
-//import com.ubicomp.ketdiary.dialog.NoteDialog;
 import com.ubicomp.ketdiary.dialog.NoteDialog;
+//import com.ubicomp.ketdiary.dialog.NoteDialog;
 
 /** Event Cope Skill Page
  * 
@@ -35,7 +35,7 @@ public class EventCopeSkillActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		new NoteDialog(this).show();
+		new NoteDialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen).show();
 		setContentView(R.layout.activity_qtip);
 		that = this;
 		tv_timer = (TextView)findViewById(R.id.qtip_tv_timer);

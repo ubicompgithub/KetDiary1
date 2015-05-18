@@ -1,10 +1,21 @@
 package com.ubicomp.ketdiary;
 
+import ubicomp.soberdiary.main.MainActivity;
+import ubicomp.soberdiary.main.R;
+import ubicomp.soberdiary.system.config.PreferenceControl;
+import ubicomp.soberdiary.test.bluetooth.Bluetooth;
+import ubicomp.soberdiary.test.bluetooth.BluetoothACVMMode;
+import ubicomp.soberdiary.test.bluetooth.BluetoothAVMMode;
+import ubicomp.soberdiary.test.bluetooth.SimpleBluetooth;
+import ubicomp.soberdiary.test.camera.CameraRecorder;
+import ubicomp.soberdiary.test.camera.CameraRunHandler;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
+import android.location.LocationManager;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -403,6 +414,44 @@ public class TestActivity extends Activity {
 		});
 		that = this;
 	}
+	/*
+	private void reset() {
+		SimpleBluetooth.closeConnection();
+
+		timestamp = System.currentTimeMillis();
+		MainActivity.getMainActivity().closeTimers();
+		setGuideMessage(R.string.test_guide_reset_top,
+				R.string.test_guide_reset_bottom);
+
+		if (MainActivity.getMainActivity().canUpdate())
+			PreferenceControl.setUpdateDetectionTimestamp(timestamp);
+		else
+			PreferenceControl.setUpdateDetectionTimestamp(0);
+
+		setStorage();
+		locationManager = (LocationManager) activity
+				.getSystemService(Context.LOCATION_SERVICE);
+		cameraRecorder = new CameraRecorder(testFragment, imgFileHandler);
+
+		cameraRunHandler = new CameraRunHandler(cameraRecorder);
+		Boolean debug = PreferenceControl.isDebugMode();
+		Boolean debug_type = PreferenceControl.debugType();
+
+		prev_drawable_time = -1;
+
+		if (debug) {
+			if (debug_type)
+				bt = new BluetoothAVMMode(testFragment, testFragment,
+						cameraRunHandler, bracFileHandler, bracDebugHandler);
+			else
+				bt = new BluetoothACVMMode(testFragment, testFragment,
+						cameraRunHandler, bracFileHandler, bracDebugHandler);
+		} else
+			bt = new Bluetooth(testFragment, testFragment, cameraRunHandler,
+					bracFileHandler, true);
+		for (int i = 0; i < 3; ++i)
+			INIT_PROGRESS[i] = DONE_PROGRESS[i] = false;
+	}*/
 	
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

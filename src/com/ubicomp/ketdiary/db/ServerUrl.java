@@ -6,7 +6,7 @@ package com.ubicomp.ketdiary.db;
  * @author mudream
  */
 public class ServerUrl {
-	private String server_url = "https://140.112.30.171/drugfreediary/";
+	private static final String SERVER_URL = "https://140.112.30.171/drugfreediary/";
 	
 	/** create instance*/
 	public static ServerUrl inst = new ServerUrl();
@@ -17,6 +17,6 @@ public class ServerUrl {
 	 * @return upload TestDetail server url
 	 */
 	public String getTestDetailUrl(){
-		return server_url + "test/add_test_detail.php";
+		return SERVER_URL + "test/add_test_detail.php";
 	}
 }

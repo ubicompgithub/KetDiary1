@@ -8,10 +8,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.ubicomp.ketdiary.db.DBControl;
+import com.ubicomp.ketdiary.system.PreferenceControl;
 
 /** Setting Page
  * 
- * @author mudream
+ * @author Andy Chen
  *
  */
 public class DevActivity extends Activity {
@@ -27,17 +28,21 @@ public class DevActivity extends Activity {
 		cb_is_dev = (CheckBox)findViewById(R.id.dev_cb_is_dev);
 		et_user_id = (EditText)findViewById(R.id.dev_et_user_id);
 		et_device_id = (EditText)findViewById(R.id.dev_et_device_id);
-		cb_is_dev.setChecked(DBControl.inst.getIsDev());
-		et_user_id.setText(DBControl.inst.getUserID());
-		et_device_id.setText(DBControl.inst.getDeviceID());
+		
+		//cb_is_dev.setChecked(DBControl.inst.getIsDev());
+		//et_user_id.setText(DBControl.inst.getUserID());
+		//et_device_id.setText(DBControl.inst.getDeviceID());
+		
 		Button btn_enter = (Button)findViewById(R.id.dev1_btn_enter);
 		Button btn_cancel = (Button)findViewById(R.id.dev1_btn_cancel);
+		
 		btn_enter.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				DBControl.inst.setIsDev(cb_is_dev.isChecked());
-				DBControl.inst.setUserID(et_user_id.getText().toString());
-				DBControl.inst.setDeviceID(et_device_id.getText().toString());
+				PreferenceControl.setIsDeveloper( cb_is_dev.isChecked() );
+				PreferenceControl.setUID( et_user_id.getText().toString() );
+				//DBControl.inst.setDeviceID(et_device_id.getText().toString());
+				
 				finish();
 			}
 		});

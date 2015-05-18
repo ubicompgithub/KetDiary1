@@ -41,6 +41,11 @@ public class NoteDialog extends Dialog{
 		
 	}
 	
+	public NoteDialog(Context context, int style) {
+		super(context, style);
+		
+	}
+	
 	/** 設定Spinner的Item */
 	private void SetItem(Context cxt, Spinner sp, String[] strs){
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
