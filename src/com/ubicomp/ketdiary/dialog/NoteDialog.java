@@ -13,13 +13,19 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.db.DBControl;
+import com.ubicomp.ketdiary.db.Datatype;
 import com.ubicomp.ketdiary.db.NoteCatagory;
 
 
@@ -35,25 +41,16 @@ public class NoteDialog extends Dialog{
 					  iv_cry, iv_not_good;
 	private ImageView iv_conflict, iv_social, iv_playing;
 	private Spinner sp_date, sp_timeslot, sp_item;
+	private Button bt_confirm, bt_cancel;
 	
 	public NoteDialog(Context context) {
 		super(context);
 		
 	}
 	
-	public NoteDialog(Context context, int style) {
+	public NoteDialog(Context context, int style) { //for fullscreen dialog
 		super(context, style);
-		
 	}
-	
-	/** 設定Spinner的Item */
-	private void SetItem(Context cxt, Spinner sp, String[] strs){
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-			cxt, android.R.layout.simple_spinner_item, strs );
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		sp.setAdapter(adapter);
-	}
-	
 	
 	@SuppressLint("InflateParams")
 	public void onCreate(Bundle savedInstanceState) {
@@ -64,9 +61,13 @@ public class NoteDialog extends Dialog{
 	    sp_date = (Spinner)findViewById(R.id.note_sp_date);
 	    sp_timeslot = (Spinner)findViewById(R.id.note_sp_timeslot);
 	    sp_item = (Spinner)findViewById(R.id.note_sp_items);
+	    bt_confirm=(Button)findViewById(R.id.button1);
+	    bt_cancel=(Button)findViewById(R.id.button2);
 	    
-	    Date dt = new Date();
 	    
+	    bt_confirm.setOnClickListener(new EndOnClickListener());
+	    bt_cancel.setOnClickListener(new EndOnClickListener());
+	    	    
 	    SetItem(getContext(), sp_timeslot, new String[]{"上午", "中午", "下午"});
 	    SetItem(getContext(), sp_item, new String[]{"請選擇分類"});
 	    SetItem(
@@ -77,6 +78,55 @@ public class NoteDialog extends Dialog{
 		initTypePager();
 	}
 	
+	
+	/** 設定Spinner的Item */
+	private void SetItem(Context cxt, Spinner sp, String[] strs){
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+			cxt, android.R.layout.simple_spinner_item, strs );
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		sp.setAdapter(adapter);
+		//sp.setPrompt("負面情緒");
+        sp.setOnItemSelectedListener(new SpinnerXMLSelectedListener());
+        sp.setVisibility(View.VISIBLE);  
+        sp.performClick();
+	}
+	
+	private class SpinnerXMLSelectedListener implements OnItemSelectedListener{
+		@Override
+		public void onItemSelected(AdapterView<?> arg0, View view, int arg2, long arg3) {  
+			//Toast.makeText(getContext(), "你選的是"+items.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+            //view2.setText("你使用什么样的手机："+adapter2.getItem(arg2));  
+        }  
+  
+        public void onNothingSelected(AdapterView<?> arg0) {  
+              
+        }  
+	}
+	class MyOnLongClickListener implements OnLongClickListener{
+	    public boolean onLongClick(View v){
+	    	//dialog.show();
+	    	return true;
+	    }
+	}
+	
+	
+	//把所選取的結果送出 
+	class EndOnClickListener implements View.OnClickListener{
+		public void onClick(View v){
+			Datatype.TestDetail ttd = Datatype.inst.newTestDetail();
+			ttd.is_filled = true;
+			ttd.date = new Date();
+			ttd.time_trunk = 1;
+			ttd.result = 1;
+			ttd.catagory_id = 1;
+			ttd.type_id = 1;
+			ttd.reason_id = 1;
+			ttd.description = "abc";
+			DBControl.inst.addTestResult(ttd);
+	    
+	    }
+	}
+
 	
 	private void initTypePager(){
 	    vPager = (ViewPager) findViewById(R.id.viewpager);

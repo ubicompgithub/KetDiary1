@@ -58,6 +58,36 @@ public class PreferenceControl {
 	}
      
 	
+	/**
+	 * get DeviceId
+	 * 
+	 * @return DeviceId (default: device_default)
+	 */
+	public static String getDeviceId() {
+		return sp.getString("device_id", "device_default");
+	}
+
+	/**
+	 * set DeviceId
+	 * 
+	 * @param device_id
+	 *            new DeviceId
+	 */
+	public static void setDeviceId(String device_id) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putString("device_id", device_id);
+		edit.commit();
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	// haven't use
 	/**

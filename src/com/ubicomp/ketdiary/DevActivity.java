@@ -7,7 +7,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-import com.ubicomp.ketdiary.db.DBControl;
+import com.ubicomp.ketdiary.db.DataUploader;
+import com.ubicomp.ketdiary.db.HttpPostGenerator;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 
 /** Setting Page
@@ -30,8 +31,8 @@ public class DevActivity extends Activity {
 		et_device_id = (EditText)findViewById(R.id.dev_et_device_id);
 		
 		//cb_is_dev.setChecked(DBControl.inst.getIsDev());
-		//et_user_id.setText(DBControl.inst.getUserID());
-		//et_device_id.setText(DBControl.inst.getDeviceID());
+		et_user_id.setText( PreferenceControl.getUID() );
+		et_device_id.setText(PreferenceControl.getDeviceId());
 		
 		Button btn_enter = (Button)findViewById(R.id.dev1_btn_enter);
 		Button btn_cancel = (Button)findViewById(R.id.dev1_btn_cancel);
@@ -41,7 +42,12 @@ public class DevActivity extends Activity {
 			public void onClick(View v) {
 				PreferenceControl.setIsDeveloper( cb_is_dev.isChecked() );
 				PreferenceControl.setUID( et_user_id.getText().toString() );
-				//DBControl.inst.setDeviceID(et_device_id.getText().toString());
+				PreferenceControl.setDeviceId(et_device_id.getText().toString());
+				
+				//Datatype.Patient p = Datatype.inst.newPatient();
+				//DBControl.inst.addPatient(p);
+				
+				DataUploader.upload();
 				
 				finish();
 			}

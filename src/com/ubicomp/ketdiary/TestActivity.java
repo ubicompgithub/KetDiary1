@@ -1,21 +1,10 @@
 package com.ubicomp.ketdiary;
 
-import ubicomp.soberdiary.main.MainActivity;
-import ubicomp.soberdiary.main.R;
-import ubicomp.soberdiary.system.config.PreferenceControl;
-import ubicomp.soberdiary.test.bluetooth.Bluetooth;
-import ubicomp.soberdiary.test.bluetooth.BluetoothACVMMode;
-import ubicomp.soberdiary.test.bluetooth.BluetoothAVMMode;
-import ubicomp.soberdiary.test.bluetooth.SimpleBluetooth;
-import ubicomp.soberdiary.test.camera.CameraRecorder;
-import ubicomp.soberdiary.test.camera.CameraRunHandler;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
-import android.location.LocationManager;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -24,12 +13,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ubicomp.ketdiary.camera.CameraPreview;
 import com.ubicomp.ketdiary.db.DBControl;
+import com.ubicomp.ketdiary.dialog.NoteDialog;
 import com.ubicomp.ketdiary.test.bluetoothle.BluetoothLE;
 import com.ubicomp.ketdiary.test.bluetoothle.BluetoothLEWrapper;
 import com.ubicomp.ketdiary.test.bluetoothle.DebugBluetoothLE;
@@ -41,6 +33,7 @@ public class TestActivity extends Activity {
 
 	private TextView label_btn, label_subtitle, label_title;
 	private ImageView img_bg, img_ac, img_btn;
+	
 	
 	/** self activity*/
 	Activity that;
@@ -386,6 +379,15 @@ public class TestActivity extends Activity {
 	}
 	
 	@Override
+	public void onResume(){
+		super.onResume();
+		// dismiss dormancy
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		
+		
+	}
+	
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_test);
@@ -414,6 +416,7 @@ public class TestActivity extends Activity {
 		});
 		that = this;
 	}
+
 	/*
 	private void reset() {
 		SimpleBluetooth.closeConnection();
@@ -458,6 +461,7 @@ public class TestActivity extends Activity {
         //參數1:群組id, 參數2:itemId, 參數3:item順序, 參數4:item名稱
         menu.add(0, 0, 0, "說明");
         menu.add(0, 1, 1, "離開");
+        menu.add(0, 2, 2, "記事");
         return super.onCreateOptionsMenu(menu);
     }
     
@@ -473,6 +477,9 @@ public class TestActivity extends Activity {
                 //結束此程式
                 finish();
                 break;
+            case 2:
+            	new NoteDialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen).show();
+            	break;
             default:
         }
         return super.onOptionsItemSelected(item);

@@ -6,7 +6,7 @@ import android.os.CountDownTimer;
 import com.ubicomp.ketdiary.db.DBControl;
 
 /**
- * 10 mins client part
+ * 10 mins client part, should be a background service.
  * @author mudream
  *
  */

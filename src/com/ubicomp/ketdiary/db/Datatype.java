@@ -2,6 +2,8 @@ package com.ubicomp.ketdiary.db;
 
 import java.util.Date;
 
+import android.text.format.Time;
+
 /**
  * Database type define
  * @author mudream
@@ -25,12 +27,28 @@ public class Datatype {
 		public TestDetail(){}
 	}
 	
+	public class Patient{
+		public String UserId;
+		//public Date JoinDate;
+		//public int IsDropout;
+		//public Date DropoutDate;
+		//public Time ConnectionCheckTime;
+		//public String AppVersion;
+		public Patient(){
+		
+		}
+	}
+	
 	/**
 	 * Get a new TestDetail
 	 * @return new TestDetail
 	 */
 	public TestDetail newTestDetail(){
 		return new TestDetail();
+	}
+	
+	public Patient newPatient(){
+		return new Patient();
 	}
 	
 }

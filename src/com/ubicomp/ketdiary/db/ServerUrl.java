@@ -19,4 +19,20 @@ public class ServerUrl {
 	public String getTestDetailUrl(){
 		return SERVER_URL + "test/add_test_detail.php";
 	}
+	
+	public String getPatientUrl(){
+		return SERVER_URL + "test/Patient2.php";
+	}
+	
+	public String getTestDetail2Url(){
+		return SERVER_URL + "test/test_detail.php";
+	}
+	
+	public String getTestResultUrl(){
+		return SERVER_URL + "test/test_result.php";
+	}
+	
+	public String getNoteAddUrl(){
+		return SERVER_URL + "test/test_note_add.php";
+	}
 }

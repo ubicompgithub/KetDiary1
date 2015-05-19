@@ -69,10 +69,19 @@ public class DataUploader {
 			
 			// TestDetail
 			Vector<Datatype.TestDetail> ttds = DBControl.inst.getNotUploadedTestDetail();
-			for(int lx = 0;lx < ttds.size();lx++){
-				if(connectToServer(ttds.get(lx)) == ERROR)
-					Log.d(TAG, "FAIL TO UPLOAD - TestDetail");
+			if(ttds != null){
+				for(int i = 0;i < ttds.size();i++){
+					if(connectToServer(ttds.get(i)) == ERROR)
+						Log.d(TAG, "FAIL TO UPLOAD - TestDetail");
+				}
 			}
+			
+			// Patient
+
+			if(connectToServer() == ERROR)
+				Log.d(TAG, "FAIL TO UPLOAD - Patient");
+				
+			
 			
 			return null;
 		}
@@ -92,9 +101,9 @@ public class DataUploader {
 		private int connectToServer() {
 			try {
 				DefaultHttpClient httpClient = HttpSecureClientGenerator.getSecureHttpClient();
-				HttpPost httpPost;// = HttpPostGenerator.genPost();
-				//if (!upload(httpClient, httpPost))
-				//	return ERROR;
+				HttpPost httpPost = HttpPostGenerator.genPost();
+				if (!upload(httpClient, httpPost))
+					return ERROR;
 			} catch (Exception e) {
 				Log.d(TAG, "EXCEPTION:" + e.toString());
 				return ERROR;
@@ -117,6 +126,25 @@ public class DataUploader {
 			return SUCCESS;
 		}
 		
+		private int connectToServer(Datatype.Patient p){
+			try {
+				Log.d("a", "1");
+				DefaultHttpClient httpClient = HttpSecureClientGenerator.getSecureHttpClient();
+				Log.d("a", "2");
+				HttpPost httpPost = HttpPostGenerator.genPost();
+				if (!upload(httpClient, httpPost))
+					return ERROR;
+			} catch (Exception e) {
+				Log.d(TAG, "EXCEPTION:" + e.toString());
+				return ERROR;
+			}
+			return SUCCESS;
+		}
+		
+		
+		
+		
+		// handle upload respond message
 		private boolean upload(HttpClient httpClient, HttpPost httpPost) {
 			HttpResponse httpResponse;
 			ResponseHandler<String> res = new BasicResponseHandler();

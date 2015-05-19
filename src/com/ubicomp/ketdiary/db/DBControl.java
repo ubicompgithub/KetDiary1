@@ -153,7 +153,7 @@ public class DBControl {
 	// TODO: use sqlite
 	
 	Vector<Datatype.TestDetail> not_uploaded_testdetail = new Vector<Datatype.TestDetail>();
-	
+	Vector<Datatype.Patient> not_uploaded_patient = new Vector<Datatype.Patient>();
 	/**
 	 * Add TestDetail and upload
 	 * @param ttd
@@ -173,6 +173,28 @@ public class DBControl {
 		for(int lx = 0;lx < not_uploaded_testdetail.size();lx++)
 			ret.add(not_uploaded_testdetail.get(lx));
 		not_uploaded_testdetail.clear();
+		return ret;
+	}
+	
+	/**
+	 * Add Patient and upload
+	 * @param ttd
+	 */
+	public void addPatient(Datatype.Patient p){
+		not_uploaded_patient.add(p);
+		DataUploader.upload();
+	}
+	
+	/**
+	 * Get not upload Patient
+	 * @return
+	 * @see DataUploader
+	 */
+	public Vector<Datatype.Patient> getNotUploadedPatient(){
+		Vector<Datatype.Patient> ret = new Vector<Datatype.Patient>();
+		for(int lx = 0;lx < not_uploaded_patient.size();lx++)
+			ret.add(not_uploaded_patient.get(lx));
+		not_uploaded_patient.clear();
 		return ret;
 	}
 }
