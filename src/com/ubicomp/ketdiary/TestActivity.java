@@ -523,9 +523,7 @@ public class TestActivity extends Activity implements BluetoothListener{
     @Override
     public void bleConnectionTimeout() {
         Toast.makeText(this, "BLE connection timeout", Toast.LENGTH_SHORT).show();
-        if(ble != null) {
-            ble = null;
-        }
+        setState(new FailState("連接逾時"));
     }
 
     @Override
@@ -538,9 +536,11 @@ public class TestActivity extends Activity implements BluetoothListener{
     public void bleDisconnected() {
         Log.i(TAG, "BLE disconnected");
         Toast.makeText(this, "BLE disconnected", Toast.LENGTH_SHORT).show();
-        if(ble != null) {
-            ble = null;
-        }
+        
+        setState(new FailState("連接中斷"));
+        //if(ble != null) {
+        //    ble = null;
+        //}
     }
 
     @Override
@@ -559,6 +559,7 @@ public class TestActivity extends Activity implements BluetoothListener{
     public void bleNoPlug() {
         Log.i(TAG, "No test plug");
         Toast.makeText(this, "No test plug", Toast.LENGTH_SHORT).show();
+        setState(new FailState("請將試紙匣插入裝置"));
     }
 
     @Override

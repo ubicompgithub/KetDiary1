@@ -18,7 +18,7 @@
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
 
-    <uses-sdk android:minSdkVersion="11" />
+    <uses-sdk android:minSdkVersion="18" />
     <application
         android:name="com.ubicomp.ketdiary.App"
         android:allowBackup="true"
