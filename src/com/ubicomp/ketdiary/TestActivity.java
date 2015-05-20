@@ -14,23 +14,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE;
+import com.ubicomp.ketdiary.BluetoothLE.BluetoothListener;
+import com.ubicomp.ketdiary.BluetoothLE.MainActivity;
 import com.ubicomp.ketdiary.camera.CameraPreview;
 import com.ubicomp.ketdiary.db.DBControl;
 import com.ubicomp.ketdiary.dialog.NoteDialog;
-import com.ubicomp.ketdiary.test.bluetoothle.BluetoothLE;
-import com.ubicomp.ketdiary.test.bluetoothle.BluetoothLEWrapper;
-import com.ubicomp.ketdiary.test.bluetoothle.DebugBluetoothLE;
+
 
 
 @SuppressWarnings("deprecation")
 @SuppressLint("NewApi")
-public class TestActivity extends Activity {
-
+public class TestActivity extends Activity implements BluetoothListener{
+	
+	
+	private static final String TAG = "BluetoothLE";
+	
 	private TextView label_btn, label_subtitle, label_title;
 	private ImageView img_bg, img_ac, img_btn;
 	
@@ -51,7 +55,8 @@ public class TestActivity extends Activity {
 	private int count_down_audio_id;
 	private int preview_audio_id;
 	
-	
+	private TestState CertainState = null;
+	private BluetoothLE ble = null;
 	/**
 	 * Define state's function
 	 * @author mudream
@@ -63,9 +68,6 @@ public class TestActivity extends Activity {
 		public void onClick(){return;}
 	}
 	
-	TestState CertainState = null;
-	BluetoothLEWrapper bluetoothle = null;
-
 	/**
 	 * Set the state of certain state machine
 	 * @param sts
@@ -104,8 +106,8 @@ public class TestActivity extends Activity {
 			label_btn.setText("確認");
 			label_subtitle.setText("");
 			label_title.setText(err_msg);
-			if(bluetoothle != null)
-				bluetoothle.Close();
+			if(ble != null)
+				ble.bleDisconnect();
 		}
 		@Override
 		public void onClick(){
@@ -119,13 +121,15 @@ public class TestActivity extends Activity {
 		public void onStart(){
 			label_btn.setText("...");
 			label_subtitle.setText("");
-		    if(DBControl.inst.getIsDev())
-		    	bluetoothle = new DebugBluetoothLE();
-		    else	
-		    	bluetoothle = new BluetoothLE(that, DBControl.inst.getDeviceID());
+		    //if(DBControl.inst.getIsDev())
+		    //	bluetoothle = new DebugBluetoothLE();
+		    //else	
 			
+		    ble = new BluetoothLE(that, "KetDiary-000"); //PreferenceControl.getDeviceId()
+		    ble.bleConnect();
+		    
 			label_title.setText("準備中....");
-			ToConn();
+			//ToConn();
 		}
 		
 		public int conn_time = 0;
@@ -138,32 +142,33 @@ public class TestActivity extends Activity {
 			conn_time += 1;
 			if(is_conn) return;
 			if(conn_time >= 10){
-				if(bluetoothle.isConnected() == false){
-					setState(new FailState("BLE連線逾時"));
-				}else{
-	        		bluetoothle.ReturnToInitState();
-	        		is_conn = true;
-	        		setState(new PlugCheckState());
-				}
+				ble.bleConnect();
+					//setState(new FailState("BLE連線逾時"));
+				//}else{
+	        	//	bluetoothle.ReturnToInitState();
+	        	is_conn = true;
+	        	setState(new PlugCheckState());
+				
 				return;
 			}
+			/*
 			new CountDownTimer(6000, 6000){
 				@Override
 		        public void onTick(long ms){}
 		        @Override
 				public void onFinish() {
 		        	if(is_conn) return;
-		        	if(bluetoothle.isConnected()){
-		        		bluetoothle.ReturnToInitState();
+		        	if(ble.isConnected()){
+		        		ble.ReturnToInitState();
 		        		is_conn = true;
 		        		setState(new PlugCheckState());
 		        	}else{
-						bluetoothle.Close();
-						bluetoothle = new BluetoothLE(that, DBControl.inst.getDeviceID());
+						ble.Close();
+						ble = new BluetoothLE(that, DBControl.inst.getDeviceID());
 		        		ToConn();
 		        	}
 		        }
-		    }.start();
+		    }.start();*/
 		}
 	}
 	
@@ -174,11 +179,12 @@ public class TestActivity extends Activity {
 			label_btn.setText("");
 			label_subtitle.setText("");
 			label_title.setText("");
+			/*
 			new CountDownTimer(1000, 200){
 				@Override
 				public void onTick(long millisUntilFinished) {
 					if(plug_ok) return;
-					if(bluetoothle.getState() >= BluetoothLE.STATE_EMBED){
+					if(ble.getState() >= ble.STATE_EMBED){
 						setState(new CheckIDState());
 						plug_ok = true;
 					}
@@ -186,14 +192,14 @@ public class TestActivity extends Activity {
 				@Override
 				public void onFinish() {
 					if(plug_ok) return;
-					if(bluetoothle.getState() >= BluetoothLE.STATE_EMBED){
+					if(ble.getState() >= BluetoothLE.STATE_EMBED){
 						setState(new CheckIDState());
 						plug_ok = true;
 					}else{
 						setState(new FailState("請檢查試紙匣是否有插入"));
 					}
 				}
-			}.start();
+			}.start();*/
 			
 		}
 	}
@@ -230,7 +236,7 @@ public class TestActivity extends Activity {
 				}
 				@Override
 				public void onFinish() {
-					bluetoothle.SendStartMsg();
+					//bluetoothle.SendStartMsg();
 					setState(new Stage1State());
 				}
 			}.start();
@@ -269,6 +275,7 @@ public class TestActivity extends Activity {
 			label_btn.setText("");
 			label_subtitle.setText("請將臉對準中央，並吐口水");
 			label_title.setText("請吐口水");
+			/*
 			test_timer = new CountDownTimer(60000, 10000){
 		        public void onTick(long ms){
 		        	if(move_to_stage2) return;
@@ -287,7 +294,7 @@ public class TestActivity extends Activity {
 		        	}
 		        }
 		    };
-		    test_timer.start();
+		    test_timer.start();*/
 		}
 		@Override
 		public void onExit(){
@@ -322,6 +329,7 @@ public class TestActivity extends Activity {
 			pids[3] = R.drawable.test_progress_4;
 			pids[4] = R.drawable.test_progress_5;
 			img_ac.setImageResource(pids[0]);
+			/*
 			new CountDownTimer(5000, 1000){
 		        public void onTick(long ms){
 		        	ptr++;
@@ -334,7 +342,7 @@ public class TestActivity extends Activity {
 		        		setState(new NoMuchSavilaState());
 		        	}
 		        }
-		    }.start();
+		    }.start();*/
 		}
 		@Override
 		public void onExit(){
@@ -372,7 +380,7 @@ public class TestActivity extends Activity {
 	private class FormState extends TestState{
 		@Override
 		public void onStart(){
-			bluetoothle.Close();
+			ble.bleDisconnect();
 			DBControl.inst.startTesting();
 			startActivity(new Intent(that, EventCopeSkillActivity.class));		
 		}
@@ -456,12 +464,21 @@ public class TestActivity extends Activity {
 			INIT_PROGRESS[i] = DONE_PROGRESS[i] = false;
 	}*/
 	
+	
+	//Upload all the data
+	@Override
+	protected void onStart() {
+		UploadService.startUploadService(this);
+		super.onStart();
+	}
+	
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //參數1:群組id, 參數2:itemId, 參數3:item順序, 參數4:item名稱
         menu.add(0, 0, 0, "說明");
         menu.add(0, 1, 1, "離開");
         menu.add(0, 2, 2, "記事");
+        menu.add(0, 3, 3, "BLE");
         return super.onCreateOptionsMenu(menu);
     }
     
@@ -480,8 +497,88 @@ public class TestActivity extends Activity {
             case 2:
             	new NoteDialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen).show();
             	break;
+            case 3:
+            	//startActivity(new Intent(that, MainActivity.class));
+            	startActivityForResult(new Intent(that, MainActivity.class), 0);
+            	break;
             default:
         }
         return super.onOptionsItemSelected(item);
+    }
+    
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        ble.onBleActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void bleNotSupported() {
+    	  Toast.makeText(this, "BLE not support", Toast.LENGTH_SHORT).show();
+//        this.finish();
+    }
+
+    @Override
+    public void bleConnectionTimeout() {
+        Toast.makeText(this, "BLE connection timeout", Toast.LENGTH_SHORT).show();
+        if(ble != null) {
+            ble = null;
+        }
+    }
+
+    @Override
+    public void bleConnected() {
+        Log.i(TAG, "BLE connected");
+        Toast.makeText(this, "BLE connected", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void bleDisconnected() {
+        Log.i(TAG, "BLE disconnected");
+        Toast.makeText(this, "BLE disconnected", Toast.LENGTH_SHORT).show();
+        if(ble != null) {
+            ble = null;
+        }
+    }
+
+    @Override
+    public void bleWriteStateSuccess() {
+        Log.i(TAG, "BLE ACTION_DATA_WRITE_SUCCESS");
+        Toast.makeText(this, "BLE write state success", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void bleWriteStateFail() {
+        Log.i(TAG, "BLE ACTION_DATA_WRITE_FAIL");
+        Toast.makeText(this, "BLE write state fail", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void bleNoPlug() {
+        Log.i(TAG, "No test plug");
+        Toast.makeText(this, "No test plug", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void blePlugInserted(byte[] plugId) {
+        Log.i(TAG, "Test plug is inserted");
+        Toast.makeText(this, "Test plug is inserted", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void bleConductiveElectrode1(byte[] adcValue) {
+
+    }
+
+    @Override
+    public void bleConductiveElectrode2(byte[] adcValue) {
+
+    }
+
+    @Override
+    public void bleColorReadings(byte[] colorReadings) {
+        Log.i(TAG, "Color sensor readings");
     }
 }

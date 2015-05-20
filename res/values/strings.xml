@@ -10,5 +10,9 @@
     <string name="title_activity_dev">DevActivity</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_event_cope_skill">EventCopeSkillActivity</string>
+    
+    
+    
+    <string name="notification_msg_1">該檢測囉!</string>
 
 </resources>

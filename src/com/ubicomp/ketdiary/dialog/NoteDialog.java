@@ -62,7 +62,7 @@ public class NoteDialog extends Dialog{
 	    sp_timeslot = (Spinner)findViewById(R.id.note_sp_timeslot);
 	    sp_item = (Spinner)findViewById(R.id.note_sp_items);
 	    bt_confirm=(Button)findViewById(R.id.button1);
-	    bt_cancel=(Button)findViewById(R.id.button2);
+	    bt_cancel=(Button)findViewById(R.id.buttonClose);
 	    
 	    
 	    bt_confirm.setOnClickListener(new EndOnClickListener());

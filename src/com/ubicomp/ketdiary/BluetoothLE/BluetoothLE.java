@@ -279,7 +279,7 @@ public class BluetoothLE {
                     // Do nothing if target device is scanned
                     if(deviceScanned)
                         return;
-
+                    
                     Log.d(TAG, "device="+device.getName()+" add="+device.getAddress());
                     String tmpName = device.getName();
                     if(mDeviceName.equals(device.getName())){

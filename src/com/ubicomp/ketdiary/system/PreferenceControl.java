@@ -21,7 +21,8 @@ public class PreferenceControl {
 	/** Default setting at the first time of launching SoberDiary */
 	public static void defaultSetting() {
 		setUID("sober_default_test");
-		setIsDeveloper(false);
+		setDeviceId("ket_001");
+		setIsDeveloper(true);
 		Calendar cal = Calendar.getInstance();
 		setStartDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
 				cal.get(Calendar.DAY_OF_MONTH));
@@ -79,7 +80,15 @@ public class PreferenceControl {
 		edit.commit();
 	}
 
-	
+	public static boolean isDeveloper() {
+		return sp.getBoolean("developer", false);
+	}
+
+	public static void setIsDeveloper(boolean developer) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putBoolean("developer", developer);
+		edit.commit();
+	}
 	
 	
 	
@@ -224,15 +233,7 @@ public class PreferenceControl {
 		editor.commit();
 	}
 
-	public static boolean isDeveloper() {
-		return sp.getBoolean("developer", false);
-	}
 
-	public static void setIsDeveloper(boolean developer) {
-		SharedPreferences.Editor edit = sp.edit();
-		edit.putBoolean("developer", developer);
-		edit.commit();
-	}
 
 	public static int lastShowedCoupon() {
 		return sp.getInt("showedCoupon", 0);

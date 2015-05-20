@@ -1,10 +1,7 @@
-package ubicomp.bioscope.main;
+package com.ubicomp.ketdiary.BluetoothLE;
 
 
-import ubicomp.bioscope.R;
-import ubicomp.bioscope.main.BluetoothLE.*;
-
-import android.app.ListActivity;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,8 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.ubicomp.ketdiary.R;
 
-public class MainActivity extends ListActivity implements BluetoothListener {
+
+public class MainActivity extends Activity implements BluetoothListener {
 
     private static final String TAG = "BluetoothLE";
 
@@ -26,7 +25,7 @@ public class MainActivity extends ListActivity implements BluetoothListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-
+        
         Button buttonStart = (Button)findViewById(R.id.buttonStart);
 
         buttonStart.setOnClickListener(new View.OnClickListener() {
@@ -36,12 +35,15 @@ public class MainActivity extends ListActivity implements BluetoothListener {
                 if(ble != null) {
                     return;
                 }
-                ble = new BluetoothLE(mainActivity, "KetDiary-Kel");
+                ble = new BluetoothLE(mainActivity, "KetDiary-000");
                 ble.bleConnect();
             }
 
         });
-
+        
+        
+        Log.i(TAG, "On create"); 
+        
         Button buttonClose = (Button)findViewById(R.id.buttonClose);
 
         buttonClose.setOnClickListener(new View.OnClickListener() {

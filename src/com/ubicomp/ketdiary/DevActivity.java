@@ -30,7 +30,7 @@ public class DevActivity extends Activity {
 		et_user_id = (EditText)findViewById(R.id.dev_et_user_id);
 		et_device_id = (EditText)findViewById(R.id.dev_et_device_id);
 		
-		//cb_is_dev.setChecked(DBControl.inst.getIsDev());
+		cb_is_dev.setChecked(PreferenceControl.isDeveloper());
 		et_user_id.setText( PreferenceControl.getUID() );
 		et_device_id.setText(PreferenceControl.getDeviceId());
 		
