@@ -38,6 +38,8 @@ public class TestActivity extends Activity implements BluetoothListener{
 	private TextView label_btn, label_subtitle, label_title;
 	private ImageView img_bg, img_ac, img_btn;
 	
+
+	private CountDownTimer testCountDownTimer = null;
 	
 	/** self activity*/
 	Activity that;
@@ -57,6 +59,12 @@ public class TestActivity extends Activity implements BluetoothListener{
 	
 	private TestState CertainState = null;
 	private BluetoothLE ble = null;
+	
+	private boolean first_connect = false;
+	
+	private static final int COUNT_DOWN_SECOND = 5;
+	
+	
 	/**
 	 * Define state's function
 	 * @author mudream
@@ -88,6 +96,7 @@ public class TestActivity extends Activity implements BluetoothListener{
 		}
 		@Override
 		public void onClick(){
+			first_connect =false;
 			setState(new ConnState());
 		}
 	}
@@ -106,8 +115,8 @@ public class TestActivity extends Activity implements BluetoothListener{
 			label_btn.setText("確認");
 			label_subtitle.setText("");
 			label_title.setText(err_msg);
-			if(ble != null)
-				ble.bleDisconnect();
+			//if(ble != null)
+				//ble.bleDisconnect();
 		}
 		@Override
 		public void onClick(){
@@ -125,7 +134,7 @@ public class TestActivity extends Activity implements BluetoothListener{
 		    //	bluetoothle = new DebugBluetoothLE();
 		    //else	
 			
-		    ble = new BluetoothLE(that, "KetDiary-000"); //PreferenceControl.getDeviceId()
+		    ble = new BluetoothLE(that, "ket_000"); //PreferenceControl.getDeviceId()
 		    ble.bleConnect();
 		    
 			label_title.setText("準備中....");
@@ -147,7 +156,7 @@ public class TestActivity extends Activity implements BluetoothListener{
 				//}else{
 	        	//	bluetoothle.ReturnToInitState();
 	        	is_conn = true;
-	        	setState(new PlugCheckState());
+	        	//setState(new PlugCheckState());
 				
 				return;
 			}
@@ -172,14 +181,14 @@ public class TestActivity extends Activity implements BluetoothListener{
 		}
 	}
 	
-	private class PlugCheckState extends TestState{
+	/*private class PlugCheckState extends TestState{
 		public volatile boolean plug_ok = false;
 		@Override
 		public void onStart(){
 			label_btn.setText("");
 			label_subtitle.setText("");
 			label_title.setText("");
-			/*
+			
 			new CountDownTimer(1000, 200){
 				@Override
 				public void onTick(long millisUntilFinished) {
@@ -199,10 +208,10 @@ public class TestActivity extends Activity implements BluetoothListener{
 						setState(new FailState("請檢查試紙匣是否有插入"));
 					}
 				}
-			}.start();*/
+			}.start();
 			
 		}
-	}
+	}*/
 	
 	private class CheckIDState extends TestState{
 		@Override
@@ -227,7 +236,12 @@ public class TestActivity extends Activity implements BluetoothListener{
 			label_btn.setText("5");
 			label_subtitle.setText("請蓄積口水");
 			count_down = 5;
-			new CountDownTimer(5000, 1000){
+			testCountDownTimer = new TestCountDownTimer(
+					COUNT_DOWN_SECOND);
+			testCountDownTimer.start();
+			
+			
+			/*new CountDownTimer(5000, 1000){
 				@Override
 				public void onTick(long ms) {
 					count_down--;
@@ -239,7 +253,7 @@ public class TestActivity extends Activity implements BluetoothListener{
 					//bluetoothle.SendStartMsg();
 					setState(new Stage1State());
 				}
-			}.start();
+			}.start();*/
 		}
 	}
 	
@@ -386,6 +400,28 @@ public class TestActivity extends Activity implements BluetoothListener{
 		}
 	}
 	
+	public void stopDueToInit() {
+		//if (cameraRecorder != null)
+		//	cameraRecorder.close();
+
+		//if (bt != null)
+		//	bt = null;
+		//if (btInitHandler != null)
+		//	btInitHandler.removeMessages(0);
+		//if (cameraInitHandler != null)
+		//	cameraInitHandler.removeMessages(0);
+		//if (btRunTask != null)
+		//	btRunTask.cancel(true);
+
+		//if (testHandler != null)
+		//	testHandler.removeMessages(0);
+
+		if (testCountDownTimer != null)
+			testCountDownTimer.cancel();
+		//if (openSensorMsgTimer != null)
+		//	openSensorMsgTimer.cancel();
+	}
+	
 	@Override
 	public void onResume(){
 		super.onResume();
@@ -463,6 +499,37 @@ public class TestActivity extends Activity implements BluetoothListener{
 		for (int i = 0; i < 3; ++i)
 			INIT_PROGRESS[i] = DONE_PROGRESS[i] = false;
 	}*/
+	
+	private class TestCountDownTimer extends CountDownTimer {
+
+		private static final int SECOND_FIX = 1300;
+		private long prevSecond = 99;
+
+		public TestCountDownTimer(long second) {
+			super(second * SECOND_FIX, 100);
+		}
+
+		@Override
+		public void onFinish() {
+			//startButton.setVisibility(View.INVISIBLE);
+			//countDownText.setText("");
+			//showDebug(">Start to run the  device");
+			//runBT();
+			setState(new Stage1State());
+		}
+
+		@Override
+		public void onTick(long millisUntilFinished) {
+			long displaySecond = millisUntilFinished / SECOND_FIX;
+			if (displaySecond < prevSecond) {
+				
+				soundPool.play(count_down_audio_id, 0.6f, 0.6f, 0, 0, 1.0F);
+				label_btn.setText(String.valueOf(displaySecond));
+				prevSecond = displaySecond;
+				
+			}
+		}
+	}
 	
 	
 	//Upload all the data
@@ -566,6 +633,12 @@ public class TestActivity extends Activity implements BluetoothListener{
     public void blePlugInserted(byte[] plugId) {
         Log.i(TAG, "Test plug is inserted");
         Toast.makeText(this, "Test plug is inserted", Toast.LENGTH_SHORT).show();
+        
+        if(!first_connect){
+        	setState(new FiveSecondState());
+        	first_connect=true;
+        }
+        //check ID here
     }
 
     @Override
