@@ -54,7 +54,7 @@ public class BluetoothLE {
     private Runnable mRunnable;
 
     // Stops scanning after 10 seconds.
-    private static final long SCAN_PERIOD = 3000;
+    private static final long SCAN_PERIOD = 10000;
 
     private int testCount = 0;
 
@@ -163,9 +163,17 @@ public class BluetoothLE {
                     case (byte)0xFB:
                         Log.i(TAG, "----0xFB----");
                         byte[] plugId = new byte[data.length-1];
-                        System.arraycopy(data, 1, plugId, 0, data.length-1);
+                        System.arraycopy(data, 1, plugId, 0, data.length - 1);
                         ((BluetoothListener) activity).blePlugInserted(plugId);
                         break;
+                    case (byte)0xFC:
+                    case (byte)0xFD:
+                    case (byte)0xFE:
+                        byte[] adcReading = new byte[data.length-1];
+                        System.arraycopy(data, 1, adcReading, 0, data.length - 1);
+                        ((BluetoothListener) activity).bleElectrodeAdcReading(data[0], adcReading);
+                        break;
+
                     case (byte)0xFF:
                         Log.i(TAG, "----0xFF----");
                         byte[] colorReadings = new byte[data.length-1];
