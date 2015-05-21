@@ -29,11 +29,11 @@ public interface BluetoothListener {
     /* Test plug is detected with its ID */
     void blePlugInserted(byte[] plugId);
 
-    /* 1st electrode is conductive */
-    void bleConductiveElectrode1(byte[] adcValue);
-
-    /* 2ed electrode is conductive */
-    void bleConductiveElectrode2(byte[] adcValue);
+    /* Electrode state:
+    state: 0xFC=not yet conduct, 0xFD=1st is conducted, 2ed is conducted,
+    adcReading: 2 bytes
+     */
+    void bleElectrodeAdcReading(byte state, byte[] adcReading);
 
     /* Color sensor readings */
     void bleColorReadings(byte[] colorReadings);
