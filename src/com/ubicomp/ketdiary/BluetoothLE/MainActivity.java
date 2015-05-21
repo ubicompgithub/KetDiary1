@@ -125,17 +125,13 @@ public class MainActivity extends Activity implements BluetoothListener {
     }
 
     @Override
-    public void bleConductiveElectrode1(byte[] adcValue) {
-
-    }
-
-    @Override
-    public void bleConductiveElectrode2(byte[] adcValue) {
-
-    }
-
-    @Override
     public void bleColorReadings(byte[] colorReadings) {
         Log.i(TAG, "Color sensor readings");
     }
+
+	@Override
+	public void bleElectrodeAdcReading(byte state, byte[] adcReading) {
+		// TODO Auto-generated method stub
+		
+	}
 }

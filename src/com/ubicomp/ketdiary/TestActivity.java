@@ -34,12 +34,14 @@ public class TestActivity extends Activity implements BluetoothListener{
 	
 	
 	private static final String TAG = "BluetoothLE";
+	private static final String TAG2 = "debug";
 	
 	private TextView label_btn, label_subtitle, label_title;
 	private ImageView img_bg, img_ac, img_btn;
 	
 
 	private CountDownTimer testCountDownTimer = null;
+	private CountDownTimer salivaCountDownTimer = null;
 	
 	/** self activity*/
 	Activity that;
@@ -53,6 +55,11 @@ public class TestActivity extends Activity implements BluetoothListener{
 	/** Sound playing variables */
 	private SoundPool soundPool;
 	
+	private static final int[] ELECTRODE_RESOURCE = { 0, R.drawable.test_progress_1,
+		R.drawable.test_progress_2, R.drawable.test_progress_3,
+		R.drawable.test_progress_4, R.drawable.test_progress_5,
+		R.drawable.test_progress_5 };
+	
 	/** Sound id*/
 	private int count_down_audio_id;
 	private int preview_audio_id;
@@ -61,8 +68,14 @@ public class TestActivity extends Activity implements BluetoothListener{
 	private BluetoothLE ble = null;
 	
 	private boolean first_connect = false;
+	private boolean first_voltage = false;
+	private boolean in_stage1 = false;
+	private boolean test_done = false;
 	
 	private static final int COUNT_DOWN_SECOND = 5;
+	private static final int WAIT_SALIVA_SECOND = 7;
+	private static final int FIRST_VOLTAGE_THRESHOLD = 25;
+	private static final int SECOND_VOLTAGE_THRESHOLD= 15;
 	
 	
 	/**
@@ -97,6 +110,7 @@ public class TestActivity extends Activity implements BluetoothListener{
 		@Override
 		public void onClick(){
 			first_connect =false;
+			first_voltage =false;
 			setState(new ConnState());
 		}
 	}
@@ -120,6 +134,7 @@ public class TestActivity extends Activity implements BluetoothListener{
 		}
 		@Override
 		public void onClick(){
+			stopDueToInit();
 			setState(new IdleState());
 		}
 	}
@@ -262,8 +277,11 @@ public class TestActivity extends Activity implements BluetoothListener{
 		private volatile boolean move_to_stage2 = false;
 		@Override
 		public void onStart(){
+			
+			
 			soundPool.play(preview_audio_id, 1.0F, 1.0F, 0, 0, 1.0F);
 			Log.d("Main", "Enter Stage1");
+			
 			
 			/** Search for the front facing camera */
 			int cameraId = -1;
@@ -289,6 +307,9 @@ public class TestActivity extends Activity implements BluetoothListener{
 			label_btn.setText("");
 			label_subtitle.setText("請將臉對準中央，並吐口水");
 			label_title.setText("請吐口水");
+			
+			in_stage1 = true;
+			ble.bleWriteState((byte)2);
 			/*
 			test_timer = new CountDownTimer(60000, 10000){
 		        public void onTick(long ms){
@@ -312,7 +333,7 @@ public class TestActivity extends Activity implements BluetoothListener{
 		}
 		@Override
 		public void onExit(){
-			move_to_stage2 = true;
+			//move_to_stage2 = true;
 			cameraLayout.setVisibility(4);
 			if(mCamera != null){
 				mCamera.stopPreview();
@@ -325,24 +346,16 @@ public class TestActivity extends Activity implements BluetoothListener{
 	}
 
 	private class Stage2State extends TestState{
-		private int ptr;
-		private int[] pids;
+		
 		@Override
 		public void onStart(){
 			label_btn.setText("");
 			img_bg.setVisibility(0);
 			img_ac.setVisibility(0);
 			img_btn.setVisibility(4);
-			ptr = 0;
-			pids = new int[5];
-			
-			/** Load id of progress bar*/
-			pids[0] = R.drawable.test_progress_1;
-			pids[1] = R.drawable.test_progress_2;
-			pids[2] = R.drawable.test_progress_3;
-			pids[3] = R.drawable.test_progress_4;
-			pids[4] = R.drawable.test_progress_5;
-			img_ac.setImageResource(pids[0]);
+
+			salivaCountDownTimer = new SalivaCountDownTimer();
+			salivaCountDownTimer.start();
 			/*
 			new CountDownTimer(5000, 1000){
 		        public void onTick(long ms){
@@ -394,13 +407,40 @@ public class TestActivity extends Activity implements BluetoothListener{
 	private class FormState extends TestState{
 		@Override
 		public void onStart(){
+			test_done = true;
 			ble.bleDisconnect();
-			DBControl.inst.startTesting();
-			startActivity(new Intent(that, EventCopeSkillActivity.class));		
+			//DBControl.inst.startTesting();
+			
+			startActivity(new Intent(that, EventCopeSkillActivity.class));	
+		}
+	}
+	
+	
+	//release resource
+	public void stop() { 
+		
+		first_connect = false;
+		first_voltage = false;
+		in_stage1 = false;
+		test_done = false;
+		
+		ble.bleDisconnect();
+		
+		if (salivaCountDownTimer!= null)
+			salivaCountDownTimer = null;
+		
+		if (testCountDownTimer != null) {
+			testCountDownTimer = null;
 		}
 	}
 	
 	public void stopDueToInit() {
+		
+		
+		first_connect = false;
+		first_voltage = false;
+		in_stage1 = false;
+		test_done = false;
 		//if (cameraRecorder != null)
 		//	cameraRecorder.close();
 
@@ -415,11 +455,20 @@ public class TestActivity extends Activity implements BluetoothListener{
 
 		//if (testHandler != null)
 		//	testHandler.removeMessages(0);
+		
+		if (salivaCountDownTimer != null)
+			salivaCountDownTimer.cancel();
 
 		if (testCountDownTimer != null)
 			testCountDownTimer.cancel();
 		//if (openSensorMsgTimer != null)
 		//	openSensorMsgTimer.cancel();
+	}
+	
+	public void onPause() {
+		
+		stop();
+		super.onPause();
 	}
 	
 	@Override
@@ -531,6 +580,32 @@ public class TestActivity extends Activity implements BluetoothListener{
 		}
 	}
 	
+	private class SalivaCountDownTimer extends CountDownTimer {
+		
+		private int ptr=0;
+		
+
+		public SalivaCountDownTimer() {
+			super(WAIT_SALIVA_SECOND*1000, 1000);
+		}
+
+		@Override
+		public void onFinish() {
+			//startButton.setVisibility(View.INVISIBLE);
+			//countDownText.setText("");
+			//showDebug(">Start to run the  device");
+			//runBT();
+			setState(new FormState());
+		}
+
+		@Override
+		public void onTick(long millisUntilFinished) {
+			
+			img_ac.setImageResource(ELECTRODE_RESOURCE[ptr++]);		
+			
+		}
+	}
+	
 	
 	//Upload all the data
 	@Override
@@ -604,7 +679,10 @@ public class TestActivity extends Activity implements BluetoothListener{
         Log.i(TAG, "BLE disconnected");
         Toast.makeText(this, "BLE disconnected", Toast.LENGTH_SHORT).show();
         
-        setState(new FailState("連接中斷"));
+        if(!test_done)
+        	setState(new FailState("連接中斷"));
+        else
+        	setState(new FailState("測試完成")); //temporary solution
         //if(ble != null) {
         //    ble = null;
         //}
@@ -641,18 +719,22 @@ public class TestActivity extends Activity implements BluetoothListener{
         //check ID here
     }
 
-    @Override
-    public void bleConductiveElectrode1(byte[] adcValue) {
-
-    }
-
-    @Override
-    public void bleConductiveElectrode2(byte[] adcValue) {
-
-    }
 
     @Override
     public void bleColorReadings(byte[] colorReadings) {
         Log.i(TAG, "Color sensor readings");
     }
+
+	@Override
+	public void bleElectrodeAdcReading(byte header, byte[] adcReading) {
+		// TODO Auto-generated method stub
+		//String str = new String(adcReading);
+		String str = String.valueOf(adcReading[0]);
+		String str2 = String.valueOf(header);
+		Log.i(TAG2, "State: "+str2+" "+str);
+		if(in_stage1 && (int)adcReading[0]> 5 && !first_voltage){
+			setState(new Stage2State());
+			first_voltage=true;
+		}
+	}
 }
