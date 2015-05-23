@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	
-        <string name="app_name">戒酒小幫手3</string>
+        <string name="app_name">戒K小幫手</string>
     <string name="loading">載入中</string>
     <string name="brac">酒精濃度</string>
     <string name="start">開始</string>

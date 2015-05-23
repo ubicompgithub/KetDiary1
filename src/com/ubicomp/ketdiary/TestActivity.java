@@ -2,8 +2,6 @@ package com.ubicomp.ketdiary;
 
 import java.io.File;
 
-import ubicomp.soberdiary3.R;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -20,13 +18,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,8 +37,8 @@ import com.ubicomp.ketdiary.camera.CameraRecorder;
 import com.ubicomp.ketdiary.camera.CameraRunHandler;
 import com.ubicomp.ketdiary.camera.ImageFileHandler;
 import com.ubicomp.ketdiary.camera.Tester;
-import com.ubicomp.ketdiary.dialog.NoteDialog;
 import com.ubicomp.ketdiary.file.MainStorage;
+import com.ubicomp.ketdiary.file.QuestionFile;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 
 
@@ -88,6 +84,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	//File 
 	private File mainDirectory;
 	private ImageFileHandler imgFileHandler;
+	private QuestionFile questionFile; 
 	
 	/** Sound playing variables */
 	private SoundPool soundPool;
@@ -104,6 +101,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	private TestState CertainState = null;
 	private BluetoothLE ble = null;
 	
+	
 	private boolean first_connect = false;
 	private boolean first_voltage = false;
 	private boolean second_voltage= false;
@@ -113,6 +111,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	private boolean camera_initial=false;
 	private boolean camera_done=false;
 	private boolean is_timeout=false;
+	private boolean is_debug = false;
 	//private boolean second_pass=false;
 	
 	private static final int COUNT_DOWN_SECOND = 5;
@@ -224,8 +223,6 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		private volatile boolean move_to_stage2 = false;
 		@Override
 		public void onStart(){
-			
-			
 						
 			soundPool.play(preview_audio_id, 1.0F, 1.0F, 0, 0, 1.0F);
 			Log.d("Main", "Enter Stage1");
@@ -243,8 +240,6 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 				}
 			}
 			
-			
-			
 			mCamPreview = new CameraPreview(that);
 			cameraLayout.addView(mCamPreview);
 			Log.i("FORTEST", "cameraId: " + cameraId);
@@ -254,12 +249,8 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			//cameraRecorder.initialize();
 			cameraRecorder.start();
 			
-			
-			
 			//cameraLayout.setVisibility(View.VISIBLE);
-			
-			
-			
+
 			label_btn.setText("");
 			label_subtitle.setText("請將臉對準中央，並吐口水");
 			label_title.setText("請吐口水");
@@ -372,7 +363,11 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 
 		imgFileHandler = new ImageFileHandler(mainDirectory,
 				String.valueOf(timestamp));
-		//questionFile = new QuestionFile(mainDirectory);
+		questionFile = new QuestionFile(mainDirectory);
+	}
+	
+	public void writeQuestionFile(int type, int items, int impact) {
+		questionFile.write(type, items, impact);
 	}
 	
 	
@@ -386,6 +381,10 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		first_voltage = false;
 		in_stage1 = false;
 		test_done = false;
+		
+		if (msgHandler != null) {
+			msgHandler.removeMessages(0);
+		}
 		
 		if(ble!=null){
 			ble.bleDisconnect();
@@ -454,7 +453,8 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		super.onResume();
 		// dismiss sleep
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		
+		checkDebug(is_debug);//PreferenceControl.isDebugMode());
+		reset();
 		
 	}
 	
@@ -471,7 +471,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		img_btn = (ImageView)findViewById(R.id.vts_iv_cry);
 		cameraLayout = (FrameLayout)findViewById(R.id.cameraLayout);
 		
-		btn_debug = (Button)findViewById(R.id.debug_button1);
+		btn_debug = (Button)findViewById(R.id.debug_button_1);
 		debugScrollView = (ScrollView)findViewById(R.id.debug_scroll_view);
 		debugMsg = (EditText)findViewById(R.id.debug_msg);
 		//TODO: camera_mask = (ImageView)findViewById(R.id.test_camera_mask);
@@ -482,7 +482,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		preview_audio_id = soundPool.load(this, R.raw.din_ding, 1);
 		setState(new IdleState());
 		
-		btn_debug.setOnClickListener(new ConditionOnClickListener();
+		btn_debug.setOnClickListener(new DebugOnClickListener());
 			
 		/** State onclick function use here*/
 		img_btn.setOnClickListener(new View.OnClickListener() {
@@ -492,6 +492,9 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			}
 		});
 		that = this;
+		
+		
+		msgHandler = new ChangeMsgHandler();
 	}
 
 	
@@ -552,7 +555,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		public void onFinish() {
 			//startButton.setVisibility(View.INVISIBLE);
 			//countDownText.setText("");
-			//showDebug(">Start to run the  device");
+			showDebug(">Start to run the  device");
 			//runBT();
 			setState(new Stage1State());
 		}
@@ -611,7 +614,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	//Upload all the data
 	@Override
 	protected void onStart() {
-		UploadService.startUploadService(this);
+		//UploadService.startUploadService(this);
 		super.onStart();
 	}
 	
@@ -638,7 +641,8 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
                 finish();
                 break;
             case 2:
-            	new NoteDialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen).show();
+            	//new NoteDialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen).show();
+            	startActivity(new Intent(that, NoteActivity.class));
             	break;
             case 3:
             	//startActivity(new Intent(that, MainActivity.class));
@@ -656,7 +660,10 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 
         ble.onBleActivityResult(requestCode, resultCode, data);
     }
-
+    
+    
+    //=======BLE callback function 
+    
     @Override
     public void bleNotSupported() {
     	  Toast.makeText(this, "BLE not support", Toast.LENGTH_SHORT).show();
@@ -711,9 +718,9 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
     @Override
     public void blePlugInserted(byte[] plugId) {
         Log.i(TAG, "Test plug is inserted");
-        Toast.makeText(this, "Test plug is inserted", Toast.LENGTH_SHORT).show();
         
         if(!first_connect){
+        	Toast.makeText(this, "Test plug is inserted", Toast.LENGTH_SHORT).show();
         	setState(new FiveSecondState());
         	first_connect=true;
         }
@@ -733,6 +740,9 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		String str = String.valueOf(adcReading[0]);
 		String str2 = String.valueOf(header);
 		Log.i(TAG2, "State: "+str2+" "+str);
+		
+		showDebug(">"+str+str2);
+		
 		if(in_stage1 && (int)adcReading[0]> FIRST_VOLTAGE_THRESHOLD && !first_voltage){
 			setState(new Stage2State());
 			first_voltage=true;
@@ -795,43 +805,22 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	
 	// DebugMode
 	// --------------------------------------------------------------------------------------------------------
-	/*
-	private void checkDebug(boolean debug, boolean debug_type) {
+	
+	private void checkDebug(boolean debug) {
 		
-		RelativeLayout debugLayout = (RelativeLayout) view
-				.findViewById(R.id.debugLayout);
 		if (debug) {
-			debugLayout.setVisibility(View.VISIBLE);
+			debugScrollView.setVisibility(View.VISIBLE);
 			msgHandler = new ChangeMsgHandler();
 			debugMsg.setText("");
 			debugMsg.setOnKeyListener(null);
-			TextView debugText = (TextView) view
-					.findViewById(R.id.debug_mode_text);
-
-			Button modeButton = (Button) view
-					.findViewById(R.id.debug_mode_change);
-
-			modeButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					PreferenceControl.setDebugType(!PreferenceControl
-							.debugType());
-					checkDebug(PreferenceControl.isDebugMode(),
-							PreferenceControl.debugType());
-				}
-			});
-
-
-			TextView vol_tv = (TextView) view
-					.findViewById(R.id.debug_voltage_value);
-			vol_tv.setText("NULL");
+			//TextView debugText = (TextView)findViewById(R.id.debug_mode_text);
 
 		} else {
-			debugLayout.setVisibility(View.INVISIBLE);
+			debugScrollView.setVisibility(View.INVISIBLE);
 			return;
 		}
 
-	}*/
+	}
 
 	private class DebugOnClickListener implements View.OnClickListener {
 
@@ -842,19 +831,24 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 
 		@Override
 		public void onClick(View v) {
-			debugScrollView.setVisibility(View.VISIBLE);
-		}
+				
+			
+			if(is_debug){
+				//debugScrollView.setVisibility(View.VISIBLE);
+				is_debug = false;
+			}
+			else{
+				//debugScrollView.setVisibility(View.INVISIBLE);
+				is_debug = true;
+			}
+			checkDebug(is_debug);
+		}		
 	}
 
-	public void showDebugVoltage(String message) {
-		TextView vol_tv = (TextView)findViewById(R.id.debug_voltage_value);
-		vol_tv.setText(message);
-		vol_tv.invalidate();
-	}
 
 	public void showDebug(String message, int type) {
-		Boolean debug = PreferenceControl.isDebugMode();
-		if (debug && msgHandler != null) {
+		//Boolean debug = PreferenceControl.isDebugMode();
+		if (is_debug && msgHandler != null) {
 			Message msg = new Message();
 			Bundle data = new Bundle();
 			data.putInt("type", type);
@@ -879,7 +873,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 				debugScrollView.scrollTo(0, debugMsg.getBottom() + 100);
 				debugMsg.invalidate();
 			} else if (type == 1) {
-				showDebugVoltage(data.getString("message"));
+				//showDebugVoltage(data.getString("message"));
 			}
 		}
 	}

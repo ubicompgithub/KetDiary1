@@ -16,6 +16,7 @@ import org.apache.http.protocol.HTTP;
 import android.util.Log;
 
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
+import com.ubicomp.ketdiary.data.structure.TestDetail;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.system.PreferenceControl;
@@ -141,8 +142,6 @@ public class HttpPostGenerator {
 		return httpPost;
 	}
 	
-	
-	
 	/**
 	 * Generate POST of NoteAdd
 	 * @param data
@@ -165,6 +164,28 @@ public class HttpPostGenerator {
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.items)));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.impact)));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.description)));
+		try {
+			httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
+		} catch (UnsupportedEncodingException e) {}
+		return httpPost;
+	}
+	
+	public static HttpPost genPost(TestDetail data){
+		HttpPost httpPost = new HttpPost(ServerUrl.getNoteAddUrl());
+		String uid = PreferenceControl.getUID();
+		String deviceId=PreferenceControl.getDeviceId();
+		
+		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+		nvps.add(new BasicNameValuePair("uid", uid));
+		//nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.isAfterTest)));
+		
+		//nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.tv.getTimestamp())));
+		//nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.recordTv)));
+		//nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.category)));
+		//nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.type)));
+		//nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.items)));
+		//nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.impact)));
+		//nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.description)));
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 		} catch (UnsupportedEncodingException e) {}

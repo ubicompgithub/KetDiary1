@@ -18,7 +18,7 @@
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
 
-    <uses-sdk android:minSdkVersion="18" />
+    <uses-sdk android:minSdkVersion="14" />
     <application
         android:name="com.ubicomp.ketdiary.App"
         android:allowBackup="true"
@@ -77,6 +77,10 @@
         
         <activity
             android:name=".BluetoothLE.MainActivity"
+            android:label="@string/title_activity_dev" >
+        </activity>
+        <activity
+            android:name=".NoteActivity"
             android:label="@string/title_activity_dev" >
         </activity>
     </application>

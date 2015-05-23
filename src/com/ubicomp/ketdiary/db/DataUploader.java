@@ -16,6 +16,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.ubicomp.ketdiary.data.structure.NoteAdd;
+import com.ubicomp.ketdiary.data.structure.TestDetail;
+import com.ubicomp.ketdiary.data.structure.TestResult;
+
 /**
  * Used for upload data to the server
  * 
@@ -59,13 +63,7 @@ public class DataUploader {
 				Log.d(TAG, "FAIL TO CONNECT TO THE SERVER");
 			}*/
 
-			// EmotionDIY
-			/*if (e_data != null) {
-				for (int i = 0; i < e_data.length; ++i) {
-					if (connectToServer(e_data[i]) == ERROR)
-						Log.d(TAG, "FAIL TO UPLOAD - EMOTION DIY");
-				}
-			}*/
+
 			
 			// TestDetail
 			Vector<Datatype.TestDetail> ttds = DBControl.inst.getNotUploadedTestDetail();
@@ -80,7 +78,16 @@ public class DataUploader {
 
 			if(connectToServer() == ERROR)
 				Log.d(TAG, "FAIL TO UPLOAD - Patient");
-				
+			
+			// EmotionDIY
+			/*
+			TestResult t_data[] = ;db.getNotUploadedEmotionDIY();
+			if (e_data != null) {
+				for (int i = 0; i < e_data.length; ++i) {
+					if (connectToServer(e_data[i]) == ERROR)
+						Log.d(TAG, "FAIL TO UPLOAD - EMOTION DIY");
+				}
+			}*/
 			
 			
 			return null;
@@ -141,7 +148,56 @@ public class DataUploader {
 			return SUCCESS;
 		}
 		
+		private int connectToServer(TestResult data) {
+			try {
+				DefaultHttpClient httpClient = HttpSecureClientGenerator
+						.getSecureHttpClient();
+				HttpPost httpPost = HttpPostGenerator.genPost(data);
+				if (upload(httpClient, httpPost)){
+					//db.setEmotionManagementUploaded(data.getTv().getTimestamp());
+				}
+				else
+					return ERROR;
+			} catch (Exception e) {
+				Log.d(TAG, "EXCEPTION:" + e.toString());
+				return ERROR;
+			}
+			return SUCCESS;
+		}
 		
+		private int connectToServer(NoteAdd data) {
+			try {
+				DefaultHttpClient httpClient = HttpSecureClientGenerator
+						.getSecureHttpClient();
+				HttpPost httpPost = HttpPostGenerator.genPost(data);
+				if (upload(httpClient, httpPost)){
+					//db.setEmotionManagementUploaded(data.getTv().getTimestamp());
+				}
+				else
+					return ERROR;
+			} catch (Exception e) {
+				Log.d(TAG, "EXCEPTION:" + e.toString());
+				return ERROR;
+			}
+			return SUCCESS;
+		}
+		
+		private int connectToServer(TestDetail data) {
+			try {
+				DefaultHttpClient httpClient = HttpSecureClientGenerator
+						.getSecureHttpClient();
+				HttpPost httpPost = HttpPostGenerator.genPost(data);
+				if (upload(httpClient, httpPost)){
+					//db.setEmotionManagementUploaded(data.getTv().getTimestamp());
+				}
+				else
+					return ERROR;
+			} catch (Exception e) {
+				Log.d(TAG, "EXCEPTION:" + e.toString());
+				return ERROR;
+			}
+			return SUCCESS;
+		}
 		
 		
 		// handle upload respond message
