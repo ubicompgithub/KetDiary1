@@ -6,5 +6,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="lib" path="libs/libsvm.jar"/>
+	<classpathentry kind="lib" path="libs/httpcore-4.3.2.jar"/>
+	<classpathentry kind="lib" path="libs/httpmime-4.3.5.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

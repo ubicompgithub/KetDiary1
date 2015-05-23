@@ -1,15 +1,15 @@
 package com.ubicomp.ketdiary.data.structure;
 
 public class NoteAdd {
-	private int isAfterTest;
-	private TimeValue tv;
-	private TimeValue recordTv;
-	private int rtimeslot;
-	private int category;
-	private int type;
-	private int items;
-	private int impact;
-	private String description;
+	public int isAfterTest;
+	public TimeValue tv;
+	public TimeValue recordTv;
+	public int rtimeslot;
+	public int category;
+	public int type;
+	public int items;
+	public int impact;
+	public String description;
 
 	public NoteAdd(int isAfterTest, TimeValue tv, TimeValue recordTv,int rtimeslot,
 			       int category, int type, int items,int impact, String description) {

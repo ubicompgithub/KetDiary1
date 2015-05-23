@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="test_guide_msg">
+        <item>飲酒過量，有礙健康</item>
+        <item>飲酒過量，害人害己</item>
+        <item>半杯茶，贏過一壺酒</item>
+        <item>應酬不喝酒，健康才長久</item>
+        <item>健康人生，減速前進\n酒色財氣，禁止通行</item>
+        <item>酒不入口，健康不用愁</item>
+        <item>遠離酒，健康久久</item>
+        <item>要安全別喝酒！</item>
+        <item>有志不在年高\n無志空長百歲</item>
+        <item>積極就是比別人多走一步</item>
+        <item>凡事不可\n真的變成不可能</item>
+        <item>放開懷抱面對轉變\n但不要放走你的價值</item>
+        <item>要社會不淘汰你\n你首先要不放棄自己</item>
+        <item>成功非僥幸\n失敗有原因</item>
+        <item>人逢順境不逞強\n身處逆境不示弱</item>
+        <item>精神的滿足比肚子\n的滿足來得長久</item>
+        <item>人生就像踏單車\n不斷向前才能取得平衡</item>
+        <item>成功人講勤力\n失敗者才講運氣</item>
+        <item>你自己就是你自己\n給自己一個認同就可以</item>
+        <item>生命在閃耀中現出絢爛\n在平凡中現出真實</item>
+        <item>憂慮不會消除明天的憂傷\n但會使你失去今天的力量</item>
+        <item>有好的觀念才能\n發揮生命的功能</item>
+        <item>正視疾病、勇於忍受的人\n將變得更堅強、壯大</item>
+        <item>每天告訴自己一次\n『我真的很不錯』</item>
+        <item>人若軟弱就是\n自己最大的敵人</item>
+        <item>人若勇敢就是\n自己最好的朋友</item>
+        <item>有理想在的地方\n地獄就是天堂</item>
+    </string-array>
+</resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="coping_page">應對技巧</string>
+    <string name="coping_relaxed">放鬆技巧</string>
+    <string name="coping_breath">閉眼專注觀察呼吸</string>
+    <string name="coping_musle">閉眼讓肌肉放鬆</string>
+    <string name="coping_music">聆聽舒緩音樂</string>
+     <string name="coping_stretch">伸展</string>
+    <string name="coping_meditation">冥想</string>
+    <string name="coping_casual">休閒活動</string>
+    <string name="coping_interperson">與他人相處建議</string>
+    <string name="coping_away">遠離現場</string>
+    <string name="coping_told">讓朋友知道你正在戒酒</string>
+    <string name="coping_drink">以飲料或茶代酒</string>
+    <string name="coping_telephone">撥電話</string>
+    <string name="coping_mms">傳簡訊</string>
+    <string name="coping_information">資訊站</string>
+    <string name="coping_harm">飲酒造成的危害</string>
+    <string name="coping_lifestyle">生活習慣建議</string>
+    <string name="coping_lapse">又開始飲酒了怎麼辦?</string>
+
+    
+</resources>

@@ -79,11 +79,12 @@ public class EventCopeSkillActivity extends Activity {
 	};
 	
 	private Handler handler = new Handler(){
+		long ms = 600;
 		public void handleMessage(Message msg){
 			super.handleMessage(msg);
 			switch(msg.what){
 			case 1:
-				long ms = 600 - (DBControl.inst.getTestMs())/1000;
+				ms -= 1;
 				long minutes = ms/60;
 				long second = ms%60;
 				tv_timer.setText(String.valueOf(minutes) + ":" + String.valueOf(second));

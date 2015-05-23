@@ -21,7 +21,7 @@ public class PreferenceControl {
 	/** Default setting at the first time of launching SoberDiary */
 	public static void defaultSetting() {
 		setUID("sober_default_test");
-		setDeviceId("ket_001");
+		setDeviceId("ket_000");
 		setIsDeveloper(true);
 		Calendar cal = Calendar.getInstance();
 		setStartDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),

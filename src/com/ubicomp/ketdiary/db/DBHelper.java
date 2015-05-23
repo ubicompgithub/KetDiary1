@@ -27,30 +27,41 @@ public class DBHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		// new Detection Table, rename as Testing
-		db.execSQL("CREATE TABLE Testing ("
+		// TestResult Table
+		db.execSQL("CREATE TABLE TestResult ("
 				+ " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-				+ " brac FLOAT," + " year INTEGER NOT NULL,"
+				+ " result INTEGER," + " cassetteId CHAR[255] NOT NULL,"
+				+ " year INTEGER NOT NULL," 
 				+ " month INTEGER NOT NULL," + " day INTEGER NOT NULL,"
 				+ " ts INTEGER NOT NULL," + " week INTEGER NOT NULL,"
-				+ " timeSlot INTEGER NOT NULL," + " trigger INTEGER NOT NULL,"
-				+ " craving INTEGER NOT NULL," + " isPrime INTEGER NOT NULL, "
+				+ " isPrime INTEGER NOT NULL, "	+ " isFilled INTEGER NOT NULL , "
 				+ " weeklyScore INTEGER NOT NULL," + " score INTEGER NOT NULL,"
 				+ " upload INTEGER NOT NULL DEFAULT 0" + ")");
 		
 		
-		//  old Detection Table
-		db.execSQL("CREATE TABLE Detection ("
+		//  NoteAdd Table
+		db.execSQL("CREATE TABLE NoteAdd ("
 				+ " id INTEGER PRIMARY KEY AUTOINCREMENT, "
-				+ " brac FLOAT NOT NULL," + " year INTEGER NOT NULL,"
+				+ " isAfterTest INT NOT NULL," + " year INTEGER NOT NULL,"
 				+ " month INTEGER NOT NULL," + " day INTEGER NOT NULL,"
 				+ " ts INTEGER NOT NULL," + " week INTEGER NOT NULL,"
-				+ " timeSlot INTEGER NOT NULL," + " emotion INTEGER NOT NULL,"
-				+ " craving INTEGER NOT NULL," + " isPrime INTEGER NOT NULL, "
+				+ " timeSlot INTEGER NOT NULL," + " category INTEGER NOT NULL,"
+				+ " type INTEGER NOT NULL," + " items INTEGER NOT NULL, "
+				+ " impact INTEGER NOT NULL, "+ " description CHAR[255], "
 				+ " weeklyScore INTEGER NOT NULL," + " score INTEGER NOT NULL,"
+				+ " upload INTEGER NOT NULL DEFAULT 0" + ")");
+		
+		
+		db.execSQL("CREATE TABLE TestDetail ("
+				+ " id INTEGER PRIMARY KEY AUTOINCREMENT, "
+				+ " cassetteId CHAR[255] NOT NULL," + " year INTEGER NOT NULL,"
+				+ " month INTEGER NOT NULL," + " day INTEGER NOT NULL,"
+				+ " ts INTEGER NOT NULL," + " week INTEGER NOT NULL,"
+				+ " failState INTEGER NOT NULL," + " firstVoltage INTEGER NOT NULL,"
+				+ " secondVoltage INTEGER NOT NULL," + " devicePower INTEGER NOT NULL, "
+				+ " colorReading INTEGER NOT NULL, "+ " connectionFailRate CHAR[255], "
 				+ " upload INTEGER NOT NULL DEFAULT 0" + ")");
 
-	
 	}
 
 	@Override

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="trigger_list">
+        <item>負面情緒</item>
+        <item>身體不舒服</item>
+        <item>正面情緒</item>
+        <item>測試控制力</item>
+        <item>誘惑與衝動</item>
+        <item>與他人衝突</item>
+        <item>社交壓力</item>
+        <item>與他人玩樂</item>
+        <item>自訂</item>
+    </string-array>
+    
+    <string-array name="note_time_slot">
+        <item>上午</item>
+        <item>下午</item>
+        <item>晚上</item>
+    </string-array>
+    
+    <string-array name="note_date">
+        <item>5/16</item>
+        <item>5/15</item>
+        <item>5/14</item>
+    </string-array>
+    
+    <string-array name="note_negative">
+        <item>沮喪</item>
+        <item>走投無路</item>
+        <item>無聊</item>
+        <item>寂寞</item>
+        <item>緊張</item>
+        <item>罪惡感</item>
+        <item>壓力大</item>
+        <item>生氣</item>
+        <item>困惑</item>
+    </string-array>
+    <string-array name="note_notgood">
+        <item>病懨懨</item>
+        <item>失眠</item>
+        <item>沒精神</item>
+        <item>想減重</item>
+        <item>疼痛</item>
+    </string-array>
+    <string-array name="note_positive">
+        <item>高興</item>
+        <item>放鬆</item>
+        <item>興奮</item>
+        <item>滿意</item>
+        <item>美好</item>
+    </string-array>
+    <string-array name="note_selftest">
+        <item>適量飲酒</item>
+        <item>酒精不是問題</item>
+        <item>還有沒有酒癮</item>
+        <item>和酒肉朋友出去</item>
+        <item>脫離誘惑</item>
+    </string-array>
+     <string-array name="note_temptation">
+        <item>在常喝酒的地方</item>
+        <item>看到酒</item>
+        <item>吸毒</item>
+        <item>別人談論酒</item>
+        <item>想到飲酒的舒爽</item>
+    </string-array>
+     <string-array name="note_conflict">
+        <item>在他人面前不自在</item>
+        <item>難以表達情感</item>
+        <item>被別人討厭</item>
+        <item>計畫被打亂</item>
+        <item>家人壓力</item>
+        <item>工作衝突</item>
+        <item>家庭糾紛</item>
+        <item>沒達到他人期望</item>
+        <item>需要勇氣面對人</item>
+        <item>被人掌握</item> 
+    </string-array>
+    <string-array name="note_social">
+        <item>朋友邀酒</item>
+        <item>朋友建議到某處</item>
+        <item>別人喝酒,請我加入</item>
+        <item>被邀酒</item>
+        <item>其他每個人都飲酒</item>
+    </string-array>
+    <string-array name="note_play">
+        <item>遇到老朋友</item>
+        <item>跟親密好友相聚</item>
+        <item>助興</item>
+        <item>慶祝</item>
+        <item>助性</item>
+    </string-array>
+
+    <string name="note_negative">負面情緒</string>
+    <string name="note_notgood">身體不舒服</string>
+    <string name="note_positive">正面情緒</string>
+    <string name="note_selftest">測試控制力</string>
+    <string name="note_temptation">誘惑與衝動</string>
+    <string name="note_conflict">與他人衝突</string>
+    <string name="note_social">社交壓力</string>
+    <string name="note_play">與他人玩樂</string>
+    
+    <string-array name="item_select">
+        <item>請點選類別以選擇</item>
+    </string-array>
+    
+    <string name="hint_note_detail">簡述記事內容</string>
+    <string name="title_activity_list_test">ListTestActivity</string>
+    
+</resources>

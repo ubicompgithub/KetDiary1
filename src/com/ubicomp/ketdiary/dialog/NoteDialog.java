@@ -36,6 +36,8 @@ import com.ubicomp.ketdiary.db.NoteCatagory;
  */
 public class NoteDialog extends Dialog{
 	
+	private NoteDialog that = this;
+	
 	private ViewPager vPager;
 	private ImageView iv_try, iv_smile, iv_urge,
 					  iv_cry, iv_not_good;
@@ -113,6 +115,7 @@ public class NoteDialog extends Dialog{
 	//把所選取的結果送出 
 	class EndOnClickListener implements View.OnClickListener{
 		public void onClick(View v){
+			/*
 			Datatype.TestDetail ttd = Datatype.inst.newTestDetail();
 			ttd.is_filled = true;
 			ttd.date = new Date();
@@ -122,7 +125,8 @@ public class NoteDialog extends Dialog{
 			ttd.type_id = 1;
 			ttd.reason_id = 1;
 			ttd.description = "abc";
-			DBControl.inst.addTestResult(ttd);
+			DBControl.inst.addTestResult(ttd);*/
+			that.dismiss();
 	    
 	    }
 	}
@@ -138,19 +142,6 @@ public class NoteDialog extends Dialog{
 		vPager.setAdapter(mAdapter);
 	}
 	
-	private void Click(){
-		/*Datatype.TestDetail ttd = Datatype.inst.newTestDetail();
-		ttd.is_filled = true;
-		ttd.date = new Date();
-		ttd.time_trunk = 1;
-		ttd.result = 1;
-		ttd.catagory_id = 1;
-		ttd.type_id = 1;
-		ttd.reason_id = 1;
-		ttd.description = "abc";
-		DBControl.inst.addTestResult(ttd);
-		*/
-	}
 	
 	public class TypePageAdapter extends PagerAdapter{
 		

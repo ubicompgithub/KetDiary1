@@ -1,8 +1,362 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	
+        <string name="app_name">戒酒小幫手3</string>
+    <string name="loading">載入中</string>
+    <string name="brac">酒精濃度</string>
+    <string name="start">開始</string>
+    <string name="recoverying">回復中</string>
+    <string name="morning">早上</string>
+    <string name="morning_time">0&#8211;12</string>
+    <string name="noon">下午</string>
+    <string name="noon_time">12&#8211;20</string>
+    <string name="night">晚上</string>
+    <string name="night_time">20&#8211;24</string>
+    <string name="today_test">今日測試</string>
+    <string name="today_test_none">尚未測試</string>
+    <string name="week_test">每周測試統計</string>
+    <string name="month_test">每月統計測試</string>
+    <string name="morning_short">早</string>
+    <string name="noon_short">午</string>
+    <string name="night_short">晚</string>
+    <string name="test_pass">通過</string>
+    <string name="test_fail">不通過</string>
+    <string name="test_none">未測試</string>
+    <string name="done">完成</string>
+    <string name="storytelling_page_help">周數</string>
+    <string name="emotion">心情量尺</string>
+    <string name="emotion_short">心情</string>
+    <string name="craving">渴求指數</string>
+    <string name="craving_short">渴求</string>
+    <string name="brac_result">酒測結果</string>
+    <string name="brac_result_short">酒測值</string>
+    <string name="total_result">綜合資料</string>
+    <string name="analysis_counter">已獲得點數</string>
+    <string name="analysis_saving">已節省金錢</string>
+    <string name="analysis_rank">您的排名</string>
+    <string name="high">高</string>
+    <string name="low">低</string>
+    <string name="after_test_pass">做得很好！</string>
+    <string name="after_test_fail">好好加油！</string>
+    <string name="after_questionnaire">繼續加油！</string>
 
-    <string name="app_name">KetDiary</string>
+    <string-array name="emotion_state">
+        <item>　沮喪　</item>
+        <item>　低落　</item>
+        <item>　普通　</item>
+        <item>　愉快　</item>
+        <item>　快樂　</item>
+    </string-array>
+    <string-array name="craving_state">
+        <item>無\n　</item>
+        <item>ㄧ點\n</item>
+        <item>輕微\n可以控制</item>
+        <item>輕度\n但未行動</item>
+        <item>輕中度\n蠢蠢欲動</item>
+        <item>中度\n想去買</item>
+        <item>中強度\n等一下買</item>
+        <item>強烈\n考慮要喝</item>
+        <item>很強烈\n猶豫再喝</item>
+        <item>極強烈\n馬上就喝</item>
+    </string-array>
+
+    <string name="wait">請稍待</string>
+    <string name="msg_box_title">自我了解</string>
+    <string name="msg_box_help1">您的心情量尺：</string>
+    <string name="msg_box_help2">您的渴求程度：</string>
+    <string name="msg_box_help3">是否回報現在位置？</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+    <string name="send">寄送</string>
+    <string name="cancel">取消</string>
+    <string name="ok">確定</string>
+    <string name="msg_box_toast_cancel">確定放棄填寫？</string>
+    <string name="msg_box_toast_send">確定完成自我了解？</string>
+    <string name="notification_msg_1">該檢測了！</string>
+    <string name="test_guide_start_top">請點選\'開始\'進行測試</string>
+    <string name="test_guide_start_bottom">測試尚未開始</string>
+    <string name="test_guide_reset_top">請按酒測裝置右下角按鈕</string>
+    <string name="test_guide_reset_bottom">請啟用酒測裝置</string>
+    <string name="test_guide_init_top">請稍待，酒測器準備中</string>
+    <string name="test_guide_init_bottom">酒測器已啟用</string>
+    <string name="test_guide_testing_top">請將臉對於螢幕中央，並開始吹氣</string>
+    <string name="test_guide_testing_bottom">酒測器已可進行測試</string>
+    <string name="test_guide_pair_top">請至藍牙設定頁面進行設定</string>
+    <string name="test_guide_pair_bottom">酒測器藍牙配對設定錯誤</string>
+    <string name="test_guide_update_top">請於倒數結束前重新進行酒測</string>
+    <string name="test_guide_update_bottom">重新測試倒數中</string>
+    <string name="test_guide_recovery_top">請稍待</string>
+    <string name="test_guide_recovery_bottom">酒測器回復中</string>
+    <string name="test_guide_recovery_update_top">請於酒測器回復後盡快重新測試</string>
+    <string name="test_guide_recovery_update_bottom">酒測器回復中</string>
+    <string name="test_guide_not_turn_on">未啟動酒測裝置</string>
+    <string name="test_guide_test_fail">酒測器沒電了</string>
+    <string name="test_guide_test_timeout">測試超時</string>
+    <string name="test_guide_connect_fail">酒測器連接錯誤</string>
+    <string name="test_guide_multi_blow">吹氣不穩以致測試失敗</string>
+    <string name="test_guide_zero_duration">連線錯誤，請重啟酒測器及手機藍牙功能</string>
+    <string name="test_guide_pressure_error">酒測器有損壞，請聯絡戒酒小幫手團隊予以更換</string>
+    <string name="test_guide_high_initial">酒測器未完全回復，請將酒測器啟動並放在通風處兩分鐘再測試</string>
+    <string name="test_guide_msg_box">請依對話框指示進行操作</string>
+    <string name="test_guide_end">請點選\'確定\'按鈕</string>
+    <string name="tutorial_next">點擊進入下一步</string>
+
+    <string-array name="tutorial_step">
+        <item>按下開關，使指示燈亮起</item>
+        <item>進入測試頁面按下開始按鈕</item>
+        <item>對準吹氣口持續吹氣五秒鐘</item>
+    </string-array>
+
+    <string name="tutorial_step1">按下開關，使指示燈亮起</string>
+    <string name="tutorial_step2">進入測試頁面按下開始按鈕</string>
+    <string name="tutorial_step3">對準吹氣口持續吹氣五秒鐘</string>
+    <string name="year">年</string>
+    <string name="month">月</string>
+    <string name="day">日</string>
+    <string name="analysis_counter_help">您已獲得：</string>
+    <string name="analysis_counter_counter">點</string>
+    <string name="analysis_counter_coupon">張禮卷</string>
+    <string name="analysis_saving_help">您已節省：</string>
+    <string name="analysis_rank_month_help">整體排名：</string>
+    <string name="analysis_rank_week_help">本周排名：</string>
+
+    <string-array name="analysis_rank_change_help">
+        <item>第一名</item>
+        <item>第二名</item>
+        <item>第三名</item>
+        <item></item>
+        <item>進步了</item>
+        <item>後退了</item>
+    </string-array>
+
+    <string name="dollor_sign">$</string>
+    <string name="audio_box_toast_timeup">一分鐘到了</string>
+    <string name="audio_box_toast_record_end">完成錄音</string>
+    <string name="audio_box_toast_play_end">結束播放</string>
+    <string name="audio_box_playing">播放中</string>
+    <string name="audio_box_recording">錄音中</string>
+    <string name="audio_box_preparing">準備中</string>
+    <string name="total">總共</string>
+    <string name="minute">分鐘</string>
+    <string name="second">秒</string>
+
+    <string-array name="audio_box_help">
+        <item>錄下或聆聽在</item>
+        <item>的心情\n(最長可達一分鐘)</item>
+    </string-array>
+
+    <string name="quote_next_message">請按此看延伸學習‧‧‧</string>
+    <string name="call_to">要聯絡誰？</string>
+    <string name="next">下一步</string>
+    <string name="connect_to_family">跟親友聊天</string>
+    <string name="connect_for_social_help">尋求社區心理諮商</string>
+    <string name="connect_to_emotion_hot_line">聯絡心情專線</string>
+    <string name="connect_null">沒有聯絡對象</string>
+    <string name="call_check_help_emotion_hot_line">確定撥打心情專線？</string>
+    <string name="call_check_help">確定要撥給 </string>
+    <string name="question_sign">？</string>
+    <string name="about_title">關於</string>
+    <string name="about_help">詳細資料：</string>
+    <string name="about_setting">設定：</string>
+    <string name="about_time_gap">提醒時間間隔為：</string>
+
+    <string-array name="setting_time_gap">
+        <item>提醒時間間隔設為30分鐘</item>
+        <item>提醒時間間隔設為60分鐘</item>
+        <item>提醒時間間隔設為120分鐘</item>
+        <item>關閉提醒功能</item>
+    </string-array>
+    <string-array name="about_message">
+        <item>此應用程式由</item>
+        <item>合作開發。</item>
+        <item>開發目為協助酗酒患者戒酒並自我控制使用。</item>
+        <item>此應用程式需搭配專用酒測器方可使用。</item>
+        <item>應用介面視覺設計：</item>
+        <item>插畫：</item>
+        <item>著色：</item>
+    </string-array>
+
+    <string name="phone">聯絡開發團隊：</string>
+    <string name="phone_number"><u>(02)3366-4926</u></string>
+    <string name="phone_check">確定要聯絡開發團隊？</string>
+    <string name="dot">、</string>
+    <string name="ntu">國立台灣大學</string>
+    <string name="intel_ntu">Intel-臺大創新研究中心</string>
+    <string name="taipei_city_hospital">臺北市立聯合醫院</string>
+    <string name="happ_design">happdesign.com</string>
+    <string name="rickie_wu">Rickie Wu</string>
+    <string name="yuda_huang">Yuga Huang</string>
+    <string name="current_version">目前版本：</string>
+    <string name="testTimeCheckToast">酒測器回復中</string>
+    <string name="self_help_counter_unit">點</string>
+    <string name="get_self_help_counter">+1點</string>
+    <string name="emotion_box_playing">播放中</string>
+    <string name="emotion_box_pause">暫停中</string>
+    <string name="emotion_box_replay">重新撥放？</string>
+    <string name="default_recreation_1">聽音樂</string>
+    <string name="default_recreation_2">慢跑</string>
+    <string name="default_recreation_3">打球</string>
+    <string name="default_goal_good"> 機車</string>
+    <string name="default_forbidden">您不是本實驗參加者，因此無法使用吹氣功能</string>
+    <string name="open_gps">請將位置資訊服務相關功能開啟</string>
+    <string name="check_do_not_keep_activities">您已開啟“不要保留活動”且未啟用“位置資訊服務”。\n建議您至“設定->開發人員選項”下取消勾選“不要保留活動”。\n本次測試將不會回報您的位置</string>
+    <string name="email"><u>ubicomplab.ntu@gmail.com</u></string>
+    <string name="email_subject">[戒酒小幫手]問題回報</string>
+    <string name="email_message">請問要如何寄送信件</string>
+    <string name="email_reject">非本實驗受試者煩請不要寄送信件</string>
+    <string name="email_fail">手機端未安裝信件寄送程式</string>
+    <string name="website"><u>查看戒酒新知</u></string>
+    <string name="know">了解</string>
+    <string name="bonus">特殊獎勵</string>
+    <string name="lock_message">恭喜您已完成戒酒小幫手的療程，感謝您於療程期間的協助，希望您之後繼續保持並遠離酒精！\n\n因為研究需求，將暫停使用戒酒小幫手三個月。 這段期間，請定期回診進行追蹤觀察，再次感謝你對本研究的幫忙。\n\n您現在可以選擇移除掉戒酒小幫手，或是暫時將戒酒小幫手保留在手機內。三個月後，若是有需要再次啟用戒酒小幫手，請點選最下面的"關於"以聯絡戒酒小幫手團隊。謝謝！\n\n戒酒小幫手團隊　敬上</string>
+    <string name="lock_about">完成訊息：</string>
+    <string name="radar_title">我的表現分析</string>
+    <string name="radar_label0">酒測\n表現</string>
+    <string name="radar_label0_full">酒測功能　完成度</string>
+    <string name="radar_label0_0">酒測表現</string>
+    <string name="radar_label1">自我\n調適</string>
+    <string name="radar_label1_full">自我調適功能　完成度</string>
+    <string name="radar_label1_0">諮詢建議</string>
+    <string name="radar_label1_1">心情DIY</string>
+    <string name="radar_label2">自我\n管理</string>
+    <string name="radar_label2_full">自我管理功能　完成度</string>
+    <string name="radar_label2_0">心情紀錄</string>
+    <string name="radar_label2_1">情緒管理</string>
+    <string name="radar_label2_2">即時自我評量</string>
+    <string name="radar_label3">歷程\n分享</string>
+    <string name="radar_label3_full">歷程分享功能　完成度</string>
+    <string name="radar_label3_0">故事分享</string>
+    <string name="radar_label3_1">自我測試</string>
+    <string name="radar_label3_2">臉書分享</string>
+    <string name="score">分</string>
+
+    <string-array name="radar_0">
+        <item>每天進行酒測是成功的第一步</item>
+        <item>在各時段進行酒測、遠離酒精、邁向成功</item>
+        <item>表現優秀，請繼續加油！</item>
+    </string-array>
+    <string-array name="radar_1_0">
+        <item>完成酒測後，可點擊\'！\'按鈕尋求諮詢</item>
+        <item>每次酒測後，使用諮詢進一步幫助自己</item>
+        <item>表現優秀，請繼續加油！</item>
+    </string-array>
+    <string-array name="radar_1_1">
+        <item>諮詢建議中，使用心情DIY幫助自己</item>
+        <item>心情不佳時，可隨時使用心情DIY舒緩心情</item>
+        <item>表現優秀，請繼續加油！</item>
+    </string-array>
+    <string-array name="radar_2_0">
+        <item>每天可在自我管理記錄中錄下留言</item>
+        <item>錄下留言讓自己更了解自己</item>
+        <item>表現優秀，請繼續加油！</item>
+    </string-array>
+    <string-array name="radar_2_1">
+        <item>每天可使用情緒管理記錄心情</item>
+        <item>可隨時留下心情供自己日後思索</item>
+        <item>表現優秀，請繼續加油！</item>
+    </string-array>
+    <string-array name="radar_2_2">
+        <item>每天晚上會跳出\'即時自我評量\'喔</item>
+        <item>表現優秀，請繼續加油！</item>
+    </string-array>
+    <string-array name="radar_3_0">
+        <item>每天翻閱細讀圖畫，會有小發現喔</item>
+        <item>多多翻閱細讀圖畫，令自我成長</item>
+        <item>表現優秀，請繼續加油！</item>
+    </string-array>
+    <string-array name="radar_3_1">
+        <item>點選圖畫上方黃色書籤，測試一下吧</item>
+        <item>若不知道測試答案，回到圖畫再讀一次</item>
+        <item>表現優秀，請繼續加油！</item>
+    </string-array>
+    <string-array name="radar_3_2">
+        <item>每周可向朋友分享自己的歷程</item>
+        <item>表現優秀，請繼續加油！</item>
+    </string-array>
+
+    <string name="homepage">http://mll.csie.ntu.edu.tw/soberdiary/</string>
+    <string name="uploading">上傳中</string>
+    <string name="storytelling_test_title">自我測試</string>
+    <string name="storytelling_test_question">下面句子中空缺的字是？</string>
+    <string name="storytelling_test_agreement">您是否認同這句話？</string>
+
+    <string-array name="agreement">
+        <item>非常不認同</item>
+        <item>不認同</item>
+        <item>普通</item>
+        <item>認同</item>
+        <item>非常認同</item>
+    </string-array>
+
+    <string name="storytelling_test_toast">您尚未選擇答案</string>
+    <string name="storytelling_test_correct">填入文字正確！</string>
+    <string name="storytelling_test_incorrect">填入文字錯誤，再試試看！</string>
+    <string name="record_title">自我管理紀錄</string>
+    <string name="voice_main_help">我的留言：</string>
+    <string name="em_main_help">情緒管理：</string>
+    <string name="emotion_manage_history_title">情緒管理紀錄</string>
+    <string name="emotion_manage_history_help">我的紀錄：</string>
+    <string name="additional_questionnaire_toast">謝謝填寫</string>
+    <string name="additional_questionnaire_help">煩請您填寫您現在的心情量尺\n及渴求程度，謝謝！</string>
+    <string name="additional_questionnaire_title">即時自我評量</string>
+    <string name="today">今日</string>
+    <string name="gcm_title">通知訊息</string>
+    <string name="sensor_wait">酒測器回復中，請稍待</string>
+    <string name="sensor_wait_try_again">請待酒測器回復後，再試一次</string>
+    <string name="try_again_test_help">請於倒數完成前再試一次</string>
+    <string name="try_again_toast">請依指示盡快重試</string>
+    <string name="feedback_help">請錄下重測原因：</string>
+    <string name="feedback_skip">略過</string>
+    <string name="feedback_record_again">重錄</string>
+    <string name="feedback_record_toast">謝謝您告知原因？</string>
+    <string name="feedback_record_help">請點選右方錄音鍵留言</string>
+    <string name="facebook_no_network">分享至臉書需先啟用網路功能</string>
+    <string name="goto_">前往</string>
+    <string name="notification_title">小提醒</string>
+
+    <string-array name="notification_subtitles">
+        <item>自我酒測</item>
+        <item>即時自我評量</item>
+        <item>心情DIY</item>
+        <item>心情紀錄</item>
+        <item>情緒管理</item>
+        <item>故事分享</item>
+        <item>臉書分享</item>
+        <item>諮詢建議</item>
+        <item>自我測試</item>
+    </string-array>
+    <string-array name="notification_comments">
+        <item>點選\"開始\"進行酒測是邁向成功的第一步</item>
+        <item>每日晚間出現的\"即時自我評量\"幫助您更了解自己</item>
+        <item>使用\"心情DIY\"可以幫助您紓解壓力</item>
+        <item>用聲音記錄下您的心情，讓自己更了解自己</item>
+        <item>使用情緒管理記錄心情，供自己日後思索</item>
+        <item>每天翻閱細讀圖畫，會有小發現喔</item>
+        <item>想要將您的戒酒歷程給朋友嗎？</item>
+        <item>完成酒測後點選諮詢建議能帶給您更多幫助</item>
+        <item>測試看看自己記不記得每周名言</item>
+    </string-array>
+
+    <string name="edit">編輯</string>
+    <string name="setting_limit">抱歉！最多只能選擇三項</string>
+    <string name="story_test_cancel">下次再做</string>
+    <string name="story_test_ok">確定送出</string>
+    <string name="title_activity_trigger">新增記事</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_tigger">TiggerActivity</string>
+
+
+    <string name="coping_skill">建議</string>
+    <string name="trigger_page">新增記事</string>
+    <string name="suggestion1">請試著想像自己躺在海上漂浮著</string>
+    <string name="item_select">請選擇項目</string>
+
+    <string name="title_activity_cal">CalActivity</string>
+    
+    
+    
+    
+    
     <string name="title_activity_timer">TImerActivity</string>
     <string name="title_activity_qtip">QTipActivity</string>
     <string name="title_activity_tips">TipsActivity</string>
@@ -10,9 +364,8 @@
     <string name="title_activity_dev">DevActivity</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_event_cope_skill">EventCopeSkillActivity</string>
+    <string name="dubug">debug</string>
     
-    
-    
-    <string name="notification_msg_1">該檢測囉!</string>
+   
 
 </resources>

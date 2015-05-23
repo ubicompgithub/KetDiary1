@@ -2,6 +2,11 @@ package com.ubicomp.ketdiary;
 
 import java.io.File;
 
+import ubicomp.soberdiary3.R;
+import ubicomp.soberdiary3.main.fragments.TestFragment.ChangeMsgHandler;
+import ubicomp.soberdiary3.main.fragments.TestFragment.ConditionOnClickListener;
+import ubicomp.soberdiary3.test.bluetooth.SimpleBluetooth;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -12,13 +17,18 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,12 +56,13 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	private static final String TAG = "BluetoothLE";
 	private static final String TAG2 = "debug";
 	
-	private TextView label_btn, label_subtitle, label_title;
+	private TextView label_btn, label_subtitle, label_title, debug_msg;
 	private ImageView img_bg, img_ac, img_btn;
 	private long timestamp = 0;
 
 	private CountDownTimer testCountDownTimer = null;
 	private CountDownTimer salivaCountDownTimer = null;
+	private CountDownTimer timeoutCountDownTimer= null;
 	
 	/** self activity*/
 	Activity that;
@@ -95,11 +106,14 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	private boolean in_stage2 = false;
 	private boolean camera_initial=false;
 	private boolean camera_done=false;
+	private boolean is_timeout=false;
+	//private boolean second_pass=false;
 	
 	private static final int COUNT_DOWN_SECOND = 5;
 	private static final int WAIT_SALIVA_SECOND = 7;
 	private static final int FIRST_VOLTAGE_THRESHOLD = 25;
 	private static final int SECOND_VOLTAGE_THRESHOLD= 15;
+	private static final int TIMEOUT_SECOND = 30;
 	
 	
 	/**
@@ -236,9 +250,9 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			
 			
 			
-			cameraLayout.setVisibility(View.VISIBLE);
+			//cameraLayout.setVisibility(View.VISIBLE);
 			
-			// TODO: camera_mask.bringToFront();
+			
 			
 			label_btn.setText("");
 			label_subtitle.setText("請將臉對準中央，並吐口水");
@@ -269,13 +283,8 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		}
 		@Override
 		public void onExit(){
-			//move_to_stage2 = true;
-			cameraLayout.setVisibility(4);
-			if(mCamera != null){
-				mCamera.stopPreview();
-				mCamera.release();
-				mCamera = null;
-			}
+			
+			cameraLayout.setVisibility(View.INVISIBLE);
 			//if(test_timer != null)
 			//	test_timer.cancel();
 		}
@@ -286,44 +295,36 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		@Override
 		public void onStart(){
 			label_btn.setText("");
-			img_bg.setVisibility(0);
-			img_ac.setVisibility(0);
-			img_btn.setVisibility(4);
+			img_bg.setVisibility(View.VISIBLE);
+			img_ac.setVisibility(View.VISIBLE);
+			img_btn.setVisibility(View.INVISIBLE);
 
 			salivaCountDownTimer = new SalivaCountDownTimer();
 			salivaCountDownTimer.start();
 			
-			/*
-			new CountDownTimer(5000, 1000){
-		        public void onTick(long ms){
-		        	ptr++;
-		        	img_ac.setImageResource(pids[ptr]);
-		        }
-		        public void onFinish() {
-		        	if(bluetoothle.getState() >= BluetoothLE.STATE_2PASS){
-		        		setState(new FormState());
-		        	}else{
-		        		setState(new NoMuchSavilaState());
-		        	}
-		        }
-		    }.start();*/
 		}
 		@Override
 		public void onExit(){
-			img_bg.setVisibility(4);
-			img_ac.setVisibility(4);
-			img_btn.setVisibility(0);
+			cameraLayout.setVisibility(View.INVISIBLE);
+			img_bg.setVisibility(View.INVISIBLE);
+			img_ac.setVisibility(View.INVISIBLE);
+			img_btn.setVisibility(View.VISIBLE);
 		}
 	}
 	
-	private class NoMuchSavilaState extends TestState{
-		private CountDownTimer timer;
+	private class NotEnoughSavilaState extends TestState{
+		//private CountDownTimer timer;
 		private boolean move_to_init = false;
 		@Override
 		public void onStart(){
-			label_btn.setText("確認");
+			label_btn.setText("繼續");
 			label_title.setText("口水量不足，請再多吐一些");
 			label_subtitle.setText("仍在檢測中");
+			
+			timeoutCountDownTimer = new TimeoutCountDownTimer();
+			timeoutCountDownTimer.start();
+			
+			/*
 			timer = new CountDownTimer(10000, 10000){
 				public void onTick(long ms){}
 				public void onFinish(){
@@ -331,21 +332,23 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 					setState(new FailState("二階段口水逾時"));
 				}
 			};
-			timer.start();
+			timer.start();*/
 		}
 		@Override
 		public void onClick(){
-			move_to_init = true;
-			timer.cancel();
+			//move_to_init = true;
+			is_timeout = false;
+			timeoutCountDownTimer.cancel();
 			setState(new Stage2State());
 		}
 	}
 	
-	private class FormState extends TestState{
+	private class DoneState extends TestState{
 		@Override
 		public void onStart(){
 			test_done = true;
-			ble.bleDisconnect();
+			if(ble != null)
+				ble.bleDisconnect();
 			//DBControl.inst.startTesting();
 			
 			startActivity(new Intent(that, EventCopeSkillActivity.class));
@@ -383,6 +386,11 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			ble = null;
 		}
 		
+		if (timeoutCountDownTimer!= null){
+			timeoutCountDownTimer.cancel();
+			timeoutCountDownTimer = null;
+		}
+		
 		if (salivaCountDownTimer!= null){
 			salivaCountDownTimer.cancel();
 			salivaCountDownTimer = null;
@@ -408,15 +416,15 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 
 		if (ble != null)
 			ble = null;
-		//if (btInitHandler != null)
-		//	btInitHandler.removeMessages(0);
-		//if (cameraInitHandler != null)
-		//	cameraInitHandler.removeMessages(0);
-		//if (btRunTask != null)
-		//	btRunTask.cancel(true);
 
+		if (cameraInitHandler != null)
+			cameraInitHandler.removeMessages(0);
+	
 		//if (testHandler != null)
 		//	testHandler.removeMessages(0);
+		
+		if (timeoutCountDownTimer != null)
+			timeoutCountDownTimer.cancel();
 		
 		if (salivaCountDownTimer != null)
 			salivaCountDownTimer.cancel();
@@ -438,7 +446,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	@Override
 	public void onResume(){
 		super.onResume();
-		// dismiss dormancy
+		// dismiss sleep
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		
 		
@@ -475,7 +483,10 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	}
 
 	
+	
 	private void reset() {
+		
+		test_done = false;
 
 		timestamp = System.currentTimeMillis();
 
@@ -494,6 +505,27 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		//for (int i = 0; i < 3; ++i)
 		//	INIT_PROGRESS[i] = DONE_PROGRESS[i] = false;
 	}
+	
+	//each state timeout
+	private class TimeoutCountDownTimer extends CountDownTimer {
+		
+		public TimeoutCountDownTimer() {
+			super(TIMEOUT_SECOND, 1000);
+		}
+
+		@Override
+		public void onFinish() {
+			if(is_timeout)
+				setState(new FailState("測試超時"));
+			
+		}
+
+		@Override
+		public void onTick(long millisUntilFinished) {
+			is_timeout=true;
+		}	
+	}
+	
 	
 	private class TestCountDownTimer extends CountDownTimer {
 
@@ -542,6 +574,14 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			//showDebug(">Start to run the  device");
 			//runBT();
 			in_stage2=true;
+			if( second_voltage ){
+				setState(new DoneState());
+			}
+			else{
+				setState(new NotEnoughSavilaState() );
+			}
+			
+			
 			//setState(new FormState());
 		}
 
@@ -686,7 +726,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			first_voltage=true;
 		}
 		else if(in_stage2 && (int)adcReading[0]< SECOND_VOLTAGE_THRESHOLD && !second_voltage){
-			setState(new FormState());
+			//setState(new DoneState());
 			second_voltage=true;
 		}
 	}
@@ -730,8 +770,6 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		return (FrameLayout)findViewById(R.id.cameraLayout);
 	
 	}
-
-
 	@Override
 	public Point getPreviewSize() {
 		
@@ -742,4 +780,126 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		return new Point(right - left, bottom - top);
 		
 	}
+	
+	// DebugMode
+	// --------------------------------------------------------------------------------------------------------
+
+	private void checkDebug(boolean debug, boolean debug_type) {
+		
+		RelativeLayout debugLayout = (RelativeLayout) view
+				.findViewById(R.id.debugLayout);
+		if (debug) {
+			debugLayout.setVisibility(View.VISIBLE);
+			msgHandler = new ChangeMsgHandler();
+			debugMsg.setText("");
+			debugMsg.setOnKeyListener(null);
+			TextView debugText = (TextView) view
+					.findViewById(R.id.debug_mode_text);
+
+			Button modeButton = (Button) view
+					.findViewById(R.id.debug_mode_change);
+
+			modeButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					PreferenceControl.setDebugType(!PreferenceControl
+							.debugType());
+					checkDebug(PreferenceControl.isDebugMode(),
+							PreferenceControl.debugType());
+				}
+			});
+			if (!debug_type) {
+				modeButton.setText("->avm");
+				debugText.setText("Training(acvm)");
+			} else {
+				modeButton.setText("->acvm");
+				debugText.setText("Testing(avm)");
+			}
+			Button[] conditionButtons = new Button[4];
+			conditionButtons[0] = (Button) view
+					.findViewById(R.id.debug_button_1);
+			conditionButtons[1] = (Button) view
+					.findViewById(R.id.debug_button_2);
+			conditionButtons[2] = (Button) view
+					.findViewById(R.id.debug_button_3);
+			conditionButtons[3] = (Button) view
+					.findViewById(R.id.debug_button_4);
+			for (int i = 0; i < 4; ++i)
+				conditionButtons[i]
+						.setOnClickListener(new ConditionOnClickListener(i));
+
+			Button volButton = (Button) view.findViewById(R.id.debug_voltage);
+			volButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					SimpleBluetooth.showVoltage(testFragment);
+				}
+			});
+			TextView vol_tv = (TextView) view
+					.findViewById(R.id.debug_voltage_value);
+			vol_tv.setText("NULL");
+
+		} else {
+			debugLayout.setVisibility(View.INVISIBLE);
+			return;
+		}
+
+	}
+
+	private class DebugOnClickListener implements View.OnClickListener {
+
+		private int cond;
+
+		public DebugOnClickListener(int cond) {
+			this.cond = cond;
+		}
+
+		@Override
+		public void onClick(View v) {
+			PreferenceControl.setTestResult(cond);
+			PreferenceControl.setLatestTestCompleteTime(System
+					.currentTimeMillis());
+			MainActivity.getMainActivity().changeTab(1);
+		}
+	}
+
+	public void showDebugVoltage(String message) {
+		TextView vol_tv = (TextView) view
+				.findViewById(R.id.debug_voltage_value);
+		vol_tv.setText(message);
+		vol_tv.invalidate();
+	}
+
+	public void showDebug(String message, int type) {
+		Boolean debug = PreferenceControl.isDebugMode();
+		if (debug && msgHandler != null) {
+			Message msg = new Message();
+			Bundle data = new Bundle();
+			data.putInt("type", type);
+			data.putString("message", message);
+			msg.setData(data);
+			msg.what = 0;
+			msgHandler.sendMessage(msg);
+		}
+	}
+
+	public void showDebug(String message) {
+		showDebug(message, 0);
+	}
+
+	@SuppressLint("HandlerLeak")
+	private class ChangeMsgHandler extends Handler {
+		public void handleMessage(Message msg) {
+			Bundle data = msg.getData();
+			int type = data.getInt("type");
+			if (type == 0) {
+				debugMsg.append("\n" + data.getString("message"));
+				debugScrollView.scrollTo(0, debugMsg.getBottom() + 100);
+				debugMsg.invalidate();
+			} else if (type == 1) {
+				showDebugVoltage(data.getString("message"));
+			}
+		}
+	}
+
 }

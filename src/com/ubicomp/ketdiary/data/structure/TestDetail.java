@@ -2,14 +2,14 @@ package com.ubicomp.ketdiary.data.structure;
 
 public class TestDetail {
 	
-	private String cassetteId;
-	private int failedState;
-	private int firstVoltage;
-	private int secondVoltage;
-	private int devicePower;
-	private int colorReading;
-	private float connectionFailRate;
-	private int failedReason;
+	public String cassetteId;
+	public int failedState;
+	public int firstVoltage;
+	public int secondVoltage;
+	public int devicePower;
+	public int colorReading;
+	public float connectionFailRate;
+	public int failedReason;
 
 	public TestDetail(String cassetteId,int failedState,int firstVoltage,
 					int secondVoltage, int devicePower, int colorReading,
