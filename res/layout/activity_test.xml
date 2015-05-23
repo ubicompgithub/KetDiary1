@@ -86,10 +86,10 @@
         android:layout_alignLeft="@+id/iv_bar_bg"
         android:layout_alignRight="@+id/iv_bar_bg"
         android:layout_alignTop="@+id/iv_bar_bg" >
-	
     </FrameLayout>
+    
     <!-- Used for Debugging -->
-
+	<!-- 
     <RelativeLayout
         android:id="@+id/debugLayout"
         android:layout_width="match_parent"
@@ -138,6 +138,7 @@
                 android:layout_height="wrap_content" >
 
                 <EditText
+                    android:labelFor="@id/debug_msg"
                     android:id="@+id/debug_msg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -151,14 +152,7 @@
             </FrameLayout>
         </ScrollView>
 
-        <TextView
-            android:id="@+id/debug_brac_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/debug_scroll_view"
-            android:layout_alignParentRight="true"
-            android:textColor="@color/white"
-            android:textSize="@dimen/xlarge_text_size" />
-    </RelativeLayout>
+
+    </RelativeLayout>-->
 
 </RelativeLayout>

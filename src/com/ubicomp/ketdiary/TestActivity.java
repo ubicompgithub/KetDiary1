@@ -3,9 +3,6 @@ package com.ubicomp.ketdiary;
 import java.io.File;
 
 import ubicomp.soberdiary3.R;
-import ubicomp.soberdiary3.main.fragments.TestFragment.ChangeMsgHandler;
-import ubicomp.soberdiary3.main.fragments.TestFragment.ConditionOnClickListener;
-import ubicomp.soberdiary3.test.bluetooth.SimpleBluetooth;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -23,12 +20,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,6 +57,13 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	
 	private TextView label_btn, label_subtitle, label_title, debug_msg;
 	private ImageView img_bg, img_ac, img_btn;
+	
+	private ScrollView debugScrollView;
+	private EditText debugMsg;
+	private ChangeMsgHandler msgHandler;
+	private TextView debugBracValueView;
+	private Button btn_debug;
+
 	private long timestamp = 0;
 
 	private CountDownTimer testCountDownTimer = null;
@@ -464,6 +470,10 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		img_ac = (ImageView)findViewById(R.id.iv_bar_ac);
 		img_btn = (ImageView)findViewById(R.id.vts_iv_cry);
 		cameraLayout = (FrameLayout)findViewById(R.id.cameraLayout);
+		
+		btn_debug = (Button)findViewById(R.id.debug_button1);
+		debugScrollView = (ScrollView)findViewById(R.id.debug_scroll_view);
+		debugMsg = (EditText)findViewById(R.id.debug_msg);
 		//TODO: camera_mask = (ImageView)findViewById(R.id.test_camera_mask);
 		
 		/** Load sound into sound pool*/
@@ -471,6 +481,8 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		count_down_audio_id = soundPool.load(this, R.raw.short_beep, 1); 
 		preview_audio_id = soundPool.load(this, R.raw.din_ding, 1);
 		setState(new IdleState());
+		
+		btn_debug.setOnClickListener(new ConditionOnClickListener();
 			
 		/** State onclick function use here*/
 		img_btn.setOnClickListener(new View.OnClickListener() {
@@ -783,7 +795,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	
 	// DebugMode
 	// --------------------------------------------------------------------------------------------------------
-
+	/*
 	private void checkDebug(boolean debug, boolean debug_type) {
 		
 		RelativeLayout debugLayout = (RelativeLayout) view
@@ -808,33 +820,8 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 							PreferenceControl.debugType());
 				}
 			});
-			if (!debug_type) {
-				modeButton.setText("->avm");
-				debugText.setText("Training(acvm)");
-			} else {
-				modeButton.setText("->acvm");
-				debugText.setText("Testing(avm)");
-			}
-			Button[] conditionButtons = new Button[4];
-			conditionButtons[0] = (Button) view
-					.findViewById(R.id.debug_button_1);
-			conditionButtons[1] = (Button) view
-					.findViewById(R.id.debug_button_2);
-			conditionButtons[2] = (Button) view
-					.findViewById(R.id.debug_button_3);
-			conditionButtons[3] = (Button) view
-					.findViewById(R.id.debug_button_4);
-			for (int i = 0; i < 4; ++i)
-				conditionButtons[i]
-						.setOnClickListener(new ConditionOnClickListener(i));
 
-			Button volButton = (Button) view.findViewById(R.id.debug_voltage);
-			volButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					SimpleBluetooth.showVoltage(testFragment);
-				}
-			});
+
 			TextView vol_tv = (TextView) view
 					.findViewById(R.id.debug_voltage_value);
 			vol_tv.setText("NULL");
@@ -844,28 +831,23 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			return;
 		}
 
-	}
+	}*/
 
 	private class DebugOnClickListener implements View.OnClickListener {
 
 		private int cond;
 
-		public DebugOnClickListener(int cond) {
-			this.cond = cond;
+		public DebugOnClickListener(){
 		}
 
 		@Override
 		public void onClick(View v) {
-			PreferenceControl.setTestResult(cond);
-			PreferenceControl.setLatestTestCompleteTime(System
-					.currentTimeMillis());
-			MainActivity.getMainActivity().changeTab(1);
+			debugScrollView.setVisibility(View.VISIBLE);
 		}
 	}
 
 	public void showDebugVoltage(String message) {
-		TextView vol_tv = (TextView) view
-				.findViewById(R.id.debug_voltage_value);
+		TextView vol_tv = (TextView)findViewById(R.id.debug_voltage_value);
 		vol_tv.setText(message);
 		vol_tv.invalidate();
 	}
