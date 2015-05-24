@@ -129,8 +129,8 @@ public class CameraRecorder {
 				previewHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 			previewHolder.addCallback(preview);
 			Point size = cameraCaller.getPreviewSize();
-			size.x -= 10;
-			size.y -= 10;
+			//size.x -= 10;
+			//size.y -= 10;
 			previewFrame.addView(preview, size.x, size.y);
 			preview.setVisibility(View.INVISIBLE);
 		}

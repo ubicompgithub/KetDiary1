@@ -4,6 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -77,7 +78,7 @@ public class EventCopeSkillActivity extends Activity {
 	};
 	
 	private Handler handler = new Handler(){
-		long ms = 600;
+		long ms = 5;
 		public void handleMessage(Message msg){
 			super.handleMessage(msg);
 			switch(msg.what){
@@ -86,6 +87,13 @@ public class EventCopeSkillActivity extends Activity {
 				long minutes = ms/60;
 				long second = ms%60;
 				tv_timer.setText(String.valueOf(minutes) + ":" + String.valueOf(second));
+				
+				
+				if(ms<=0){
+					Intent a_intent = new Intent(that, AlarmService.class);
+					that.startService(a_intent);
+				}
+				
 				break;
 			}
 		}

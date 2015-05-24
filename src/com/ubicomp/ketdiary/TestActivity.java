@@ -70,9 +70,9 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	Activity that;
 	
 	/** Camare variables */
-	private Camera mCamera = null;
-	private CameraPreview mCamPreview;
-	private FrameLayout cameraLayout;
+	//private Camera mCamera = null;
+	//private CameraPreview mCamPreview;
+	//private FrameLayout cameraLayout;
 	
 	// Camera
 	private CameraInitHandler cameraInitHandler;
@@ -112,6 +112,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	private boolean camera_done=false;
 	private boolean is_timeout=false;
 	private boolean is_debug = false;
+	private boolean ble_disconnect=false;
 	//private boolean second_pass=false;
 	
 	private static final int COUNT_DOWN_SECOND = 5;
@@ -178,7 +179,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 				//ble.bleDisconnect();
 		}
 		@Override
-		public void onClick(){
+		public void onClick(){ 
 			stopDueToInit();
 			setState(new IdleState());
 		}
@@ -195,10 +196,11 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			
 			cameraInitHandler = new CameraInitHandler( (Tester)that, cameraRecorder);
 			cameraInitHandler.sendEmptyMessage(0);
-			if(ble != null) {
-                return;
+			
+			if(ble == null) {
+				ble = new BluetoothLE(that, "ket_000");
             }
-		    ble = new BluetoothLE(that, "ket_000"); //PreferenceControl.getDeviceId()
+		     //PreferenceControl.getDeviceId()
 		    ble.bleConnect();
 		    
 		}
@@ -229,6 +231,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			
 			
 			/** Search for the front facing camera */
+			
 			int cameraId = -1;
 			int numberOfCameras = Camera.getNumberOfCameras();
 			for (int i = 0; i < numberOfCameras; i++) {
@@ -239,24 +242,25 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 					break;
 				}
 			}
-			
+			/*
 			mCamPreview = new CameraPreview(that);
 			cameraLayout.addView(mCamPreview);
 			Log.i("FORTEST", "cameraId: " + cameraId);
-			//mCamera = Camera.open(cameraId);
-			//mCamPreview.set(that, mCamera);
+			mCamera = Camera.open(cameraId);
+			mCamPreview.set(that, mCamera);
+			cameraLayout.setVisibility(View.VISIBLE);
+			*/
 			
-			//cameraRecorder.initialize();
 			cameraRecorder.start();
 			
-			//cameraLayout.setVisibility(View.VISIBLE);
 
 			label_btn.setText("");
-			label_subtitle.setText("請將臉對準中央，並吐口水");
+			label_subtitle.setText("請將臉對準中央，並吐口水於管中");
 			label_title.setText("請吐口水");
 			
 			in_stage1 = true;
-			ble.bleWriteState((byte)2);
+			if(ble != null)
+				ble.bleWriteState((byte)2);
 			/*
 			test_timer = new CountDownTimer(60000, 10000){
 		        public void onTick(long ms){
@@ -281,7 +285,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		@Override
 		public void onExit(){
 			
-			cameraLayout.setVisibility(View.INVISIBLE);
+			//cameraLayout.setVisibility(View.INVISIBLE);
 			//if(test_timer != null)
 			//	test_timer.cancel();
 		}
@@ -295,6 +299,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			img_bg.setVisibility(View.VISIBLE);
 			img_ac.setVisibility(View.VISIBLE);
 			img_btn.setVisibility(View.INVISIBLE);
+			//cameraLayout.setVisibility(View.VISIBLE);
 
 			salivaCountDownTimer = new SalivaCountDownTimer();
 			salivaCountDownTimer.start();
@@ -302,7 +307,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		}
 		@Override
 		public void onExit(){
-			cameraLayout.setVisibility(View.INVISIBLE);
+			//cameraLayout.setVisibility(View.INVISIBLE);
 			img_bg.setVisibility(View.INVISIBLE);
 			img_ac.setVisibility(View.INVISIBLE);
 			img_btn.setVisibility(View.VISIBLE);
@@ -366,9 +371,10 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		questionFile = new QuestionFile(mainDirectory);
 	}
 	
+	/*
 	public void writeQuestionFile(int type, int items, int impact) {
 		questionFile.write(type, items, impact);
-	}
+	}*/
 	
 	
 	//release resource
@@ -385,6 +391,8 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		if (msgHandler != null) {
 			msgHandler.removeMessages(0);
 		}
+		if (cameraInitHandler != null)
+			cameraInitHandler.removeMessages(0);
 		
 		if(ble!=null){
 			ble.bleDisconnect();
@@ -416,8 +424,10 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		first_voltage = false;
 		in_stage1 = false;
 		test_done = false;
-		//if (cameraRecorder != null)
-		//	cameraRecorder.close();
+		
+		if (msgHandler != null) {
+			msgHandler.removeMessages(0);
+		}
 
 		if (ble != null)
 			ble = null;
@@ -454,7 +464,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		// dismiss sleep
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		checkDebug(is_debug);//PreferenceControl.isDebugMode());
-		reset();
+		//reset();
 		
 	}
 	
@@ -469,7 +479,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		img_bg = (ImageView)findViewById(R.id.iv_bar_bg);
 		img_ac = (ImageView)findViewById(R.id.iv_bar_ac);
 		img_btn = (ImageView)findViewById(R.id.vts_iv_cry);
-		cameraLayout = (FrameLayout)findViewById(R.id.cameraLayout);
+		//cameraLayout = (FrameLayout)findViewById(R.id.cameraLayout);
 		
 		btn_debug = (Button)findViewById(R.id.debug_button_1);
 		debugScrollView = (ScrollView)findViewById(R.id.debug_scroll_view);
@@ -565,6 +575,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			long displaySecond = millisUntilFinished / SECOND_FIX;
 			if (displaySecond < prevSecond) {
 				
+				
 				soundPool.play(count_down_audio_id, 0.6f, 0.6f, 0, 0, 1.0F);
 				label_btn.setText(String.valueOf(displaySecond));
 				prevSecond = displaySecond;
@@ -603,6 +614,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		@Override
 		public void onTick(long millisUntilFinished) {
 			
+			cameraRunHandler.sendEmptyMessage(0);	
 			img_ac.setImageResource(ELECTRODE_RESOURCE[ptr++]);		
 			
 		}
@@ -761,7 +773,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		if (camera_initial == true)
 			return;
 		camera_initial = true;
-		cameraInitHandler.removeMessages(0);
+		//cameraInitHandler.removeMessages(0);
 	
 	}
 	

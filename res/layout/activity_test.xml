@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/paper_texture"
+    android:background="@drawable/paper_texture_mix"
     tools:context="${relativePackage}.${activityClass}" >
 
     <TextView
@@ -22,19 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="144dp"
-        android:src="@drawable/btn_start" />
-
-    <TextView
-        android:id="@+id/tv_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/vts_iv_cry"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="56dp"
-        android:text="Label"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="@dimen/center_word_dp" />
+        android:layout_marginTop="155dp"
+        android:src="@drawable/button_start_test" />
 
     <TextView
         android:id="@+id/tv_title"
@@ -45,6 +34,29 @@
         android:layout_marginTop="@dimen/top_title"
         android:text="Title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+    
+    <FrameLayout
+        android:id="@+id/cameraLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/vts_iv_cry"
+        android:layout_alignLeft="@+id/vts_iv_cry"
+        android:layout_alignRight="@+id/vts_iv_cry"
+        android:layout_alignTop="@+id/vts_iv_cry" >
+    </FrameLayout>
+    
+    <ImageView
+        android:id="@+id/iv_mask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignBottom="@+id/vts_iv_cry"
+        android:layout_alignLeft="@+id/vts_iv_cry"
+        android:layout_alignRight="@+id/vts_iv_cry"
+        android:layout_alignTop="@+id/vts_iv_cry"
+        
+        android:visibility="visible" />
 
     <ImageView
         android:id="@+id/iv_bar_bg"
@@ -53,7 +65,7 @@
         android:layout_alignBottom="@+id/tv_subtitle"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="51dp"
-        android:src="@drawable/test_progress_bg"
+        android:src="@drawable/test_progress_bg_2"
         android:visibility="invisible" />
 
     <ImageView
@@ -64,12 +76,22 @@
         android:layout_alignTop="@+id/iv_bar_bg"
         android:src="@drawable/test_progress_bg"
         android:visibility="invisible" />
+    
+    <TextView
+        android:id="@+id/tv_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Label"
+        android:layout_marginTop="220dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="@dimen/center_word_dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/tab_bar"
+        android:background="@drawable/tabhost2"
         android:orientation="horizontal" >
 
        <!-- <ImageView
@@ -79,15 +101,6 @@
             android:src="@drawable/tab_bar" /> -->
     </LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/cameraLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/iv_bar_bg"
-        android:layout_alignLeft="@+id/iv_bar_bg"
-        android:layout_alignRight="@+id/iv_bar_bg"
-        android:layout_alignTop="@+id/iv_bar_bg" >
-    </FrameLayout>
     
     <!-- Used for Debugging -->
 	 
@@ -152,6 +165,7 @@
             </FrameLayout>
         </ScrollView>
 
+        
 
     </RelativeLayout>
 
