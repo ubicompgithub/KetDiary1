@@ -50,12 +50,11 @@
         android:id="@+id/iv_mask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_alignBottom="@+id/vts_iv_cry"
         android:layout_alignLeft="@+id/vts_iv_cry"
         android:layout_alignRight="@+id/vts_iv_cry"
         android:layout_alignTop="@+id/vts_iv_cry"
-        
+        android:src="@drawable/camera_mask2"
         android:visibility="visible" />
 
     <ImageView
