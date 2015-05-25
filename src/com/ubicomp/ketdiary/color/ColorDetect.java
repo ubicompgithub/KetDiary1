@@ -282,7 +282,7 @@ public class ColorDetect {
 				{1,2,3,4,5,6,7,8,9,10,11}
 		};*/
 		
-		double[][] values = new double[1][13];
+		double[][] values = new double[1][12];
 		
 		float tx= (float) ((-0.14282)*(float)(readings[0])+(1.54924)*(float)(readings[1])+ 
    				(-0.95641)*(float)(readings[2]));
@@ -297,16 +297,16 @@ public class ColorDetect {
 		values[0][1] = readings[1];
 		values[0][2] = readings[2];
 		values[0][3] = readings[3];
-		values[0][4] = readings[4];
-		values[0][5] = readings[3] - readings[0];
-		values[0][6] = readings[3] - readings[1];
-		values[0][7] = readings[3] - readings[2];
-		values[0][8] = readings[0] - readings[1];
-		values[0][9] = readings[0] - readings[2];
-		values[0][10] = readings[1] - readings[2];
+	
+		values[0][4] = readings[3] - readings[0];
+		values[0][5] = readings[3] - readings[1];
+		values[0][6] = readings[3] - readings[2];
+		values[0][7] = readings[0] - readings[1];
+		values[0][8] = readings[0] - readings[2];
+		values[0][9] = readings[1] - readings[2];
 		
-		values[0][11] = (float)((int)(tx/(tx+ty+tz)*10000));
-		values[0][12] = (float)((int)(ty/(tx+ty+tz)*10000));
+		values[0][10] = (float)((int)(tx/(tx+ty+tz)*10000));
+		values[0][11] = (float)((int)(ty/(tx+ty+tz)*10000));
 		
 		String rt = "";
 		for(int i=0;i<values[0].length;i++) {

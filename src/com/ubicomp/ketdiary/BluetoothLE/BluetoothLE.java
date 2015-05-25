@@ -54,7 +54,7 @@ public class BluetoothLE {
     private Runnable mRunnable;
 
     // Stops scanning after 10 seconds.
-    private static final long SCAN_PERIOD = 10000;
+    private static final long SCAN_PERIOD = 3000;
 
     private int testCount = 0;
 

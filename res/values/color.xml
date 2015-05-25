@@ -26,4 +26,8 @@
     <color name="chart_y_axis">#FF434343</color>
     <color name="setting_edit_bg_color">#FF494949</color>
     <color name="setting_title_bg_color">#FF434343</color>
+    <color name="red">#FFf2a6a3</color>
+    <color name="text_gray2">#FFb3b3b4</color>
+    <color name="blue">#FF7dcdff</color>
+    
 </resources>

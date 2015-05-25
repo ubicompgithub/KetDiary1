@@ -117,6 +117,11 @@ public class CameraRecorder {
 		if (preview != null)
 			preview.setVisibility(View.VISIBLE);
 	}
+	
+	public void pause(){
+		if(preview != null)
+			preview.setVisibility(View.INVISIBLE);
+	}
 
 	@SuppressWarnings("deprecation")
 	private void setSurfaceCallback() {
@@ -129,8 +134,8 @@ public class CameraRecorder {
 				previewHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 			previewHolder.addCallback(preview);
 			Point size = cameraCaller.getPreviewSize();
-			//size.x -= 10;
-			//size.y -= 10;
+			size.x -= 10;
+			size.y -= 10;
 			previewFrame.addView(preview, size.x, size.y);
 			preview.setVisibility(View.INVISIBLE);
 		}
