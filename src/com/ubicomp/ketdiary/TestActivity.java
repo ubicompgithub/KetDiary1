@@ -128,11 +128,12 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	private int state;
 	//private boolean second_pass=false;
 	
-	private static final int COUNT_DOWN_SECOND = 2;
+	private static final int COUNT_DOWN_SECOND = 5;
 	private static final int WAIT_SALIVA_SECOND = 7;
 	private static final int FIRST_VOLTAGE_THRESHOLD = 25;
 	private static final int SECOND_VOLTAGE_THRESHOLD= 15;
 	private static final int TIMEOUT_SECOND = 30;
+	private static final int CAMERATIMEOUT = 10;
 	
 	private static final int FAIL_STATE = -1;
 	private static final int IDLE_STATE = 0;
@@ -233,21 +234,6 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			
 			openSensorMsgTimer = new OpenSensorMsgTimer();
 			openSensorMsgTimer.start();
-			
-			/*
-			startConnection();
-			
-			
-			
-			cameraInitHandler = new CameraInitHandler( (Tester)that, cameraRecorder);
-			cameraInitHandler.sendEmptyMessage(0);
-			
-			if(ble == null) {
-				ble = new BluetoothLE(that, "ket_000");
-				//PreferenceControl.getDeviceId()
-				ble.bleConnect();
-            }*/
-		     
 		    
 		}
 	}
@@ -311,7 +297,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			*/
 			
 			cameraRecorder.start();
-			//cameraLayout.setVisibility(View.VISIBLE);
+			
 
 			label_btn.setText("");
 			label_subtitle.setText("請將臉對準中央，並吐口水於管中");
@@ -319,7 +305,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			
 			in_stage1 = true;
 			if(ble != null)
-				ble.bleWriteState((byte)2);
+				ble.bleWriteState((byte)2);//ble.bleWriteState((byte)3);
 			
 			
 			cameraCountDownTimer = new CameraCountDownTimer();
@@ -362,7 +348,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 				salivaCountDownTimer = null;
 			}
 			
-			//cameraLayout.setVisibility(View.INVISIBLE);
+			
 			img_bg.setVisibility(View.INVISIBLE);
 			img_ac.setVisibility(View.INVISIBLE);
 			img_btn.setVisibility(View.VISIBLE);
@@ -377,15 +363,18 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			
 			state = NOTENOUGH_STATE;
 			
-			img_btn.setEnabled(true);
-			label_btn.setText("繼續");
+			img_btn.setEnabled(false);
+			//label_btn.setText("繼續");
 			label_title.setText("口水量不足，請再多吐一些");
 			label_subtitle.setText("仍在檢測中");
 			
 			
-			if(	timeoutCountDownTimer==null	)
+			cameraCountDownTimer = new CameraCountDownTimer();
+			cameraCountDownTimer.start();
+			
+			/*if(	timeoutCountDownTimer==null	)
 				timeoutCountDownTimer = new TimeoutCountDownTimer();
-			timeoutCountDownTimer.start();
+			timeoutCountDownTimer.start();*/
 			
 		}
 		@Override
@@ -397,6 +386,10 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 				timeoutCountDownTimer.cancel();
 			
 			setState(new Stage2State());
+		}
+		public void onExit(){
+			if(	cameraCountDownTimer!=null	)
+				cameraCountDownTimer.cancel();
 		}
 	}
 	
@@ -434,11 +427,11 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		if(ble == null) {
 			ble = new BluetoothLE(that, "ket_000");
 			//PreferenceControl.getDeviceId()
-			ble.bleConnect();
 		}
+		if(!is_connect)
+			ble.bleConnect();
 		
 		// initialize camera task
-		
 		cameraInitHandler = new CameraInitHandler(this, cameraRecorder);
 		cameraInitHandler.sendEmptyMessage(0);
 	}
@@ -652,7 +645,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	private class CameraCountDownTimer extends CountDownTimer {
 			
 			public CameraCountDownTimer() {
-				super(10000, 2500);
+				super(CAMERATIMEOUT*1000, 2500);
 			}
 
 			@Override
@@ -660,6 +653,9 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 				Log.i(TAG3, "FINISH");
 				if(state == STAGE1_STATE)
 					setState(new FailState("測試超時"));
+				else if (state == NOTENOUGH_STATE){
+					setState(new DoneState());
+				}
 				
 				//cameraRecorder.closeSuccess();
 			}
@@ -824,6 +820,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 
     @Override
     public void bleConnectionTimeout() {
+    	Log.i(TAG, "connect timeout");
         Toast.makeText(this, "BLE connection timeout", Toast.LENGTH_SHORT).show();
         setState(new FailState("連接逾時"));
     }
@@ -858,21 +855,21 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
     @Override
     public void bleWriteStateFail() {
         Log.i(TAG, "BLE ACTION_DATA_WRITE_FAIL");
-        Toast.makeText(this, "BLE write state fail", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "BLE writefstate fail", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void bleNoPlug() {
-        Log.i(TAG, "No test plug");
+        //Log.i(TAG, "No test plug");
         Toast.makeText(this, "No test plug", Toast.LENGTH_SHORT).show();
         setState(new FailState("請將試紙匣插入裝置"));
     }
 
     @Override
     public void blePlugInserted(byte[] plugId) {
-        Log.i(TAG, "Test plug is inserted");
+        //Log.i(TAG, "Test plug is inserted");
         ble_pluginserted = true;
-        
+        //check ID here
         updateInitState(Tester._BT);
         
         /*
@@ -883,13 +880,27 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
         		setState(new FiveSecondState());
         	first_connect=true;
         }*/
-        //check ID here
+        
     }
 
 
     @Override
     public void bleColorReadings(byte[] colorReadings) {
-        Log.i(TAG, "Color sensor readings");
+    	String str1 ="";
+    	String str2 ="";
+    	int[] color = new int[4];
+    	for(int i=0; i<8; i+=2){
+    		color[i/2] = colorReadings[i]+colorReadings[i+1]*256;
+    		str1 = str1+ " " + String.valueOf(color[i/2]);
+    	}
+    		
+    	for(int i=8; i<16; i+=2)
+    		str2 = str2+ " " + String.valueOf(colorReadings[i]+colorReadings[i+1]*256);
+    	
+    	Log.i(TAG, "First: "+str1);
+    	Log.i(TAG, "Second: "+str2);
+    	
+        //Log.i(TAG, "Color sensor readings");
     }
 
 	@Override
