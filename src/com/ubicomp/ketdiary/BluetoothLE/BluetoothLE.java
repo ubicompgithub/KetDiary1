@@ -187,8 +187,14 @@ public class BluetoothLE {
 //                for(int i=0; i<4; i++) {
 //                    color_sensor0[i] = data[(i*2)+1]<<8 + data[i*2];
 //                    color_sensor1[i] = data[(i*2)+9]<<8 + data[i*2+8];
+                
 
             }
+            else{
+                	Log.i(TAG, "----BLE Can't handle data----");
+                }
+            
+            
         }
     };
 
