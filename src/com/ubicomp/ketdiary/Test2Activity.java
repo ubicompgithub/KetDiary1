@@ -45,7 +45,7 @@ import com.ubicomp.ketdiary.system.PreferenceControl;
 
 @SuppressWarnings("deprecation")
 @SuppressLint("NewApi")
-public class TestActivity extends Activity implements BluetoothListener, CameraCaller{
+public class Test2Activity extends Activity implements BluetoothListener, CameraCaller{
 	
 	
 	private static final String TAG = "BluetoothLE";
@@ -129,8 +129,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	private static Object init_lock = new Object();
 	private static Object done_lock = new Object();
 
-	private int voltage_count=0;
-	private int voltage = 0;
+	
 	
 	private int state;
 	//private boolean second_pass=false;
@@ -183,14 +182,18 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			label_btn.setText("開始");
 			label_subtitle.setText("請點選開始進行測試");
 			label_title.setText("測試尚未開始");
+			
+			
+			//onClick();
+			
+			
+			
 		}
 		@Override
 		public void onClick(){
 			first_connect =false;
 			first_voltage =false;
 			ble_pluginserted =false;
-			
-			
 			reset();
 			
 			start_test = true;
@@ -204,7 +207,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		 * A Fail state with error msg
 		 * @param _err_msg
 		 */
-		public FailState(String _err_msg){ //TODO set subtitle
+		public FailState(String _err_msg){
 			err_msg = _err_msg;
 		}
 		@Override
@@ -247,9 +250,6 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			startConnection();
 			openSensorMsgTimer = new OpenSensorMsgTimer();
 			openSensorMsgTimer.start();
-			/*  Next State decide by callback
-			 *  1. timeout 2. connect but no saliva(or wrong ID) 3.connect with right salivaId (continue)
-			 */
 		    
 		}
 		
@@ -326,7 +326,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			
 			
 			if(ble != null)
-				ble.bleWriteState((byte)2);//ble.bleWriteState((byte)3);
+				ble.bleWriteState((byte)3);//ble.bleWriteState((byte)3);
 			
 			
 			cameraCountDownTimer = new CameraCountDownTimer();
@@ -386,8 +386,8 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			
 			img_btn.setEnabled(false);
 			//label_btn.setText("繼續");
-			label_title.setText("請在10秒內再吐一口水");
-			label_subtitle.setText("口水量不足");
+			label_title.setText("口水量不足，請再多吐一些");
+			label_subtitle.setText("仍在檢測中");
 			
 			
 			cameraCountDownTimer = new CameraCountDownTimer();
@@ -401,12 +401,12 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		@Override
 		public void onClick(){
 			//move_to_init = true;
-			/*is_timeout = false;
+			is_timeout = false;
 			
 			if(	timeoutCountDownTimer!=null	)
 				timeoutCountDownTimer.cancel();
 			
-			setState(new Stage2State());*/
+			setState(new Stage2State());
 		}
 		public void onExit(){
 			if(	cameraCountDownTimer!=null	)
@@ -420,9 +420,6 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			
 			state = DONE_STATE;
 			
-			label_title.setText("測試完成!");
-			label_subtitle.setText("");
-			
 			test_done = true;
 			if(ble != null)
 				ble.bleDisconnect();
@@ -430,8 +427,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			stop();
 			
 			startActivity(new Intent(that, EventCopeSkillActivity.class));
-			startActivity(new Intent(that, EventCopeSkillActivity.class));
-			//setState(new IdleState());
+			setState(new IdleState());
 		}
 	}
 	private void setStorage() {
@@ -457,7 +453,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	public void startConnection() {
 		// initialize bt task
 		if(ble == null) {
-			ble = new BluetoothLE(that, "ket_000");
+			ble = new BluetoothLE(that, "ket_002");
 			//PreferenceControl.getDeviceId()
 		}
 		if(!is_connect)
@@ -597,7 +593,6 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		checkDebug(is_debug);//PreferenceControl.isDebugMode());
 		//reset();
-		setState(new IdleState());
 		
 	}
 	
@@ -651,7 +646,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		camera_initial=false;
 
 		timestamp = System.currentTimeMillis();
-		voltage_count = 0;
+
 		//setGuideMessage(R.string.test_guide_reset_top,R.string.test_guide_reset_bottom);
 
 		PreferenceControl.setUpdateDetectionTimestamp(timestamp);
@@ -701,11 +696,8 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 				Log.i(TAG3, "FINISH");
 				if(state == CAMERA_STATE)
 					setState(new FailState("測試超時"));
-				else if (state == NOTENOUGH_STATE){ // 判斷第二個電極是否通過
-					if(voltage < SECOND_VOLTAGE_THRESHOLD)
-						setState(new DoneState());
-					else
-						setState(new FailState("測試失敗,請更換試紙匣後重試"));
+				else if (state == NOTENOUGH_STATE){
+					setState(new DoneState());
 				}
 				
 				//cameraRecorder.closeSuccess();
@@ -714,9 +706,6 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			@Override
 			public void onTick(long millisUntilFinished) {
 				cameraRunHandler.sendEmptyMessage(0);
-				if(state == NOTENOUGH_STATE){
-					label_title.setText("請在"+millisUntilFinished/1000 +"秒內再吐一口水");
-				}
 			}	
 	}
 	
@@ -756,10 +745,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			//countDownText.setText("");
 			showDebug(">Start to run the  device");
 			//runBT();
-			if(voltage < FIRST_VOLTAGE_THRESHOLD)
-				setState(new CameraState());
-			else
-				setState(new FailState("請更換試紙匣後重試"));
+			setState(new CameraState());
 		}
 
 		@Override
@@ -792,7 +778,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			//showDebug(">Start to run the  device");
 			//runBT();
 			in_stage2=true;
-			if( voltage < SECOND_VOLTAGE_THRESHOLD ){
+			if( second_voltage ){
 				setState(new DoneState());
 			}
 			else{
@@ -895,7 +881,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
         Toast.makeText(this, "BLE disconnected", Toast.LENGTH_SHORT).show();
         //setState(new FailState("連接中斷"));
         
-        if(state != IDLE_STATE && state!= FAIL_STATE && state!= DONE_STATE)
+        if(state != IDLE_STATE && state!= FAIL_STATE)
         	setState(new FailState("連接中斷"));
         else if (state == STAGE2_STATE)
         	setState(new FailState("測試完成")); //temporary solution
@@ -948,10 +934,13 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 
     @Override
     public void bleColorReadings(byte[] colorReadings) {
-    	String feature, feature2;
+    	//String feature, feature2;
+    	int[] color = new int[4];
+    	int[] color2 = new int[4];
     	String str1 ="";
     	String str2 ="";
-    	int[] color = new int[4];
+    	
+    	
     	for(int i=0; i<8; i+=2){
     		color[i/2] = colorReadings[i]+colorReadings[i+1]*256;
     		str1 = str1+ " " + String.valueOf(color[i/2]);
@@ -959,24 +948,26 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
     	//ColorDetect2.colorDetect(color);
     	//feature = ColorDetect2.colorDetect2(color);
     	
-    	//writeToColorRawFile(str1+"\n");
+    	writeToColorRawFile(str1+"\n");
     	//writeToColorRawFile(feature+"\n");
     	//writeToColorRawFile(str1+"\n");
     	
-    	int[] color2 = new int[4];
+    	
     	for(int i=8; i<16; i+=2){
     		color2[(i-8)/2] = colorReadings[i]+colorReadings[i+1]*256;
     		str2 = str2+ " " + String.valueOf(color2[(i-8)/2]);
     	}
     	
+    	writeToVoltageFile(str2+"\n"); //tempory use
     	//feature2 = ColorDetect2.colorDetect2(color2);
     	//writeToVoltageFile(feature2+"\n");	
     	
     	showDebug(">First:"+str1+" Second:"+str2);
-    	//Log.i(TAG, "First: "+str1);
-    	//Log.i(TAG, "Second: "+str2);
+    	Log.i(TAG, "First: "+str1);
+    	Log.i(TAG, "Second: "+str2);
     	
-        //Log.i(TAG, "Color sensor readings");
+    	//writeToColorRawFile(str1+"\n");
+        //Log.i(TAG, "Color sensor readings"+colorReadings.length);
     }
     
     protected void writeToColorRawFile(String str) {
@@ -999,14 +990,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	public void bleElectrodeAdcReading(byte header, byte[] adcReading) {
 		// TODO Auto-generated method stub
 		//String str = new String(adcReading);
-		voltage = (int)adcReading[0];
-		
-		if( voltage > FIRST_VOLTAGE_THRESHOLD )
-			voltage_count++;
-		
-		
-		
-		String str = String.valueOf(voltage);
+		String str = String.valueOf(adcReading[0]);
 		String str2 = String.valueOf(header);
 		
 		String str3= " "+str2+" "+str;
@@ -1015,11 +999,11 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		showDebug(">"+str3);
 		
 		writeToVoltageFile(str+str2+"\n");
-		if(state == CAMERA_STATE && voltage > FIRST_VOLTAGE_THRESHOLD ){
+		if(state == CAMERA_STATE && (int)adcReading[0]> FIRST_VOLTAGE_THRESHOLD && !first_voltage){
 			setState(new Stage2State());
 			first_voltage=true;
 		}
-		else if(state==NOTENOUGH_STATE && voltage< SECOND_VOLTAGE_THRESHOLD && !second_voltage){
+		else if(in_stage2 && (int)adcReading[0]< SECOND_VOLTAGE_THRESHOLD && !second_voltage){
 			//setState(new DoneState());
 			second_voltage=true;
 		}

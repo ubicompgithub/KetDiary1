@@ -22,6 +22,7 @@ import com.ubicomp.ketdiary.db.TestDataParser;
 import com.ubicomp.ketdiary.file.ColorRawFileHandler;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.VoltageFileHandler;
+import com.ubicomp.ketdiary.system.PreferenceControl;
 //import com.ubicomp.ketdiary.dialog.NoteDialog;
 
 /** Event Cope Skill Page
@@ -49,8 +50,12 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
 	//private long timestamp = 0;
 	private File mainDirectory;
 	
+	private boolean first_connect=true;
 	private long startTime;
 	private Handler handler2 = new Handler();
+	private Handler handler3 = new Handler();
+	private long timeout = 2000;
+	private boolean write_success = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -111,17 +116,51 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
 		//設定定時要執行的方法
 		handler2.removeCallbacks(updateTimer);
 		//new Timer().schedule(task, 0, 1000);
-		handler2.postDelayed(updateTimer, 2000);
+		handler2.postDelayed(updateTimer, 0);
+		
+		//設定定時要執行的方法
+		handler3.removeCallbacks(updateTimer2);
+		//new Timer().schedule(task, 0, 1000);
+		handler3.postDelayed(updateTimer2, 0);
 	}
 	
 	private Runnable updateTimer = new Runnable() {
 		public void run() {
+			
+			
+			
 			long spentTime = System.currentTimeMillis() - startTime;
+			
+			spentTime = timeout - spentTime;
+			
 			long minius = (spentTime/1000)/60;
 			long seconds = (spentTime/1000) % 60;
 			
 			tv_timer.setText(minius+":"+seconds);
+			if(ble!=null)
+				ble.bleWriteState((byte)3);
+			
 			handler2.postDelayed(this, 1000);
+			
+			if(spentTime < 0)
+				handler2.removeCallbacks(updateTimer);
+			/*
+			final TextView time = (TextView) findViewById(R.id.timer);
+			Long spentTime = System.currentTimeMillis() - startTime;
+		            //計算目前已過分鐘數
+		    
+		            //計算目前已過秒數
+		    
+		    time.setText(minius+":"+seconds);
+		    handler.postDelayed(this, 1000);*/
+		}
+    };
+    
+    private Runnable updateTimer2 = new Runnable() {
+		public void run() {
+			bleConnection();
+			Toast.makeText(that, "Start writing File", Toast.LENGTH_SHORT).show();
+			//handler2.postDelayed(this, 1000);
 			/*
 			final TextView time = (TextView) findViewById(R.id.timer);
 			Long spentTime = System.currentTimeMillis() - startTime;
@@ -136,12 +175,18 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
     @Override
     public void onResume(){
     	super.onResume();
+
+    }
+    
+    private void bleConnection(){
     	if(ble == null) {
-			//ble = new BluetoothLE(that, "ket_000");
-			//PreferenceControl.getDeviceId()
+			ble = new BluetoothLE(that, "ket_002");
+			//PreferenceControl.getDeviceId();
 		}
-		//ble.bleConnect();
-		//ble.bleWriteState((byte)3);
+		ble.bleConnect();
+		//ble.bleWriteState((byte)1);
+		
+		
     }
 	
 	private TimerTask task = new TimerTask(){
@@ -230,9 +275,16 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
 
     @Override
     public void bleConnected() {
+    	/*
+    	ble.bleWriteState((byte)3);
+    	if(first_connect){
+    		ble.bleWriteState((byte)3);
+    		first_connect =false;
+    	}*/
     	//is_connect = true;
-        //Log.i(TAG, "BLE connected");
-        //Toast.makeText(this, "BLE connected", Toast.LENGTH_SHORT).show();
+        Log.i(TAG, "BLE connected");
+        Toast.makeText(this, "BLE connected", Toast.LENGTH_SHORT).show();
+        ble.bleWriteState((byte)3);
     }
 
     @Override
@@ -249,6 +301,7 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
     public void bleWriteStateSuccess() {
         Log.i(TAG, "BLE ACTION_DATA_WRITE_SUCCESS");
         Toast.makeText(this, "BLE write state success", Toast.LENGTH_SHORT).show();
+        write_success = true;
     }
 
     @Override
@@ -267,8 +320,10 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
 
     @Override
     public void blePlugInserted(byte[] plugId) {
-        //Log.i(TAG, "Test plug is inserted");
-        
+        Log.i(TAG, "Test plug is inserted");
+        if(!write_success){
+        	ble.bleWriteState((byte)3);
+        }
         /*
         if(!first_connect){
         	Toast.makeText(this, "Test plug is inserted", Toast.LENGTH_SHORT).show();
@@ -295,17 +350,19 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
     	//ColorDetect2.colorDetect(color);
     	feature = ColorDetect2.colorDetect2(color);
     	
-    	//writeToColorRawFile(str1+"\n");
-    	writeToColorRawFile(feature+"\n");
+    	writeToColorRawFile(str1+"\n");
+    	//writeToColorRawFile(feature+"\n");
     	
     	int[] color2 = new int[4];
     	for(int i=8; i<16; i+=2){
-    		color2[i/2] = colorReadings[i]+colorReadings[i+1]*256;
-    		str2 = str2+ " " + String.valueOf(colorReadings[i]+colorReadings[i+1]*256);
+    		color2[(i-8)/2] = colorReadings[i]+colorReadings[i+1]*256;
+    		str2 = str2+ " " + String.valueOf(color2[(i-8)/2]);
     	}
     	
     	feature2 = ColorDetect2.colorDetect2(color2);
-    	writeToVoltageFile(feature2+"\n");
+    	//writeToVoltageFile(feature2+"\n");
+    	writeToVoltageFile(str2+"\n");
+    	
     	//showDebug(">First:"+str1+" Second:"+str2);
     	Log.i(TAG, "First: "+str1);
     	Log.i(TAG, "Second: "+str2);
