@@ -58,7 +58,7 @@ public class DataUploader {
 
 			Log.d(TAG, "upload start");
 
-			// UserInfo
+			
 			/*if (connectToServer() == ERROR) {
 				Log.d(TAG, "FAIL TO CONNECT TO THE SERVER");
 			}*/
@@ -75,9 +75,19 @@ public class DataUploader {
 			}
 			
 			// Patient
-
+			// UserInfo
 			if(connectToServer() == ERROR)
 				Log.d(TAG, "FAIL TO UPLOAD - Patient");
+			
+			
+			// TestResult
+			Vector<TestResult> tr = DBControl.inst.getNotUploadedTestResult();
+			if(tr != null){
+				for(int i = 0;i < tr.size();i++){
+					if(connectToServer(tr.get(i)) == ERROR)
+						Log.d(TAG, "FAIL TO UPLOAD - TestResult");
+				}
+			}
 			
 			// EmotionDIY
 			/*

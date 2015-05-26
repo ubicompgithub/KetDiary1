@@ -12,10 +12,10 @@ public class TestResult {
 	public int isPrime;
 	public int isFilled;
 
-	public TestResult(float result, TimeValue tv, String cassette_id
+	public TestResult(int result, long tv, String cassette_id
 			,int isPrime, int isFilled) {
 		this.result = result;
-		this.tv = tv;
+		this.tv = TimeValue.generate(tv);;
 		this.cassette_id = cassette_id;
 		this.isPrime = isPrime;
 		this.isFilled= isFilled;

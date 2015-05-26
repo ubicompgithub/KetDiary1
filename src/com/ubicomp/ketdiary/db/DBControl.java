@@ -2,15 +2,15 @@ package com.ubicomp.ketdiary.db;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
-
-import com.ubicomp.ketdiary.App;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+
+import com.ubicomp.ketdiary.App;
+import com.ubicomp.ketdiary.data.structure.TestResult;
 
 
 /** 
@@ -34,7 +34,7 @@ public class DBControl {
 	
 	/** create instance*/
 	public static DBControl inst = new DBControl();
-	private DBControl(){}
+	public DBControl(){}
 	
 	public String getUserID(){
 		Log.d("asdasd", "GetUserID");
@@ -158,7 +158,7 @@ public class DBControl {
 	 * Add TestDetail and upload
 	 * @param ttd
 	 */
-	public void addTestResult(Datatype.TestDetail ttd){
+	public void addTestResult(Datatype.TestDetail ttd){ 
 		not_uploaded_testdetail.add(ttd);
 		DataUploader.upload();
 	}
@@ -175,6 +175,34 @@ public class DBControl {
 		not_uploaded_testdetail.clear();
 		return ret;
 	}
+	
+	
+	//Test Result new
+	
+	Vector<TestResult> notUploadedTestResult = new Vector<TestResult>();
+
+	/**
+	 * Add TestResult and upload
+	 * @param ttd
+	 */
+	public void addTestResult(TestResult data){ //insertTestResult
+		notUploadedTestResult.add(data);
+		DataUploader.upload();
+	}
+	
+	/**
+	 * Get not upload TestResult
+	 * @return
+	 * @see DataUploader
+	 */
+	public Vector<TestResult> getNotUploadedTestResult(){
+		Vector<TestResult> ret = new Vector<TestResult>();
+		for(int lx = 0;lx < notUploadedTestResult.size();lx++)
+			ret.add(notUploadedTestResult.get(lx));
+		notUploadedTestResult.clear();
+		return ret;
+	}
+	
 	
 	/**
 	 * Add Patient and upload
