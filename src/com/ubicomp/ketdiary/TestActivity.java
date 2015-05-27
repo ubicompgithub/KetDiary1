@@ -491,7 +491,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	public void startConnection() {
 		// initialize bt task
 		if(ble == null) {
-			ble = new BluetoothLE(that, "ket_000");
+			//ble = new BluetoothLE(that, "ket_000");
 			//PreferenceControl.getDeviceId()
 		}
 		if(!is_connect)

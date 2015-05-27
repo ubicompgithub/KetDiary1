@@ -17,11 +17,8 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -30,14 +27,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ubicomp.ketdiary.EventCopeSkillActivity;
-import com.ubicomp.ketdiary.InfoActivity;
 import com.ubicomp.ketdiary.NoteActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.UploadService;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE;
+import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE2;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothListener;
-import com.ubicomp.ketdiary.BluetoothLE.MainActivity2;
 import com.ubicomp.ketdiary.camera.CameraCaller;
 import com.ubicomp.ketdiary.camera.CameraInitHandler;
 import com.ubicomp.ketdiary.camera.CameraRecorder;
@@ -59,7 +54,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	
 	private static final String TAG1 = "TEST_PAGE";
 
-	public Activity activity;
+	public Activity activity = null;
 	private TestFragment testFragment;
 	private View view;
 	private TextView messageView;
@@ -124,7 +119,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private static int soundId;
 	
 	private TestState CertainState = null;
-	private BluetoothLE ble = null;
+	private BluetoothLE2 ble = null;
 	
 	private boolean start_test = false;
 	private boolean is_connect = false;
@@ -560,7 +555,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	public void startConnection() {
 		// initialize bt task
 		if(ble == null) {
-			ble = new BluetoothLE( testFragment , "ket_000");
+			ble = new BluetoothLE2( testFragment , "ket_000");
 			//PreferenceControl.getDeviceId()
 		}
 		if(!is_connect)
@@ -786,7 +781,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			@Override
 			public void onTick(long millisUntilFinished) {
 				
-				if(millisUntilFinished % 2500 == 0)
+				//if(millisUntilFinished % 2500 == 0)
 					cameraRunHandler.sendEmptyMessage(0);
 				
 				if(state == NOTENOUGH_STATE){

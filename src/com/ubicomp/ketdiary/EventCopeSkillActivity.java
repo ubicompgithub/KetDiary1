@@ -35,7 +35,7 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
 	private static final String TAG = "Bluetooth_Event"; 
 	
 	/** self activity*/
-	private Activity that;
+	private Activity activity;
 	
 	private TextView tv_timer;
 	private TextView tv_tips;
@@ -64,7 +64,7 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
 		super.onCreate(savedInstanceState);
 		//new NoteDialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen).show();
 		setContentView(R.layout.activity_qtip);
-		that = this;
+		activity = this;
 		tv_timer = (TextView)findViewById(R.id.qtip_tv_timer);
 		tv_tips = (TextView)findViewById(R.id.qtip_tv_tips);
 		btn_know = (Button)findViewById(R.id.qtip_btn_know);
@@ -163,7 +163,7 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
     private Runnable updateTimer2 = new Runnable() {
 		public void run() {
 			bleConnection();
-			Toast.makeText(that, "Start writing File", Toast.LENGTH_SHORT).show();
+			Toast.makeText(activity, "Start writing File", Toast.LENGTH_SHORT).show();
 			//handler2.postDelayed(this, 1000);
 			/*
 			final TextView time = (TextView) findViewById(R.id.timer);
@@ -184,7 +184,7 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
     
     private void bleConnection(){
     	if(ble == null) {
-			ble = new BluetoothLE(that, "ket_001");
+			ble = new BluetoothLE(this, "ket_001");
 			//PreferenceControl.getDeviceId();
 		}
 		ble.bleConnect();
@@ -217,8 +217,8 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
 				
 				
 				if(ms<=0){
-					Intent a_intent = new Intent(that, AlarmService.class);
-					that.startService(a_intent);
+					Intent a_intent = new Intent(activity, AlarmService.class);
+					activity.startService(a_intent);
 				}
 				
 				break;

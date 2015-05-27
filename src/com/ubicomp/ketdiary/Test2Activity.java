@@ -453,7 +453,7 @@ public class Test2Activity extends Activity implements BluetoothListener, Camera
 	public void startConnection() {
 		// initialize bt task
 		if(ble == null) {
-			ble = new BluetoothLE(that, "ket_002");
+			ble = new BluetoothLE(this, "ket_002");
 			//PreferenceControl.getDeviceId()
 		}
 		if(!is_connect)
