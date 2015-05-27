@@ -19,7 +19,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:background="@drawable/tabs_bg"
+                android:background="@drawable/bottom_bar_bg"
                 android:orientation="horizontal"
                 android:splitMotionEvents="false" />
 
@@ -36,7 +36,8 @@
         android:id="@+id/main_count_down_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/count_down_circle_normal" >
+        android:background="@drawable/count_down_circle_normal"
+        android:visibility="gone" >
 
         <TextView
             android:id="@+id/main_count_down_text"
@@ -52,6 +53,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/loading_page" />
+        android:src="@drawable/loadingpage" />
 
 </RelativeLayout>

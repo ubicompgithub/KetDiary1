@@ -56,6 +56,8 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
 	private Handler handler3 = new Handler();
 	private long timeout = 2000;
 	private boolean write_success = false;
+	private boolean start_write = false;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,14 +83,16 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
 		btn_tipup.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				tv_tips.setText(DBTip.inst.getTip());
+				//tv_tips.setText(DBTip.inst.getTip());
+				start_write = true;
 			}
 		});
 		
 		btn_tipdown.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				tv_tips.setText(DBTip.inst.getTip());
+				//tv_tips.setText(DBTip.inst.getTip());
+				bleConnection();
 			}
 		});
 		
@@ -180,7 +184,7 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
     
     private void bleConnection(){
     	if(ble == null) {
-			ble = new BluetoothLE(that, "ket_002");
+			ble = new BluetoothLE(that, "ket_001");
 			//PreferenceControl.getDeviceId();
 		}
 		ble.bleConnect();

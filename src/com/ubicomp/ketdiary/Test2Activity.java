@@ -27,7 +27,7 @@ import android.widget.Toast;
 
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothListener;
-import com.ubicomp.ketdiary.BluetoothLE.MainActivity;
+import com.ubicomp.ketdiary.BluetoothLE.MainActivity2;
 import com.ubicomp.ketdiary.camera.CameraCaller;
 import com.ubicomp.ketdiary.camera.CameraInitHandler;
 import com.ubicomp.ketdiary.camera.CameraRecorder;
@@ -836,7 +836,7 @@ public class Test2Activity extends Activity implements BluetoothListener, Camera
             	break;
             case 3:
             	//startActivity(new Intent(that, MainActivity.class));
-            	startActivityForResult(new Intent(that, MainActivity.class), 0);
+            	startActivityForResult(new Intent(that, MainActivity2.class), 0);
             	break;
             default:
         }

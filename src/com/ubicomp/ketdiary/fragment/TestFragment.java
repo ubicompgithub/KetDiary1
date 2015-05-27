@@ -1,21 +1,26 @@
-package com.ubicomp.ketdiary;
+package com.ubicomp.ketdiary.fragment;
 
 import java.io.File;
+import java.text.DecimalFormat;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,6 +30,11 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ubicomp.ketdiary.EventCopeSkillActivity;
+import com.ubicomp.ketdiary.InfoActivity;
+import com.ubicomp.ketdiary.NoteActivity;
+import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.UploadService;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothListener;
 import com.ubicomp.ketdiary.BluetoothLE.MainActivity2;
@@ -34,23 +44,25 @@ import com.ubicomp.ketdiary.camera.CameraRecorder;
 import com.ubicomp.ketdiary.camera.CameraRunHandler;
 import com.ubicomp.ketdiary.camera.ImageFileHandler;
 import com.ubicomp.ketdiary.camera.Tester;
-import com.ubicomp.ketdiary.color.ColorDetect2;
 import com.ubicomp.ketdiary.file.ColorRawFileHandler;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.QuestionFile;
 import com.ubicomp.ketdiary.file.VoltageFileHandler;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.ui.Typefaces;
 
-
-
-@SuppressWarnings("deprecation")
-@SuppressLint("NewApi")
-public class TestActivity extends Activity implements BluetoothListener, CameraCaller{
-	
+public class TestFragment extends Fragment implements BluetoothListener, CameraCaller{
 	
 	private static final String TAG = "BluetoothLE";
 	private static final String TAG2 = "debug";
 	private static final String TAG3 = "-State-";
+	
+	private static final String TAG1 = "TEST_PAGE";
+
+	public Activity activity;
+	private TestFragment testFragment;
+	private View view;
+	private TextView messageView;
 	
 	private TextView label_btn, label_subtitle, label_title, debug_msg;
 	private ImageView img_bg, img_ac, img_btn;
@@ -72,8 +84,6 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	
 	private final boolean[] INIT_PROGRESS = { false, false, false };
 	private final boolean[] DONE_PROGRESS = { false, false, false };
-	/** self activity*/
-	Activity that;
 	
 	/** Camare variables */
 	//private Camera mCamera = null;
@@ -103,9 +113,15 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		R.drawable.test_progress_4, R.drawable.test_progress_5,
 		R.drawable.test_progress_5 };
 	
+	private Typeface digitTypefaceBold, wordTypefaceBold;
+	private DecimalFormat format;
+	
 	/** Sound id*/
 	private int count_down_audio_id;
 	private int preview_audio_id;
+	
+	private static SoundPool soundpool;
+	private static int soundId;
 	
 	private TestState CertainState = null;
 	private BluetoothLE ble = null;
@@ -152,6 +168,80 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	private static final int DONE_STATE = 5;
 	private static final int NOTENOUGH_STATE = 6;
 	private static final int RUN_STATE = 7;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		activity = this.getActivity();
+		testFragment = this;
+		
+		//format = new DecimalFormat();
+		//format.setMaximumIntegerDigits(1);
+		//format.setMinimumIntegerDigits(1);
+		//format.setMinimumFractionDigits(2);
+		//format.setMaximumFractionDigits(2);
+		digitTypefaceBold = Typefaces.getDigitTypeface();
+		wordTypefaceBold = Typefaces.getWordTypefaceBold();
+		
+		/** Load sound into sound pool*/
+		soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 5);
+		count_down_audio_id = soundPool.load(activity, R.raw.short_beep, 1); 
+		preview_audio_id = soundPool.load(activity, R.raw.din_ding, 1);
+		
+		msgHandler = new ChangeMsgHandler();
+		
+		
+		/*
+		if (soundpool == null) {
+			soundpool = new SoundPool(1, AudioManager.STREAM_MUSIC, 1);
+			soundId = soundpool.load(this.getActivity(), R.raw.short_beep, 1);
+		}*/
+		//msgLoadingHandler = new MsgLoadingHandler();
+		//failBgHandler = new FailMessageHandler();
+		//testHandler = new TestHandler();
+		//changeTabsHandler = new ChangeTabsHandler();
+		//test_guide_msg = getResources().getStringArray(R.array.test_guide_msg);
+		
+		
+				
+	}
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+		view = inflater.inflate(R.layout.fragment_test, container, false);
+		
+		label_btn = (TextView) view.findViewById(R.id.tv_btn);
+		label_subtitle = (TextView) view.findViewById(R.id.tv_subtitle);
+		label_title = (TextView) view.findViewById(R.id.tv_title);
+		
+		img_bg = (ImageView)view.findViewById(R.id.iv_bar_bg);
+		img_ac = (ImageView)view.findViewById(R.id.iv_bar_ac);
+		img_btn = (ImageView)view.findViewById(R.id.vts_iv_cry);
+		cameraLayout = (FrameLayout)view.findViewById(R.id.cameraLayout);
+		
+		btn_debug = (Button)view.findViewById(R.id.debug_button_1);
+		debugScrollView = (ScrollView)view.findViewById(R.id.debug_scroll_view);
+		
+		debugMsg = (EditText)view.findViewById(R.id.debug_msg);
+		
+		//設定字型
+		label_btn.setTypeface(wordTypefaceBold);
+		label_subtitle.setTypeface(wordTypefaceBold);
+		label_title.setTypeface(wordTypefaceBold);
+		//messageView.setTypeface(wordTypefaceBold);
+		
+		setState(new IdleState());
+		btn_debug.setOnClickListener(new DebugOnClickListener());
+		
+		/** State onclick function use here*/
+		img_btn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				CertainState.onClick();
+			}
+		});
+		
+		return view;
+	}
 	
 	/**
 	 * Define state's function
@@ -296,27 +386,6 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 						
 			soundPool.play(preview_audio_id, 1.0F, 1.0F, 0, 0, 1.0F);
 			Log.d("Main", "Enter Stage1");
-			
-			
-			/** Search for the front facing camera */
-			/*
-			int cameraId = -1;
-			int numberOfCameras = Camera.getNumberOfCameras();
-			for (int i = 0; i < numberOfCameras; i++) {
-				CameraInfo info = new CameraInfo();
-				Camera.getCameraInfo(i, info);
-				if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
-					cameraId = i;
-					break;
-				}
-			}
-			mCamPreview = new CameraPreview(that);
-			cameraLayout.addView(mCamPreview);
-			Log.i("FORTEST", "cameraId: " + cameraId);
-			mCamera = Camera.open(cameraId);
-			mCamPreview.set(that, mCamera);
-			cameraLayout.setVisibility(View.VISIBLE);
-			*/
 			
 			cameraRecorder.start();
 			
@@ -463,8 +532,8 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			//DBControl.inst.startTesting();
 			stop();
 			
-			//startActivity(new Intent(that, EventCopeSkillActivity.class));
-			startActivity(new Intent(that, NoteActivity.class));
+			//startActivity(new Intent(, EventCopeSkillActivity.class));
+			startActivity(new Intent(activity, NoteActivity.class));
 			//setState(new IdleState());
 		}
 	}
@@ -491,7 +560,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	public void startConnection() {
 		// initialize bt task
 		if(ble == null) {
-			ble = new BluetoothLE(that, "ket_000");
+			ble = new BluetoothLE( testFragment , "ket_000");
 			//PreferenceControl.getDeviceId()
 		}
 		if(!is_connect)
@@ -637,52 +706,12 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	public void onResume(){
 		super.onResume();
 		// dismiss sleep
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		//getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		checkDebug(is_debug);//PreferenceControl.isDebugMode());
 		//reset();
 		setState(new IdleState());
 		
 	}
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_test);
-		label_btn = (TextView)findViewById(R.id.tv_btn);
-		label_subtitle = (TextView)findViewById(R.id.tv_subtitle);
-		label_title = (TextView)findViewById(R.id.tv_title);
-		
-		img_bg = (ImageView)findViewById(R.id.iv_bar_bg);
-		img_ac = (ImageView)findViewById(R.id.iv_bar_ac);
-		img_btn = (ImageView)findViewById(R.id.vts_iv_cry);
-		cameraLayout = (FrameLayout)findViewById(R.id.cameraLayout);
-		
-		btn_debug = (Button)findViewById(R.id.debug_button_1);
-		debugScrollView = (ScrollView)findViewById(R.id.debug_scroll_view);
-		debugMsg = (EditText)findViewById(R.id.debug_msg);
-		//TODO: camera_mask = (ImageView)findViewById(R.id.test_camera_mask);
-		
-		/** Load sound into sound pool*/
-		soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 5);
-		count_down_audio_id = soundPool.load(this, R.raw.short_beep, 1); 
-		preview_audio_id = soundPool.load(this, R.raw.din_ding, 1);
-		setState(new IdleState());
-		
-		btn_debug.setOnClickListener(new DebugOnClickListener());
-			
-		/** State onclick function use here*/
-		img_btn.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				CertainState.onClick();
-			}
-		});
-		that = this;
-		
-		
-		msgHandler = new ChangeMsgHandler();
-	}
-
 	
 	
 	private void reset() {
@@ -886,13 +915,15 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	
 	
 	//Upload all the data
-	@Override
+	
+	/*
 	protected void onStart() {
 		//UploadService.startUploadService(this);
 		super.onStart();
-	}
+	}*/
 	
-    @Override
+    
+    /*
     public boolean onCreateOptionsMenu(Menu menu) {
         //參數1:群組id, 參數2:itemId, 參數3:item順序, 參數4:item名稱
         menu.add(0, 0, 0, "說明");
@@ -908,24 +939,24 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
         switch(item.getItemId()) {
             case 0:
                 //在TextView上顯示說明
-    			startActivity(new Intent(that, InfoActivity.class));
+    			startActivity(new Intent(, InfoActivity.class));
                 break;
             case 1:
                 //結束此程式
-                finish();
+                //finish();
                 break;
             case 2:
             	//new NoteDialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen).show();
-            	startActivity(new Intent(that, EventCopeSkillActivity.class));
+            	startActivity(new Intent(, EventCopeSkillActivity.class));
             	break;
             case 3:
-            	//startActivity(new Intent(that, MainActivity.class));
-            	startActivityForResult(new Intent(that, MainActivity2.class), 0);
+            	//startActivity(new Intent(, MainActivity.class));
+            	startActivityForResult(new Intent(, MainActivity2.class), 0);
             	break;
             default:
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
     
 
     @Override
@@ -940,7 +971,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
     
     @Override
     public void bleNotSupported() {
-    	  Toast.makeText(this, "BLE not support", Toast.LENGTH_SHORT).show();
+    	  Toast.makeText(activity, "BLE not support", Toast.LENGTH_SHORT).show();
     	  setState(new FailState("裝置不支援"));
 //        this.finish();
     }
@@ -948,7 +979,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
     @Override
     public void bleConnectionTimeout() {
     	Log.i(TAG, "connect timeout");
-        Toast.makeText(this, "BLE connection timeout", Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, "BLE connection timeout", Toast.LENGTH_SHORT).show();
         setState(new FailState("連接逾時"));
     }
 
@@ -962,7 +993,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
     @Override
     public void bleDisconnected() {
         Log.i(TAG, "BLE disconnected");
-        Toast.makeText(this, "BLE disconnected", Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, "BLE disconnected", Toast.LENGTH_SHORT).show();
         //setState(new FailState("連接中斷"));
         
         if(state != IDLE_STATE && state!= FAIL_STATE && state!= DONE_STATE)
@@ -977,13 +1008,13 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
     @Override
     public void bleWriteStateSuccess() {
         Log.i(TAG, "BLE ACTION_DATA_WRITE_SUCCESS");
-        Toast.makeText(this, "BLE write state success", Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, "BLE write state success", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void bleWriteStateFail() {
         Log.i(TAG, "BLE ACTION_DATA_WRITE_FAIL");
-        Toast.makeText(this, "BLE writefstate fail", Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, "BLE writefstate fail", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -991,7 +1022,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
         Log.i(TAG, "No test plug");
     	
         if(state != IDLE_STATE){
-        	Toast.makeText(this, "No test plug", Toast.LENGTH_SHORT).show();
+        	Toast.makeText(activity, "No test plug", Toast.LENGTH_SHORT).show();
         	setState(new FailState("請將試紙匣插入裝置"));
         }
     }
@@ -1125,7 +1156,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			return;
 			camera_done = true;
 
-		UploadService.startUploadService(this);
+		UploadService.startUploadService(activity);
 
 		
 	}
@@ -1142,7 +1173,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	public FrameLayout getPreviewFrameLayout() {
 		
 		//return cameraLayout;
-		return (FrameLayout)findViewById(R.id.cameraLayout);
+		return (FrameLayout)view.findViewById(R.id.cameraLayout);
 	
 	}
 	@Override
@@ -1231,4 +1262,6 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		}
 	}
 
+	
+	
 }

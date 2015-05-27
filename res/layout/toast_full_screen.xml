@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="#AA000000"
+    android:id="@+id/custom_toast_root"
+    >
+    
+    <ImageView
+        android:id="@+id/custom_toast_main_picture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="186.7dp"
+        android:src="@drawable/toast_pass" />
+    
+    <TextView 
+        android:id="@+id/custom_toast_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/dark_gray"
+        android:gravity="center"
+        android:textSize="@dimen/large_text_size"
+        android:layout_below="@+id/custom_toast_main_picture"
+        />
+    
+    <TextView
+        android:id="@+id/custom_toast_counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/custom_toast_text"
+        android:layout_toRightOf="@+id/custom_toast_main_picture"
+        android:text="@string/self_help_counter_unit" 
+        android:gravity="center"
+        android:textSize="@dimen/large_text_size"
+        android:textColor="@color/toast_point"
+        />
+
+</RelativeLayout>
