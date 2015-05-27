@@ -758,9 +758,11 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	
 	//each state timeout
 	private class CameraCountDownTimer extends CountDownTimer {
+		
+			private int count = 0;
 			
 			public CameraCountDownTimer() {
-				super(CAMERATIMEOUT*1000, 1000);
+				super(CAMERATIMEOUT*1000, 500);
 			}
 
 			@Override
@@ -782,11 +784,13 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			public void onTick(long millisUntilFinished) {
 				
 				//if(millisUntilFinished % 2500 == 0)
+				if(count % 5 == 0)
 					cameraRunHandler.sendEmptyMessage(0);
 				
-				if(state == NOTENOUGH_STATE){
+				if(state == NOTENOUGH_STATE && count%2 == 0){
 					label_title.setText("請在"+millisUntilFinished/1000 +"秒內再吐一口水");
 				}
+				count ++;
 			}	
 	}
 	
