@@ -1,19 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
 
-    <Button
-        android:id="@+id/buttonStart"
+    <TabHost
+        android:id="@android:id/tabhost"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:splitMotionEvents="false" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:splitMotionEvents="false" >
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/tabs_bg"
+                android:orientation="horizontal"
+                android:splitMotionEvents="false" />
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@android:id/tabs"
+                android:splitMotionEvents="false" />
+        </RelativeLayout>
+    </TabHost>
+
+    <RelativeLayout
+        android:id="@+id/main_count_down_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start" />
+        android:background="@drawable/count_down_circle_normal" >
 
-    <Button
-        android:id="@+id/buttonClose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Close" />
+        <TextView
+            android:id="@+id/main_count_down_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/orange"
+            android:textSize="@dimen/normal_text_size" />
+    </RelativeLayout>
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/loading_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/loading_page" />
+
+</RelativeLayout>
