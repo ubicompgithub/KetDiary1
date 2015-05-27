@@ -68,7 +68,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	private CountDownTimer timeoutCountDownTimer= null;
 	private CountDownTimer cameraCountDownTimer= null;
 	private CountDownTimer openSensorMsgTimer = null;
-	
+	private CountDownTimer confirmCountDownTimer = null;
 	
 	private final boolean[] INIT_PROGRESS = { false, false, false };
 	private final boolean[] DONE_PROGRESS = { false, false, false };
@@ -141,6 +141,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	private static final int SECOND_VOLTAGE_THRESHOLD= 15;
 	private static final int TIMEOUT_SECOND = 30;
 	private static final int CAMERATIMEOUT = 10;
+	private static final int CONFIRM_SECOND = 5;
 	
 	private static final int FAIL_STATE = -1;
 	private static final int IDLE_STATE = 0;
@@ -150,7 +151,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	private static final int STAGE2_STATE = 4;
 	private static final int DONE_STATE = 5;
 	private static final int NOTENOUGH_STATE = 6;
-	
+	private static final int RUN_STATE = 7;
 	
 	/**
 	 * Define state's function
@@ -414,6 +415,39 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		}
 	}
 	
+	private class RunState extends TestState{
+		
+		@Override
+		public void onStart(){
+			state = RUN_STATE;
+			
+			label_btn.setText("");
+			img_bg.setVisibility(View.VISIBLE);
+			img_ac.setVisibility(View.VISIBLE);
+			img_btn.setVisibility(View.INVISIBLE);
+			label_title.setText("口水確認中");
+			label_subtitle.setText("請稍後");
+			//cameraLayout.setVisibility(View.VISIBLE);
+			
+			
+			confirmCountDownTimer = new ConfirmCountDownTimer();
+			confirmCountDownTimer.start();
+			
+		}
+		@Override
+		public void onExit(){
+			if (confirmCountDownTimer != null){
+				confirmCountDownTimer.cancel();
+				confirmCountDownTimer = null;
+			}
+			
+			
+			//img_bg.setVisibility(View.INVISIBLE);
+			//img_ac.setVisibility(View.INVISIBLE);
+			//img_btn.setVisibility(View.VISIBLE);
+		}
+	}
+	
 	private class DoneState extends TestState{
 		@Override
 		public void onStart(){
@@ -429,8 +463,8 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			//DBControl.inst.startTesting();
 			stop();
 			
-			startActivity(new Intent(that, EventCopeSkillActivity.class));
-			startActivity(new Intent(that, EventCopeSkillActivity.class));
+			//startActivity(new Intent(that, EventCopeSkillActivity.class));
+			startActivity(new Intent(that, NoteActivity.class));
 			//setState(new IdleState());
 		}
 	}
@@ -534,6 +568,11 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			openSensorMsgTimer=null;
 		}
 		
+		if (confirmCountDownTimer != null){
+			confirmCountDownTimer.cancel();
+			confirmCountDownTimer=null;
+		}
+		
 	}
 	
 	public void stopDueToInit() {
@@ -580,6 +619,10 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 		
 		if (openSensorMsgTimer != null)
 			openSensorMsgTimer.cancel();
+		
+		if (confirmCountDownTimer != null){
+			confirmCountDownTimer=null;
+		}
 	}
 	
 	
@@ -693,7 +736,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 	private class CameraCountDownTimer extends CountDownTimer {
 			
 			public CameraCountDownTimer() {
-				super(CAMERATIMEOUT*1000, 2500);
+				super(CAMERATIMEOUT*1000, 1000);
 			}
 
 			@Override
@@ -703,7 +746,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 					setState(new FailState("測試超時"));
 				else if (state == NOTENOUGH_STATE){ // 判斷第二個電極是否通過
 					if(voltage < SECOND_VOLTAGE_THRESHOLD)
-						setState(new DoneState());
+						setState(new RunState());
 					else
 						setState(new FailState("測試失敗,請更換試紙匣後重試"));
 				}
@@ -713,7 +756,10 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 
 			@Override
 			public void onTick(long millisUntilFinished) {
-				cameraRunHandler.sendEmptyMessage(0);
+				
+				if(millisUntilFinished % 2500 == 0)
+					cameraRunHandler.sendEmptyMessage(0);
+				
 				if(state == NOTENOUGH_STATE){
 					label_title.setText("請在"+millisUntilFinished/1000 +"秒內再吐一口水");
 				}
@@ -739,6 +785,30 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			is_timeout=true;
 		}	
 	}
+	
+	private class ConfirmCountDownTimer extends CountDownTimer {
+		
+		private int ptr = 0;
+		
+		public ConfirmCountDownTimer() {
+			super(CONFIRM_SECOND*1000, 1000);
+		}
+
+		@Override
+		public void onFinish() {
+			
+			setState(new DoneState());
+			
+		}
+
+		@Override
+		public void onTick(long millisUntilFinished) {
+			//is_timeout=true;
+			img_ac.setImageResource(ELECTRODE_RESOURCE[ptr]);
+			ptr+=2;
+		}	
+	}
+	
 	
 	
 	private class TestCountDownTimer extends CountDownTimer {
