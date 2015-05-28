@@ -120,10 +120,10 @@ public class HttpPostGenerator {
 		imageFiles = new File[3];
 
 		testFile = new File(mainStorageDir.getPath() + File.separator + _ts
-				+ File.separator + _ts + ".txt");
+				+ File.separator +"color_raw.txt");
 
 		detectionFile = new File(mainStorageDir.getPath() + File.separator
-				+ _ts + File.separator + "detection_detail.txt");
+				+ _ts + File.separator + "voltage.txt");
 
 		for (int i = 0; i < imageFiles.length; ++i)
 			imageFiles[i] = new File(mainStorageDir.getPath() + File.separator
