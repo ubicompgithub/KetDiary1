@@ -25,14 +25,14 @@ public class ServerUrl {
 	}
 	
 	public static String getTestDetail2Url(){
-		return SERVER_URL + "test/test_detail.php";
+		return SERVER_URL + "test/TestDetail.php";
 	}
 	
 	public static String getTestResultUrl(){
-		return SERVER_URL + "test/test_result.php";
+		return SERVER_URL + "test/TestResult.php";
 	}
 	
 	public static String getNoteAddUrl(){
-		return SERVER_URL + "test/test_note_add.php";
+		return SERVER_URL + "test/NoteAdd.php";
 	}
 }

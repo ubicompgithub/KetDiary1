@@ -219,7 +219,7 @@ public class TestActivity extends Activity implements BluetoothListener, CameraC
 			img_btn.setEnabled(true);
 			
 			//cameraLayout.setVisibility(View.INVISIBLE);
-			cameraRecorder.pause();//TODO: Camera Resource Release
+			cameraRecorder.pause();
 			
 			stopDueToInit();
 			

@@ -17,7 +17,29 @@ import com.ubicomp.ketdiary.R;
 public class PreferenceControl {
 
 	private static final SharedPreferences sp = App.getSp();
-
+	
+	/* UID
+	 * DeviceId
+	 * sensorId
+	 * family_name
+	 * family_phone
+	 * TestResult
+	 * LatestDetectionTimstamp
+	 * LatestDoneDetectionTimstamp
+	 * latestTestFail
+	 * TestSuccess
+	 * LatestTestTime
+	 * debug
+	 * debugType
+	 * firstTime
+	 * showedCoupon
+	 * targetGood
+	 * targetMoney
+	 * perDrinkCost
+	 * startdate
+	 * systemLock
+	 */
+	
 	/** Default setting at the first time of launching SoberDiary */
 	public static void defaultSetting() {
 		setUID("sober_default_test");
@@ -98,6 +120,15 @@ public class PreferenceControl {
 	
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+
 	// haven't use
 	/**
 	 * Check if it is the first time launching SoberDiary
@@ -336,28 +367,6 @@ public class PreferenceControl {
 	}
 
 
-	public static int getStorytellingReadTimes() {
-		return sp.getInt("readTimes", 0);
-	}
-
-	public static void addStorytellingReadTimes() {
-		int time = sp.getInt("readTimes", 0);
-		if (time < Config.STORYTELLING_READ_LIMIT) {
-			SharedPreferences.Editor edit = sp.edit();
-			edit.putInt("readTimes", (time + 1));
-			edit.commit();
-		}
-	}
-
-	public static void resetStorytellingReadTimes() {
-		SharedPreferences.Editor edit = sp.edit();
-		edit.putInt("readTimes", 0);
-		edit.commit();
-	}
-
-
-
-
 	public static int getUsedCounter() {
 		return sp.getInt("usedCounter", 0);
 	}
@@ -477,17 +486,6 @@ public class PreferenceControl {
 		edit.commit();
 	}
 
-	public static void setStorytellingImageSize(int width, int height) {
-		SharedPreferences.Editor edit = sp.edit();
-		edit.putInt("storytellingImageWidth", width);
-		edit.putInt("storytellingImageHeight", height);
-		edit.commit();
-	}
-
-	public static Point getStorytellingImageSize() {
-		int width = sp.getInt("storytellingImageWidth", 1);
-		int height = sp.getInt("storytellingImageHeight", 1);
-		return new Point(width, height);
-	}
+	
 
 }

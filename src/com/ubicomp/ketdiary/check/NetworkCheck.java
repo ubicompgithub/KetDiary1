@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.system;
+package com.ubicomp.ketdiary.check;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

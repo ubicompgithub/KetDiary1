@@ -1,6 +1,7 @@
 package com.ubicomp.ketdiary;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -11,6 +12,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,6 +32,7 @@ import com.ubicomp.ketdiary.fragment.StorytellingFragment;
 import com.ubicomp.ketdiary.fragment.TestFragment;
 import com.ubicomp.ketdiary.system.Config;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.ui.CustomMenu;
 import com.ubicomp.ketdiary.ui.CustomTab;
 import com.ubicomp.ketdiary.ui.ScreenSize;
 import com.ubicomp.ketdiary.ui.Typefaces;
@@ -64,10 +71,10 @@ public class MainActivity extends FragmentActivity {
 	private LoadingPageTimer loadingPageTimer;
 	private Handler loadingHandler = new LoadingHandler();
 
-	//private CustomMenu menu;
+	private CustomMenu menu;
 
-	//private RelativeLayout count_down_layout;
-	//private TextView count_down_text;
+	private RelativeLayout count_down_layout;
+	private TextView count_down_text;
 
 	 private static final String TAG = "MAIN_ACTIVITY";
 
@@ -76,6 +83,7 @@ public class MainActivity extends FragmentActivity {
 
 	private static final long TEST_GAP_DURATION_LONG = Config.TEST_GAP_DURATION_LONG;
 	private static final long TEST_GAP_DURATION_SHORT = Config.TEST_GAP_DURATION_SHORT;
+	
 	private CountDownTimer sensorCountDownTimer = null;
 	private boolean isRecovery = false;
 
@@ -84,7 +92,7 @@ public class MainActivity extends FragmentActivity {
 
 	private int notify_action = 0;
 
-	private boolean clickable = false;
+	private boolean clickable = false;   // back & home
 	private boolean doubleClickState = false;
 	private long latestClickTime = 0;
 
@@ -102,22 +110,21 @@ public class MainActivity extends FragmentActivity {
 		loading_page = (ImageView) findViewById(R.id.loading_page);
 		tabHost = (TabHost) findViewById(android.R.id.tabhost);
 		
-		//count_down_layout = (RelativeLayout) findViewById(R.id.main_count_down_layout);
-		//count_down_text = (TextView) findViewById(R.id.main_count_down_text);
+		count_down_layout = (RelativeLayout) findViewById(R.id.main_count_down_layout);
+		count_down_text = (TextView) findViewById(R.id.main_count_down_text);
 		
-		/*
+		
 		if (soundpool == null) {
 			soundpool = new SoundPool(1, AudioManager.STREAM_MUSIC, 1);
 			timer_sound_id = soundpool.load(getApplicationContext(),
 					R.raw.end_count_down, 0);
-		}*/
+		}
 
 		loadingHandler.sendEmptyMessage(0);
 
 		loadingPageTimer = new LoadingPageTimer();
 		loadingPageTimer.start();
 
-		//GCMUtilities.onCreate(getApplicationContext());
 
 	}
 
@@ -155,12 +162,13 @@ public class MainActivity extends FragmentActivity {
 			for (int i = 0; i < count; ++i)
 				tabWidget.getChildTabViewAt(i).setMinimumWidth(
 						ScreenSize.getScreenSize().x / count);
-
-			//count_down_text.setTypeface(Typefaces.getDigitTypefaceBold());
-			//count_down_layout.setOnTouchListener(new CountDownCircleOnTouchListener());
+			
+			
+			count_down_text.setTypeface(Typefaces.getDigitTypefaceBold());
+			count_down_layout.setOnTouchListener(new CountDownCircleOnTouchListener());
 		}
 	}
-	/*
+	
 	private class CountDownCircleOnTouchListener implements
 			View.OnTouchListener {
 		private int width = 0, height = 0;
@@ -205,7 +213,7 @@ public class MainActivity extends FragmentActivity {
 			}
 			return true;
 		}
-	}*/
+	}
 
 	@Override
 	protected void onStart() {
@@ -233,7 +241,7 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	protected void onPause() {
 		closeOptionsMenu();
-		//closeTimers();
+		closeTimers();
 		super.onPause();
 	}
 
@@ -428,7 +436,7 @@ public class MainActivity extends FragmentActivity {
 			long cur_time = System.currentTimeMillis();
 			if ((cur_time - latestClickTime) < 600 && doubleClickState) {
 				doubleClickState = false;
-				//openOptionsMenu();
+				openOptionsMenu();
 				latestClickTime = 0;
 				return false;
 			} else if ((cur_time - latestClickTime) >= 600 || !doubleClickState) {
@@ -461,7 +469,7 @@ public class MainActivity extends FragmentActivity {
 	public static MainActivity getMainActivity() {
 		return mainActivity;
 	}
-	/*
+	
 	public void openOptionsMenu() {
 		if (Build.VERSION.SDK_INT < 14) {
 			super.openOptionsMenu();
@@ -497,11 +505,11 @@ public class MainActivity extends FragmentActivity {
 		Intent newIntent;
 		switch (id) {
 		case R.id.menu_about:
-			newIntent = new Intent(this, AboutActivity.class);
+			newIntent = new Intent(this, DevActivity.class);
 			startActivity(newIntent);
 			return true;
 		case R.id.menu_setting:
-			newIntent = new Intent(this, CopingActivity.class);
+			newIntent = new Intent(this, NoteActivity.class);
 			startActivity(newIntent);
 			return true;
 		default:
@@ -510,13 +518,12 @@ public class MainActivity extends FragmentActivity {
 	}
 	
 	
-	@Override
 	public int getTabHeight() {
 		View v = findViewById(android.R.id.tabs);
 		return v.getBottom() - v.getTop();
-	}*/
+	}
 	
-	/*
+	
 	
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_MENU) {
@@ -529,7 +536,7 @@ public class MainActivity extends FragmentActivity {
 					openOptionsMenu();
 			}
 			return true;
-		} else if (keyCode == KeyEvent.KEYCODE_BACK) {
+		} else if (keyCode == KeyEvent.KEYCODE_BACK) {	
 			if (menu != null && menu.isShowing()) {
 				closeOptionsMenu();
 				return true;
@@ -549,39 +556,36 @@ public class MainActivity extends FragmentActivity {
 		long curTime = System.currentTimeMillis();
 		boolean debug = PreferenceControl.isDebugMode();
 		boolean testFail = PreferenceControl.isTestFail();
-		long TEST_GAP_DURATION = testFail ? TEST_GAP_DURATION_SHORT
-				: TEST_GAP_DURATION_LONG;
+		long waitTime = 10*60*1000;
+
 		long time = curTime - lastTime;
 		isRecovery = false;
-		if (time <= TEST_GAP_DURATION) {
-			closeSensorCountDownTimer();
-			if (debug)
-				sensorCountDownTimer = new SensorCountDownTimer(0);
+		closeSensorCountDownTimer();
+		
+		sensorCountDownTimer = new SensorCountDownTimer(waitTime);
+		//sensorCountDownTimer = new SensorCountDownTimer( Math.min(waitTime, waitTime-time) );
+		sensorCountDownTimer.start();
+			
+			
+			/*
 			else {
 				isRecovery = true;
 				long test_gap_time = TEST_GAP_DURATION - time;
 				sensorCountDownTimer = new SensorCountDownTimer(Math.min(
 						test_gap_time, TEST_GAP_DURATION));
-			}
-			sensorCountDownTimer.start();
-		}
+			}*/
+			
+		
 	}
 
 	private void closeSensorCountDownTimer() {
 		if (sensorCountDownTimer != null) {
 			sensorCountDownTimer.cancel();
-			sensorCountDownTimer = null;
-			/*
-			if (tabHost.getCurrentTab() == 0 && fragments[0] != null
-					&& fragments[0].isAdded()) {
-				((TestFragment) fragments[0]).enableStartButton(true);
-			}
-			
+			sensorCountDownTimer = null;	
 		}
-	}*/
+	}
 
-	
-/*
+
 	private class SensorCountDownTimer extends CountDownTimer {
 
 		public SensorCountDownTimer(long millisInFuture) {
@@ -593,11 +597,7 @@ public class MainActivity extends FragmentActivity {
 			soundpool.play(timer_sound_id, 1f, 1f, 0, 0, 1f);
 			isRecovery = false;
 			count_down_layout.setVisibility(View.GONE);
-			if (tabHost.getCurrentTab() == 0 && fragments[0] != null
-					&& fragments[0].isAdded()) {
-				((TestFragment) fragments[0]).setState(TestFragment.STATE_INIT);
-				((TestFragment) fragments[0]).enableStartButton(true);
-			}
+
 		}
 
 		@Override
@@ -606,90 +606,22 @@ public class MainActivity extends FragmentActivity {
 			isRecovery = true;
 			count_down_text.setText(String.valueOf(time));
 			count_down_layout.setVisibility(View.VISIBLE);
-			if (tabHost.getCurrentTab() == 0 && fragments[0] != null
-					&& fragments[0].isAdded()) {
-				if (((TestFragment) fragments[0]).getShowCountDown()) {
-					if (canUpdate) {
-						((TestFragment) fragments[0]).setGuideMessage(
-								R.string.test_guide_recovery_update_top,
-								R.string.test_guide_recovery_update_bottom);
-					} else {
-						((TestFragment) fragments[0]).setGuideMessage(
-								R.string.test_guide_recovery_top,
-								R.string.test_guide_recovery_bottom);
-					}
-					((TestFragment) fragments[0])
-							.setStartButtonText(R.string.recoverying);
-					((TestFragment) fragments[0]).enableStartButton(false);
-				}
-			}
 
 		}
 	}
 	
-	
 
-	private class UpdateTestTimer extends CountDownTimer {
-
-		private static final long FIVE_MINUTES = 5 * 60 * 1000;
-
-		public UpdateTestTimer() {
-			super(
-					(Math.min(PreferenceControl.getLatestTestCompleteTime()
-							+ FIVE_MINUTES - System.currentTimeMillis(),
-							FIVE_MINUTES)), 100);
-		}
-
-		@Override
-		public void onFinish() {
-			canUpdate = false;
-			count_down_layout.setVisibility(View.GONE);
-		}
-
-		@Override
-		public void onTick(long millisUntilFinished) {
-			int time = (int) millisUntilFinished / 1000;
-			if (!isRecovery) {
-				count_down_text.setText(String.valueOf(time));
-				if (tabHost.getCurrentTab() == 0 && fragments[0] != null
-						&& fragments[0].isAdded()) {
-					((TestFragment) fragments[0]).setGuideMessage(
-							R.string.test_guide_update_top,
-							R.string.test_guide_update_bottom);
-				}
-			}
-			count_down_layout.setVisibility(View.VISIBLE);
-		}
-	}
-
-	private void closeUpdateTestTimer() {
-		if (updateTestTimer != null) {
-			updateTestTimer.cancel();
-			updateTestTimer = null;
-		}
-	}
-
-	private void setUpdateTestTimer() {
-		canUpdate = false;
-		canUpdate = PreferenceControl.getUpdateDetection();
-		if (canUpdate) {
-			closeUpdateTestTimer();
-			updateTestTimer = new UpdateTestTimer();
-			updateTestTimer.start();
-		}
-	}
 
 	public void setTimers() {
 		closeTimers();
 		setSensorCountDownTimer();
-		setUpdateTestTimer();
+		
 	}
 
 	public void closeTimers() {
 		count_down_layout.setVisibility(View.GONE);
-		closeUpdateTestTimer();
 		closeSensorCountDownTimer();
-	}*/
+	}
 
 
 	

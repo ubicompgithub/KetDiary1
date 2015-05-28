@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.data.structure.TestResult;
@@ -57,7 +58,8 @@ public class TestDataParser {
 		questionFile = new File(mainStorageDir.getPath() + File.separator + "0"
 				+ File.separator + "question.txt");
 		
-
+		Log.i(TAG, "TDP Start");
+		
 		int q_result = getQuestionResult(questionFile);
 		int type = q_result / 1000;
 		int item = (q_result % 1000)/10;

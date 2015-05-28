@@ -165,6 +165,7 @@ public class DataUploader {
 				HttpPost httpPost = HttpPostGenerator.genPost(data);
 				if (upload(httpClient, httpPost)){
 					//db.setEmotionManagementUploaded(data.getTv().getTimestamp());
+					Log.d(TAG, "Upload TestResult Success.");
 				}
 				else
 					return ERROR;

@@ -27,10 +27,10 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.NoteActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.UploadService;
-import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE2;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothListener;
 import com.ubicomp.ketdiary.camera.CameraCaller;
@@ -39,6 +39,7 @@ import com.ubicomp.ketdiary.camera.CameraRecorder;
 import com.ubicomp.ketdiary.camera.CameraRunHandler;
 import com.ubicomp.ketdiary.camera.ImageFileHandler;
 import com.ubicomp.ketdiary.camera.Tester;
+import com.ubicomp.ketdiary.db.TestDataParser;
 import com.ubicomp.ketdiary.file.ColorRawFileHandler;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.QuestionFile;
@@ -79,6 +80,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	
 	private final boolean[] INIT_PROGRESS = { false, false, false };
 	private final boolean[] DONE_PROGRESS = { false, false, false };
+	
+	private TestDataParser TDP;
 	
 	/** Camare variables */
 	//private Camera mCamera = null;
@@ -222,6 +225,9 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		label_btn.setTypeface(wordTypefaceBold);
 		label_subtitle.setTypeface(wordTypefaceBold);
 		label_title.setTypeface(wordTypefaceBold);
+		
+		label_subtitle.setTextColor(getResources().getColor(R.color.text_gray2));
+		label_title.setTextColor(getResources().getColor(R.color.text_gray2));
 		//messageView.setTypeface(wordTypefaceBold);
 		
 		setState(new IdleState());
@@ -269,13 +275,16 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			label_btn.setText("開始");
 			label_subtitle.setText("請點選開始進行測試");
 			label_title.setText("測試尚未開始");
+			MainActivity.getMainActivity().enableTabAndClick(true);
+			
+			MainActivity.getMainActivity().setTimers(); //for Test
 		}
 		@Override
 		public void onClick(){
 			first_connect =false;
 			first_voltage =false;
 			ble_pluginserted =false;
-			
+			MainActivity.getMainActivity().enableTabAndClick(false);
 			
 			reset();
 			
@@ -307,7 +316,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			cameraRecorder.pause();//TODO: Camera Resource Release
 			
 			stopDueToInit();
-			
+			MainActivity.getMainActivity().enableTabAndClick(true);
 			//if(ble != null)
 				//ble.bleDisconnect();
 		}
@@ -390,12 +399,14 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			label_title.setText("請吐口水");
 			
 			
-			if(ble != null)
-				ble.bleWriteState((byte)2);//ble.bleWriteState((byte)3);
+			//ble.bleWriteState((byte)3);
 			
 			
 			cameraCountDownTimer = new CameraCountDownTimer();
 			cameraCountDownTimer.start();
+			
+			if(ble != null)
+				ble.bleWriteState((byte)2);
 
 		}
 		@Override
@@ -527,8 +538,11 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			//DBControl.inst.startTesting();
 			stop();
 			
+			MainActivity.getMainActivity().enableTabAndClick(true);
+			MainActivity.getMainActivity().setTimers();
+			
 			//startActivity(new Intent(, EventCopeSkillActivity.class));
-			startActivity(new Intent(activity, NoteActivity.class));
+			//startActivity(new Intent(activity, NoteActivity.class));
 			//setState(new IdleState());
 		}
 	}
@@ -540,6 +554,11 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			if (!mainDirectory.mkdirs()) {
 				return;
 			}
+		
+		
+		TDP = new TestDataParser(timestamp);  //For testing Function, need removal
+		TDP.start();
+		
 		voltageFileHandler = new VoltageFileHandler(mainDirectory,
 				String.valueOf(timestamp));
 		
@@ -555,7 +574,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	public void startConnection() {
 		// initialize bt task
 		if(ble == null) {
-			ble = new BluetoothLE2( testFragment , "ket_000");
+			ble = new BluetoothLE2( testFragment , PreferenceControl.getDeviceId()); // default "ket_000";
 			//PreferenceControl.getDeviceId()
 		}
 		if(!is_connect)
@@ -583,6 +602,13 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		//in_stage1 = false;
 		//test_done = false;
 		
+		if(ble!=null){
+			is_connect = false;
+			ble.bleDisconnect();
+			ble = null;
+		}
+		
+		
 		if (voltageFileHandler != null) {
 			voltageFileHandler.close();
 			voltageFileHandler = null;
@@ -602,11 +628,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		if (cameraRunHandler != null)
 			cameraRunHandler.removeMessages(0);
 		
-		if(ble!=null){
-			is_connect = false;
-			ble.bleDisconnect();
-			ble = null;
-		}
+		
 		
 		if (cameraCountDownTimer!= null){
 			cameraCountDownTimer.cancel();
@@ -784,12 +806,14 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			public void onTick(long millisUntilFinished) {
 				
 				//if(millisUntilFinished % 2500 == 0)
-				if(count % 5 == 0)
-					cameraRunHandler.sendEmptyMessage(0);
-				
 				if(state == NOTENOUGH_STATE && count%2 == 0){
 					label_title.setText("請在"+millisUntilFinished/1000 +"秒內再吐一口水");
 				}
+				
+				if(count % 5 == 0)
+					cameraRunHandler.sendEmptyMessage(0);
+				
+				
 				count ++;
 			}	
 	}
@@ -1114,7 +1138,9 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		
 		showDebug(">"+str3);
 		
-		writeToVoltageFile(str+str2+"\n");
+		if(state == CAMERA_STATE && state == STAGE2_STATE && state == NOTENOUGH_STATE && state == RUN_STATE)
+			writeToVoltageFile(str+str2+"\n");
+		
 		if(state == CAMERA_STATE && voltage > FIRST_VOLTAGE_THRESHOLD ){
 			setState(new Stage2State());
 			first_voltage=true;
@@ -1154,7 +1180,9 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		if (camera_done == true)
 			return;
 			camera_done = true;
-
+			
+			
+		TDP.start();
 		UploadService.startUploadService(activity);
 
 		
@@ -1185,6 +1213,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		return new Point(right - left, bottom - top);
 		
 	}
+	
 	
 	// DebugMode
 	// --------------------------------------------------------------------------------------------------------
