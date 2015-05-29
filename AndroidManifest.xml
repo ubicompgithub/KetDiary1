@@ -39,7 +39,7 @@
             </intent-filter>
         </activity>
         
-        <receiver android:name=".main.BootBoardcastReceiver" >
+        <receiver android:name=".BootBoardcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.TIME_SET" />
@@ -47,8 +47,9 @@
                 <action android:name="android.intent.action.EXTERNAL_APPLICATIONS_AVAILABLE" />
             </intent-filter>
         </receiver>
+        
         <receiver
-            android:name=".main.NetworkChangeReceiver"
+            android:name=".NetworkChangeReceiver"
             android:singleUser="true" >
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
