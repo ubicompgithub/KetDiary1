@@ -27,6 +27,7 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
+import com.ubicomp.ketdiary.fragment.NoteFragment;
 import com.ubicomp.ketdiary.fragment.StatisticFragment;
 import com.ubicomp.ketdiary.fragment.StorytellingFragment;
 import com.ubicomp.ketdiary.fragment.TestFragment;
@@ -498,6 +499,17 @@ public class MainActivity extends FragmentActivity {
 		inflater.inflate(R.menu.main_menu, menu);
 		return true;
 	}
+	
+	
+	// add by 
+	public void setNotePage(){
+		ft = fm.beginTransaction();
+		fragments[0] = new NoteFragment();
+		ft.add(android.R.id.tabcontent, fragments[0], tabName[0]);
+		setTabState(tabName[0]);
+		ft.commit();
+	}
+	
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -509,8 +521,9 @@ public class MainActivity extends FragmentActivity {
 			startActivity(newIntent);
 			return true;
 		case R.id.menu_setting:
-			newIntent = new Intent(this, NoteActivity.class);
-			startActivity(newIntent);
+			//newIntent = new Intent(this, NoteActivity.class);
+			//startActivity(newIntent);
+			setNotePage();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

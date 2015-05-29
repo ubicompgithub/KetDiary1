@@ -23,12 +23,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ubicomp.ketdiary.MainActivity;
-import com.ubicomp.ketdiary.NoteActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.UploadService;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE2;
@@ -45,9 +45,11 @@ import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.QuestionFile;
 import com.ubicomp.ketdiary.file.VoltageFileHandler;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.ui.NoteDialog;
+import com.ubicomp.ketdiary.ui.TestQuestionCaller;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
-public class TestFragment extends Fragment implements BluetoothListener, CameraCaller{
+public class TestFragment extends Fragment implements BluetoothListener, CameraCaller, TestQuestionCaller{
 	
 	private static final String TAG = "BluetoothLE";
 	private static final String TAG2 = "debug";
@@ -59,7 +61,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private TestFragment testFragment;
 	private View view;
 	private TextView messageView;
-	
+	private RelativeLayout main_layout;
 	private TextView label_btn, label_subtitle, label_title, debug_msg;
 	private ImageView img_bg, img_ac, img_btn;
 	
@@ -82,6 +84,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private final boolean[] DONE_PROGRESS = { false, false, false };
 	
 	private TestDataParser TDP;
+	private NoteDialog msgBox;
 	
 	/** Camare variables */
 	//private Camera mCamera = null;
@@ -100,6 +103,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private ImageFileHandler imgFileHandler;
 	private VoltageFileHandler voltageFileHandler;
 	private ColorRawFileHandler colorRawFileHandler;
+	private ChangeTabsHandler changeTabsHandler;
 	//private ColorResultFileHandler colorResultFileHandler;
 	private QuestionFile questionFile; 
 	
@@ -197,15 +201,18 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		//msgLoadingHandler = new MsgLoadingHandler();
 		//failBgHandler = new FailMessageHandler();
 		//testHandler = new TestHandler();
-		//changeTabsHandler = new ChangeTabsHandler();
-		//test_guide_msg = getResources().getStringArray(R.array.test_guide_msg);
 		
+		//test_guide_msg = getResources().getStringArray(R.array.test_guide_msg);
+		changeTabsHandler = new ChangeTabsHandler();
+		//changeTabsHandler.sendEmptyMessage(0);
 		
 				
 	}
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 		view = inflater.inflate(R.layout.fragment_test, container, false);
+		
+		main_layout = (RelativeLayout) view.findViewById(R.id.test_fragment_main_layout); 
 		
 		label_btn = (TextView) view.findViewById(R.id.tv_btn);
 		label_subtitle = (TextView) view.findViewById(R.id.tv_subtitle);
@@ -240,6 +247,15 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 				CertainState.onClick();
 			}
 		});
+		
+		msgBox = new NoteDialog(testFragment, main_layout);
+		
+		//For Testing Function
+		/*
+		img_btn.setOnClickListener(null);
+		img_btn.setEnabled(false);
+		msgBox.initialize();
+		msgBox.show();*/
 		
 		return view;
 	}
@@ -546,6 +562,20 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			//setState(new IdleState());
 		}
 	}
+	
+	@SuppressLint("HandlerLeak")
+	private class ChangeTabsHandler extends Handler {
+		public void handleMessage(Message msg) {
+			MainActivity.getMainActivity().enableTabAndClick(true);
+			//MainActivity.getMainActivity().changeTab(1, MainActivity.ACTION_QUESTIONNAIRE);
+			MainActivity.getMainActivity().setNotePage();
+			
+		}
+	}
+	
+	
+	
+	
 	private void setStorage() {
 		File dir = MainStorage.getMainStorageDirectory();
 
@@ -575,6 +605,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		// initialize bt task
 		if(ble == null) {
 			ble = new BluetoothLE2( testFragment , PreferenceControl.getDeviceId()); // default "ket_000";
+			
+			Log.d(TAG, PreferenceControl.getDeviceId());
 			//PreferenceControl.getDeviceId()
 		}
 		if(!is_connect)
@@ -629,6 +661,9 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			cameraRunHandler.removeMessages(0);
 		
 		
+		if (changeTabsHandler != null) {
+			changeTabsHandler.removeMessages(0);
+		}
 		
 		if (cameraCountDownTimer!= null){
 			cameraCountDownTimer.cancel();
@@ -1214,6 +1249,12 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		
 	}
 	
+	@Override
+	public void writeQuestionFile(int emotion, int craving) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	
 	// DebugMode
 	// --------------------------------------------------------------------------------------------------------
@@ -1289,6 +1330,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			}
 		}
 	}
+
+
 
 	
 	

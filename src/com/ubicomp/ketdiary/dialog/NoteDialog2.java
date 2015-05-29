@@ -24,8 +24,6 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.ubicomp.ketdiary.R;
-import com.ubicomp.ketdiary.db.DBControl;
-import com.ubicomp.ketdiary.db.Datatype;
 import com.ubicomp.ketdiary.db.NoteCatagory;
 
 
@@ -34,9 +32,9 @@ import com.ubicomp.ketdiary.db.NoteCatagory;
  * @author mudream
  *
  */
-public class NoteDialog extends Dialog{
+public class NoteDialog2 extends Dialog{
 	
-	private NoteDialog that = this;
+	private NoteDialog2 that = this;
 	
 	private ViewPager vPager;
 	private ImageView iv_try, iv_smile, iv_urge,
@@ -45,12 +43,12 @@ public class NoteDialog extends Dialog{
 	private Spinner sp_date, sp_timeslot, sp_item;
 	private Button bt_confirm, bt_cancel;
 	
-	public NoteDialog(Context context) {
+	public NoteDialog2(Context context) {
 		super(context);
 		
 	}
 	
-	public NoteDialog(Context context, int style) { //for fullscreen dialog
+	public NoteDialog2(Context context, int style) { //for fullscreen dialog
 		super(context, style);
 	}
 	
@@ -58,7 +56,7 @@ public class NoteDialog extends Dialog{
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    requestWindowFeature(Window.FEATURE_NO_TITLE); //before     
-	    setContentView(R.layout.test_dialog);
+	    setContentView(R.layout.dialog_note);
 	    
 	    sp_date = (Spinner)findViewById(R.id.note_sp_date);
 	    sp_timeslot = (Spinner)findViewById(R.id.note_sp_timeslot);

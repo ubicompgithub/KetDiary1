@@ -1,12 +1,10 @@
-package com.ubicomp.ketdiary.fragment;
+package com.ubicomp.ketdiary.ui;
 
 import java.io.File;
 import java.util.ArrayList;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -19,10 +17,13 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 
-import com.ubicomp.ketdiary.EventCopeSkillActivity;
+import com.ubicomp.ketdiary.App;
+import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.QuestionFile;
@@ -33,12 +34,19 @@ import com.ubicomp.ketdiary.file.QuestionFile;
  * @author Andy
  *
  */
-public class NoteFragment extends Fragment{
+public class NoteDialog{
 	
 	private Activity activity;
-	private NoteFragment noteFragment = this;
+	private NoteDialog noteFragment = this;
 	private static final String TAG = "ADD_PAGE";
 	
+	private TestQuestionCaller testQuestionCaller;
+	private Context context;
+	private LayoutInflater inflater;
+	private RelativeLayout boxLayout = null;
+	private LinearLayout questionLayout;
+	
+	private RelativeLayout mainLayout;
 	private View view;
 	
 	private ViewPager vPager;
@@ -49,6 +57,7 @@ public class NoteFragment extends Fragment{
 	private Button bt_confirm, bt_cancel;
 	private SeekBar impactSeekBar;
 	
+	
 	//write File
 	private File mainDirectory;
 	private long timestamp = 0;
@@ -58,24 +67,38 @@ public class NoteFragment extends Fragment{
 	private int items;
 	private int impact;
 	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-	    super.onCreate(savedInstanceState);
-	    //requestWindowFeature(Window.FEATURE_NO_TITLE); //before     
-	    activity = this.getActivity();
+	public NoteDialog(TestQuestionCaller testQuestionCaller, RelativeLayout mainLayout){
+		
+		this.testQuestionCaller = testQuestionCaller;
+		this.context = App.getContext();
+		this.inflater = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.mainLayout = mainLayout;
+		
+		//activity = this.getActivity();
 	    noteFragment = this;
+		//view = inflater.inflate(R.layout.fragment_note, container, false);
+		
+	    setting();
+	    mainLayout.addView(boxLayout);
+	    
+	
 	}
 	
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		view = inflater.inflate(R.layout.fragment_note, container, false);
+	protected void setting() {
 		
-	    sp_date = (Spinner)view.findViewById(R.id.note_sp_date);
-	    sp_timeslot = (Spinner)view.findViewById(R.id.note_sp_timeslot);
-	    sp_item = (Spinner)view.findViewById(R.id.note_sp_items);
-	    bt_confirm=(Button)view.findViewById(R.id.button1);
-	    bt_cancel=(Button)view.findViewById(R.id.buttonClose);
-	    impactSeekBar=(SeekBar)view.findViewById(R.id.seekBar1);
+		boxLayout = (RelativeLayout) inflater.inflate(
+				R.layout.dialog_note, null);
+		boxLayout.setVisibility(View.INVISIBLE);
+
+		questionLayout = (LinearLayout) boxLayout
+				.findViewById(R.id.msg_question_layout);
+		sp_date = (Spinner)boxLayout.findViewById(R.id.note_sp_date);
+	    sp_timeslot = (Spinner)boxLayout.findViewById(R.id.note_sp_timeslot);
+	    sp_item = (Spinner)boxLayout.findViewById(R.id.note_sp_items);
+	    bt_confirm=(Button)boxLayout.findViewById(R.id.button1);
+	    bt_cancel=(Button)boxLayout.findViewById(R.id.buttonClose);
+	    impactSeekBar=(SeekBar)boxLayout.findViewById(R.id.seekBar1);
 	    
 	    bt_confirm.setOnClickListener(new EndOnClickListener());
 	    bt_cancel.setOnClickListener(new EndOnClickListener());
@@ -87,10 +110,50 @@ public class NoteFragment extends Fragment{
 	    
 		initTypePager();
 		setStorage();
-		
-		return view;
 	}
 	
+	public void copingSetting(){
+		boxLayout = (RelativeLayout) inflater.inflate(R.layout.activity_qtip, null);
+		mainLayout.addView(boxLayout);
+	}
+	
+	
+	/** Initialize the dialog */
+	public void initialize() {
+	}
+	
+	/** show the dialog */
+	public void show() {
+		
+		questionLayout.setVisibility(View.VISIBLE);
+		boxLayout.setVisibility(View.VISIBLE);
+		
+		/*enableSend(false);
+		PreferenceControl.setTestSuccess();
+		help.setText("");
+		questionLayout.setVisibility(View.VISIBLE);
+		boxLayout.setVisibility(View.VISIBLE);
+		send.setOnClickListener(endListener);
+		notSend.setOnClickListener(cancelListener);
+
+		gpsRadioGroup.check(R.id.msg_gps_no);
+		enableSend(false);
+		MainActivity.getMainActivity().enableTabAndClick(false);*/
+	}
+	
+	/** remove the dialog and release the resources */
+	public void clear() {
+		if (mainLayout != null && boxLayout != null
+				&& boxLayout.getParent() != null
+				&& boxLayout.getParent().equals(mainLayout))
+			mainLayout.removeView(boxLayout);
+	}
+	
+	/** close the dialog */
+	public void close() {
+		if (boxLayout != null)
+			boxLayout.setVisibility(View.INVISIBLE);
+	}
 	
 	private void setStorage() {
 		File dir = MainStorage.getMainStorageDirectory();
@@ -110,7 +173,7 @@ public class NoteFragment extends Fragment{
 	
 	/** 設定Spinner的Item */
 	private void SetItem(Spinner sp, int array){
-		ArrayAdapter adapter = ArrayAdapter.createFromResource(activity, array, android.R.layout.simple_spinner_item);
+		ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, android.R.layout.simple_spinner_item);
 		//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, strs );
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sp.setAdapter(adapter);
@@ -150,6 +213,9 @@ public class NoteFragment extends Fragment{
 			questionFile.write(type, items, impact);
 			
 			Log.d(TAG, items+"\t"+impact);
+			//questionLayout.setVisibility(View.GONE);
+			clear();
+			copingSetting();
 			//questionFile.write(0, 0, 0);
 			//startActivity(new Intent(that, EventCopeSkillActivity.class));
 			
@@ -177,11 +243,12 @@ public class NoteFragment extends Fragment{
 	}
 	
 	private void initTypePager(){
-	    vPager = (ViewPager) view.findViewById(R.id.viewpager);
-		LayoutInflater li = getLayoutInflater(null);
+	    vPager = (ViewPager) boxLayout.findViewById(R.id.viewpager);
+	    
+		//LayoutInflater li = LayoutInflater.from(context); //getLayoutInflater();
 		ArrayList<View> aList = new ArrayList<View>();
-		aList.add(li.inflate(R.layout.view_typepager_self, null));
-		aList.add(li.inflate(R.layout.view_typepager_other, null));
+		aList.add(inflater.inflate(R.layout.view_typepager_self, null));
+		aList.add(inflater.inflate(R.layout.view_typepager_other, null));
 		TypePageAdapter mAdapter = new TypePageAdapter(aList);		
 		vPager.setAdapter(mAdapter);
 	}
@@ -213,11 +280,11 @@ public class NoteFragment extends Fragment{
 		public Object instantiateItem(ViewGroup container, int position) {
 			container.addView(viewLists.get(position));
 			if(position == 0){
-				iv_smile = (ImageView) view.findViewById(R.id.vts_iv_smile);
-				iv_not_good = (ImageView) view.findViewById(R.id.vts_iv_not_good);
-				iv_urge = (ImageView) view.findViewById(R.id.vts_iv_urge);
-				iv_cry = (ImageView) view.findViewById(R.id.vts_iv_cry);
-				iv_try = (ImageView) view.findViewById(R.id.vts_iv_try);
+				iv_smile = (ImageView) boxLayout.findViewById(R.id.vts_iv_smile);
+				iv_not_good = (ImageView) boxLayout.findViewById(R.id.vts_iv_not_good);
+				iv_urge = (ImageView) boxLayout.findViewById(R.id.vts_iv_urge);
+				iv_cry = (ImageView) boxLayout.findViewById(R.id.vts_iv_cry);
+				iv_try = (ImageView) boxLayout.findViewById(R.id.vts_iv_try);
 				
 				iv_smile.setOnClickListener(SelectItem);
 				iv_not_good.setOnClickListener(SelectItem);
@@ -225,9 +292,9 @@ public class NoteFragment extends Fragment{
 				iv_cry.setOnClickListener(SelectItem);
 				iv_try.setOnClickListener(SelectItem);
 			}else{
-				iv_social = (ImageView) view.findViewById(R.id.vts_iv_social);
-				iv_playing = (ImageView) view.findViewById(R.id.vts_iv_playing);
-				iv_conflict = (ImageView) view.findViewById(R.id.vts_iv_conflict);
+				iv_social = (ImageView) boxLayout.findViewById(R.id.vts_iv_social);
+				iv_playing = (ImageView) boxLayout.findViewById(R.id.vts_iv_playing);
+				iv_conflict = (ImageView) boxLayout.findViewById(R.id.vts_iv_conflict);
 			
 				iv_social.setOnClickListener(SelectItem);
 				iv_playing.setOnClickListener(SelectItem);
