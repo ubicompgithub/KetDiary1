@@ -1,0 +1,108 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/test_fragment_main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg">
+
+    <FrameLayout
+        android:id="@+id/test_bg_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="65dp" >
+
+        <FrameLayout
+            android:id="@+id/cameraLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" >
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/iv_mask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/camera_mask2"
+            android:visibility="visible" />
+
+        <FrameLayout
+            android:id="@+id/test_start_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" >
+
+            <ImageView
+                android:id="@+id/iv_bar_bg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/test_progress_bg_2"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/iv_bar_ac"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/test_progress_bg"
+                android:visibility="invisible" />
+
+            <ImageView
+                android:id="@+id/vts_iv_cry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/button_start_test" />
+
+            <ImageView
+                android:id="@+id/test_face"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="center"
+                android:src="@drawable/test_face" />
+
+            <TextView
+                android:id="@+id/tv_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Label"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="@dimen/center_word_dp" />
+
+            <TextView
+                android:id="@+id/test_start_count_down_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="@color/count_down"
+                android:textSize="@dimen/xlarge_text_size" />
+        </FrameLayout>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/test_bg_center"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="29dp"
+        android:text="subtitle"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_subtitle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:text="Title"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+</RelativeLayout>

@@ -34,17 +34,17 @@ import com.ubicomp.ketdiary.file.QuestionFile;
  * @author Andy
  *
  */
-public class NoteDialog{
+public class NoteDialog2{
 	
 	private Activity activity;
-	private NoteDialog noteFragment = this;
+	private NoteDialog2 noteFragment = this;
 	private static final String TAG = "ADD_PAGE";
 	
 	private TestQuestionCaller testQuestionCaller;
 	private Context context;
 	private LayoutInflater inflater;
 	private RelativeLayout boxLayout = null;
-	private LinearLayout questionLayout;
+	private LinearLayout center_layout, title_layout, main_layout, bottom_layout;
 	
 	private RelativeLayout mainLayout;
 	private View view;
@@ -63,11 +63,14 @@ public class NoteDialog{
 	private long timestamp = 0;
 	private QuestionFile questionFile; 
 	
+	
+	private SpinnerXMLSelectedListener selectListener;
+	
 	private int type;
 	private int items;
 	private int impact;
 	
-	public NoteDialog(TestQuestionCaller testQuestionCaller, RelativeLayout mainLayout){
+	public NoteDialog2(TestQuestionCaller testQuestionCaller, RelativeLayout mainLayout){
 		
 		this.testQuestionCaller = testQuestionCaller;
 		this.context = App.getContext();
@@ -76,8 +79,9 @@ public class NoteDialog{
 		this.mainLayout = mainLayout;
 		
 		//activity = this.getActivity();
-	    noteFragment = this;
+	    
 		//view = inflater.inflate(R.layout.fragment_note, container, false);
+		selectListener = new SpinnerXMLSelectedListener();
 		
 	    setting();
 	    mainLayout.addView(boxLayout);
@@ -88,28 +92,35 @@ public class NoteDialog{
 	protected void setting() {
 		
 		boxLayout = (RelativeLayout) inflater.inflate(
-				R.layout.activity_note, null);
+				R.layout.note, null);
 		boxLayout.setVisibility(View.INVISIBLE);
-
-		//questionLayout = (LinearLayout) boxLayout
-				//.findViewById(R.id.msg_question_layout);
-		sp_date = (Spinner)boxLayout.findViewById(R.id.note_sp_date);
-	    sp_timeslot = (Spinner)boxLayout.findViewById(R.id.note_sp_timeslot);
-	    sp_item = (Spinner)boxLayout.findViewById(R.id.note_sp_items);
-	    bt_confirm=(Button)boxLayout.findViewById(R.id.button1);
-	    bt_cancel=(Button)boxLayout.findViewById(R.id.buttonClose);
-	    impactSeekBar=(SeekBar)boxLayout.findViewById(R.id.seekBar1);
+		title_layout = (LinearLayout) boxLayout.findViewById(R.id.note_title_layout);
+		main_layout = (LinearLayout) boxLayout.findViewById(R.id.note_main_layout);
+		bottom_layout = (LinearLayout) boxLayout.findViewById(R.id.note_bottom_layout);
+		
+		View bottom = BarButtonGenerator.createTwoButtonView(R.string.cancel, R.string.ok, null, null);
+		bottom_layout.addView(bottom);
+		
+		View title = BarButtonGenerator.createAddNoteView(selectListener);
+		title_layout.addView(title);
+		
+		
+		
+		center_layout = (LinearLayout) inflater.inflate(
+				R.layout.note_main, null);
+			
+	    sp_item = (Spinner)center_layout.findViewById(R.id.note_sp_items);
+	    impactSeekBar=(SeekBar)center_layout.findViewById(R.id.seekBar1);
 	    
-	    bt_confirm.setOnClickListener(new EndOnClickListener());
-	    bt_cancel.setOnClickListener(new EndOnClickListener());
-	    	    
-	    SetItem(sp_timeslot, R.array.note_time_slot);
 	    SetItem(sp_item, R.array.item_select);
-	    SetItem(sp_date, R.array.note_date);
+	    
+	    
 	    
 	    
 		initTypePager();
-		setStorage();
+		//setStorage();
+		
+		main_layout.addView(center_layout);
 	}
 	
 	public void copingSetting(){
@@ -243,7 +254,7 @@ public class NoteDialog{
 	}
 	
 	private void initTypePager(){
-	    vPager = (ViewPager) boxLayout.findViewById(R.id.viewpager);
+	    vPager = (ViewPager) center_layout.findViewById(R.id.viewpager);
 	    
 		//LayoutInflater li = LayoutInflater.from(context); //getLayoutInflater();
 		ArrayList<View> aList = new ArrayList<View>();
@@ -280,11 +291,11 @@ public class NoteDialog{
 		public Object instantiateItem(ViewGroup container, int position) {
 			container.addView(viewLists.get(position));
 			if(position == 0){
-				iv_smile = (ImageView) boxLayout.findViewById(R.id.vts_iv_smile);
-				iv_not_good = (ImageView) boxLayout.findViewById(R.id.vts_iv_not_good);
-				iv_urge = (ImageView) boxLayout.findViewById(R.id.vts_iv_urge);
-				iv_cry = (ImageView) boxLayout.findViewById(R.id.vts_iv_cry);
-				iv_try = (ImageView) boxLayout.findViewById(R.id.vts_iv_try);
+				iv_smile = (ImageView) center_layout.findViewById(R.id.vts_iv_smile);
+				iv_not_good = (ImageView) center_layout.findViewById(R.id.vts_iv_not_good);
+				iv_urge = (ImageView) center_layout.findViewById(R.id.vts_iv_urge);
+				iv_cry = (ImageView) center_layout.findViewById(R.id.vts_iv_cry);
+				iv_try = (ImageView) center_layout.findViewById(R.id.vts_iv_try);
 				
 				iv_smile.setOnClickListener(SelectItem);
 				iv_not_good.setOnClickListener(SelectItem);
@@ -292,9 +303,9 @@ public class NoteDialog{
 				iv_cry.setOnClickListener(SelectItem);
 				iv_try.setOnClickListener(SelectItem);
 			}else{
-				iv_social = (ImageView) boxLayout.findViewById(R.id.vts_iv_social);
-				iv_playing = (ImageView) boxLayout.findViewById(R.id.vts_iv_playing);
-				iv_conflict = (ImageView) boxLayout.findViewById(R.id.vts_iv_conflict);
+				iv_social = (ImageView) center_layout.findViewById(R.id.vts_iv_social);
+				iv_playing = (ImageView) center_layout.findViewById(R.id.vts_iv_playing);
+				iv_conflict = (ImageView) center_layout.findViewById(R.id.vts_iv_conflict);
 			
 				iv_social.setOnClickListener(SelectItem);
 				iv_playing.setOnClickListener(SelectItem);

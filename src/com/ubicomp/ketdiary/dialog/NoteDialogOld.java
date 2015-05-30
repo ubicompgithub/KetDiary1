@@ -32,9 +32,9 @@ import com.ubicomp.ketdiary.db.NoteCatagory;
  * @author mudream
  *
  */
-public class NoteDialog2 extends Dialog{
+public class NoteDialogOld extends Dialog{
 	
-	private NoteDialog2 that = this;
+	private NoteDialogOld that = this;
 	
 	private ViewPager vPager;
 	private ImageView iv_try, iv_smile, iv_urge,
@@ -43,12 +43,12 @@ public class NoteDialog2 extends Dialog{
 	private Spinner sp_date, sp_timeslot, sp_item;
 	private Button bt_confirm, bt_cancel;
 	
-	public NoteDialog2(Context context) {
+	public NoteDialogOld(Context context) {
 		super(context);
 		
 	}
 	
-	public NoteDialog2(Context context, int style) { //for fullscreen dialog
+	public NoteDialogOld(Context context, int style) { //for fullscreen dialog
 		super(context, style);
 	}
 	

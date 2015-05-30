@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/vts_iv_cry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/center_icon_dp"
+            android:src="@drawable/emoji5" />
+
+        <ImageView
+            android:id="@+id/vts_iv_not_good"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/center_icon_dp"
+            android:src="@drawable/emoji2" />
+
+        <ImageView
+            android:id="@+id/vts_iv_smile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/center_icon_dp"
+            android:src="@drawable/emoji4" />
+
+    </LinearLayout>
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.21" >
+
+        <ImageView
+            android:id="@+id/vts_iv_try"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/center_icon_dp"
+            android:src="@drawable/emoji1" />
+
+        <ImageView
+            android:id="@+id/vts_iv_urge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/center_icon_dp"
+            android:src="@drawable/emoji3" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/center_icon_dp"
+            android:src="@drawable/emoji4"
+            android:visibility="invisible" />
+
+    </LinearLayout>
+
+</LinearLayout>

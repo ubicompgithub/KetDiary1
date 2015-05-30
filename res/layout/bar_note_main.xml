@@ -1,45 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/msg_box_layout"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg" >
-
-
-        <RelativeLayout
+    android:orientation="vertical" >
+    
+      <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+            
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true" 
-            android:id="@+id/note_title">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true" >
-
-                <TextView
-                    android:id="@+id/textView1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="新增記事"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-
-                <Spinner
-                    android:id="@+id/note_sp_date"
-                    android:layout_width="121dp"
-                    android:layout_height="45dp"
-                    android:layout_weight="1" />
-
-                <Spinner
-                    android:id="@+id/note_sp_timeslot"
-                    android:layout_width="121dp"
-                    android:layout_height="45dp" />
-            </LinearLayout>
-    </RelativeLayout>
-    
-    
+            android:layout_height="360dp"
+            android:orientation="vertical" >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -64,18 +37,18 @@
             android:layout_marginLeft="64dp"
             android:text="自己"
             android:textAppearance="?android:attr/textAppearanceLarge" />
-
     </RelativeLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="172dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content" 
+        android:layout_weight="1">
 
         <TextView
             android:id="@+id/textView2"
@@ -88,7 +61,8 @@
             android:id="@+id/note_sp_items"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:spinnerMode="dialog" />
     </LinearLayout>
 
     <TextView
@@ -107,7 +81,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content" 
+        android:layout_weight="1">
 
         <TextView
             android:id="@+id/textView4"
@@ -128,12 +103,12 @@
             android:layout_marginLeft="14dp"
             android:text="-3"
             android:textAppearance="?android:attr/textAppearanceLarge" />
-
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content" 
+        android:layout_weight="1">
 
         <TextView
             android:id="@+id/textView5"
@@ -151,32 +126,10 @@
 
             <requestFocus />
         </EditText>
-
     </LinearLayout>
+    
+    
+    </LinearLayout>
+    </ScrollView>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="36dp"
-            android:text="取消" />
-
-        <Button
-            android:id="@+id/buttonClose"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="43dp"
-            android:text="確定" />
-
-    </RelativeLayout>
-
-
-</RelativeLayout>
+</LinearLayout>

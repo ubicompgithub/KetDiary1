@@ -46,6 +46,7 @@ import com.ubicomp.ketdiary.file.QuestionFile;
 import com.ubicomp.ketdiary.file.VoltageFileHandler;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.NoteDialog;
+import com.ubicomp.ketdiary.ui.NoteDialog2;
 import com.ubicomp.ketdiary.ui.TestQuestionCaller;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
@@ -84,7 +85,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private final boolean[] DONE_PROGRESS = { false, false, false };
 	
 	private TestDataParser TDP;
-	private NoteDialog msgBox;
+	private NoteDialog2 msgBox;
 	
 	/** Camare variables */
 	//private Camera mCamera = null;
@@ -248,14 +249,14 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			}
 		});
 		
-		msgBox = new NoteDialog(testFragment, main_layout);
+		msgBox = new NoteDialog2(testFragment, main_layout);
 		
 		//For Testing Function
-		/*
+		
 		img_btn.setOnClickListener(null);
 		img_btn.setEnabled(false);
 		msgBox.initialize();
-		msgBox.show();*/
+		msgBox.show();
 		
 		return view;
 	}
@@ -968,54 +969,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			
 		}
 	}
-	
-	
-	
-	
-	//Upload all the data
-	
-	/*
-	protected void onStart() {
-		//UploadService.startUploadService(this);
-		super.onStart();
-	}*/
-	
-    
-    /*
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //參數1:群組id, 參數2:itemId, 參數3:item順序, 參數4:item名稱
-        menu.add(0, 0, 0, "說明");
-        menu.add(0, 1, 1, "離開");
-        menu.add(0, 2, 2, "記事");
-        menu.add(0, 3, 3, "BLE");
-        return super.onCreateOptionsMenu(menu);
-    }
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        //依據itemId來判斷使用者點選哪一個item
-        switch(item.getItemId()) {
-            case 0:
-                //在TextView上顯示說明
-    			startActivity(new Intent(, InfoActivity.class));
-                break;
-            case 1:
-                //結束此程式
-                //finish();
-                break;
-            case 2:
-            	//new NoteDialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen).show();
-            	startActivity(new Intent(, EventCopeSkillActivity.class));
-            	break;
-            case 3:
-            	//startActivity(new Intent(, MainActivity.class));
-            	startActivityForResult(new Intent(, MainActivity2.class), 0);
-            	break;
-            default:
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
-    
+  
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

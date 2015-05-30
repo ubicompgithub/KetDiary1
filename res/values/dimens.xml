@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+	<dimen name="center_icon_dp">16dp</dimen>
     <dimen name="center_word_dp">22dp</dimen>
     <dimen name="top_title">80dp</dimen>
     <dimen name="top_subtitle">50dp</dimen>
