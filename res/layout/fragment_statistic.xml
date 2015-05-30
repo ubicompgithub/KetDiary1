@@ -6,5 +6,75 @@
     android:background="@drawable/statistic_fragment_bg"
     android:splitMotionEvents="false" >
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/brac_statistics_layout"
+            android:layout_width="match_parent"
+            android:layout_height="253.3dp" >
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/brac_statistics"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <RelativeLayout
+                android:id="@+id/brac_statistics_dots"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" 
+                android:layout_marginTop="233.3dp"
+                >
+                <ImageView 
+                    android:id="@+id/brac_statistic_dot1"
+                    android:layout_width="wrap_content" 
+                    android:layout_height="wrap_content" 
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="6.7dp"
+                    android:layout_marginRight="6.7dp"
+                    />
+                <ImageView 
+                    android:id="@+id/brac_statistic_dot0"
+                    android:layout_width="wrap_content" 
+                    android:layout_height="wrap_content" 
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/brac_statistic_dot1"
+                    />
+                <ImageView 
+                    android:id="@+id/brac_statistic_dot2"
+                    android:layout_width="wrap_content" 
+                    android:layout_height="wrap_content" 
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/brac_statistic_dot1"
+                    />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <ScrollView
+            android:id="@+id/brac_analysis"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <LinearLayout
+                android:id="@+id/brac_analysis_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/question_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:padding="13.3dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginRight="2dp"
+        android:src="@drawable/statistic_questionnaire_button"
+        android:visibility="invisible" />
 
 </RelativeLayout>

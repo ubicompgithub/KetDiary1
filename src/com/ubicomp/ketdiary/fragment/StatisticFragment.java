@@ -1,16 +1,38 @@
 package com.ubicomp.ketdiary.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 
+import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.statistic.StatisticPagerAdapter;
+import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.ui.ScaleOnTouchListener;
 
 public class StatisticFragment extends Fragment {
 	
+	/*
 	private View view;
 	private Activity activity;
 	
@@ -28,9 +50,9 @@ public class StatisticFragment extends Fragment {
 		view = inflater.inflate(R.layout.fragment_statistic, container, false);
 		
 		return view;
-	}
+	}*/
 	
-	/*
+	
 	private View view;
 	private Activity activity;
 	private ViewPager statisticView;
@@ -47,7 +69,7 @@ public class StatisticFragment extends Fragment {
 
 	private AlphaAnimation questionAnimation;
 
-	private QuestionnaireDialog msgBox;
+	//private QuestionnaireDialog msgBox;
 
 	
 
@@ -88,8 +110,8 @@ public class StatisticFragment extends Fragment {
 		analysisLayout.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View arg0, MotionEvent motion) {
-				if (motion.getAction() == MotionEvent.ACTION_DOWN)
-					ClickLog.Log(ClickLogId.STATISTIC_ANALYSIS);
+				//if (motion.getAction() == MotionEvent.ACTION_DOWN)
+					//ClickLog.Log(ClickLogId.STATISTIC_ANALYSIS);
 				return false;
 			}
 		});
@@ -101,11 +123,11 @@ public class StatisticFragment extends Fragment {
 		super.onResume();
 		
 		
-		ClickLog.Log(ClickLogId.STATISTIC_ENTER);
+		//ClickLog.Log(ClickLogId.STATISTIC_ENTER);
 		enablePage(true);
 		statisticFragment = this;
 		statisticViewAdapter = new StatisticPagerAdapter();
-		msgBox = new QuestionnaireDialog(this, (RelativeLayout) view);
+		//msgBox = new QuestionnaireDialog(this, (RelativeLayout) view);
 
 		Bundle data = getArguments();
 		if (data != null) {
@@ -133,8 +155,8 @@ public class StatisticFragment extends Fragment {
 		statisticViewAdapter.clear();
 		if (analysisLayout != null)
 			analysisLayout.removeAllViews();
-		if (msgBox != null)
-			msgBox.clear();
+		//if (msgBox != null)
+		//	msgBox.clear();
 	}
 
 	private class StatisticOnPageChangeListener implements OnPageChangeListener {
@@ -152,13 +174,13 @@ public class StatisticFragment extends Fragment {
 
 			switch (idx) {
 			case 0:
-				ClickLog.Log(ClickLogId.STATISTIC_TODAY);
+				//ClickLog.Log(ClickLogId.STATISTIC_TODAY);
 				break;
 			case 1:
-				ClickLog.Log(ClickLogId.STATISTIC_WEEK);
+				//ClickLog.Log(ClickLogId.STATISTIC_WEEK);
 				break;
 			case 2:
-				ClickLog.Log(ClickLogId.STATISTIC_MONTH);
+				//ClickLog.Log(ClickLogId.STATISTIC_MONTH);
 				break;
 			}
 			for (int i = 0; i < 3; ++i)
@@ -188,8 +210,8 @@ public class StatisticFragment extends Fragment {
 				dots[i].setImageDrawable(dot_off);
 			dots[0].setImageDrawable(dot_on);
 
-			if (msgBox != null)
-				msgBox.initialize();
+			//if (msgBox != null)
+			//	msgBox.initialize();
 
 			questionAnimation = new AlphaAnimation(1.0F, 0.0F);
 			questionAnimation.setDuration(200);
@@ -199,31 +221,15 @@ public class StatisticFragment extends Fragment {
 			setQuestionAnimation();
 
 			MainActivity.getMainActivity().enableTabAndClick(true);
-			LoadingDialogControl.dismiss();
+			//LoadingDialogControl.dismiss();
 
 			if (notify_action == MainActivity.ACTION_QUESTIONNAIRE) {
 				//openQuestionnaire();
-				msgBox.generateCopingDialog();
+				//msgBox.generateCopingDialog();
 				notify_action = 0;
 			}
 			
 		}
-	}
-
-	private void openQuestionnaire() {
-		int result = PreferenceControl.getTestResult();
-		if (msgBox == null)
-			return;
-		if (result == 0)
-			msgBox.generateType0Dialog();
-		else if (result == 1)
-			msgBox.generateType1Dialog();
-		else if (result == 2)
-			msgBox.generateType2Dialog();
-		else if (result == 3)
-			msgBox.generateType3Dialog();
-		else
-			msgBox.generateNormalBox();
 	}
 
 	private class QuestionOnClickListener implements View.OnClickListener {
@@ -233,7 +239,7 @@ public class StatisticFragment extends Fragment {
 			//ClickLog.Log(ClickLogId.STATISTIC_QUESTION_BUTTON);
 			//openQuestionnaire();
 			Intent intent = new Intent();
-			intent.setClass(activity, CopingActivity.class);
+			//intent.setClass(activity, CopingActivity.class);
 			activity.startActivity(intent);
 		}
 	}
@@ -259,16 +265,8 @@ public class StatisticFragment extends Fragment {
 		MainActivity.getMainActivity().enableTabAndClick(enable);
 	}
 
-	@Override
-	public void updateSelfHelpCounter() {
-		try {
 
-		} catch (Exception e) {
-		}
-	}
-
-	@Override
 	public Context getContext() {
 		return this.getActivity();
-	}*/
+	}
 }

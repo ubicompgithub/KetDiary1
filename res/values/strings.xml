@@ -28,8 +28,6 @@
     <string name="emotion_short">心情</string>
     <string name="craving">渴求指數</string>
     <string name="craving_short">渴求</string>
-    <string name="brac_result">酒測結果</string>
-    <string name="brac_result_short">酒測值</string>
     <string name="total_result">綜合資料</string>
     <string name="analysis_counter">已獲得點數</string>
     <string name="analysis_saving">已節省金錢</string>
@@ -39,6 +37,7 @@
     <string name="after_test_pass">做得很好！</string>
     <string name="after_test_fail">好好加油！</string>
     <string name="after_questionnaire">繼續加油！</string>
+    <string name="result">檢測結果</string>
 
     <string-array name="emotion_state">
         <item>　沮喪　</item>

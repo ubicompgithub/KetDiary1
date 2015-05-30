@@ -21,9 +21,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.ubicomp.ketdiary.App;
-import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.QuestionFile;
@@ -56,6 +56,7 @@ public class NoteDialog2{
 	private Spinner sp_date, sp_timeslot, sp_item;
 	private Button bt_confirm, bt_cancel;
 	private SeekBar impactSeekBar;
+	private TextView text_self, text_other, text_item, text_impact, text_description;
 	
 	
 	//write File
@@ -114,6 +115,17 @@ public class NoteDialog2{
 	    
 	    SetItem(sp_item, R.array.item_select);
 	    
+	    text_self = (TextView)center_layout.findViewById(R.id.text_self);
+	    text_other = (TextView)center_layout.findViewById(R.id.text_other);
+	    text_item = (TextView)center_layout.findViewById(R.id.text_item);
+	    text_impact = (TextView)center_layout.findViewById(R.id.text_impact);
+	    text_description = (TextView)center_layout.findViewById(R.id.text_description);
+	    
+	    text_self.setTypeface(Typefaces.getWordTypeface());
+	    text_other.setTypeface(Typefaces.getWordTypeface());
+	    text_item.setTypeface(Typefaces.getWordTypeface());
+	    text_impact.setTypeface(Typefaces.getWordTypeface());
+	    text_description.setTypeface(Typefaces.getWordTypeface());
 	    
 	    
 	    

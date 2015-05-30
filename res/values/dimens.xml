@@ -2,6 +2,7 @@
 <resources>
 	<dimen name="center_icon_dp">16dp</dimen>
     <dimen name="center_word_dp">22dp</dimen>
+    
     <dimen name="top_title">80dp</dimen>
     <dimen name="top_subtitle">50dp</dimen>
     <dimen name="btn_lbl_dp">22dp</dimen>
@@ -52,5 +53,6 @@
     
     <dimen name="title_bar_height">72dp</dimen>
     <dimen name="bar_height">61dp</dimen>
-
+	
+    <dimen name="normal_margin">29.3dp</dimen>
 </resources>
