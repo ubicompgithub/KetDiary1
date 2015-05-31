@@ -65,6 +65,7 @@
         </receiver>
         <service android:name=".AlarmService" />
         <service android:name=".UploadService" />
+        <service android:name=".ResultService" />
         <service
             android:name=".BluetoothLE.BluetoothLeService"
             android:enabled="true" >

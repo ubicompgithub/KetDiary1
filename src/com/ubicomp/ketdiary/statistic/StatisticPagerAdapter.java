@@ -21,18 +21,17 @@ public class StatisticPagerAdapter extends PagerAdapter {
 		Boolean debug_type = PreferenceControl.debugType();
 
 
-		statisticViews = new StatisticPageView[3];
+		statisticViews = new StatisticPageView[1];
 		if (Build.VERSION.SDK_INT >= 11) {
-			//statisticViews[0] = new StatisticDayView();
+			statisticViews[0] = new StatisticDayView();
 			//statisticViews[1] = new StatisticWeekView();
 		} else {
-			//statisticViews[0] = new StatisticDayView();
+			statisticViews[0] = new StatisticDayView();
 			//statisticViews[1] = new StatisticWeekViewSDK10();
 
 		}
 		viewsList.add(statisticViews[0].getView());
-		viewsList.add(statisticViews[1].getView());
-		viewsList.add(statisticViews[2].getView());
+		//viewsList.add(statisticViews[1].getView());
 
 	}
 

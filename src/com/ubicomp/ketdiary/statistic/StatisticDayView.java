@@ -254,7 +254,8 @@ public class StatisticDayView extends StatisticPageView {
 		if (desireDrawable != null)
 			craving.setImageDrawable(desireDrawable);
 
-		Float[] bracs = db.getTodayPrimeBrac();
+		//Float[] bracs = db.getTodayPrimeBrac();
+		
 		int blockMargin = App.getContext().getResources()
 				.getDimensionPixelSize(R.dimen.day_block_margin_size);
 		int circle_size = App.getContext().getResources()

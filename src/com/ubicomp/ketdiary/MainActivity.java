@@ -134,6 +134,11 @@ public class MainActivity extends FragmentActivity {
 			if (PreferenceControl.checkFirstUID())
 				PreferenceControl.defaultSetting();
 			
+			//For test Sevice
+			Intent startIntent =  new  Intent( mainActivity , ResultService. class );  
+			startService(startIntent); 
+            //
+			
 			Typefaces.initAll();
 			//CustomToast.settingSoundPool();
 
