@@ -262,7 +262,7 @@ public class StatisticDayView extends StatisticPageView {
 				.getDimensionPixelSize(R.dimen.day_circle_size);
 
 		int cur_hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-
+		/*
 		for (int i = 0; i < nBlocks; ++i) {
 			RelativeLayout lLayout = new RelativeLayout(context);
 
@@ -291,7 +291,7 @@ public class StatisticDayView extends StatisticPageView {
 			tParam.addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE);
 			
 			
-			/*
+			
 			if (bracs[i] == null) {
 				circleValues[i].setText("");
 				circleImages[i].setImageDrawable(circleDrawables[0]);
@@ -308,14 +308,14 @@ public class StatisticDayView extends StatisticPageView {
 					circleImages[i].setImageDrawable(circleDrawables[1]);
 					circleValues[i].setText(value);
 				}
-			}*/
+			}
 
 			blockLayout.addView(lLayout);
 
 			LinearLayout.LayoutParams lParam = (LinearLayout.LayoutParams) lLayout
 					.getLayoutParams();
 			lParam.leftMargin = lParam.rightMargin = blockMargin;
-		}
+		}*/
 	}
 
 	@Override

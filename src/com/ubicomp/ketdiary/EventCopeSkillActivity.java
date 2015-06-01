@@ -184,7 +184,7 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
     
     private void bleConnection(){
     	if(ble == null) {
-			ble = new BluetoothLE(this, "ket_001");
+			ble = new BluetoothLE(this, "ket_000");
 			//PreferenceControl.getDeviceId();
 		}
 		ble.bleConnect();

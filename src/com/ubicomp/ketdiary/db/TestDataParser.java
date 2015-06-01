@@ -77,7 +77,7 @@ public class TestDataParser {
 		int is_filled = 1;
 
 		//Detection detection = new Detection(brac, timestamp, emotion, craving,				false, 0, 0);
-		TestResult testResult = new TestResult(test_result, timestamp, "tmp_id", is_prime, is_filled );
+		TestResult testResult = new TestResult(test_result, timestamp, "tmp_id", is_prime, is_filled, 0, 0);
 		boolean update = false;
 		if (timestamp == PreferenceControl.getUpdateDetectionTimestamp())
 			update = true;

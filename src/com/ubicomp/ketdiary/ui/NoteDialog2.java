@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.db.DBTip;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.QuestionFile;
 
@@ -56,7 +57,10 @@ public class NoteDialog2{
 	private Spinner sp_date, sp_timeslot, sp_item;
 	private Button bt_confirm, bt_cancel;
 	private SeekBar impactSeekBar;
-	private TextView text_self, text_other, text_item, text_impact, text_description;
+	private TextView text_self, text_other, text_item, text_impact, text_description, tv_knowdlege;
+	
+	
+	private int state;
 	
 	
 	//write File
@@ -64,12 +68,17 @@ public class NoteDialog2{
 	private long timestamp = 0;
 	private QuestionFile questionFile; 
 	
-	
+	//Listener
 	private SpinnerXMLSelectedListener selectListener;
+	private EndOnClickListener buttonOnClickListener;
+	
 	
 	private int type;
 	private int items;
 	private int impact;
+	
+	private static final int STATE_NOTE = 1;
+	private static final int STATE_KNOW = 2;
 	
 	public NoteDialog2(TestQuestionCaller testQuestionCaller, RelativeLayout mainLayout){
 		
@@ -83,7 +92,7 @@ public class NoteDialog2{
 	    
 		//view = inflater.inflate(R.layout.fragment_note, container, false);
 		selectListener = new SpinnerXMLSelectedListener();
-		
+		buttonOnClickListener = new EndOnClickListener();
 	    setting();
 	    mainLayout.addView(boxLayout);
 	    
@@ -99,7 +108,7 @@ public class NoteDialog2{
 		main_layout = (LinearLayout) boxLayout.findViewById(R.id.note_main_layout);
 		bottom_layout = (LinearLayout) boxLayout.findViewById(R.id.note_bottom_layout);
 		
-		View bottom = BarButtonGenerator.createTwoButtonView(R.string.cancel, R.string.ok, null, null);
+		View bottom = BarButtonGenerator.createTwoButtonView(R.string.cancel, R.string.ok, buttonOnClickListener, buttonOnClickListener);
 		bottom_layout.addView(bottom);
 		
 		View title = BarButtonGenerator.createAddNoteView(selectListener);
@@ -136,8 +145,18 @@ public class NoteDialog2{
 	}
 	
 	public void copingSetting(){
-		boxLayout = (RelativeLayout) inflater.inflate(R.layout.activity_qtip, null);
-		mainLayout.addView(boxLayout);
+		//boxLayout = (RelativeLayout) inflater.inflate(R.layout.activity_qtip, null);
+		//mainLayout.addView(boxLayout);
+		state = STATE_KNOW;
+		
+		title_layout.removeAllViews();
+		main_layout.removeAllViews();
+		//main_layout.removeView(center_layout);
+		center_layout = (LinearLayout) inflater.inflate(
+				R.layout.knowledge, null);
+		tv_knowdlege = (TextView)center_layout.findViewById(R.id.qtip_tv_tips);
+		tv_knowdlege.setText(DBTip.inst.getTip());
+		main_layout.addView(center_layout);
 	}
 	
 	
@@ -150,7 +169,7 @@ public class NoteDialog2{
 		
 		//questionLayout.setVisibility(View.VISIBLE);
 		boxLayout.setVisibility(View.VISIBLE);
-		
+		state = STATE_NOTE;
 		/*enableSend(false);
 		PreferenceControl.setTestSuccess();
 		help.setText("");
@@ -232,16 +251,21 @@ public class NoteDialog2{
 	class EndOnClickListener implements View.OnClickListener{
 		public void onClick(View v){
 			
-			impact = impactSeekBar.getProgress();
-			questionFile.write(type, items, impact);
 			
-			Log.d(TAG, items+"\t"+impact);
+			if(state == STATE_NOTE){
+				impact = impactSeekBar.getProgress();
+			//questionFile.write(type, items, impact);
+			
+				Log.d(TAG, items+"\t"+impact);
 			//questionLayout.setVisibility(View.GONE);
-			clear();
-			copingSetting();
+			//clear();
+				copingSetting();
 			//questionFile.write(0, 0, 0);
 			//startActivity(new Intent(that, EventCopeSkillActivity.class));
-			
+			}
+			else if(state == STATE_KNOW){
+				tv_knowdlege.setText(DBTip.inst.getTip());
+			}
 			
 			/*
 			Datatype.TestDetail ttd = Datatype.inst.newTestDetail();

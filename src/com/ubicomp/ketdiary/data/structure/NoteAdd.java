@@ -11,11 +11,11 @@ public class NoteAdd {
 	public int impact;
 	public String description;
 
-	public NoteAdd(int isAfterTest, TimeValue tv, TimeValue recordTv,int rtimeslot,
+	public NoteAdd(int isAfterTest, long tv, long recordTv,int rtimeslot,
 			       int category, int type, int items,int impact, String description) {
 		this.isAfterTest = isAfterTest;
-		this.tv = tv;
-		this.recordTv = recordTv;
+		this.tv = TimeValue.generate(tv);
+		this.recordTv = TimeValue.generate(recordTv);;
 		this.rtimeslot= rtimeslot;
 		this.category = category;
 		this.type = type;

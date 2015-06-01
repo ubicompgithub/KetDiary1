@@ -15,7 +15,7 @@ public class ResultService extends Service{
 	public  static  final  String TAG =  "MyService" ;  
 	private Handler mhandler = new Handler();  
 	private long startTime;
-	private long timeout = 10*1000;//10*60*1000;
+	private long timeout = 60*10*1000;//10*60*1000;
 	private Notification notification;
 	private PendingIntent pendingIntent;
 	
@@ -31,7 +31,7 @@ public class ResultService extends Service{
         
         Log.d(TAG,  "onCreate() executed" );  
         startTime = System.currentTimeMillis();
-        
+         
         mhandler.postDelayed(updateTimer, 1000);
     }  
     

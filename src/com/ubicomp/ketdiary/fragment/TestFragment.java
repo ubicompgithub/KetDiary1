@@ -183,7 +183,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		//format.setMinimumIntegerDigits(1);
 		//format.setMinimumFractionDigits(2);
 		//format.setMaximumFractionDigits(2);
-		digitTypefaceBold = Typefaces.getDigitTypeface();
+		digitTypefaceBold = Typefaces.getDigitTypefaceBold();
 		wordTypefaceBold = Typefaces.getWordTypefaceBold();
 		
 		/** Load sound into sound pool*/
@@ -252,12 +252,12 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		msgBox = new NoteDialog2(testFragment, main_layout);
 		
 		//For Testing Function
-		
+		/*
 		img_btn.setOnClickListener(null);
 		img_btn.setEnabled(false);
 		msgBox.initialize();
 		msgBox.show();
-		
+		*/
 		return view;
 	}
 	
@@ -381,6 +381,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			
 			Log.d("Main", "Enter FiveSecond");
 			label_btn.setText("5");
+			label_btn.setTypeface(digitTypefaceBold);
+			label_btn.setTextSize(40);
 			label_subtitle.setText("請蓄積口水");
 			img_btn.setEnabled(false);
 			
@@ -395,6 +397,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 				testCountDownTimer.cancel();
 				testCountDownTimer = null;
 			}
+			label_btn.setTypeface(wordTypefaceBold);
+			label_btn.setTextSize(22);
 		}
 	}
 	
@@ -557,6 +561,11 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			
 			MainActivity.getMainActivity().enableTabAndClick(true);
 			MainActivity.getMainActivity().setTimers();
+			
+			img_btn.setOnClickListener(null);
+			img_btn.setEnabled(false);
+			msgBox.initialize();
+			msgBox.show();
 			
 			//startActivity(new Intent(, EventCopeSkillActivity.class));
 			//startActivity(new Intent(activity, NoteActivity.class));
