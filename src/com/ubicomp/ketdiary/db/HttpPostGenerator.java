@@ -155,15 +155,15 @@ public class HttpPostGenerator {
 		
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("uid", uid));
-		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.isAfterTest)));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getIsAfterTest())));
 		
-		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.tv.getTimestamp())));
-		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.recordTv)));
-		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.category)));
-		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.type)));
-		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.items)));
-		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.impact)));
-		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.description)));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getTv().getTimestamp())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getRecordTv().getTimestamp())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getCategory())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getType())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getItems())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getImpact())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getDescription())));
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 		} catch (UnsupportedEncodingException e) {}

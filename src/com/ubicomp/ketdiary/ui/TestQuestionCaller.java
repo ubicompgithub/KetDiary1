@@ -3,9 +3,9 @@ package com.ubicomp.ketdiary.ui;
 /**
  * Interface for calling the test questionnaire dialog
  * 
- * @author Stanley Wang
+ * @author Andy Chen
  */
 public interface TestQuestionCaller {
 	/** write the questionnaire results into a file */
-	public void writeQuestionFile(int emotion, int craving);
+	public void writeQuestionFile(int type, int item, int impact);
 }

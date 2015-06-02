@@ -70,7 +70,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private EditText debugMsg;
 	private ChangeMsgHandler msgHandler;
 	private TextView debugBracValueView;
-	private Button btn_debug;
+	private Button btn_debug, btn_note;
 
 	private long timestamp = 0;
 
@@ -100,7 +100,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	
 	
 	//File 
-	private File mainDirectory;
+	private File mainDirectory = null;
 	private ImageFileHandler imgFileHandler;
 	private VoltageFileHandler voltageFileHandler;
 	private ColorRawFileHandler colorRawFileHandler;
@@ -156,8 +156,12 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	
 	private static final int COUNT_DOWN_SECOND = 5;
 	private static final int WAIT_SALIVA_SECOND = 7;
-	private static final int FIRST_VOLTAGE_THRESHOLD = 25;
+	/*
+	private static final int FIRST_VOLTAGE_THRESHOLD = 25; //之後會是50 跟 40
 	private static final int SECOND_VOLTAGE_THRESHOLD= 15;
+	*/
+	private static final int FIRST_VOLTAGE_THRESHOLD = 50; 
+	private static final int SECOND_VOLTAGE_THRESHOLD= 40;
 	private static final int TIMEOUT_SECOND = 30;
 	private static final int CAMERATIMEOUT = 10;
 	private static final int CONFIRM_SECOND = 5;
@@ -225,6 +229,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		cameraLayout = (FrameLayout)view.findViewById(R.id.cameraLayout);
 		
 		btn_debug = (Button)view.findViewById(R.id.debug_button_1);
+		btn_note =( Button)view.findViewById(R.id.debug_button_2);
 		debugScrollView = (ScrollView)view.findViewById(R.id.debug_scroll_view);
 		
 		debugMsg = (EditText)view.findViewById(R.id.debug_msg);
@@ -240,6 +245,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		
 		setState(new IdleState());
 		btn_debug.setOnClickListener(new DebugOnClickListener());
+		btn_note.setOnClickListener(new QuestionOnClickListener());
 		
 		/** State onclick function use here*/
 		img_btn.setOnClickListener(new View.OnClickListener() {
@@ -357,6 +363,10 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			label_title.setText("準備中....");
 			
 			startConnection();
+			
+			if(ble != null)
+				ble.bleWriteState((byte)2);
+			
 			openSensorMsgTimer = new OpenSensorMsgTimer();
 			openSensorMsgTimer.start();
 			/*  Next State decide by callback
@@ -426,8 +436,10 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			cameraCountDownTimer = new CameraCountDownTimer();
 			cameraCountDownTimer.start();
 			
+			
+			/*
 			if(ble != null)
-				ble.bleWriteState((byte)2);
+				ble.bleWriteState((byte)2);*/
 
 		}
 		@Override
@@ -627,12 +639,12 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		cameraInitHandler = new CameraInitHandler(this, cameraRecorder);
 		cameraInitHandler.sendEmptyMessage(0);
 	}
-	/*
+	
+	
 	public void writeQuestionFile(int type, int items, int impact) {
 		questionFile.write(type, items, impact);
-	}*/
-	
-	
+	}
+
 	//release resource
 	public void stop() { 
 		
@@ -1212,15 +1224,25 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		
 	}
 	
-	@Override
-	public void writeQuestionFile(int emotion, int craving) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	
 	// DebugMode
 	// --------------------------------------------------------------------------------------------------------
+	
+	private class QuestionOnClickListener implements View.OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			if(mainDirectory == null)
+				setStorage();
+			
+			img_btn.setOnClickListener(null);
+			img_btn.setEnabled(false);
+			msgBox.initialize();
+			msgBox.show();	
+		}		
+	}
+	
+	
 	
 	private void checkDebug(boolean debug) {
 		
@@ -1241,9 +1263,6 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private class DebugOnClickListener implements View.OnClickListener {
 
 		private int cond;
-
-		public DebugOnClickListener(){
-		}
 
 		@Override
 		public void onClick(View v) {

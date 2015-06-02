@@ -254,7 +254,7 @@ public class NoteDialog2{
 			
 			if(state == STATE_NOTE){
 				impact = impactSeekBar.getProgress();
-			//questionFile.write(type, items, impact);
+				testQuestionCaller.writeQuestionFile(type, items, impact);
 			
 				Log.d(TAG, items+"\t"+impact);
 			//questionLayout.setVisibility(View.GONE);

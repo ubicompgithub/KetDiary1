@@ -332,14 +332,14 @@ public class DatabaseControl {
 	 * @see ubicomp.soberdiary.data.structure.TestResult
 	 */
 	
-	/*
+	
 	public TestResult[] getAllNotUploadedTestResult() {
 		synchronized (sqlLock) {
 			db = dbHelper.getReadableDatabase();
 			long cur_ts = System.currentTimeMillis();
 			String sql;
 
-			sql = "SELECT * FROM Detection WHERE upload = 0  ORDER BY ts ASC";
+			sql = "SELECT * FROM TestResult WHERE upload = 0  ORDER BY ts ASC";
 
 			Cursor cursor = db.rawQuery(sql, null);
 			int count = cursor.getCount();
@@ -349,24 +349,23 @@ public class DatabaseControl {
 				return null;
 			}
 
-			Detection[] detections = new Detection[count];
+			TestResult[] testResults = new TestResult[count];
 			for (int i = 0; i < count; ++i) {
 				cursor.moveToPosition(i);
-				float brac = cursor.getFloat(1);
-				long ts = cursor.getLong(5);
-				int emotion = cursor.getInt(8);
-				int craving = cursor.getInt(9);
-				boolean isPrime = cursor.getInt(10) == 1;
-				int weeklyScore = cursor.getInt(11);
-				int score = cursor.getInt(12);
-				detections[i] = new Detection(brac, ts, emotion, craving,
-						isPrime, weeklyScore, score);
+				int result = cursor.getInt(1);
+				String cassetteId = cursor.getString(2);
+				long ts = cursor.getLong(6);
+				int isPrime = cursor.getInt(8);
+				int isFilled= cursor.getInt(9);
+				int weeklyScore = cursor.getInt(10);
+				int score = cursor.getInt(11);
+				testResults[i] = new TestResult(result, ts, cassetteId, isPrime, isFilled, weeklyScore, score);
 			}
 			cursor.close();
 			db.close();
-			return detections;
+			return testResults;
 		}
-	}*/
+	}
 
 	/**
 	 * This method is used for checking if the user do the brac detection at
@@ -374,42 +373,40 @@ public class DatabaseControl {
 	 * 
 	 * @return true if the user do a brac detection at the current time slot
 	 */
-	/*
+	
 	public boolean detectionIsDone() {
 		synchronized (sqlLock) {
 			db = dbHelper.getReadableDatabase();
 			long ts = System.currentTimeMillis();
 			TimeValue tv = TimeValue.generate(ts);
-			String sql = "SELECT id FROM Detection WHERE" + " year ="
+			String sql = "SELECT id FROM TestResult WHERE" + " year ="
 					+ tv.getYear() + " AND month = " + tv.getMonth()
-					+ " AND day= " + tv.getDay() + " AND timeSlot= "
-					+ tv.getTimeslot();
+					+ " AND day= " + tv.getDay();
 			Cursor cursor = db.rawQuery(sql, null);
 			boolean result = cursor.getCount() > 0;
 			cursor.close();
 			db.close();
 			return result;
 		}
-	}*/
+	}
 
 	/**
 	 * This method is used for counting total passed prime detections
 	 * 
 	 * @return # of passed prime detections
 	 */
-	/*
-	public int getPrimeDetectionPassTimes() {
+	
+	public int getPrimeTestPassTimes() {
 		synchronized (sqlLock) {
 			db = dbHelper.getReadableDatabase();
-			String sql = "SELECT * FROM Detection WHERE isPrime = 1 AND brac < "
-					+ Detection.BRAC_THRESHOLD;
+			String sql = "SELECT * FROM TestResult WHERE isPrime = 1 AND result = 0";
 			Cursor cursor = db.rawQuery(sql, null);
 			int count = cursor.getCount();
 			cursor.close();
 			db.close();
 			return count;
 		}
-	}*/
+	}
 
 	/**
 	 * This method is used for checking if the user can replace the current
@@ -425,9 +422,8 @@ public class DatabaseControl {
 			int day = curTV.getDay();
 			int timeslot = curTV.getTimeslot();
 			db = dbHelper.getReadableDatabase();
-			String sql = "SELECT * FROM DETECTION WHERE year=" + year
-					+ " AND month=" + month + " AND day=" + day
-					+ " AND timeSlot=" + timeslot;
+			String sql = "SELECT * FROM TestResult WHERE year=" + year
+					+ " AND month=" + month + " AND day=" + day;
 			Cursor cursor = db.rawQuery(sql, null);
 			return (cursor.getCount() == 1);
 		}
@@ -435,7 +431,264 @@ public class DatabaseControl {
 	
 	
 	
-	
+	// EmotionManagement
+
+	/**
+	 * Get the latest Emotion Management result
+	 * 
+	 * @return EmotionManagement. If there are no EmotionManagement, return a
+	 *         dummy data.
+	 * @see ubicomp.soberdiary.data.structure.EmotionManagement
+	 */
+	/*
+	public EmotionManagement getLatestEmotionManagement() {
+		synchronized (sqlLock) {
+			db = dbHelper.getReadableDatabase();
+			String sql;
+			Cursor cursor;
+			sql = "SELECT * FROM EmotionManagement ORDER BY ts DESC LIMIT 1";
+			cursor = db.rawQuery(sql, null);
+			if (!cursor.moveToFirst()) {
+				cursor.close();
+				db.close();
+				Calendar cal = Calendar.getInstance();
+				cal.setTimeInMillis(0);
+				int year = cal.get(Calendar.YEAR);
+				int month = cal.get(Calendar.MONTH);
+				int day = cal.get(Calendar.DAY_OF_MONTH);
+				return new EmotionManagement(0, year, month, day, 0, 0, null, 0);
+			}
+			long ts = cursor.getLong(4);
+			int year = cursor.getInt(7);
+			int month = cursor.getInt(8);
+			int day = cursor.getInt(9);
+			int emotion = cursor.getInt(10);
+			int type = cursor.getInt(11);
+			String reason = cursor.getString(12);
+			int score = cursor.getInt(13);
+			return new EmotionManagement(ts, year, month, day, emotion, type,
+					reason, score);
+		}
+	}*/
+
+	/**
+	 * Insert an Emotion Management result
+	 * 
+	 * @return # of credits got by the user
+	 * @see ubicomp.soberdiary.data.structure.EmotionManagement
+	 */
+	/*
+	public int insertEmotionManagement(EmotionManagement data) {
+		synchronized (sqlLock) {
+			EmotionManagement prev_data = getLatestEmotionManagement();
+			int addScore = 0;
+			if (!prev_data.getTv().isSameTimeBlock(data.getTv()))
+				addScore = 1;
+			if (!StartDateCheck.afterStartDate())
+				addScore = 0;
+
+			db = dbHelper.getWritableDatabase();
+			ContentValues content = new ContentValues();
+			content.put("year", data.getTv().getYear());
+			content.put("month", data.getTv().getMonth());
+			content.put("day", data.getTv().getDay());
+			content.put("ts", data.getTv().getTimestamp());
+			content.put("week", data.getTv().getWeek());
+			content.put("timeslot", data.getTv().getTimeslot());
+			content.put("recordYear", data.getRecordTv().getYear());
+			content.put("recordMonth", data.getRecordTv().getMonth());
+			content.put("recordDay", data.getRecordTv().getDay());
+			content.put("emotion", data.getEmotion());
+			content.put("type", data.getType());
+			content.put("reason", data.getReason());
+			content.put("score", prev_data.getScore() + addScore);
+			db.insert("EmotionManagement", null, content);
+			db.close();
+			return addScore;
+		}
+	}*/
+
+	/**
+	 * Get all EmotionManagement results which are not uploaded to the server
+	 * 
+	 * @return An array of EmotionManagement results If there are no
+	 *         EmotionManagement, return null.
+	 * @see ubicomp.soberdiary.data.structure.EmotionManagement
+	 */
+	/*
+	public EmotionManagement[] getNotUploadedEmotionManagement() {
+		synchronized (sqlLock) {
+			EmotionManagement[] data = null;
+
+			db = dbHelper.getReadableDatabase();
+			String sql;
+			Cursor cursor;
+
+			sql = "SELECT * FROM EmotionManagement WHERE upload = 0";
+			cursor = db.rawQuery(sql, null);
+			int count = cursor.getCount();
+			if (count == 0) {
+				cursor.close();
+				db.close();
+				return null;
+			}
+
+			data = new EmotionManagement[count];
+
+			for (int i = 0; i < count; ++i) {
+				cursor.moveToPosition(i);
+				long ts = cursor.getLong(4);
+				int year = cursor.getInt(7);
+				int month = cursor.getInt(8);
+				int day = cursor.getInt(9);
+				int emotion = cursor.getInt(10);
+				int type = cursor.getInt(11);
+				String reason = cursor.getString(12);
+				int score = cursor.getInt(13);
+				data[i] = new EmotionManagement(ts, year, month, day, emotion,
+						type, reason, score);
+			}
+
+			cursor.close();
+			db.close();
+
+			return data;
+		}
+	}*/
+
+	/**
+	 * Get EmotionManagement results by date
+	 * 
+	 * @param rYear
+	 *            record Year
+	 * @param rMonth
+	 *            record Month (0~11)
+	 * @param rDay
+	 *            record Day of Month
+	 * @return An array of EmotionManagement results @ rYear/rMonth/rDay. If
+	 *         there are no EmotionManagement, return null.
+	 * @see ubicomp.soberdiary.data.structure.EmotionManagement
+	 */
+	/*
+	public EmotionManagement[] getDayEmotionManagement(int rYear, int rMonth,
+			int rDay) {
+		synchronized (sqlLock) {
+			EmotionManagement[] data = null;
+
+			db = dbHelper.getReadableDatabase();
+			String sql;
+			Cursor cursor;
+
+			sql = "SELECT * FROM EmotionManagement WHERE recordYear = " + rYear
+					+ " AND recordMonth = " + rMonth + " AND recordDay = "
+					+ rDay + " ORDER BY id DESC";
+			cursor = db.rawQuery(sql, null);
+			int count = cursor.getCount();
+			if (count == 0) {
+				cursor.close();
+				db.close();
+				return null;
+			}
+
+			data = new EmotionManagement[count];
+
+			for (int i = 0; i < count; ++i) {
+				cursor.moveToPosition(i);
+				long ts = cursor.getLong(4);
+				int year = cursor.getInt(7);
+				int month = cursor.getInt(8);
+				int day = cursor.getInt(9);
+				int emotion = cursor.getInt(10);
+				int type = cursor.getInt(11);
+				String reason = cursor.getString(12);
+				int score = cursor.getInt(13);
+				data[i] = new EmotionManagement(ts, year, month, day, emotion,
+						type, reason, score);
+			}
+
+			cursor.close();
+			db.close();
+
+			return data;
+		}
+	}*/
+
+	/**
+	 * Label the EmotionManagement result uploaded
+	 * 
+	 * @param ts
+	 *            Timestamp of the uploaded EmotionManagement
+	 * @see ubicomp.soberdiary.data.structure.EmotionManagement
+	 */
+	/*
+	public void setEmotionManagementUploaded(long ts) {
+		synchronized (sqlLock) {
+			db = dbHelper.getWritableDatabase();
+			String sql = "UPDATE EmotionManagement SET upload = 1 WHERE ts = "
+					+ ts;
+			db.execSQL(sql);
+			db.close();
+		}
+	}*/
+
+	/**
+	 * Get the latest 4 reasons of EmotionManagement by reason type
+	 * 
+	 * @param type
+	 *            reason type of EmotionManagement.
+	 * @return An array of reasons. There are no reasons, return null
+	 */
+	/*
+	public String[] getEmotionManagementString(int type) {
+		synchronized (sqlLock) {
+			db = dbHelper.getReadableDatabase();
+			String sql = "SELECT DISTINCT reason FROM EmotionManagement WHERE type = "
+					+ type + " ORDER BY ts DESC LIMIT 4";
+			String[] out = null;
+
+			Cursor cursor = db.rawQuery(sql, null);
+			if (cursor.getCount() == 0) {
+				cursor.close();
+				db.close();
+				return null;
+			}
+			out = new String[cursor.getCount()];
+
+			for (int i = 0; i < out.length; ++i)
+				if (cursor.moveToPosition(i))
+					out[i] = cursor.getString(0);
+
+			cursor.close();
+			db.close();
+			return out;
+		}
+	}*/
+
+	/**
+	 * Get if there are EmotionManagement results at the date
+	 * 
+	 * @param tv
+	 *            TimeValue of the date
+	 * @return true if exists EmotionManagement
+	 * @see ubicomp.soberdiary.data.structure.TimeValue
+	 */
+	/*
+	public boolean hasEmotionManagement(TimeValue tv) {
+		synchronized (sqlLock) {
+			db = dbHelper.getReadableDatabase();
+			String sql;
+			Cursor cursor;
+
+			sql = "SELECT * FROM EmotionManagement WHERE" + " recordYear ="
+					+ tv.getYear() + " AND recordMonth=" + tv.getMonth()
+					+ " AND recordDay =" + tv.getDay();
+			cursor = db.rawQuery(sql, null);
+			int count = cursor.getCount();
+			cursor.close();
+			db.close();
+			return count > 0;
+		}
+	}*/
 
 
 }

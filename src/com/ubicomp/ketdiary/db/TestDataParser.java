@@ -116,6 +116,79 @@ public class TestDataParser {
 			PreferenceControl.setTestResult(3);
 		 */
 	}
+	
+	/** start to handle the noteAdd data */
+	public void startAddNote() {
+
+		File mainStorageDir = MainStorage.getMainStorageDirectory();
+		File textFile, questionFile;
+
+		textFile = new File(mainStorageDir.getPath() + File.separator + ts
+				+ File.separator + ts + ".txt");
+		//questionFile = new File(mainStorageDir.getPath() + File.separator + ts
+		//		+ File.separator + "question.txt");
+		
+		questionFile = new File(mainStorageDir.getPath() + File.separator + "0"
+				+ File.separator + "question.txt");
+		
+		Log.i(TAG, "TDP Start");
+		
+		int q_result = getQuestionResult(questionFile);
+		int type = q_result / 1000;
+		int item = (q_result % 1000)/10;
+		int impact = q_result % 10;
+		
+		if (q_result == -1) {
+			type = -1;
+			item = -1;
+			impact = -1;
+		}
+
+		int test_result = 0; 
+		long timestamp = ts;
+		int is_prime = 1;
+		int is_filled = 1;
+
+		//Detection detection = new Detection(brac, timestamp, emotion, craving,				false, 0, 0);
+		TestResult testResult = new TestResult(test_result, timestamp, "tmp_id", is_prime, is_filled, 0, 0);
+		boolean update = false;
+		if (timestamp == PreferenceControl.getUpdateDetectionTimestamp())
+			update = true;
+		PreferenceControl.setUpdateDetection(false);
+		PreferenceControl.setUpdateDetectionTimestamp(0);
+		
+		//db.addTestResult(testResult);
+		DBControl.inst.addTestResult(testResult);
+		//int addScore = db.insertDetection(detection, update);
+		//if (addScore == 0 && !detection.isPass()) // TestFail & get no credit
+			//CustomToast.generateToast(R.string.after_test_fail, -1);
+		//else if (!detection.isPass())
+			//CustomToast.generateToast(R.string.after_test_fail, addScore);
+		//else
+			//CustomToast.generateToast(R.string.after_test_pass, addScore);
+
+		//int prevShowWeek = PreferenceControl.getPrevShowWeek();
+		//int prevShowWeekState = PreferenceControl.getPrevShowWeekState();
+		//Detection curDetection = db.getLatestDetection();
+		//int curState = StorytellingGraphics.getPageIdx(
+			//	curDetection.getWeeklyScore(), curDetection.getTv().getWeek());
+		/*
+		if (prevShowWeek < curDetection.getTv().getWeek())
+			prevShowWeekState = 0;
+		boolean pageChange = (prevShowWeekState < curState);
+		PreferenceControl.setPageChange(pageChange);
+
+		if (sensorResult < Detection.BRAC_THRESHOLD)
+			if (emotion <= 2 || craving >= 4)
+				PreferenceControl.setTestResult(1);
+			else
+				PreferenceControl.setTestResult(0);
+		else if (sensorResult < Detection.BRAC_THRESHOLD_HIGH)
+			PreferenceControl.setTestResult(2);
+		else
+			PreferenceControl.setTestResult(3);
+		 */
+	}
 
 	/**
 	 * get detection result

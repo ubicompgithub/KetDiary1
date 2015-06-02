@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/analysis_saving_title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@drawable/analyse_line" >
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:layout_marginBottom="7.3dp"
+        android:layout_marginTop="7.3dp"
+        >
+
+        <TextView
+            android:id="@+id/analysis_saving_help"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="26.7dp"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:text="@string/analysis_saving_help"
+            android:textColor="@color/black"
+            android:textSize="@dimen/normal_text_size"/>
+        
+        <TextView
+            android:id="@+id/analysis_saving_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/analysis_saving_help"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:textColor="@color/lite_orange"
+            android:textSize="@dimen/normal_text_size" />
+        
+        <TextView
+            android:id="@+id/analysis_target_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="26.7dp"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:textColor="@color/black"
+            android:textSize="@dimen/normal_text_size"/>
+        
+        <TextView
+            android:id="@+id/analysis_target_help"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/analysis_target_money"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="4dp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/normal_text_size"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/analysis_saving_content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7.3dp" >
+
+        <ImageView
+            android:id="@+id/analysis_saving_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="26.7dp"
+            android:layout_marginRight="26.7dp"
+            android:src="@drawable/analyse_procons" />
+
+        <ImageView
+            android:id="@+id/analysis_saving_cur_bar_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="26.7dp"
+            android:src="@drawable/progress_bar_start" />
+
+        <ImageView
+            android:id="@+id/analysis_saving_cur_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/analysis_saving_cur_bar_start"
+            android:scaleType="fitXY"
+            android:src="@drawable/progress_bar_inner" />
+
+        <ImageView
+            android:id="@+id/analysis_saving_cur_bar_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/analysis_saving_cur_bar"
+            android:src="@drawable/progress_bar_end" />
+    </RelativeLayout>
+
+</LinearLayout>

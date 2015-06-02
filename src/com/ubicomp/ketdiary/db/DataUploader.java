@@ -89,6 +89,15 @@ public class DataUploader {
 				}
 			}
 			
+			// NoteAdd
+			Vector<NoteAdd> na = DBControl.inst.getNotUploadedNoteAdd();
+			if(tr != null){
+				for(int i = 0;i < tr.size();i++){
+					if(connectToServer(na.get(i)) == ERROR)
+						Log.d(TAG, "FAIL TO UPLOAD - NoteAdd");
+				}
+			}			
+			
 			// EmotionDIY
 			/*
 			TestResult t_data[] = ;db.getNotUploadedEmotionDIY();
