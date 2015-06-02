@@ -26,6 +26,8 @@ import android.widget.ScrollView;
 
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.statistic.AnalysisSavingView;
+import com.ubicomp.ketdiary.statistic.StatisticPageView;
 import com.ubicomp.ketdiary.statistic.StatisticPagerAdapter;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.ScaleOnTouchListener;
@@ -52,7 +54,7 @@ public class StatisticFragment extends Fragment {
 		return view;
 	}*/
 	
-	
+	private StatisticPageView[] analysisViews;
 	private View view;
 	private Activity activity;
 	private ViewPager statisticView;
@@ -126,6 +128,12 @@ public class StatisticFragment extends Fragment {
 		//ClickLog.Log(ClickLogId.STATISTIC_ENTER);
 		enablePage(true);
 		statisticFragment = this;
+		
+		analysisViews = new StatisticPageView[1];
+		//analysisViews[0] = new AnalysisCounterView();
+		analysisViews[0] = new AnalysisSavingView();
+		//analysisViews[2] = new AnalysisRankView(statisticFragment);
+		
 		statisticViewAdapter = new StatisticPagerAdapter();
 		//msgBox = new QuestionnaireDialog(this, (RelativeLayout) view);
 
@@ -155,6 +163,11 @@ public class StatisticFragment extends Fragment {
 		statisticViewAdapter.clear();
 		if (analysisLayout != null)
 			analysisLayout.removeAllViews();
+		
+		for (int i = 0; i < analysisViews.length; ++i) {
+			if (analysisViews[i] != null)
+				analysisViews[i].clear();
+		}
 		//if (msgBox != null)
 		//	msgBox.clear();
 	}
@@ -201,9 +214,18 @@ public class StatisticFragment extends Fragment {
 			analysisLayout.removeAllViews();
 
 			questionButton.setOnClickListener(new QuestionOnClickListener());
+			
+			for (int i = 0; i < analysisViews.length; ++i)
+				if (analysisViews[i] != null)
+					analysisLayout.addView(analysisViews[i].getView());
 
 
 			statisticViewAdapter.load();
+			
+			for (int i = 0; i < analysisViews.length; ++i)
+				if (analysisViews[i] != null)
+					analysisViews[i].load();
+			
 			statisticView.setCurrentItem(0);
 
 			for (int i = 0; i < 3; ++i)

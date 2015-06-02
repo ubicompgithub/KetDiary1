@@ -522,13 +522,13 @@ public class MainActivity extends FragmentActivity {
 		Intent newIntent;
 		switch (id) {
 		case R.id.menu_about:
-			newIntent = new Intent(this, DevActivity.class);
+			newIntent = new Intent(this, AboutActivity.class);
 			startActivity(newIntent);
 			return true;
 		case R.id.menu_setting:
 			//newIntent = new Intent(this, NoteActivity.class);
 			//startActivity(newIntent);
-			setNotePage();
+			//setNotePage();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

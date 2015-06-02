@@ -3,6 +3,7 @@ package com.ubicomp.ketdiary;
 import java.io.File;
 import java.util.TimerTask;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +25,6 @@ import com.ubicomp.ketdiary.db.TestDataParser;
 import com.ubicomp.ketdiary.file.ColorRawFileHandler;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.VoltageFileHandler;
-import com.ubicomp.ketdiary.system.PreferenceControl;
 //import com.ubicomp.ketdiary.dialog.NoteDialog;
 
 /** Event Cope Skill Page
@@ -58,6 +60,14 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
 	private boolean write_success = false;
 	private boolean start_write = false;
 	
+	//Debug
+	private ScrollView debugScrollView;
+	private EditText debugMsg;
+	private ChangeMsgHandler msgHandler;
+	private TextView debugBracValueView;
+	private Button btn_debug, btn_note;
+	private boolean is_debug = false;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +80,16 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
 		btn_know = (Button)findViewById(R.id.qtip_btn_know);
 		btn_tipup = (Button)findViewById(R.id.qtip_btn_tipup);
 		btn_tipdown = (Button)findViewById(R.id.qtip_btn_tipdown);
+		
+		btn_debug = (Button)findViewById(R.id.debug_button_1);
+		btn_note =( Button)findViewById(R.id.debug_button_2);
+		debugScrollView = (ScrollView)findViewById(R.id.debug_scroll_view);
+		
+		debugMsg = (EditText)findViewById(R.id.debug_msg);
+		btn_debug.setOnClickListener(new DebugOnClickListener());
+		//btn_note.setOnClickListener(new QuestionOnClickListener());
+		
+		
 		btn_know.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -357,6 +377,7 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
     	writeToColorRawFile(str1+"\n");
     	//writeToColorRawFile(feature+"\n");
     	
+    	showDebug("First:"+str1+"\n");
     	int[] color2 = new int[4];
     	for(int i=8; i<16; i+=2){
     		color2[(i-8)/2] = colorReadings[i]+colorReadings[i+1]*256;
@@ -366,6 +387,7 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
     	feature2 = ColorDetect2.colorDetect2(color2);
     	//writeToVoltageFile(feature2+"\n");
     	writeToVoltageFile(str2+"\n");
+    	showDebug("Second:"+str2+"\n");
     	
     	//showDebug(">First:"+str1+" Second:"+str2);
     	Log.i(TAG, "First: "+str1);
@@ -413,5 +435,74 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
 			//setState(new DoneState());
 			second_voltage=true;
 		}*/
+	}
+	
+	private void checkDebug(boolean debug) {
+		
+		if (debug) {
+			debugScrollView.setVisibility(View.VISIBLE);
+			msgHandler = new ChangeMsgHandler();
+			debugMsg.setText("");
+			debugMsg.setOnKeyListener(null);
+			//TextView debugText = (TextView)findViewById(R.id.debug_mode_text);
+
+		} else {
+			debugScrollView.setVisibility(View.INVISIBLE);
+			return;
+		}
+
+	}
+
+	private class DebugOnClickListener implements View.OnClickListener {
+
+		private int cond;
+
+		@Override
+		public void onClick(View v) {
+				
+			
+			if(is_debug){
+				//debugScrollView.setVisibility(View.VISIBLE);
+				is_debug = false;
+			}
+			else{
+				//debugScrollView.setVisibility(View.INVISIBLE);
+				is_debug = true;
+			}
+			checkDebug(is_debug);
+		}		
+	}
+
+
+	public void showDebug(String message, int type) {
+		//Boolean debug = PreferenceControl.isDebugMode();
+		if (is_debug && msgHandler != null) {
+			Message msg = new Message();
+			Bundle data = new Bundle();
+			data.putInt("type", type);
+			data.putString("message", message);
+			msg.setData(data);
+			msg.what = 0;
+			msgHandler.sendMessage(msg);
+		}
+	}
+
+	public void showDebug(String message) {
+		showDebug(message, 0);
+	}
+
+	@SuppressLint("HandlerLeak")
+	private class ChangeMsgHandler extends Handler {
+		public void handleMessage(Message msg) {
+			Bundle data = msg.getData();
+			int type = data.getInt("type");
+			if (type == 0) {
+				debugMsg.append("\n" + data.getString("message"));
+				debugScrollView.scrollTo(0, debugMsg.getBottom() + 100);
+				debugMsg.invalidate();
+			} else if (type == 1) {
+				//showDebugVoltage(data.getString("message"));
+			}
+		}
 	}
 }

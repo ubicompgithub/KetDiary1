@@ -8,6 +8,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.ubicomp.ketdiary.App;
+import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.system.PreferenceControl;
@@ -121,22 +122,21 @@ public class TestDataParser {
 	public void startAddNote() {
 
 		File mainStorageDir = MainStorage.getMainStorageDirectory();
-		File textFile, questionFile;
+		File questionFile;
 
-		textFile = new File(mainStorageDir.getPath() + File.separator + ts
-				+ File.separator + ts + ".txt");
-		//questionFile = new File(mainStorageDir.getPath() + File.separator + ts
-		//		+ File.separator + "question.txt");
-		
-		questionFile = new File(mainStorageDir.getPath() + File.separator + "0"
-				+ File.separator + "question.txt");
-		
+
+		questionFile = new File(mainStorageDir.getPath() + File.separator + ts
+			+ File.separator + "question.txt");
+
 		Log.i(TAG, "TDP Start");
 		
 		int q_result = getQuestionResult(questionFile);
 		int type = q_result / 1000;
 		int item = (q_result % 1000)/10;
 		int impact = q_result % 10;
+		
+		
+		int category = 1;
 		
 		if (q_result == -1) {
 			type = -1;
@@ -149,8 +149,7 @@ public class TestDataParser {
 		int is_prime = 1;
 		int is_filled = 1;
 
-		//Detection detection = new Detection(brac, timestamp, emotion, craving,				false, 0, 0);
-		TestResult testResult = new TestResult(test_result, timestamp, "tmp_id", is_prime, is_filled, 0, 0);
+		NoteAdd noteAdd = new NoteAdd(1, ts, ts, category, type, item, impact, "test", 0);
 		boolean update = false;
 		if (timestamp == PreferenceControl.getUpdateDetectionTimestamp())
 			update = true;
@@ -158,36 +157,7 @@ public class TestDataParser {
 		PreferenceControl.setUpdateDetectionTimestamp(0);
 		
 		//db.addTestResult(testResult);
-		DBControl.inst.addTestResult(testResult);
-		//int addScore = db.insertDetection(detection, update);
-		//if (addScore == 0 && !detection.isPass()) // TestFail & get no credit
-			//CustomToast.generateToast(R.string.after_test_fail, -1);
-		//else if (!detection.isPass())
-			//CustomToast.generateToast(R.string.after_test_fail, addScore);
-		//else
-			//CustomToast.generateToast(R.string.after_test_pass, addScore);
-
-		//int prevShowWeek = PreferenceControl.getPrevShowWeek();
-		//int prevShowWeekState = PreferenceControl.getPrevShowWeekState();
-		//Detection curDetection = db.getLatestDetection();
-		//int curState = StorytellingGraphics.getPageIdx(
-			//	curDetection.getWeeklyScore(), curDetection.getTv().getWeek());
-		/*
-		if (prevShowWeek < curDetection.getTv().getWeek())
-			prevShowWeekState = 0;
-		boolean pageChange = (prevShowWeekState < curState);
-		PreferenceControl.setPageChange(pageChange);
-
-		if (sensorResult < Detection.BRAC_THRESHOLD)
-			if (emotion <= 2 || craving >= 4)
-				PreferenceControl.setTestResult(1);
-			else
-				PreferenceControl.setTestResult(0);
-		else if (sensorResult < Detection.BRAC_THRESHOLD_HIGH)
-			PreferenceControl.setTestResult(2);
-		else
-			PreferenceControl.setTestResult(3);
-		 */
+		DBControl.inst.addNoteAdd(noteAdd);
 	}
 
 	/**
@@ -260,7 +230,7 @@ public class TestDataParser {
 			if (s.hasNextInt())
 				impact = s.nextInt();
 
-			if (type == -1 || item == -1)
+			if (type == 0 || item == 0)
 				return -1;
 			
 			result = item * 10 + impact;

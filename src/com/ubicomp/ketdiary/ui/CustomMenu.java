@@ -11,8 +11,8 @@ import android.view.WindowManager;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.ubicomp.ketdiary.InfoActivity;
-import com.ubicomp.ketdiary.NoteActivity;
+import com.ubicomp.ketdiary.AboutActivity;
+import com.ubicomp.ketdiary.EventCopeSkillActivity;
 import com.ubicomp.ketdiary.R;
 
 @SuppressLint({ "ViewConstructor", "InlinedApi" })
@@ -56,10 +56,10 @@ public class CustomMenu extends PopupWindow {
 			Intent intent;
 			switch (v.getId()) {
 			case R.id.menu_about:
-				intent = new Intent(context, InfoActivity.class);
+				intent = new Intent(context, AboutActivity.class);
 				break;
 			case R.id.menu_setting:
-				intent = new Intent(context, NoteActivity.class);
+				intent = new Intent(context, EventCopeSkillActivity.class);
 				break;
 			default:
 				intent = null;

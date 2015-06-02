@@ -643,6 +643,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	
 	public void writeQuestionFile(int type, int items, int impact) {
 		questionFile.write(type, items, impact);
+		
+		TDP.startAddNote();
 	}
 
 	//release resource
@@ -814,6 +816,26 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 
 		for (int i = 0; i < 3; ++i)
 			INIT_PROGRESS[i] = DONE_PROGRESS[i] = false;
+	}
+	
+	private void reset2() { //for debug use
+		
+		first_connect = false;
+		first_voltage = false;
+		in_stage1 = false;
+		test_done = false;
+		camera_initial=false;
+
+		timestamp = System.currentTimeMillis();
+	
+		//setGuideMessage(R.string.test_guide_reset_top,R.string.test_guide_reset_bottom);
+
+		PreferenceControl.setUpdateDetectionTimestamp(timestamp);
+
+		setStorage();
+		
+		
+
 	}
 	
 	private class OpenSensorMsgTimer extends CountDownTimer {
@@ -1233,7 +1255,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		@Override
 		public void onClick(View v) {
 			if(mainDirectory == null)
-				setStorage();
+				reset2();
 			
 			img_btn.setOnClickListener(null);
 			img_btn.setEnabled(false);
