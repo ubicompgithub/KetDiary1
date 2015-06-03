@@ -25,6 +25,7 @@ import com.ubicomp.ketdiary.db.TestDataParser;
 import com.ubicomp.ketdiary.file.ColorRawFileHandler;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.VoltageFileHandler;
+import com.ubicomp.ketdiary.system.PreferenceControl;
 //import com.ubicomp.ketdiary.dialog.NoteDialog;
 
 /** Event Cope Skill Page
@@ -204,8 +205,8 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
     
     private void bleConnection(){
     	if(ble == null) {
-			ble = new BluetoothLE(this, "ket_000");
-			//PreferenceControl.getDeviceId();
+			//ble = new BluetoothLE(this, "ket_020");
+			ble = new BluetoothLE(this, PreferenceControl.getDeviceId());//PreferenceControl.getDeviceId();
 		}
 		ble.bleConnect();
 		//ble.bleWriteState((byte)1);
@@ -368,7 +369,8 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
     	String str2 ="";
     	int[] color = new int[4];
     	for(int i=0; i<8; i+=2){
-    		color[i/2] = colorReadings[i]+colorReadings[i+1]*256;
+    		//color[i/2] = colorReadings[i]+ colorReadings[i+1]*256;
+    		color[i/2] = ((colorReadings[i+1] & 0xFF) << 8) | (colorReadings[i] & 0xFF);
     		str1 = str1+ " " + String.valueOf(color[i/2]);
     	}
     	//ColorDetect2.colorDetect(color);
@@ -377,10 +379,14 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
     	writeToColorRawFile(str1+"\n");
     	//writeToColorRawFile(feature+"\n");
     	
+    	
+    	
     	showDebug("First:"+str1+"\n");
     	int[] color2 = new int[4];
     	for(int i=8; i<16; i+=2){
-    		color2[(i-8)/2] = colorReadings[i]+colorReadings[i+1]*256;
+    		//color2[(i-8)/2] = colorReadings[i]+colorReadings[i+1]*256;
+    		
+    		color2[(i-8)/2] = ((colorReadings[i+1] & 0xFF) << 8) | (colorReadings[i] & 0xFF);
     		str2 = str2+ " " + String.valueOf(color2[(i-8)/2]);
     	}
     	

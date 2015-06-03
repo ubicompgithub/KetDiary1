@@ -4,29 +4,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg">
+    
+    
+    <TextView
+        android:id="@+id/test_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:gravity="center"
+        android:text="test"
+        android:textColor="@color/test_message"
+        android:textSize="@dimen/normal_text_size" />
+    
+    <TextView
+    	android:id="@+id/tv_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Center"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="@dimen/center_word_dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="invisible" />
 
     <FrameLayout
         android:id="@+id/test_bg_center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="65dp" >
-
-        <FrameLayout
-            android:id="@+id/cameraLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" >
-        </FrameLayout>
-
-        <ImageView
-            android:id="@+id/iv_mask"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/camera_mask2"
-            android:visibility="visible" />
+        android:layout_above="@+id/tv_center"
+        android:layout_marginBottom="-50dp" >
 
         <FrameLayout
             android:id="@+id/test_start_layout"
@@ -55,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/button_start_test" />
+                android:src="@drawable/button_start_test2" />
 
             <ImageView
                 android:id="@+id/test_face"
@@ -63,7 +72,8 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:scaleType="center"
-                android:src="@drawable/test_face" />
+                android:src="@drawable/test_face"
+                android:visibility="invisible" />
 
             <TextView
                 android:id="@+id/tv_btn"
@@ -83,15 +93,62 @@
                 android:textColor="@color/count_down"
                 android:textSize="@dimen/xlarge_text_size" />
         </FrameLayout>
+        
+        <FrameLayout
+            android:id="@+id/cameraLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" >
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/iv_mask"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:src="@drawable/camera_mask2"
+            android:visibility="visible" />
     </FrameLayout>
+    
+    <LinearLayout 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/tv_subtitle">
+        <ImageView
+            android:id="@+id/iv_water1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/saliva1_no1"/>
+
+        <ImageView
+            android:id="@+id/iv_water2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/saliva2_no" />
+
+        <ImageView
+            android:id="@+id/iv_water3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/saliva3_no" />
+        
+
+    </LinearLayout>
+	
+
 
     <TextView
         android:id="@+id/tv_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/test_bg_center"
+        android:layout_above="@+id/tv_title"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="29dp"
+        android:layout_marginBottom="20dp"
         android:text="subtitle"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -99,10 +156,96 @@
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_subtitle"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
+        android:layout_marginBottom="20dp"
         android:text="Title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+        <!-- Used for Debugging -->
+	 
+    <RelativeLayout
+        android:id="@+id/debugLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:visibility="invisible" >
+
+        <TextView
+            android:id="@+id/debug_mode_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="@dimen/small_title_size" />
+
+        <LinearLayout
+            android:id="@+id/debugButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/debug_mode_text" >
+
+            <Button
+                android:id="@+id/debug_button_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_weight="1"
+                android:background="@color/green"
+                android:paddingBottom="3dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:paddingTop="3dp"
+                android:text="@string/dubug"
+                android:textColor="@color/white"
+                android:textSize="@dimen/small_title_size" />
+
+            <Button
+                android:id="@+id/debug_button_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Note" />
+
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/debug_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/shadow" >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <EditText
+                    android:id="@+id/debug_msg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/black"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:freezesText="true"
+                    android:inputType="textMultiLine"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/normal_text_size" />
+            </FrameLayout>
+        </ScrollView>
+    </RelativeLayout>
+    
+    <ImageView
+        android:id="@+id/iv_help"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="4dp"
+        android:padding="10dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/test_information" />
+    
+    
 
 </RelativeLayout>

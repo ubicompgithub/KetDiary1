@@ -173,7 +173,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private static final int CAMERA_STATE = 3;
 	private static final int STAGE2_STATE = 4;
 	private static final int DONE_STATE = 5;
-	private static final int NOTENOUGH_STATE = 6;
+	private static final int NOTENOUGH_STATE
+	= 6;
 	private static final int RUN_STATE = 7;
 	
 	@Override
@@ -215,7 +216,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	}
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-		view = inflater.inflate(R.layout.fragment_test, container, false);
+		view = inflater.inflate(R.layout.fragment_test2, container, false);
 		
 		main_layout = (RelativeLayout) view.findViewById(R.id.test_fragment_main_layout); 
 		
