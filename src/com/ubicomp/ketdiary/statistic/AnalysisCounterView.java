@@ -20,29 +20,31 @@ public class AnalysisCounterView extends StatisticPageView {
 	private Typeface wordTypeface, digitTypefaceBold;
 
 	public AnalysisCounterView() {
-		super(R.layout.analysis_counter_view);
+		super(R.layout.analysis_counter_view2);
+		
+		
 		wordTypeface = Typefaces.getWordTypeface();
 		digitTypefaceBold = Typefaces.getDigitTypefaceBold();
 		//title = (TextView) view.findViewById(R.id.analysis_counter_title);
-		title.setTypeface(wordTypeface);
+		//title.setTypeface(wordTypeface);
 		titleLayout = (RelativeLayout) view
 				.findViewById(R.id.analysis_counter_title_layout);
 		help = (TextView) view.findViewById(R.id.analysis_counter_help);
-		help.setTypeface(wordTypeface);
+		//help.setTypeface(wordTypeface);
 		couponValue = (TextView) view
 				.findViewById(R.id.analysis_counter_coupon_value);
-		couponValue.setTypeface(digitTypefaceBold);
+		//couponValue.setTypeface(digitTypefaceBold);
 		counterValue = (TextView) view
 				.findViewById(R.id.analysis_counter_counter_value);
-		counterValue.setTypeface(digitTypefaceBold);
+		//counterValue.setTypeface(digitTypefaceBold);
 
 		counterText = (TextView) view
 				.findViewById(R.id.analysis_counter_counter_text);
-		counterText.setTypeface(wordTypeface);
+		//counterText.setTypeface(wordTypeface);
 
 		couponText = (TextView) view
 				.findViewById(R.id.analysis_counter_coupon_text);
-		couponText.setTypeface(wordTypeface);
+		//couponText.setTypeface(wordTypeface);
 	}
 
 	@Override

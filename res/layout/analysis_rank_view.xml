@@ -7,18 +7,9 @@
     <RelativeLayout
         android:id="@+id/analysis_rank_title_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/analysis_title_bar" >
+        android:layout_height="20dp"
+        android:background="@drawable/analyse_line" >
 
-        <TextView
-            android:id="@+id/analysis_rank_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="26.7dp"
-            android:gravity="center"
-            android:text="@string/analysis_rank"
-            android:textColor="@color/white"
-            android:textSize="@dimen/normal_text_size"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -34,15 +25,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/analysis_rank_week_help"
-            android:textColor="@color/black"
-            android:textSize="@dimen/normal_text_size"/>
+            android:textColor="@color/text_gray3"
+            android:textSize="@dimen/normal_text_size" />
 
         <TextView
             android:id="@+id/analysis_rank_help_week_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="@dimen/normal_text_size"/>
+            android:textColor="@color/blue"
+            android:textSize="@dimen/normal_text_size" />
+
     </LinearLayout>
 
     <RelativeLayout
@@ -58,8 +50,8 @@
             android:layout_marginLeft="26.7dp"
             android:gravity="center"
             android:text="@string/low"
-            android:textColor="@color/black"
-            android:textSize="@dimen/normal_text_size"/>
+            android:textColor="@color/text_gray3"
+            android:textSize="@dimen/normal_text_size" />
 
         <ImageView
             android:id="@+id/analysis_rank_bar_week"
@@ -138,15 +130,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/analysis_rank_month_help"
-            android:textColor="@color/black"
-            android:textSize="@dimen/normal_text_size"/>
+            android:textColor="@color/text_gray3"
+            android:textSize="@dimen/normal_text_size" />
 
         <TextView
             android:id="@+id/analysis_rank_help_month_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="@dimen/normal_text_size"/>
+            android:textColor="@color/blue"
+            android:textSize="@dimen/normal_text_size" />
+
     </LinearLayout>
 
     <RelativeLayout
@@ -163,8 +156,8 @@
             android:layout_marginLeft="26.7dp"
             android:gravity="center"
             android:text="@string/low"
-            android:textColor="@color/black"
-            android:textSize="@dimen/normal_text_size"/>
+            android:textColor="@color/text_gray3"
+            android:textSize="@dimen/normal_text_size" />
 
         <ImageView
             android:id="@+id/analysis_rank_bar_month"

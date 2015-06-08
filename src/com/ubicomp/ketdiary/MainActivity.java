@@ -1,6 +1,9 @@
 package com.ubicomp.ketdiary;
 
+import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.media.AudioManager;
@@ -96,9 +99,11 @@ public class MainActivity extends FragmentActivity {
 	private boolean clickable = false;   // back & home
 	private boolean doubleClickState = false;
 	private long latestClickTime = 0;
-
+	
+	public static final long WAIT_RESULT_TIME = 1*60*1000;
 	public static final int ACTION_RECORD = 1;
 	public static final int ACTION_QUESTIONNAIRE = 2;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -135,9 +140,11 @@ public class MainActivity extends FragmentActivity {
 				PreferenceControl.defaultSetting();
 			
 			//For test Sevice
-			Intent startIntent =  new  Intent( mainActivity , ResultService. class );  
-			startService(startIntent); 
+			//Intent startIntent =  new  Intent( mainActivity , ResultService. class );  
+			//startService(startIntent); 
             //
+			
+			
 			
 			Typefaces.initAll();
 			//CustomToast.settingSoundPool();
@@ -235,7 +242,23 @@ public class MainActivity extends FragmentActivity {
 			finish();
 			return;
 		}*/
-		//setTimers();
+		PreferenceControl.setInApp(true);
+		
+		long curTime = System.currentTimeMillis();
+		long testTime = PreferenceControl.getLatestTestCompleteTime();
+		long pastTime = curTime - testTime;
+		
+		if(PreferenceControl.getCheckResult() && pastTime < WAIT_RESULT_TIME)
+			setTimers();
+		
+		else if(PreferenceControl.getCheckResult() && pastTime >= WAIT_RESULT_TIME){
+			//setTimers();
+			//changeTab(1);
+		}
+		
+		
+		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager.cancel(0); //回到APP裡要把Notification關掉
 		clickable = true;
 	}
 
@@ -248,7 +271,13 @@ public class MainActivity extends FragmentActivity {
 	protected void onPause() {
 		closeOptionsMenu();
 		closeTimers();
+		PreferenceControl.setInApp(false);
 		super.onPause();
+	}
+	
+	@Override
+	protected void onStop() {		
+		super.onStop();
 	}
 
 	public void setTabState(String tabId) {
@@ -570,17 +599,19 @@ public class MainActivity extends FragmentActivity {
 	
 
 	private void setSensorCountDownTimer() {
-		long lastTime = PreferenceControl.getLastTestTime();
+		long lastTime = PreferenceControl.getLatestTestCompleteTime();
 		long curTime = System.currentTimeMillis();
 		boolean debug = PreferenceControl.isDebugMode();
 		boolean testFail = PreferenceControl.isTestFail();
-		long waitTime = 10*60*1000;
+		long waitTime = 1*60*1000;
 
 		long time = curTime - lastTime;
+		long countTime = waitTime - time;
+		
 		isRecovery = false;
 		closeSensorCountDownTimer();
 		
-		sensorCountDownTimer = new SensorCountDownTimer(waitTime);
+		sensorCountDownTimer = new SensorCountDownTimer(countTime);
 		//sensorCountDownTimer = new SensorCountDownTimer( Math.min(waitTime, waitTime-time) );
 		sensorCountDownTimer.start();
 			
@@ -615,7 +646,8 @@ public class MainActivity extends FragmentActivity {
 			soundpool.play(timer_sound_id, 1f, 1f, 0, 0, 1f);
 			isRecovery = false;
 			count_down_layout.setVisibility(View.GONE);
-
+			
+			showResult();
 		}
 
 		@Override
@@ -626,6 +658,26 @@ public class MainActivity extends FragmentActivity {
 			count_down_layout.setVisibility(View.VISIBLE);
 
 		}
+	}
+	
+	private void showResult(){
+		new AlertDialog.Builder(this)
+	    .setTitle("檢測倒數結束")
+	    .setMessage("查看檢測結果?")
+	    .setPositiveButton("確定", new DialogInterface.OnClickListener() {
+	        @Override
+	        public void onClick(DialogInterface dialog, int which) {
+	            //Toast.makeText(getApplicationContext(),"走吧！一起吃", Toast.LENGTH_SHORT).show();
+	        	changeTab(1);
+	        }
+	    })
+	    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+	        @Override
+	        public void onClick(DialogInterface dialog, int which) {
+	           //Toast.makeText(getApplicationContext(),"可是我好餓耶", Toast.LENGTH_SHORT).show();
+	        }
+	    })
+	    .show();
 	}
 	
 

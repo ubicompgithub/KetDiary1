@@ -13,7 +13,7 @@ import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
-public class AnalysisSavingView extends StatisticPageView {
+public class AnalysisProsConsView extends StatisticPageView {
 
 	private TextView title;
 
@@ -32,16 +32,18 @@ public class AnalysisSavingView extends StatisticPageView {
 
 	private RelativeLayout layout;
 
-	private Typeface wordTypeface, digitTypefaceBold;
+	private Typeface wordTypeface, wordTypefaceBold, digitTypefaceBold;
 
 	private String dollor_sign;
 
 	private BarHandler barHandler = new BarHandler();
 
-	public AnalysisSavingView() {
+	public AnalysisProsConsView() {
 		super(R.layout.analysis_saving_view);
 		db = new DatabaseControl();
+		
 		wordTypeface = Typefaces.getWordTypeface();
+		wordTypefaceBold=Typefaces.getDigitTypefaceBold();
 		digitTypefaceBold = Typefaces.getDigitTypefaceBold();
 
 		//targetGood = PreferenceControl.getSavingGoal();
@@ -53,20 +55,16 @@ public class AnalysisSavingView extends StatisticPageView {
 		
 
 		help = (TextView) view.findViewById(R.id.analysis_saving_help);
-		help.setTypeface(wordTypeface);
-		curMoney = (TextView) view.findViewById(R.id.analysis_saving_money);
-		curMoney.setTypeface(digitTypefaceBold);
-		target = (TextView) view.findViewById(R.id.analysis_target_help);
-		//target.setTypeface(wordTypeface);
+		help.setTypeface(wordTypefaceBold);
 		targetMoney = (TextView) view.findViewById(R.id.analysis_target_money);
-		//targetMoney.setTypeface(digitTypefaceBold);
+		targetMoney.setTypeface(wordTypefaceBold);
 
 		currentBar = (ImageView) view
-				.findViewById(R.id.analysis_saving_cur_bar);
+				.findViewById(R.id.analysis_pros_position);
 		barStart = (ImageView) view
-				.findViewById(R.id.analysis_saving_cur_bar_start);
+				.findViewById(R.id.analysis_pros_backward);
 		barEnd = (ImageView) view
-				.findViewById(R.id.analysis_saving_cur_bar_end);
+				.findViewById(R.id.analysis_pros_forward);
 		bar = (ImageView) view.findViewById(R.id.analysis_saving_bar);
 
 		layout = (RelativeLayout) view
@@ -91,9 +89,9 @@ public class AnalysisSavingView extends StatisticPageView {
 		String cur_money = dollor_sign + currentMoney;
 		String goal_money = dollor_sign + goal;
 
-		curMoney.setText(cur_money);
-		targetMoney.setText(goal_money);
-		target.setText(targetGood);
+		//curMoney.setText(cur_money);
+		//targetMoney.setText(goal_money);
+		//target.setText(targetGood);
 
 	}
 

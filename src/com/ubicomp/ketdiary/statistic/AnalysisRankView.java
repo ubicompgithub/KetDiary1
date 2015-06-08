@@ -50,8 +50,8 @@ public class AnalysisRankView extends StatisticPageView {
 				R.array.analysis_rank_change_help);
 		wordTypeface = Typefaces.getWordTypeface();
 
-		title = (TextView) view.findViewById(R.id.analysis_rank_title);
-		title.setTypeface(wordTypeface);
+		//title = (TextView) view.findViewById(R.id.analysis_rank_title);
+		//title.setTypeface(wordTypeface);
 
 		helpMonth = (TextView) view.findViewById(R.id.analysis_rank_help_month);
 		helpMonth.setTypeface(wordTypeface);

@@ -26,7 +26,9 @@ import android.widget.ScrollView;
 
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
-import com.ubicomp.ketdiary.statistic.AnalysisSavingView;
+import com.ubicomp.ketdiary.statistic.AnalysisCounterView;
+import com.ubicomp.ketdiary.statistic.AnalysisProsConsView;
+import com.ubicomp.ketdiary.statistic.AnalysisRankView;
 import com.ubicomp.ketdiary.statistic.StatisticPageView;
 import com.ubicomp.ketdiary.statistic.StatisticPagerAdapter;
 import com.ubicomp.ketdiary.system.PreferenceControl;
@@ -124,15 +126,21 @@ public class StatisticFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		
+		long curTime = System.currentTimeMillis();
+		long testTime = PreferenceControl.getLatestTestCompleteTime();
+		long pastTime = curTime - testTime;
 		
+		if( pastTime > MainActivity.WAIT_RESULT_TIME)
+			PreferenceControl.setCheckResult( false );
 		//ClickLog.Log(ClickLogId.STATISTIC_ENTER);
 		enablePage(true);
 		statisticFragment = this;
 		
-		analysisViews = new StatisticPageView[1];
+		analysisViews = new StatisticPageView[3];
 		//analysisViews[0] = new AnalysisCounterView();
-		analysisViews[0] = new AnalysisSavingView();
-		//analysisViews[2] = new AnalysisRankView(statisticFragment);
+		analysisViews[0] = new AnalysisProsConsView();
+		analysisViews[1] = new AnalysisCounterView();
+		analysisViews[2] = new AnalysisRankView();
 		
 		statisticViewAdapter = new StatisticPagerAdapter();
 		//msgBox = new QuestionnaireDialog(this, (RelativeLayout) view);

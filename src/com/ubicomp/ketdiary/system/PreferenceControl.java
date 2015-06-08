@@ -113,15 +113,50 @@ public class PreferenceControl {
 	}
 	
 	
+	/**
+	 * set Test state
+	 * 
+	 */
+	public static void setAfterTestState(int state) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putInt("after_test_state", state);
+		edit.commit();
+	}
+	
+	public static int getAfterTestState() {
+		return sp.getInt("after_test_state", 0);
+	}
+	
+	public static void setLatestTestCompleteTime(long timestamp) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putLong("testCompleteTime", timestamp);
+		edit.commit();
+	}
+
+	public static long getLatestTestCompleteTime() {
+		return sp.getLong("testCompleteTime", 0);
+	}
+
+	public static boolean getCheckResult() {
+		return sp.getBoolean("checkResult", false);
+	}
+
+	public static void setCheckResult(boolean checkResult) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putBoolean("checkResult", checkResult);
+		edit.commit();
+	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
+	public static boolean getInApp() {
+		return sp.getBoolean("inApp", true);
+	}
+
+	public static void setInApp(boolean inApp) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putBoolean("checkResult", inApp);
+		edit.commit();
+	}
 	
 	
 	
@@ -203,6 +238,11 @@ public class PreferenceControl {
 	public static long getDetectionTimestamp() {
 		return sp.getLong("latestDetectionTimestamp", 0);
 	}
+	
+	public static long getLastTestTime() {
+		return sp.getLong("latestDetectionDoneTimestamp", 0);
+	}
+
 
 	public static void setTestFail() {
 		SharedPreferences.Editor edit = sp.edit();
@@ -218,10 +258,7 @@ public class PreferenceControl {
 		edit.commit();
 	}
 
-	public static long getLastTestTime() {
-		return sp.getLong("latestDetectionDoneTimestamp", 0);
-	}
-
+	
 	public static boolean isTestFail() {
 		return sp.getBoolean("latestTestFail", false);
 	}
@@ -377,16 +414,7 @@ public class PreferenceControl {
 		edit.commit();
 	}
 
-	public static void setLatestTestCompleteTime(long timestamp) {
-		SharedPreferences.Editor edit = sp.edit();
-		edit.putLong("testCompleteTime", timestamp);
-		edit.commit();
-	}
-
-	public static long getLatestTestCompleteTime() {
-		return sp.getLong("testCompleteTime", 0);
-	}
-
+	
 
 
 	public static void setUpdateDetection(boolean update) {

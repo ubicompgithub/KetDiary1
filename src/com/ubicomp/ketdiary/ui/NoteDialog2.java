@@ -24,10 +24,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.ubicomp.ketdiary.App;
+import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.db.DBTip;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.QuestionFile;
+import com.ubicomp.ketdiary.system.PreferenceControl;
 
 
 /**
@@ -77,8 +79,8 @@ public class NoteDialog2{
 	private int items;
 	private int impact;
 	
-	private static final int STATE_NOTE = 1;
-	private static final int STATE_KNOW = 2;
+	public static final int STATE_NOTE = 1;
+	public static final int STATE_KNOW = 2;
 	
 	public NoteDialog2(TestQuestionCaller testQuestionCaller, RelativeLayout mainLayout){
 		
@@ -148,15 +150,18 @@ public class NoteDialog2{
 		//boxLayout = (RelativeLayout) inflater.inflate(R.layout.activity_qtip, null);
 		//mainLayout.addView(boxLayout);
 		state = STATE_KNOW;
+		MainActivity.getMainActivity().enableTabAndClick(true);
 		
 		title_layout.removeAllViews();
 		main_layout.removeAllViews();
 		//main_layout.removeView(center_layout);
-		center_layout = (LinearLayout) inflater.inflate(
-				R.layout.knowledge, null);
+		center_layout = (LinearLayout) inflater.inflate(R.layout.knowledge, null);
 		tv_knowdlege = (TextView)center_layout.findViewById(R.id.qtip_tv_tips);
 		tv_knowdlege.setText(DBTip.inst.getTip());
 		main_layout.addView(center_layout);
+		
+		main_layout.getLayoutParams().height = center_layout.getLayoutParams().height;
+		
 	}
 	
 	
@@ -166,7 +171,7 @@ public class NoteDialog2{
 	
 	/** show the dialog */
 	public void show() {
-		
+		PreferenceControl.setAfterTestState(STATE_NOTE);
 		//questionLayout.setVisibility(View.VISIBLE);
 		boxLayout.setVisibility(View.VISIBLE);
 		state = STATE_NOTE;

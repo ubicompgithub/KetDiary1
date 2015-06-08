@@ -1,12 +1,16 @@
 package com.ubicomp.ketdiary;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+
+import com.ubicomp.ketdiary.system.PreferenceControl;
 
 public class ResultService extends Service{
 	
@@ -15,7 +19,7 @@ public class ResultService extends Service{
 	public  static  final  String TAG =  "MyService" ;  
 	private Handler mhandler = new Handler();  
 	private long startTime;
-	private long timeout = 60*10*1000;//10*60*1000;
+	private long timeout = 1*60*1000;//10*60*1000;
 	private Notification notification;
 	private PendingIntent pendingIntent;
 	
@@ -23,7 +27,7 @@ public class ResultService extends Service{
     public  void  onCreate() {  
         super .onCreate();  
         notification =  new  Notification(R.drawable.ntu_logo, "有通知到來" , System.currentTimeMillis());  
-        Intent notificationIntent =  new  Intent( this , MainActivity. class );  
+        Intent notificationIntent =  new  Intent( this , MainActivity.class );  
         pendingIntent = PendingIntent.getActivity( this ,  0 ,  
                 notificationIntent,  0 );  
         notification.setLatestEventInfo( this ,  "這是通知的標題" ,  "這是通知的內容" , pendingIntent);  
@@ -38,7 +42,7 @@ public class ResultService extends Service{
 	private Runnable updateTimer = new Runnable() {
 		public void run() {
 
-			long spentTime = System.currentTimeMillis() - startTime;
+			long spentTime = System.currentTimeMillis() - PreferenceControl.getLatestTestCompleteTime();
 			
 			spentTime = timeout - spentTime;
 			
@@ -52,6 +56,17 @@ public class ResultService extends Service{
 			
 			if(spentTime < 0){ //想一下時間到要做什麼    跳出不一樣的notification讓他點or直接跳出activity
 				mhandler.removeCallbacks(updateTimer);
+				
+				notification.defaults = Notification.DEFAULT_ALL;
+				notification.flags |= Notification.FLAG_AUTO_CANCEL;
+				notification.setLatestEventInfo( myservice , "檢測倒數結束", "前往測試結果", pendingIntent);
+				NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+				
+				if(!PreferenceControl.getInApp())
+					notificationManager.notify(0, notification);
+				
+				
+				
 				stopSelf();
 			}
 			/*

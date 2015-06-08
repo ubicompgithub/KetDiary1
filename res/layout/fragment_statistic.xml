@@ -3,7 +3,7 @@
     android:id="@+id/statistic_fragment_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/statistic_fragment_bg"
+    android:background="@color/white"
     android:splitMotionEvents="false" >
 
     <LinearLayout
@@ -42,13 +42,15 @@
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@+id/brac_statistic_dot1"
                     />
-                <ImageView 
+
+                <ImageView
                     android:id="@+id/brac_statistic_dot2"
-                    android:layout_width="wrap_content" 
-                    android:layout_height="wrap_content" 
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/brac_statistic_dot1"
-                    />
+                    android:visibility="invisible" />
+
             </RelativeLayout>
         </RelativeLayout>
 
@@ -71,10 +73,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:padding="13.3dp"
-        android:layout_marginTop="2dp"
         android:layout_marginRight="2dp"
-        android:src="@drawable/statistic_questionnaire_button"
+        android:layout_marginTop="2dp"
+        android:padding="13.3dp"
+        android:src="@drawable/coping_button"
         android:visibility="invisible" />
 
 </RelativeLayout>
