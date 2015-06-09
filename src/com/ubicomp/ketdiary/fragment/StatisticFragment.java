@@ -130,8 +130,9 @@ public class StatisticFragment extends Fragment {
 		long testTime = PreferenceControl.getLatestTestCompleteTime();
 		long pastTime = curTime - testTime;
 		
-		if( pastTime > MainActivity.WAIT_RESULT_TIME)
+		if( pastTime > MainActivity.WAIT_RESULT_TIME){
 			PreferenceControl.setCheckResult( false );
+		}
 		//ClickLog.Log(ClickLogId.STATISTIC_ENTER);
 		enablePage(true);
 		statisticFragment = this;

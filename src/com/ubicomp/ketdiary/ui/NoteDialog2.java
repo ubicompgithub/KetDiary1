@@ -2,14 +2,17 @@ package com.ubicomp.ketdiary.ui;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Random;
 
 import android.app.Activity;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -22,6 +25,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
@@ -59,9 +63,9 @@ public class NoteDialog2{
 	private Spinner sp_date, sp_timeslot, sp_item;
 	private Button bt_confirm, bt_cancel;
 	private SeekBar impactSeekBar;
-	private TextView text_self, text_other, text_item, text_impact, text_description, tv_knowdlege;
+	private TextView text_self, text_other, text_item, text_impact, text_description, tv_knowdlege, tv_title;
 	
-	
+	private String[] coping_msg;
 	private int state;
 	
 	
@@ -72,15 +76,19 @@ public class NoteDialog2{
 	
 	//Listener
 	private SpinnerXMLSelectedListener selectListener;
-	private EndOnClickListener buttonOnClickListener;
-	
+	private EndOnClickListener endOnClickListener;
+	private GoResultOnClickListener goResultOnClickListener;
+	private GoCopingToResultOnClickListener goCopingToResultOnClickListener;
+	private MyOnPageChangeListener myOnPageChangeListener;
 	
 	private int type;
 	private int items;
 	private int impact;
 	
+	public static final int STATE_TEST = 0;
 	public static final int STATE_NOTE = 1;
-	public static final int STATE_KNOW = 2;
+	public static final int STATE_COPE = 2;
+	public static final int STATE_KNOW = 3;
 	
 	public NoteDialog2(TestQuestionCaller testQuestionCaller, RelativeLayout mainLayout){
 		
@@ -90,11 +98,15 @@ public class NoteDialog2{
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.mainLayout = mainLayout;
 		
+		coping_msg = context.getResources().getStringArray(R.array.coping_list);
 		//activity = this.getActivity();
 	    
 		//view = inflater.inflate(R.layout.fragment_note, container, false);
 		selectListener = new SpinnerXMLSelectedListener();
-		buttonOnClickListener = new EndOnClickListener();
+		endOnClickListener = new EndOnClickListener();
+		goResultOnClickListener = new GoResultOnClickListener();
+		goCopingToResultOnClickListener = new GoCopingToResultOnClickListener();
+				
 	    setting();
 	    mainLayout.addView(boxLayout);
 	    
@@ -110,7 +122,7 @@ public class NoteDialog2{
 		main_layout = (LinearLayout) boxLayout.findViewById(R.id.note_main_layout);
 		bottom_layout = (LinearLayout) boxLayout.findViewById(R.id.note_bottom_layout);
 		
-		View bottom = BarButtonGenerator.createTwoButtonView(R.string.cancel, R.string.ok, buttonOnClickListener, buttonOnClickListener);
+		View bottom = BarButtonGenerator.createTwoButtonView(R.string.cancel, R.string.ok, endOnClickListener, endOnClickListener);
 		bottom_layout.addView(bottom);
 		
 		View title = BarButtonGenerator.createAddNoteView(selectListener);
@@ -138,7 +150,10 @@ public class NoteDialog2{
 	    text_impact.setTypeface(Typefaces.getWordTypeface());
 	    text_description.setTypeface(Typefaces.getWordTypeface());
 	    
+	    text_self.setTextColor(context.getResources().getColor(R.color.blue));
 	    
+	    text_self.setOnClickListener(new MyClickListener(0));
+	    text_other.setOnClickListener(new MyClickListener(1));
 	    
 		initTypePager();
 		//setStorage();
@@ -149,11 +164,66 @@ public class NoteDialog2{
 	public void copingSetting(){
 		//boxLayout = (RelativeLayout) inflater.inflate(R.layout.activity_qtip, null);
 		//mainLayout.addView(boxLayout);
+		state = STATE_COPE;
+		PreferenceControl.setAfterTestState(STATE_COPE);
+		
+		title_layout.removeAllViews();
+		main_layout.removeAllViews();
+		bottom_layout.removeAllViews();
+		
+		center_layout = (LinearLayout) inflater.inflate(R.layout.knowledge, null);
+		tv_knowdlege = (TextView)center_layout.findViewById(R.id.qtip_tv_tips);
+		tv_title = (TextView)center_layout.findViewById(R.id.text_knowing_title);
+		
+		tv_title.setText(R.string.coping_page);
+		
+		Random rand = new Random();
+		int idx = rand.nextInt(coping_msg.length);
+		tv_knowdlege.setText(coping_msg[idx]);
+		main_layout.addView(center_layout);
+		
+		View bottom = BarButtonGenerator.createOneButtonView( R.string.Iknow, endOnClickListener );
+		bottom_layout.addView(bottom);
+		
+	}
+	
+	public void copingSettingToResult(){
+		//boxLayout = (RelativeLayout) inflater.inflate(R.layout.activity_qtip, null);
+		//mainLayout.addView(boxLayout);
+		state = STATE_COPE;
+		PreferenceControl.setAfterTestState(STATE_COPE);
+		
+		title_layout.removeAllViews();
+		main_layout.removeAllViews();
+		bottom_layout.removeAllViews();
+		
+		center_layout = (LinearLayout) inflater.inflate(R.layout.knowledge, null);
+		tv_knowdlege = (TextView)center_layout.findViewById(R.id.qtip_tv_tips);
+		tv_title = (TextView)center_layout.findViewById(R.id.text_knowing_title);
+		
+		tv_title.setText(R.string.coping_page);
+		
+		Random rand = new Random();
+		int idx = rand.nextInt(coping_msg.length);
+		tv_knowdlege.setText(coping_msg[idx]);
+		main_layout.addView(center_layout);
+		
+		View bottom = BarButtonGenerator.createOneButtonView( R.string.go_result, goResultOnClickListener );
+		bottom_layout.addView(bottom);
+		
+	}
+	
+	public void knowingSetting(){
 		state = STATE_KNOW;
+		PreferenceControl.setAfterTestState(STATE_KNOW);
 		MainActivity.getMainActivity().enableTabAndClick(true);
 		
 		title_layout.removeAllViews();
 		main_layout.removeAllViews();
+		bottom_layout.removeAllViews();
+		
+		View bottom = BarButtonGenerator.createTwoButtonView(R.string.last, R.string.next, endOnClickListener, endOnClickListener);
+		bottom_layout.addView(bottom);
 		//main_layout.removeView(center_layout);
 		center_layout = (LinearLayout) inflater.inflate(R.layout.knowledge, null);
 		tv_knowdlege = (TextView)center_layout.findViewById(R.id.qtip_tv_tips);
@@ -161,9 +231,46 @@ public class NoteDialog2{
 		main_layout.addView(center_layout);
 		
 		main_layout.getLayoutParams().height = center_layout.getLayoutParams().height;
-		
 	}
 	
+	
+	public void setResult(){
+		bottom_layout.removeAllViews();
+		//Toast.makeText(context, "倒數結束", Toast.LENGTH_SHORT).show();
+		
+		if(state == STATE_NOTE){
+			Toast.makeText(context, "請完成新增記事以查看檢測結果", Toast.LENGTH_SHORT).show();
+			View bottom = BarButtonGenerator.createTwoButtonView(R.string.cancel, R.string.ok, goCopingToResultOnClickListener, goCopingToResultOnClickListener);
+			bottom_layout.addView(bottom);
+		}
+		else if(state == STATE_COPE){
+			Toast.makeText(context, "請點選以查看檢測結果", Toast.LENGTH_SHORT).show();
+			View bottom = BarButtonGenerator.createOneButtonView( R.string.go_result, goResultOnClickListener );
+			bottom_layout.addView(bottom);
+		}
+		else if(state == STATE_KNOW){
+			Toast.makeText(context, "請點選以查看檢測結果", Toast.LENGTH_SHORT).show();
+			View bottom = BarButtonGenerator.createOneButtonView( R.string.go_result, goResultOnClickListener );
+			bottom_layout.addView(bottom);
+		}
+	
+	}
+	
+	public void testSetting(){
+		
+		title_layout.removeAllViews();
+		main_layout.removeAllViews();
+		bottom_layout.removeAllViews();
+		
+
+		//main_layout.removeView(center_layout);
+		center_layout = (LinearLayout) inflater.inflate(R.layout.bar_impact, null);
+		//tv_knowdlege = (TextView)center_layout.findViewById(R.id.qtip_tv_tips);
+		//tv_knowdlege.setText(DBTip.inst.getTip());
+		main_layout.addView(center_layout);
+		
+		//main_layout.getLayoutParams().height = center_layout.getLayoutParams().height;
+	}
 	
 	/** Initialize the dialog */
 	public void initialize() {
@@ -171,10 +278,13 @@ public class NoteDialog2{
 	
 	/** show the dialog */
 	public void show() {
+		state = STATE_NOTE;
 		PreferenceControl.setAfterTestState(STATE_NOTE);
 		//questionLayout.setVisibility(View.VISIBLE);
+		
+		MainActivity.getMainActivity().enableTabAndClick(false);
 		boxLayout.setVisibility(View.VISIBLE);
-		state = STATE_NOTE;
+		
 		/*enableSend(false);
 		PreferenceControl.setTestSuccess();
 		help.setText("");
@@ -264,27 +374,43 @@ public class NoteDialog2{
 				Log.d(TAG, items+"\t"+impact);
 			//questionLayout.setVisibility(View.GONE);
 			//clear();
+				
+				//testSetting(); //For Test
+				
 				copingSetting();
 			//questionFile.write(0, 0, 0);
 			//startActivity(new Intent(that, EventCopeSkillActivity.class));
 			}
+			else if(state == STATE_COPE){
+				knowingSetting();
+			}
 			else if(state == STATE_KNOW){
 				tv_knowdlege.setText(DBTip.inst.getTip());
 			}
+	    }
+	}
+	
+	class GoResultOnClickListener implements View.OnClickListener{
+		public void onClick(View v){
+
+			MainActivity.getMainActivity().changeTab(1);
 			
-			/*
-			Datatype.TestDetail ttd = Datatype.inst.newTestDetail();
-			ttd.is_filled = true;
-			ttd.date = new Date();
-			ttd.time_trunk = 1;
-			ttd.result = 1;
-			ttd.catagory_id = 1;
-			ttd.type_id = 1;
-			ttd.reason_id = 1;
-			ttd.description = "abc";
-			DBControl.inst.addTestResult(ttd);*/
-			//that.dismiss();
-	    
+	    }
+	}
+	
+	class GoCopingToResultOnClickListener implements View.OnClickListener{
+		public void onClick(View v){
+			
+			
+			if(state == STATE_NOTE){
+				impact = impactSeekBar.getProgress();
+				testQuestionCaller.writeQuestionFile(type, items, impact);
+			
+				Log.d(TAG, items+"\t"+impact);
+
+				copingSettingToResult();
+			}
+
 	    }
 	}
 	
@@ -296,6 +422,7 @@ public class NoteDialog2{
 	
 	private void initTypePager(){
 	    vPager = (ViewPager) center_layout.findViewById(R.id.viewpager);
+	    vPager.setOnPageChangeListener(new MyOnPageChangeListener());
 	    
 		//LayoutInflater li = LayoutInflater.from(context); //getLayoutInflater();
 		ArrayList<View> aList = new ArrayList<View>();
@@ -412,6 +539,58 @@ public class NoteDialog2{
 			}
 		};
 	}
+	public class MyClickListener implements OnClickListener
+	{
+		private int index = 0;
+		public MyClickListener(int i){
+			index = i;
+		}
+		
+		@Override
+		public void onClick(View arg0) {
+			vPager.setCurrentItem(index);
+			switch(index){
+			case 0:
+				text_self.setTextColor(context.getResources().getColor(R.color.blue));
+				text_other.setTextColor(context.getResources().getColor(R.color.text_gray3));
+				break;
+			case 1:
+				text_self.setTextColor(context.getResources().getColor(R.color.text_gray3));
+				text_other.setTextColor(context.getResources().getColor(R.color.blue));
+				break;
+
+			}
+		}
+		
+	}
+	
+	
+	//監聽頁面切換時間,主要做的是動畫處理,就是移動條的移動
+		public class MyOnPageChangeListener implements OnPageChangeListener {
+
+
+			@Override
+			public void onPageSelected(int index) {
+
+				switch (index) {
+				case 0:
+					text_self.setTextColor(context.getResources().getColor(R.color.blue));
+					text_other.setTextColor(context.getResources().getColor(R.color.text_gray3));
+					break;
+				case 1:
+					text_self.setTextColor(context.getResources().getColor(R.color.text_gray3));
+					text_other.setTextColor(context.getResources().getColor(R.color.blue));
+					break;
+				}
+
+			}
+			@Override
+			public void onPageScrollStateChanged(int arg0) {}
+
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {}
+		
+		}
 
 	
 }

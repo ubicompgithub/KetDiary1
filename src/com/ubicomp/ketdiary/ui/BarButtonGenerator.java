@@ -73,6 +73,19 @@ public class BarButtonGenerator {
        // sp.performClick();
 	}
 	
+	public static View createOneButtonView(int TextId, 	OnClickListener Listener) {
+		LinearLayout layout = (LinearLayout) inflater.inflate(
+				R.layout.bar_one_button, null);
+		TextView textLeft = (TextView) layout
+				.findViewById(R.id.bar_one_button);
+		textLeft.setText(TextId);
+		textLeft.setTypeface(wordTypefaceBold);
+		textLeft.setOnClickListener(Listener);
+
+		return layout;
+	}
+	
+	
 /*
 	public static View createTextView(int textStr) {
 		LinearLayout layout = (LinearLayout) inflater.inflate(

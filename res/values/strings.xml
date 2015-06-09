@@ -70,6 +70,10 @@
     <string name="send">寄送</string>
     <string name="cancel">取消</string>
     <string name="ok">確定</string>
+    <string name="Iknow">我知道了</string>
+    <string name="last">上一則</string>
+    <string name="next">下一則</string>
+    <string name="go_result">看測試結果</string>
     <string name="msg_box_toast_cancel">確定放棄填寫？</string>
     <string name="msg_box_toast_send">確定完成自我了解？</string>
     <string name="notification_msg_1">該檢測了！</string>
@@ -161,7 +165,6 @@
 
     <string name="quote_next_message">請按此看延伸學習‧‧‧</string>
     <string name="call_to">要聯絡誰？</string>
-    <string name="next">下一步</string>
     <string name="connect_to_family">跟親友聊天</string>
     <string name="connect_for_social_help">尋求社區心理諮商</string>
     <string name="connect_to_emotion_hot_line">聯絡心情專線</string>
@@ -383,6 +386,6 @@
     
     <string name="negative_consequence">負面後果</string>
 	<string name="positive_goal">正向目標</string>
-	<string name="check_result">查看測試結果?</string>
+	<string name="check_result">看測試結果?</string>
 	
 </resources>

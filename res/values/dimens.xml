@@ -55,4 +55,6 @@
     <dimen name="bar_height">61dp</dimen>
 	
     <dimen name="normal_margin">29.3dp</dimen>
+    <dimen name="note_margin">20dp</dimen>
+    <dimen name="impact_text_margin">30dp</dimen>
 </resources>

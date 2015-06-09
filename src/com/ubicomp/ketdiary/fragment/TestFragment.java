@@ -92,7 +92,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private final boolean[] DONE_PROGRESS = { false, false, false };
 	
 	private TestDataParser TDP;
-	private NoteDialog2 msgBox;
+	public NoteDialog2 msgBox = null;
 	
 	/** Camare variables */
 	//private Camera mCamera = null;
@@ -218,7 +218,6 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		//failBgHandler = new FailMessageHandler();
 		//testHandler = new TestHandler();
 		
-		//test_guide_msg = getResources().getStringArray(R.array.test_guide_msg);
 		changeTabsHandler = new ChangeTabsHandler();
 		test_guide_msg = getResources().getStringArray(R.array.test_guide_msg);
 		//changeTabsHandler.sendEmptyMessage(0);
@@ -340,7 +339,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			ble_pluginserted =false;
 			MainActivity.getMainActivity().enableTabAndClick(false);
 			reset();
-			/*
+			
 			if(debug){
 				setState(new DoneState());
 			}
@@ -348,9 +347,9 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 				start_test = true;
 				setState(new ConnState());
 			}
-			*/
+			/*
 			start_test = true;
-			setState(new ConnState());
+			setState(new ConnState());*/
 		}
 	}
 	
@@ -802,8 +801,9 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		}
 
 		if (ble != null){
-			is_connect = false;
+			
 			ble.bleDisconnect(); // 原本註解
+			is_connect = false;
 			//ble = null; 
 		}
 
@@ -854,15 +854,34 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		long curTime = System.currentTimeMillis();
 		long testTime = PreferenceControl.getLatestTestCompleteTime();
 		long pastTime = curTime - testTime;
+		int note_state = PreferenceControl.getAfterTestState();
 		
-		if(PreferenceControl.getCheckResult() && pastTime < MainActivity.WAIT_RESULT_TIME){
+		
+		if(PreferenceControl.getCheckResult() && pastTime < MainActivity.WAIT_RESULT_TIME){ //還沒察看結果且時間還沒到
 			img_btn.setOnClickListener(null);
 			img_btn.setEnabled(false);
 			msgBox.initialize();
 			msgBox.show();
-			msgBox.copingSetting();
+			
+			if(note_state == msgBox.STATE_KNOW)
+				msgBox.knowingSetting();
+			else if(note_state == msgBox.STATE_COPE)
+				msgBox.copingSetting();
 		}
+		else if(PreferenceControl.getCheckResult() && pastTime > MainActivity.WAIT_RESULT_TIME){//還沒察看結果且時間到了
+			img_btn.setOnClickListener(null);
+			img_btn.setEnabled(false);
+			msgBox.initialize();
+			msgBox.show();
+			
+			if(note_state == msgBox.STATE_KNOW)
+				msgBox.knowingSetting();
+			else if(note_state == msgBox.STATE_COPE)
+				msgBox.copingSetting();
 
+			msgBox.setResult();
+			
+		}
 		
 		
 		setState(new IdleState());

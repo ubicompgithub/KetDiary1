@@ -62,7 +62,10 @@ public class ResultService extends Service{
 				notification.setLatestEventInfo( myservice , "檢測倒數結束", "前往測試結果", pendingIntent);
 				NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 				
-				if(!PreferenceControl.getInApp())
+				boolean inApp = PreferenceControl.getInApp();
+				
+				Log.d("InApp",String.valueOf(inApp));
+				if(!inApp)
 					notificationManager.notify(0, notification);
 				
 				

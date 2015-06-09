@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+
+    <RelativeLayout
+         android:id="@+id/msg_craving_seek_bar_layout"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="-13dp" 
+         android:gravity="center"
+         android:layout_marginLeft="20dp"
+         android:layout_marginRight="20dp">
+         
+
+    	<ImageView
+       		  android:id="@+id/msg_craving_bar_bg"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+			  android:layout_centerVertical="true"	  
+              android:contentDescription="@string/msg_box_help2"
+              android:src="@drawable/impact_bar"
+              android:layout_centerInParent="true" />
+
+                <SeekBar
+                    android:id="@+id/msg_craving_seek_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true"
+                    android:max="6"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="10dp"
+                    android:progress="4"
+                    android:progressDrawable="@color/transparent"
+                    android:thumb="@drawable/impact_thumb" />
+                
+           <ImageView
+       		  android:id="@+id/impact_dot"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:src="@drawable/impact_dot"
+              android:layout_below="@+id/msg_craving_bar_bg"
+              android:layout_marginTop="23dp"
+              android:layout_marginRight="20dp"
+              android:layout_marginLeft="20dp" />     
+                
+                    
+		<LinearLayout
+		    android:layout_width="match_parent"
+         	android:layout_height="wrap_content"
+         	android:orientation="horizontal"
+         	android:layout_below="@+id/msg_craving_bar_bg"
+         	android:layout_marginTop="30dp">
+         	
+         		<TextView
+                    android:id="@+id/msg_craving_num0"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center"
+                    android:text="-3\n極壞"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="@dimen/normal_text_size"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/msg_craving_num1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center"
+                    android:text="-2\n很壞"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="@dimen/normal_text_size"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/msg_craving_num2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center"
+                    android:text="-1\n壞"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="@dimen/normal_text_size"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/msg_craving_num3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center"
+                    android:text="0\n普通"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="@dimen/normal_text_size"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/msg_craving_num4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center"
+                    android:text="1\n好"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="@dimen/normal_text_size"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/msg_craving_num5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center"
+                    android:text="2\n很好"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="@dimen/normal_text_size"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/msg_craving_num6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center"
+                    android:text="3\n極好"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="@dimen/normal_text_size"
+                    android:layout_weight="1" />
+			</LinearLayout>
+
+
+
+      </RelativeLayout>
+    
+    
+</LinearLayout>

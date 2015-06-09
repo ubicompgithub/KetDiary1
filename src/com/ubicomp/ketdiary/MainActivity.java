@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -38,6 +39,7 @@ import com.ubicomp.ketdiary.system.Config;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.CustomMenu;
 import com.ubicomp.ketdiary.ui.CustomTab;
+import com.ubicomp.ketdiary.ui.NoteDialog2;
 import com.ubicomp.ketdiary.ui.ScreenSize;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
@@ -96,7 +98,7 @@ public class MainActivity extends FragmentActivity {
 
 	private int notify_action = 0;
 
-	private boolean clickable = false;   // back & home
+	private boolean clickable = false;   // back 
 	private boolean doubleClickState = false;
 	private long latestClickTime = 0;
 	
@@ -242,17 +244,27 @@ public class MainActivity extends FragmentActivity {
 			finish();
 			return;
 		}*/
+		
 		PreferenceControl.setInApp(true);
+		boolean inApp = PreferenceControl.getInApp();	
+		Log.d("InApp",String.valueOf(inApp));
 		
 		long curTime = System.currentTimeMillis();
 		long testTime = PreferenceControl.getLatestTestCompleteTime();
 		long pastTime = curTime - testTime;
+		int state = PreferenceControl.getAfterTestState();
+		Log.d("InApp",String.valueOf(state));
+		
+		if(state == NoteDialog2.STATE_NOTE){
+			enableTabAndClick(false);
+		}
 		
 		if(PreferenceControl.getCheckResult() && pastTime < WAIT_RESULT_TIME)
 			setTimers();
 		
 		else if(PreferenceControl.getCheckResult() && pastTime >= WAIT_RESULT_TIME){
-			//setTimers();
+			//showResult();
+			setTimers();
 			//changeTab(1);
 		}
 		
@@ -271,7 +283,12 @@ public class MainActivity extends FragmentActivity {
 	protected void onPause() {
 		closeOptionsMenu();
 		closeTimers();
-		PreferenceControl.setInApp(false);
+		
+		PreferenceControl.setInApp(false);		
+		boolean inApp = PreferenceControl.getInApp();
+		Log.d("InApp",String.valueOf(inApp));
+		
+		
 		super.onPause();
 	}
 	
@@ -603,10 +620,9 @@ public class MainActivity extends FragmentActivity {
 		long curTime = System.currentTimeMillis();
 		boolean debug = PreferenceControl.isDebugMode();
 		boolean testFail = PreferenceControl.isTestFail();
-		long waitTime = 1*60*1000;
 
 		long time = curTime - lastTime;
-		long countTime = waitTime - time;
+		long countTime = WAIT_RESULT_TIME - time;
 		
 		isRecovery = false;
 		closeSensorCountDownTimer();
@@ -647,7 +663,17 @@ public class MainActivity extends FragmentActivity {
 			isRecovery = false;
 			count_down_layout.setVisibility(View.GONE);
 			
-			showResult();
+			//showResult();
+			if (tabHost.getCurrentTab() == 0 && fragments[0] != null
+					&& fragments[0].isAdded()) {
+				((TestFragment) fragments[0]).msgBox.setResult();
+				//((TestFragment) fragments[0]).setState(TestFragment.STATE_INIT);
+				//((TestFragment) fragments[0]).enableStartButton(true);
+			}
+			else{
+				showResult();
+			}
+			
 		}
 
 		@Override
@@ -664,14 +690,14 @@ public class MainActivity extends FragmentActivity {
 		new AlertDialog.Builder(this)
 	    .setTitle("檢測倒數結束")
 	    .setMessage("查看檢測結果?")
-	    .setPositiveButton("確定", new DialogInterface.OnClickListener() {
+	    .setNegativeButton("確定", new DialogInterface.OnClickListener() {
 	        @Override
 	        public void onClick(DialogInterface dialog, int which) {
 	            //Toast.makeText(getApplicationContext(),"走吧！一起吃", Toast.LENGTH_SHORT).show();
 	        	changeTab(1);
 	        }
 	    })
-	    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+	    .setPositiveButton("取消", new DialogInterface.OnClickListener() {
 	        @Override
 	        public void onClick(DialogInterface dialog, int which) {
 	           //Toast.makeText(getApplicationContext(),"可是我好餓耶", Toast.LENGTH_SHORT).show();

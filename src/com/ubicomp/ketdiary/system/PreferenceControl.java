@@ -154,7 +154,7 @@ public class PreferenceControl {
 
 	public static void setInApp(boolean inApp) {
 		SharedPreferences.Editor edit = sp.edit();
-		edit.putBoolean("checkResult", inApp);
+		edit.putBoolean("inApp", inApp);
 		edit.commit();
 	}
 	

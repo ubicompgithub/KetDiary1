@@ -7,29 +7,31 @@
         
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="50dp" >
 
         <TextView
             android:id="@+id/text_other"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
             android:layout_marginRight="63dp"
             android:text="他人"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/text_gray2" />
+            android:textColor="@color/text_gray2"
+            android:gravity="center"
+            android:layout_centerVertical="true"/>
 
         <TextView
             android:id="@+id/text_self"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
             android:layout_marginLeft="64dp"
             android:text="自己"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/text_gray2" />
+            android:textColor="@color/text_gray2"
+            android:gravity="center"
+            android:layout_centerVertical="true" />
 
     </RelativeLayout>
 
