@@ -90,7 +90,7 @@ public class NoteActivity extends Activity{
 	}
 	
 	public void writeQuestionFile(int type, int items, int impact) {
-		questionFile.write(type, items, impact);
+		//questionFile.write(type, items, impact);
 	}
 	
 	
@@ -133,7 +133,7 @@ public class NoteActivity extends Activity{
 		public void onClick(View v){
 			
 			impact = impactSeekBar.getProgress();
-			questionFile.write(type, items, impact);
+			//questionFile.write(type, items, impact);
 			
 			Log.d(TAG, items+"\t"+impact);
 			//questionFile.write(0, 0, 0);

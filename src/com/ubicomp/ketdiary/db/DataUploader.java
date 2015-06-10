@@ -42,7 +42,9 @@ public class DataUploader {
 
 	/** AsyncTask handles the data uploading task */
 	public static class DataUploadTask extends AsyncTask<Void, Void, Void> {
-
+		
+		
+		private DatabaseControl db;
 		
 		/** ENUM UPLOAD ERROR */
 		public static final int ERROR = -1;
@@ -51,6 +53,7 @@ public class DataUploader {
 
 		/** Constructor */
 		public DataUploadTask() {
+			db = new DatabaseControl();
 		}
 
 		@Override
@@ -79,7 +82,7 @@ public class DataUploader {
 			if(connectToServer() == ERROR)
 				Log.d(TAG, "FAIL TO UPLOAD - Patient");
 			
-			
+			/*
 			// TestResult
 			Vector<TestResult> tr = DBControl.inst.getNotUploadedTestResult();
 			if(tr != null){
@@ -87,27 +90,34 @@ public class DataUploader {
 					if(connectToServer(tr.get(i)) == ERROR)
 						Log.d(TAG, "FAIL TO UPLOAD - TestResult");
 				}
-			}
-			
+			}*/
+			/*
 			// NoteAdd
 			Vector<NoteAdd> na = DBControl.inst.getNotUploadedNoteAdd();
-			if(tr != null){
+			if(na != null){
 				for(int i = 0;i < na.size();i++){
 					if(connectToServer(na.get(i)) == ERROR)
 						Log.d(TAG, "FAIL TO UPLOAD - NoteAdd");
 				}
-			}			
+			}*/			
 			
-			// EmotionDIY
-			/*
-			TestResult t_data[] = ;db.getNotUploadedEmotionDIY();
-			if (e_data != null) {
-				for (int i = 0; i < e_data.length; ++i) {
-					if (connectToServer(e_data[i]) == ERROR)
-						Log.d(TAG, "FAIL TO UPLOAD - EMOTION DIY");
+			// TestResult		
+			TestResult testResults[] = db.getAllNotUploadedTestResult();
+			if (testResults != null) {
+				for (int i = 0; i < testResults.length; ++i) {
+					if (connectToServer(testResults[i]) == ERROR)
+						Log.d(TAG, "FAIL TO UPLOAD - TESTRESULT");
 				}
-			}*/
+			}
 			
+			// NoteAdd
+			NoteAdd noteAdds[] = db.getNotUploadedNoteAdd();
+			if (noteAdds != null) {
+				for (int i = 0; i < noteAdds.length; ++i) {
+					if (connectToServer(noteAdds[i]) == ERROR)
+						Log.d(TAG, "FAIL TO UPLOAD - NOTEADD");
+				}
+			}
 			
 			return null;
 		}
@@ -192,6 +202,7 @@ public class DataUploader {
 				HttpPost httpPost = HttpPostGenerator.genPost(data);
 				if (upload(httpClient, httpPost)){
 					//db.setEmotionManagementUploaded(data.getTv().getTimestamp());
+					Log.d(TAG, "Upload NoteAdd Success.");
 				}
 				else
 					return ERROR;

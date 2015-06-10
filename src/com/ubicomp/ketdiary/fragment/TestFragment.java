@@ -42,7 +42,7 @@ import com.ubicomp.ketdiary.camera.CameraRecorder;
 import com.ubicomp.ketdiary.camera.CameraRunHandler;
 import com.ubicomp.ketdiary.camera.ImageFileHandler;
 import com.ubicomp.ketdiary.camera.Tester;
-import com.ubicomp.ketdiary.db.TestDataParser;
+import com.ubicomp.ketdiary.db.TestDataParser2;
 import com.ubicomp.ketdiary.file.ColorRawFileHandler;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.QuestionFile;
@@ -91,7 +91,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private final boolean[] INIT_PROGRESS = { false, false, false };
 	private final boolean[] DONE_PROGRESS = { false, false, false };
 	
-	private TestDataParser TDP;
+	private TestDataParser2 TDP;
 	public NoteDialog2 msgBox = null;
 	
 	/** Camare variables */
@@ -671,7 +671,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			}
 		
 		
-		TDP = new TestDataParser(timestamp);  //For testing Function, need removal
+		TDP = new TestDataParser2(timestamp);  //For testing Function, need removal
 		TDP.start();
 		
 		voltageFileHandler = new VoltageFileHandler(mainDirectory,
@@ -704,9 +704,9 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	}
 	
 	
-	public void writeQuestionFile(int type, int items, int impact) {
+	public void writeQuestionFile(int type, int items, int impact, String description) {
 		if( questionFile!= null )
-			questionFile.write(type, items, impact);
+			questionFile.write(type, items, impact, description);
 		
 		if( TDP!= null )
 			TDP.startAddNote();
@@ -724,7 +724,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		//test_done = false;
 		
 		if(ble!=null){
-			is_connect = false;
+			//is_connect = false;
 			ble.bleDisconnect();
 			ble = null;
 		}
@@ -802,8 +802,9 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 
 		if (ble != null){
 			
+			//while(!is_connect)
 			ble.bleDisconnect(); // 原本註解
-			is_connect = false;
+			//is_connect = false;
 			//ble = null; 
 		}
 
@@ -882,9 +883,9 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			msgBox.setResult();
 			
 		}
-		
-		
-		setState(new IdleState());
+		else{
+			setState(new IdleState());
+		}
 		
 	}
 	

@@ -1,5 +1,7 @@
 package com.ubicomp.ketdiary.data.structure;
 
+import java.util.Calendar;
+
 
 public class NoteAdd {
 	private int isAfterTest;
@@ -10,18 +12,23 @@ public class NoteAdd {
 	private int items;
 	private int impact;
 	private String description;
+	private int weeklyScore;
 	private int score;
 
-	public NoteAdd(int isAfterTest, long tv, long recordTv, 
-			int category, int type, int items, int impact, String description, int score) {
+	public NoteAdd(int isAfterTest, long tv, int rYear, int rMonth, int rDay, 
+			int category, int type, int items, int impact, String description, int weeklyScore, int score) {
 		this.isAfterTest = isAfterTest;
 		this.tv = TimeValue.generate(tv);
-		this.recordTv = TimeValue.generate(recordTv);;
+		Calendar cal = Calendar.getInstance();
+		cal.set(rYear, rMonth, rDay, 0, 0, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		this.recordTv = TimeValue.generate(cal.getTimeInMillis());
 		this.category = category;
 		this.type = type;
 		this.items = items;
 		this.impact = impact;
 		this.description=description;
+		this.weeklyScore=weeklyScore;
 		this.score=score;
 	}
 	
@@ -60,6 +67,7 @@ public class NoteAdd {
 		return isAfterTest;
 	}
 	
+	
 	public int getCategory() {
 		return category;
 	}
@@ -78,6 +86,10 @@ public class NoteAdd {
 
 	public String getDescription() {
 		return description;
+	}
+	
+	public int getWeeklyScore() {
+		return weeklyScore;
 	}
 
 	public int getScore() {

@@ -39,6 +39,7 @@ import com.ubicomp.ketdiary.system.Config;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.CustomMenu;
 import com.ubicomp.ketdiary.ui.CustomTab;
+import com.ubicomp.ketdiary.ui.CustomToast;
 import com.ubicomp.ketdiary.ui.NoteDialog2;
 import com.ubicomp.ketdiary.ui.ScreenSize;
 import com.ubicomp.ketdiary.ui.Typefaces;
@@ -255,8 +256,12 @@ public class MainActivity extends FragmentActivity {
 		int state = PreferenceControl.getAfterTestState();
 		Log.d("InApp",String.valueOf(state));
 		
-		if(state == NoteDialog2.STATE_NOTE){
+		if(state == NoteDialog2.STATE_NOTE || state == NoteDialog2.STATE_COPE){
 			enableTabAndClick(false);
+			//Log.d("InApp","Disable click");
+		}
+		else{
+			clickable = true;
 		}
 		
 		if(PreferenceControl.getCheckResult() && pastTime < WAIT_RESULT_TIME)
@@ -268,10 +273,11 @@ public class MainActivity extends FragmentActivity {
 			//changeTab(1);
 		}
 		
+		Log.d("InApp",String.valueOf(clickable));
 		
 		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		notificationManager.cancel(0); //回到APP裡要把Notification關掉
-		clickable = true;
+		//clickable = true;
 	}
 
 	@Override
@@ -669,6 +675,11 @@ public class MainActivity extends FragmentActivity {
 				((TestFragment) fragments[0]).msgBox.setResult();
 				//((TestFragment) fragments[0]).setState(TestFragment.STATE_INIT);
 				//((TestFragment) fragments[0]).enableStartButton(true);
+			}
+			else if(tabHost.getCurrentTab() == 1 && fragments[1] != null
+					&& fragments[1].isAdded()){
+				CustomToast.generateToast(R.string.after_test_pass, 2);
+				
 			}
 			else{
 				showResult();

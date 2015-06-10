@@ -151,12 +151,11 @@ public class HttpPostGenerator {
 	public static HttpPost genPost(NoteAdd data){
 		HttpPost httpPost = new HttpPost(ServerUrl.getNoteAddUrl());
 		String uid = PreferenceControl.getUID();
-		String deviceId=PreferenceControl.getDeviceId();
+		String deviceId = PreferenceControl.getDeviceId();
 		
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("uid", uid));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getIsAfterTest())));
-		
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getTv().getTimestamp())));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getRecordTv().getTimestamp())));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getCategory())));

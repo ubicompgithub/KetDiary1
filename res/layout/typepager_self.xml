@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingLeft="30dp"
+    android:paddingRight="30dp" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,7 +15,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="@dimen/center_icon_dp"
             android:src="@drawable/emoji5" />
 
         <ImageView
@@ -21,22 +22,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="@dimen/center_icon_dp"
-            android:src="@drawable/emoji2" />
+            android:src="@drawable/emoji2"
+            android:layout_marginLeft="10dp" />
 
         <ImageView
             android:id="@+id/vts_iv_smile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="@dimen/center_icon_dp"
-            android:src="@drawable/emoji4" />
+            android:src="@drawable/emoji4"
+            android:layout_marginLeft="10dp" />
 
     </LinearLayout>
         <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.21" >
+        android:layout_marginTop="10dp" >
 
         <ImageView
             android:id="@+id/vts_iv_try"
@@ -44,8 +45,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:padding="@dimen/center_icon_dp"
             android:src="@drawable/icon_testself_selector" />
 
         <ImageView
@@ -53,17 +52,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="@dimen/center_icon_dp"
-            android:src="@drawable/emoji3" />
+            android:src="@drawable/emoji3"
+            android:layout_marginLeft="10dp" />
 
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="@dimen/center_icon_dp"
             android:src="@drawable/emoji4"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            android:layout_marginLeft="10dp" />
 
     </LinearLayout>
 

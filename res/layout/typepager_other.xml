@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingLeft="30dp"
+    android:paddingRight="30dp" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,6 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginLeft="10dp"
             android:src="@drawable/others_emoji1" />
 
         <ImageView
@@ -28,13 +31,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:src="@drawable/emoji4"
+            android:layout_marginLeft="10dp"
             android:visibility="invisible" />
 
     </LinearLayout>
         <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.21" >
+        android:layout_marginTop="10dp" >
 
         <ImageView
             android:id="@+id/vts_iv_social"
@@ -49,7 +53,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:src="@drawable/emoji3"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            android:layout_marginLeft="10dp" />
 
         <ImageView
             android:id="@+id/imageView3"
@@ -57,7 +62,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:src="@drawable/emoji4"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            android:layout_marginLeft="10dp" />
 
     </LinearLayout>
 

@@ -2,35 +2,44 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:orientation="vertical" >
-
+    
+   <TextView
+       android:id="@+id/impact_title"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginLeft="20dp"
+       android:layout_marginTop="20dp"
+       android:gravity="left"
+       android:text="對你的影響："
+       android:textColor="@color/dark_gray"
+       android:textSize="16sp" />
 
     <RelativeLayout
          android:id="@+id/msg_craving_seek_bar_layout"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
-         android:layout_marginTop="-13dp" 
+         android:layout_marginTop="-30dp" 
          android:gravity="center"
          android:layout_marginLeft="20dp"
          android:layout_marginRight="20dp">
          
-
+       
     	<ImageView
        		  android:id="@+id/msg_craving_bar_bg"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-			  android:layout_centerVertical="true"	  
+              android:layout_height="wrap_content" 
               android:contentDescription="@string/msg_box_help2"
               android:src="@drawable/impact_bar"
               android:layout_centerInParent="true" />
 
                 <SeekBar
-                    android:id="@+id/msg_craving_seek_bar"
+                    android:id="@+id/impact_seek_bar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_centerInParent="true"
-                    android:layout_centerVertical="true"
                     android:max="6"
                     android:paddingBottom="10dp"
                     android:paddingLeft="16dp"

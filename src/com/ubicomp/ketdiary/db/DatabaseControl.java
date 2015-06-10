@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.check.StartDateCheck;
 import com.ubicomp.ketdiary.check.WeekNumCheck;
+import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.data.structure.TimeValue;
 
@@ -143,6 +144,7 @@ public class DatabaseControl {
 
 				ContentValues content = new ContentValues();
 				content.put("result", data.getResult());
+				content.put("cassetteId", data.getCassette_id());
 				content.put("year", data.getTv().getYear());
 				content.put("month", data.getTv().getMonth());
 				content.put("day", data.getTv().getDay());
@@ -164,6 +166,7 @@ public class DatabaseControl {
 				db.execSQL(sql);
 				ContentValues content = new ContentValues();
 				content.put("result", data.getResult());
+				content.put("cassetteId", data.getCassette_id());
 				content.put("year", data.getTv().getYear());
 				content.put("month", data.getTv().getMonth());
 				content.put("day", data.getTv().getDay());
@@ -431,22 +434,22 @@ public class DatabaseControl {
 	
 	
 	
-	// EmotionManagement
+	// **** NoteAdd ****
 
 	/**
-	 * Get the latest Emotion Management result
+	 * Get the latest NoteAdd
 	 * 
-	 * @return EmotionManagement. If there are no EmotionManagement, return a
+	 * @return NoteAdd. If there are no EmotionManagement, return a
 	 *         dummy data.
 	 * @see ubicomp.soberdiary.data.structure.EmotionManagement
 	 */
-	/*
-	public EmotionManagement getLatestEmotionManagement() {
+	
+	public NoteAdd getLatestNoteAdd() {
 		synchronized (sqlLock) {
 			db = dbHelper.getReadableDatabase();
 			String sql;
 			Cursor cursor;
-			sql = "SELECT * FROM EmotionManagement ORDER BY ts DESC LIMIT 1";
+			sql = "SELECT * FROM NoteAdd ORDER BY ts DESC LIMIT 1";
 			cursor = db.rawQuery(sql, null);
 			if (!cursor.moveToFirst()) {
 				cursor.close();
@@ -456,31 +459,35 @@ public class DatabaseControl {
 				int year = cal.get(Calendar.YEAR);
 				int month = cal.get(Calendar.MONTH);
 				int day = cal.get(Calendar.DAY_OF_MONTH);
-				return new EmotionManagement(0, year, month, day, 0, 0, null, 0);
+				
+				return new NoteAdd(0, 0, year, month, day, 0, 0, 0, 0, null, 0, 0);
 			}
-			long ts = cursor.getLong(4);
+			int isAfterTest = cursor.getInt(1);
+			long ts = cursor.getLong(5);
 			int year = cursor.getInt(7);
 			int month = cursor.getInt(8);
 			int day = cursor.getInt(9);
-			int emotion = cursor.getInt(10);
-			int type = cursor.getInt(11);
-			String reason = cursor.getString(12);
-			int score = cursor.getInt(13);
-			return new EmotionManagement(ts, year, month, day, emotion, type,
-					reason, score);
+			int category = cursor.getInt(11);
+			int type = cursor.getInt(12);
+			int items = cursor.getInt(13);
+			int impact = cursor.getInt(14);
+			String reason = cursor.getString(15);
+			int weeklyScore = cursor.getInt(16);
+			int score = cursor.getInt(17);
+			return new NoteAdd(isAfterTest, ts, year, month, day, category, type, items, impact, reason, weeklyScore, score);
 		}
-	}*/
+	}
 
 	/**
-	 * Insert an Emotion Management result
+	 * Insert an NoteAdd result
 	 * 
 	 * @return # of credits got by the user
 	 * @see ubicomp.soberdiary.data.structure.EmotionManagement
 	 */
-	/*
-	public int insertEmotionManagement(EmotionManagement data) {
+	
+	public int insertNoteAdd(NoteAdd data) {
 		synchronized (sqlLock) {
-			EmotionManagement prev_data = getLatestEmotionManagement();
+			NoteAdd prev_data = getLatestNoteAdd();
 			int addScore = 0;
 			if (!prev_data.getTv().isSameTimeBlock(data.getTv()))
 				addScore = 1;
@@ -489,42 +496,46 @@ public class DatabaseControl {
 
 			db = dbHelper.getWritableDatabase();
 			ContentValues content = new ContentValues();
+			content.put("isAfterTest", data.getIsAfterTest());
 			content.put("year", data.getTv().getYear());
 			content.put("month", data.getTv().getMonth());
 			content.put("day", data.getTv().getDay());
 			content.put("ts", data.getTv().getTimestamp());
 			content.put("week", data.getTv().getWeek());
-			content.put("timeslot", data.getTv().getTimeslot());
+			content.put("timeslot", data.getRecordTv().getTimeslot());
 			content.put("recordYear", data.getRecordTv().getYear());
 			content.put("recordMonth", data.getRecordTv().getMonth());
 			content.put("recordDay", data.getRecordTv().getDay());
-			content.put("emotion", data.getEmotion());
+			content.put("category", data.getCategory());
 			content.put("type", data.getType());
-			content.put("reason", data.getReason());
+			content.put("items", data.getItems());
+			content.put("impact", data.getImpact());
+			content.put("description", data.getDescription());
+			content.put("weeklyScore", prev_data.getWeeklyScore() + addScore);
 			content.put("score", prev_data.getScore() + addScore);
-			db.insert("EmotionManagement", null, content);
+			db.insert("NoteAdd", null, content);
 			db.close();
 			return addScore;
 		}
-	}*/
+	}
 
 	/**
-	 * Get all EmotionManagement results which are not uploaded to the server
+	 * Get all NoteAdd results which are not uploaded to the server
 	 * 
-	 * @return An array of EmotionManagement results If there are no
-	 *         EmotionManagement, return null.
+	 * @return An array of NoteAdd results If there are no
+	 *         NoteAdd, return null.
 	 * @see ubicomp.soberdiary.data.structure.EmotionManagement
 	 */
-	/*
-	public EmotionManagement[] getNotUploadedEmotionManagement() {
+	
+	public NoteAdd[] getNotUploadedNoteAdd() {
 		synchronized (sqlLock) {
-			EmotionManagement[] data = null;
+			NoteAdd[] data = null;
 
 			db = dbHelper.getReadableDatabase();
 			String sql;
 			Cursor cursor;
 
-			sql = "SELECT * FROM EmotionManagement WHERE upload = 0";
+			sql = "SELECT * FROM NoteAdd WHERE upload = 0";
 			cursor = db.rawQuery(sql, null);
 			int count = cursor.getCount();
 			if (count == 0) {
@@ -533,20 +544,23 @@ public class DatabaseControl {
 				return null;
 			}
 
-			data = new EmotionManagement[count];
+			data = new NoteAdd[count];
 
 			for (int i = 0; i < count; ++i) {
 				cursor.moveToPosition(i);
-				long ts = cursor.getLong(4);
+				int isAfterTest = cursor.getInt(1);
+				long ts = cursor.getLong(5);
 				int year = cursor.getInt(7);
 				int month = cursor.getInt(8);
 				int day = cursor.getInt(9);
-				int emotion = cursor.getInt(10);
-				int type = cursor.getInt(11);
-				String reason = cursor.getString(12);
-				int score = cursor.getInt(13);
-				data[i] = new EmotionManagement(ts, year, month, day, emotion,
-						type, reason, score);
+				int category = cursor.getInt(11);
+				int type = cursor.getInt(12);
+				int items = cursor.getInt(13);
+				int impact = cursor.getInt(14);
+				String reason = cursor.getString(15);
+				int weeklyScore = cursor.getInt(16);
+				int score = cursor.getInt(17);
+				data[i] = new NoteAdd(isAfterTest, ts, year, month, day, category, type, items, impact, reason, weeklyScore, score);
 			}
 
 			cursor.close();
@@ -554,7 +568,7 @@ public class DatabaseControl {
 
 			return data;
 		}
-	}*/
+	}
 
 	/**
 	 * Get EmotionManagement results by date

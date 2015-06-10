@@ -2,6 +2,7 @@ package com.ubicomp.ketdiary.db;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Calendar;
 import java.util.Scanner;
 
 import android.content.Context;
@@ -18,15 +19,15 @@ import com.ubicomp.ketdiary.system.PreferenceControl;
  * 
  * @author Stanley Wang
  */
-public class TestDataParser {
+public class TestDataParser2 {
 
 	private static final String TAG = "TEST_DATA_PARSER";
 
 	protected long ts;
 	protected Context context;
 	protected double sensorResult = 0;
-	//protected DatabaseControl db;
-	protected DBControl db;
+	protected DatabaseControl db;
+	//protected DBControl db;
 	
 	public static final int NOTHING = 0;
 	public static final int ERROR = -1;
@@ -38,11 +39,11 @@ public class TestDataParser {
 	 * @param timestamp
 	 *            timestamp of the detection
 	 */
-	public TestDataParser(long timestamp) {
+	public TestDataParser2(long timestamp) {
 		this.ts = timestamp;
 		this.context = App.getContext();
-		//db = new DatabaseControl();
-		db = new DBControl();
+		db = new DatabaseControl();
+		//db = new DBControl();
 	}
 
 	/** start to handle the detection data */
@@ -86,36 +87,8 @@ public class TestDataParser {
 		PreferenceControl.setUpdateDetectionTimestamp(0);
 		
 		//db.addTestResult(testResult);
-		DBControl.inst.addTestResult(testResult);
-		//int addScore = db.insertDetection(detection, update);
-		//if (addScore == 0 && !detection.isPass()) // TestFail & get no credit
-			//CustomToast.generateToast(R.string.after_test_fail, -1);
-		//else if (!detection.isPass())
-			//CustomToast.generateToast(R.string.after_test_fail, addScore);
-		//else
-			//CustomToast.generateToast(R.string.after_test_pass, addScore);
-
-		//int prevShowWeek = PreferenceControl.getPrevShowWeek();
-		//int prevShowWeekState = PreferenceControl.getPrevShowWeekState();
-		//Detection curDetection = db.getLatestDetection();
-		//int curState = StorytellingGraphics.getPageIdx(
-			//	curDetection.getWeeklyScore(), curDetection.getTv().getWeek());
-		/*
-		if (prevShowWeek < curDetection.getTv().getWeek())
-			prevShowWeekState = 0;
-		boolean pageChange = (prevShowWeekState < curState);
-		PreferenceControl.setPageChange(pageChange);
-
-		if (sensorResult < Detection.BRAC_THRESHOLD)
-			if (emotion <= 2 || craving >= 4)
-				PreferenceControl.setTestResult(1);
-			else
-				PreferenceControl.setTestResult(0);
-		else if (sensorResult < Detection.BRAC_THRESHOLD_HIGH)
-			PreferenceControl.setTestResult(2);
-		else
-			PreferenceControl.setTestResult(3);
-		 */
+		//DBControl.inst.addTestResult(testResult);
+		db.insertTestResult(testResult,false);
 	}
 	
 	/** start to handle the noteAdd data */
@@ -148,13 +121,21 @@ public class TestDataParser {
 		long timestamp = ts;
 		int is_prime = 1;
 		int is_filled = 1;
-
-		//NoteAdd noteAdd = new NoteAdd(1, ts, ts, category, type, item, impact, "test", 0);
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(0);
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH);
+		int day = cal.get(Calendar.DAY_OF_MONTH);
+		
+		NoteAdd noteAdd = new NoteAdd(1, ts, year, month, day, category, type, item, impact, "test", 0, 0);
 		boolean update = false;
 		if (timestamp == PreferenceControl.getUpdateDetectionTimestamp())
 			update = true;
 		PreferenceControl.setUpdateDetection(false);
 		PreferenceControl.setUpdateDetectionTimestamp(0);
+		
+		db.insertNoteAdd(noteAdd);
 		
 		//db.addTestResult(testResult);
 		//DBControl.inst.addNoteAdd(noteAdd);

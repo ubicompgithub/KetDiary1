@@ -33,8 +33,8 @@ public class QuestionFile {
 	 * @param craving
 	 *            craving index of the user
 	 */
-	public void write(int type, int items, int impact) {
-		String a = type + "\t" + items + "\t" + impact;
+	public void write(int type, int items, int impact, String description) {
+		String a = type + "\t" + items + "\t" + impact + "\t" + description;
 		file = new File(directory, "question.txt");
 		try {
 			writer = new BufferedWriter(new FileWriter(file));

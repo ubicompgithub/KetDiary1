@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -31,7 +32,6 @@ import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.db.DBTip;
-import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.QuestionFile;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 
@@ -64,6 +64,7 @@ public class NoteDialog2{
 	private Button bt_confirm, bt_cancel;
 	private SeekBar impactSeekBar;
 	private TextView text_self, text_other, text_item, text_impact, text_description, tv_knowdlege, tv_title;
+	private EditText edtext;
 	
 	private String[] coping_msg;
 	private int state;
@@ -84,6 +85,7 @@ public class NoteDialog2{
 	private int type;
 	private int items;
 	private int impact;
+	private String description;
 	
 	public static final int STATE_TEST = 0;
 	public static final int STATE_NOTE = 1;
@@ -122,43 +124,68 @@ public class NoteDialog2{
 		main_layout = (LinearLayout) boxLayout.findViewById(R.id.note_main_layout);
 		bottom_layout = (LinearLayout) boxLayout.findViewById(R.id.note_bottom_layout);
 		
-		View bottom = BarButtonGenerator.createTwoButtonView(R.string.cancel, R.string.ok, endOnClickListener, endOnClickListener);
-		bottom_layout.addView(bottom);
 		
+		//
+		
+		//Title View
 		View title = BarButtonGenerator.createAddNoteView(selectListener);
 		title_layout.addView(title);
 		
 		
 		
 		center_layout = (LinearLayout) inflater.inflate(
-				R.layout.note_main, null);
-			
-	    sp_item = (Spinner)center_layout.findViewById(R.id.note_sp_items);
-	    impactSeekBar=(SeekBar)center_layout.findViewById(R.id.seekBar1);
-	    
-	    SetItem(sp_item, R.array.item_select);
-	    
-	    text_self = (TextView)center_layout.findViewById(R.id.text_self);
+				R.layout.note_main2, null);
+		text_self = (TextView)center_layout.findViewById(R.id.text_self);
 	    text_other = (TextView)center_layout.findViewById(R.id.text_other);
-	    text_item = (TextView)center_layout.findViewById(R.id.text_item);
-	    text_impact = (TextView)center_layout.findViewById(R.id.text_impact);
-	    text_description = (TextView)center_layout.findViewById(R.id.text_description);
 	    
-	    text_self.setTypeface(Typefaces.getWordTypeface());
+		text_self.setTypeface(Typefaces.getWordTypeface());
 	    text_other.setTypeface(Typefaces.getWordTypeface());
-	    text_item.setTypeface(Typefaces.getWordTypeface());
-	    text_impact.setTypeface(Typefaces.getWordTypeface());
-	    text_description.setTypeface(Typefaces.getWordTypeface());
 	    
-	    text_self.setTextColor(context.getResources().getColor(R.color.blue));
-	    
+		text_self.setTextColor(context.getResources().getColor(R.color.blue));    
 	    text_self.setOnClickListener(new MyClickListener(0));
 	    text_other.setOnClickListener(new MyClickListener(1));
 	    
 		initTypePager();
-		//setStorage();
+			
+		
+		
+		//Spinner
+		LinearLayout spinner_layout = (LinearLayout) inflater.inflate(
+				R.layout.bar_spinner, null);
+			
+		sp_item = (Spinner)spinner_layout.findViewById(R.id.spinner_content);
+		SetItem(sp_item, R.array.item_select);
+		TextView spin_title = (TextView)spinner_layout.findViewById(R.id.spinner_title);
+		spin_title.setText("詳細事件：");
+		spin_title.setTypeface(Typefaces.getWordTypefaceBold());
+		
+		
+		//Impact
+		LinearLayout impact_layout = (LinearLayout) inflater.inflate(
+				R.layout.bar_impact, null);
+		impactSeekBar=(SeekBar)impact_layout.findViewById(R.id.impact_seek_bar);
+		TextView impact_title = (TextView)impact_layout.findViewById(R.id.impact_title);
+		impact_title.setTypeface(Typefaces.getWordTypefaceBold());
+		
+		//Description
+		LinearLayout discription_layout = (LinearLayout) inflater.inflate(
+				R.layout.bar_description, null);
+		
+		TextView dec_title = (TextView)discription_layout.findViewById(R.id.description_title);
+		dec_title.setText("內容簡述：");
+		dec_title.setTypeface(Typefaces.getWordTypefaceBold());
+		edtext = (EditText)discription_layout.findViewById(R.id.description_content);
+		
+		//Bottom View
+		View bottom = BarButtonGenerator.createTwoButtonView(R.string.cancel, R.string.ok, endOnClickListener, endOnClickListener);
 		
 		main_layout.addView(center_layout);
+		main_layout.addView(spinner_layout);
+		main_layout.addView(impact_layout);
+		main_layout.addView(discription_layout);
+		
+		bottom_layout.addView(bottom);
+		//main_layout.addView(bottom);
 	}
 	
 	public void copingSetting(){
@@ -311,7 +338,7 @@ public class NoteDialog2{
 		if (boxLayout != null)
 			boxLayout.setVisibility(View.INVISIBLE);
 	}
-	
+	/*
 	private void setStorage() {
 		File dir = MainStorage.getMainStorageDirectory();
 
@@ -325,12 +352,14 @@ public class NoteDialog2{
 	
 	public void writeQuestionFile(int type, int items, int impact) {
 		questionFile.write(type, items, impact);
-	}
+	}*/
 	
 	
 	/** 設定Spinner的Item */
 	private void SetItem(Spinner sp, int array){
-		ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, android.R.layout.simple_spinner_item);
+		//ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, android.R.layout.simple_spinner_item);
+		
+		ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, R.layout.my_spinner);
 		//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, strs );
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sp.setAdapter(adapter);
@@ -369,7 +398,7 @@ public class NoteDialog2{
 			
 			if(state == STATE_NOTE){
 				impact = impactSeekBar.getProgress();
-				testQuestionCaller.writeQuestionFile(type, items, impact);
+				testQuestionCaller.writeQuestionFile(type, items, impact, edtext.getText().toString());
 			
 				Log.d(TAG, items+"\t"+impact);
 			//questionLayout.setVisibility(View.GONE);
@@ -404,7 +433,7 @@ public class NoteDialog2{
 			
 			if(state == STATE_NOTE){
 				impact = impactSeekBar.getProgress();
-				testQuestionCaller.writeQuestionFile(type, items, impact);
+				testQuestionCaller.writeQuestionFile(type, items, impact, edtext.getText().toString());
 			
 				Log.d(TAG, items+"\t"+impact);
 
@@ -454,6 +483,18 @@ public class NoteDialog2{
 			return view == object;
 		}
 		
+		private void resetView(){
+			iv_smile.setImageResource(R.drawable.emoji4);
+			iv_not_good.setImageResource(R.drawable.emoji2);
+			iv_urge.setImageResource(R.drawable.emoji3);
+			iv_cry.setImageResource(R.drawable.emoji5);
+			iv_try.setImageResource(R.drawable.emoji1);
+			
+			iv_social.setImageResource(R.drawable.others_emoji1);
+			iv_playing.setImageResource(R.drawable.others_emoji2);
+			iv_conflict.setImageResource(R.drawable.others_emoji3);
+		}
+		
 		/** 初始化Type*/
 		@Override
 		public Object instantiateItem(ViewGroup container, int position) {
@@ -495,41 +536,65 @@ public class NoteDialog2{
 		        switch(v.getId()){
 		        
 		        case R.id.vts_iv_cry:
+		        	resetView();
+		        	iv_cry.setImageResource(R.drawable.emoji5_pressed);
+		        	
 	        		SetItem(sp_item,R.array.note_negative);
 	        		sp_item.performClick();
 	        		type = 1;
 	        		break;
 		        case R.id.vts_iv_not_good:
+		        	resetView();
+		        	iv_not_good.setImageResource(R.drawable.emoji2_pressed);
+		        	
 		        	SetItem(sp_item,R.array.note_notgood);
 		        	sp_item.performClick();
 		        	type = 2;
 			        break;
 		        case R.id.vts_iv_smile:
+		        	resetView();
+		        	iv_smile.setImageResource(R.drawable.emoji4_pressed);
+		        	
 		        	SetItem(sp_item, R.array.note_positive);
 		        	sp_item.performClick();
 		        	type = 3;
 		        	break;
 		        case R.id.vts_iv_try:
+		        	resetView();
+		        	iv_try.setImageResource(R.drawable.emoji1_pressed);
+		        	
 		        	SetItem(sp_item,R.array.note_selftest);
 		        	sp_item.performClick();
 		        	type = 4; 
 		        	break;
 		        case R.id.vts_iv_urge:
+		        	resetView();
+		        	iv_urge.setImageResource(R.drawable.emoji3_pressed);
+		        	
 		        	SetItem(sp_item,R.array.note_temptation);
 		        	sp_item.performClick();
 		        	type = 5;
 		        	break;
 		        case R.id.vts_iv_playing:
+		        	resetView();
+		        	iv_playing.setImageResource(R.drawable.others_emoji2_pressed);
+		        	
 		        	SetItem(sp_item,R.array.note_play);
 		        	sp_item.performClick();
 		        	type = 6;
 		        	break;
 		        case R.id.vts_iv_social:
+		        	resetView();
+		        	iv_social.setImageResource(R.drawable.others_emoji1_oressed);
+		        	
 		        	SetItem(sp_item,R.array.note_social);
 		        	sp_item.performClick();
 		        	type = 7;
 		        	break;
 		        case R.id.vts_iv_conflict:
+		        	resetView();
+		        	iv_conflict.setImageResource(R.drawable.others_emoji3_pressed);
+		        	
 		        	SetItem(sp_item,R.array.note_conflict);
 		        	sp_item.performClick();
 		        	type = 8;

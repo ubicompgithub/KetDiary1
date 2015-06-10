@@ -166,9 +166,6 @@ public class NoteDialog{
 		questionFile = new QuestionFile(mainDirectory);
 	}
 	
-	public void writeQuestionFile(int type, int items, int impact) {
-		questionFile.write(type, items, impact);
-	}
 	
 	
 	/** 設定Spinner的Item */
@@ -210,7 +207,7 @@ public class NoteDialog{
 		public void onClick(View v){
 			
 			impact = impactSeekBar.getProgress();
-			questionFile.write(type, items, impact);
+			//questionFile.write(type, items, impact);
 			
 			Log.d(TAG, items+"\t"+impact);
 			//questionLayout.setVisibility(View.GONE);
