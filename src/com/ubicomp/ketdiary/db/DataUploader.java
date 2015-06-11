@@ -162,20 +162,6 @@ public class DataUploader {
 			return SUCCESS;
 		}
 		
-		private int connectToServer(Datatype.Patient p){
-			try {
-				Log.d("a", "1");
-				DefaultHttpClient httpClient = HttpSecureClientGenerator.getSecureHttpClient();
-				Log.d("a", "2");
-				HttpPost httpPost = HttpPostGenerator.genPost();
-				if (!upload(httpClient, httpPost))
-					return ERROR;
-			} catch (Exception e) {
-				Log.d(TAG, "EXCEPTION:" + e.toString());
-				return ERROR;
-			}
-			return SUCCESS;
-		}
 		
 		private int connectToServer(TestResult data) {
 			try {
@@ -183,7 +169,7 @@ public class DataUploader {
 						.getSecureHttpClient();
 				HttpPost httpPost = HttpPostGenerator.genPost(data);
 				if (upload(httpClient, httpPost)){
-					//db.setEmotionManagementUploaded(data.getTv().getTimestamp());
+					db.setTestResultUploaded(data.getTv().getTimestamp());
 					Log.d(TAG, "Upload TestResult Success.");
 				}
 				else
@@ -201,7 +187,7 @@ public class DataUploader {
 						.getSecureHttpClient();
 				HttpPost httpPost = HttpPostGenerator.genPost(data);
 				if (upload(httpClient, httpPost)){
-					//db.setEmotionManagementUploaded(data.getTv().getTimestamp());
+					db.setNoteAddUploaded(data.getTv().getTimestamp());
 					Log.d(TAG, "Upload NoteAdd Success.");
 				}
 				else

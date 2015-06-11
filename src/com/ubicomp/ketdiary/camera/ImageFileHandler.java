@@ -66,6 +66,9 @@ public class ImageFileHandler extends Handler {
 			}
 			writer = null;
 		}
+		
+		//if(count)
+		//recorder.closeSuccess();
 		//if (count == 3) {
 		//	recorder.closeSuccess();
 		//}

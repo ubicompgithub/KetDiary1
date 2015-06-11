@@ -135,8 +135,10 @@ public class HttpPostGenerator {
 		if (detectionFile.exists())
 			builder.addPart("file[]", new FileBody(detectionFile));
 		for (int i = 0; i < imageFiles.length; ++i)
-			if (imageFiles[i].exists())
+			if (imageFiles[i].exists()){
 				builder.addPart("file[]", new FileBody(imageFiles[i]));
+				Log.d("image", imageFiles[i].getName());
+			}
 
 		httpPost.setEntity(builder.build());
 		return httpPost;

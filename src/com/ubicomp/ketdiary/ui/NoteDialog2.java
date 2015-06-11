@@ -64,7 +64,7 @@ public class NoteDialog2{
 	private Button bt_confirm, bt_cancel;
 	private SeekBar impactSeekBar;
 	private TextView text_self, text_other, text_item, text_impact, text_description, tv_knowdlege, tv_title;
-	private EditText edtext;
+	private EditText edtext, typetext;
 	
 	private String[] coping_msg;
 	private int state;
@@ -147,7 +147,15 @@ public class NoteDialog2{
 	    
 		initTypePager();
 			
+		//Description
+		LinearLayout type_layout = (LinearLayout) inflater.inflate(
+				R.layout.bar_description, null);
 		
+		TextView type_title = (TextView)type_layout.findViewById(R.id.description_title);
+		type_title.setText("生活項目：");
+		type_title.setTypeface(Typefaces.getWordTypefaceBold());
+		typetext = (EditText)type_layout.findViewById(R.id.description_content);
+		typetext.setEnabled(false);
 		
 		//Spinner
 		LinearLayout spinner_layout = (LinearLayout) inflater.inflate(
@@ -180,6 +188,7 @@ public class NoteDialog2{
 		View bottom = BarButtonGenerator.createTwoButtonView(R.string.cancel, R.string.ok, endOnClickListener, endOnClickListener);
 		
 		main_layout.addView(center_layout);
+		main_layout.addView(type_layout);
 		main_layout.addView(spinner_layout);
 		main_layout.addView(impact_layout);
 		main_layout.addView(discription_layout);
@@ -538,6 +547,7 @@ public class NoteDialog2{
 		        case R.id.vts_iv_cry:
 		        	resetView();
 		        	iv_cry.setImageResource(R.drawable.emoji5_pressed);
+		        	typetext.setHint(R.string.note_negative);
 		        	
 	        		SetItem(sp_item,R.array.note_negative);
 	        		sp_item.performClick();
@@ -546,6 +556,7 @@ public class NoteDialog2{
 		        case R.id.vts_iv_not_good:
 		        	resetView();
 		        	iv_not_good.setImageResource(R.drawable.emoji2_pressed);
+		        	typetext.setHint(R.string.note_notgood);
 		        	
 		        	SetItem(sp_item,R.array.note_notgood);
 		        	sp_item.performClick();
@@ -554,6 +565,7 @@ public class NoteDialog2{
 		        case R.id.vts_iv_smile:
 		        	resetView();
 		        	iv_smile.setImageResource(R.drawable.emoji4_pressed);
+		        	typetext.setHint(R.string.note_positive);
 		        	
 		        	SetItem(sp_item, R.array.note_positive);
 		        	sp_item.performClick();
@@ -562,6 +574,7 @@ public class NoteDialog2{
 		        case R.id.vts_iv_try:
 		        	resetView();
 		        	iv_try.setImageResource(R.drawable.emoji1_pressed);
+		        	typetext.setHint(R.string.note_selftest);
 		        	
 		        	SetItem(sp_item,R.array.note_selftest);
 		        	sp_item.performClick();
@@ -570,6 +583,7 @@ public class NoteDialog2{
 		        case R.id.vts_iv_urge:
 		        	resetView();
 		        	iv_urge.setImageResource(R.drawable.emoji3_pressed);
+		        	typetext.setHint(R.string.note_temptation);
 		        	
 		        	SetItem(sp_item,R.array.note_temptation);
 		        	sp_item.performClick();

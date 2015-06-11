@@ -569,7 +569,24 @@ public class DatabaseControl {
 			return data;
 		}
 	}
-
+	
+	/**
+	 * Label the NoteAdd result uploaded
+	 * 
+	 * @param ts
+	 *            Timestamp of the uploaded EmotionManagement
+	 * @see ubicomp.soberdiary.data.structure.EmotionManagement
+	 */
+	
+	public void setNoteAddUploaded(long ts) {
+		synchronized (sqlLock) {
+			db = dbHelper.getWritableDatabase();
+			String sql = "UPDATE NoteAdd SET upload = 1 WHERE ts = "
+					+ ts;
+			db.execSQL(sql);
+			db.close();
+		}
+	}
 	/**
 	 * Get EmotionManagement results by date
 	 * 
@@ -627,23 +644,7 @@ public class DatabaseControl {
 		}
 	}*/
 
-	/**
-	 * Label the EmotionManagement result uploaded
-	 * 
-	 * @param ts
-	 *            Timestamp of the uploaded EmotionManagement
-	 * @see ubicomp.soberdiary.data.structure.EmotionManagement
-	 */
-	/*
-	public void setEmotionManagementUploaded(long ts) {
-		synchronized (sqlLock) {
-			db = dbHelper.getWritableDatabase();
-			String sql = "UPDATE EmotionManagement SET upload = 1 WHERE ts = "
-					+ ts;
-			db.execSQL(sql);
-			db.close();
-		}
-	}*/
+	
 
 	/**
 	 * Get the latest 4 reasons of EmotionManagement by reason type

@@ -166,12 +166,14 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	
 	private static final int COUNT_DOWN_SECOND = 5;
 	private static final int WAIT_SALIVA_SECOND = 7;
-	/*
+	
 	private static final int FIRST_VOLTAGE_THRESHOLD = 25; //之後會是50 跟 40
 	private static final int SECOND_VOLTAGE_THRESHOLD= 15;
-	*/
+	/*
 	private static final int FIRST_VOLTAGE_THRESHOLD = 50; 
 	private static final int SECOND_VOLTAGE_THRESHOLD= 40;
+	*/
+	
 	private static final int TIMEOUT_SECOND = 30;
 	private static final int CAMERATIMEOUT = 10;
 	private static final int CONFIRM_SECOND = 5;
@@ -339,6 +341,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			ble_pluginserted =false;
 			MainActivity.getMainActivity().enableTabAndClick(false);
 			reset();
+			
+			
 			
 			if(debug){
 				setState(new DoneState());
@@ -613,18 +617,23 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private class DoneState extends TestState{
 		@Override
 		public void onStart(){
-			
 			state = DONE_STATE;
 			
-			label_title.setText("測試完成!");
-			label_subtitle.setText("");
-			img_water3.setImageResource(R.drawable.saliva3_yes);
-			
-			test_done = true;
 			if(ble != null)
 				ble.bleDisconnect();
 			//DBControl.inst.startTesting();
 			stop();
+			
+	
+			label_title.setText("測試完成!");
+			label_subtitle.setText("");
+			water_layout.setVisibility(View.VISIBLE);
+			img_water3.setImageResource(R.drawable.saliva3_yes);
+			
+			
+			test_done = true;
+			
+			updateDoneState(0);
 			
 			PreferenceControl.setLatestTestCompleteTime( (long)System.currentTimeMillis() );
 			PreferenceControl.setCheckResult( true );
@@ -632,11 +641,20 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			MainActivity.getMainActivity().enableTabAndClick(false);
 			MainActivity.getMainActivity().setTimers();
 			
+			/*
+			try {
+				 Thread.sleep(2000);
+			} catch (InterruptedException e) {
+			     Log.d(TAG,"error");  
+			}*/
 			
 			img_btn.setOnClickListener(null);
 			img_btn.setEnabled(false);
 			msgBox.initialize();
-			msgBox.show();
+			
+			Handler handler=new Handler();
+			handler.postDelayed(runnable, 1000);
+			//msgBox.show();
 			
 			//
 			Intent startIntent =  new  Intent( getActivity() , ResultService. class );  
@@ -648,12 +666,19 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		}
 	}
 	
+	Runnable runnable=new Runnable(){
+		   @Override
+		   public void run() {
+			   msgBox.show();
+		   } 
+	};
+	
 	@SuppressLint("HandlerLeak")
 	private class ChangeTabsHandler extends Handler {
 		public void handleMessage(Message msg) {
-			MainActivity.getMainActivity().enableTabAndClick(true);
+			//MainActivity.getMainActivity().enableTabAndClick(true);
 			//MainActivity.getMainActivity().changeTab(1, MainActivity.ACTION_QUESTIONNAIRE);
-			MainActivity.getMainActivity().setNotePage();
+			//MainActivity.getMainActivity().setNotePage();
 			
 		}
 	}
@@ -672,7 +697,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		
 		
 		TDP = new TestDataParser2(timestamp);  //For testing Function, need removal
-		TDP.start();
+		//TDP.start();
 		
 		voltageFileHandler = new VoltageFileHandler(mainDirectory,
 				String.valueOf(timestamp));
@@ -803,6 +828,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		if (ble != null){
 			
 			//while(!is_connect)
+			//while(is_connect)
 			ble.bleDisconnect(); // 原本註解
 			//is_connect = false;
 			//ble = null; 
@@ -1027,7 +1053,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 
 		@Override
 		public void onFinish() {
-			
+			img_ac.setVisibility(View.INVISIBLE);
 			setState(new DoneState());
 			
 		}
@@ -1094,6 +1120,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			//runBT();
 			in_stage2=true;
 			if( voltage < SECOND_VOLTAGE_THRESHOLD ){
+				img_water3.setImageResource(R.drawable.saliva3_yes);
 				setState(new DoneState());
 			}
 			else{

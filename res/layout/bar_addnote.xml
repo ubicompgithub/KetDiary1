@@ -22,12 +22,12 @@
         android:layout_weight="1"
         android:spinnerMode="dropdown" />
 
-     <Spinner
-         android:id="@+id/note_sp_timeslot"
-         style="android:spinnerStyle"
-         android:layout_width="match_parent"
-         android:layout_height="match_parent"
-         android:layout_weight="1"
-         android:spinnerMode="dropdown" />
+    <Spinner
+        android:id="@+id/note_sp_timeslot"
+        style="android:spinnerStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:spinnerMode="dropdown" />
 
 </LinearLayout>

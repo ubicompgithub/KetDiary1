@@ -272,6 +272,9 @@ public class MainActivity extends FragmentActivity {
 			setTimers();
 			//changeTab(1);
 		}
+		else{
+			enableTabAndClick(true);
+		}
 		
 		Log.d("InApp",String.valueOf(clickable));
 		
