@@ -29,7 +29,10 @@ public class TestResult {
 		return d != null && tv != null && tv.isSameTimeBlock(d.tv);
 	}
 
-
+	public boolean isSameDay(TestResult d) {
+		return d != null && tv != null && tv.isSameDay(d.tv);
+	}
+	
 	public static float weeklyScoreToProgress(int score) {
 		float progress = (float) score * 100F / MAX_WEEKLY_SCORE;
 		if (progress > 100.f)

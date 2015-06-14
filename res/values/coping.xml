@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="coping_page">應對方法</string>
+    <string name="coping_page">應對技巧</string>
     <string name="coping_relaxed">放鬆技巧</string>
     <string name="coping_breath">閉眼專注觀察呼吸</string>
     <string name="coping_musle">閉眼讓肌肉放鬆</string>
@@ -25,5 +25,18 @@
         <item>社交壓力的應對方法：\n當朋友邀約吸毒時，您可以委婉拒絕</item>
         <item>負面情緒的應對方法：\n可以使用放鬆技巧來緩和情緒</item>
     </string-array>
+    
+    <string-array name="knowing_list">
+        <item>愷他命屬中樞神經抑制劑，副作用包括心搏過速、血壓上升</item>
+        <item>愷他命副作用包括震顫、肌肉緊張而呈強直性、陣攣性運動</item>
+        <item>研究顯示濫用愷他命，會罹患慢性間質性膀胱炎</item>
+        <item>濫用愷他命會使膀胱容量變小，產生頻尿、小便疼痛、血尿、下腹部疼痛等症狀</item>
+        <item>濫用愷他命會出現尿量減少、水腫等腎功能不全的症狀，甚至須進行膀胱重建手術</item>
+        <item>愷他命藥效約可維持1小時，但影響吸食者感覺、協調及判斷力則可長達16至24小時</item>
+    </string-array>
+    
+    <string name="note_check">請填寫完成再送出</string>
+    <string name="countdown">檢測倒數中</string>
+    <string name="test_done">檢測完成</string>
     
 </resources>

@@ -1,0 +1,76 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="@drawable/wholebg" >
+        
+    <RelativeLayout
+         android:id="@+id/upper_bar"
+         android:layout_alignParentTop="true"
+         android:layout_width="match_parent"
+	     android:layout_height="55dip"
+	     android:orientation="horizontal"
+	     android:layout_marginBottom="-8dp" >           
+	               
+    </RelativeLayout>
+    
+   <ImageView
+        android:id="@+id/footer"
+        android:layout_height="70dip"
+        android:layout_width="wrap_content"
+        android:background="@drawable/bottom_bar"
+        android:layout_alignParentBottom="true"
+        android:scaleType="fitCenter">
+    </ImageView>
+    
+    <ImageView
+      	android:id="@+id/add_button"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:background="@drawable/mybutton_add"
+        android:layout_above="@id/footer"
+        android:layout_alignEnd="@id/footer"
+        android:clickable="true" >
+	</ImageView>
+	    
+    
+    <ScrollView
+        android:id="@+id/diary_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" 
+        android:layout_above="@id/footer"
+        android:layout_below="@id/upper_bar" >
+        <LinearLayout
+            android:id="@+id/item"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent" 
+	        android:orientation="vertical" >   
+        </LinearLayout>       
+	</ScrollView>
+    
+
+    <SlidingDrawer
+        android:id="@+id/slidingDrawer1"
+        android:layout_width="match_parent"
+        android:layout_height="325dp"
+        android:content="@+id/drawer_content"
+        android:handle="@+id/handle"
+        android:rotation="180"
+        android:layout_below="@id/upper_bar">
+	    <ImageView
+            android:id="@+id/handle"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+        	android:rotation="180"/>	    
+	    <LinearLayout 
+	         android:id="@+id/drawer_content"
+		     android:layout_width="match_parent"
+		     android:layout_height="wrap_content"
+		     android:orientation="vertical"
+		     android:rotation="180"
+		     android:paddingBottom="1dp"
+		     android:background="@drawable/dropdownview_content">  	        
+	    </LinearLayout>
+	</SlidingDrawer>
+</RelativeLayout>

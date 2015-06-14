@@ -7,28 +7,32 @@
     <LinearLayout
         android:id="@+id/note_title_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:orientation="vertical"
-        android:layout_alignParentTop="true" >
+        android:layout_alignParentTop="true"
+        android:background="@drawable/upper_bar_bg" >
     </LinearLayout>
     
     <LinearLayout
         android:id="@+id/note_bottom_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/note_bottom_bar_height"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/note_button_bg"
         android:orientation="vertical"
-        android:layout_alignParentBottom="true" >
+        android:layout_marginBottom="-10dp" >
         
     </LinearLayout>
     
-
     <ScrollView
         android:id="@+id/note_main_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-		android:layout_below="@id/note_title_layout"
-		android:layout_above="@id/note_bottom_layout"
-        android:background="@drawable/activity_bg" >
+        android:layout_marginTop="-10dp"
+        android:layout_above="@id/note_bottom_layout"
+        android:layout_below="@id/note_title_layout"
+        android:background="@color/white"
+        android:fadeScrollbars="false" >
 
         <LinearLayout
             android:id="@+id/note_main_layout"

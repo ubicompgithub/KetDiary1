@@ -6,9 +6,11 @@ import java.util.Random;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +18,15 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -31,7 +36,6 @@ import android.widget.Toast;
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
-import com.ubicomp.ketdiary.db.DBTip;
 import com.ubicomp.ketdiary.file.QuestionFile;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 
@@ -60,14 +64,21 @@ public class NoteDialog2{
 	private ImageView iv_try, iv_smile, iv_urge,
 					  iv_cry, iv_not_good;
 	private ImageView iv_conflict, iv_social, iv_playing;
-	private Spinner sp_date, sp_timeslot, sp_item;
+	private Spinner sp_date, sp_timeslot;// sp_item;
 	private Button bt_confirm, bt_cancel;
 	private SeekBar impactSeekBar;
-	private TextView text_self, text_other, text_item, text_impact, text_description, tv_knowdlege, tv_title;
+	private TextView text_self, text_other, text_item, text_impact, text_description,
+	     tv_knowdlege, tv_title, note_title, sp_content;
+	
 	private EditText edtext, typetext;
+	private ListView listView;
 	
 	private String[] coping_msg;
+	private String[] knowing_msg;
+	private static int knowing_index=-1;
+	
 	private int state;
+	private ChooseItemDialog chooseBox;
 	
 	
 	//write File
@@ -82,15 +93,21 @@ public class NoteDialog2{
 	private GoCopingToResultOnClickListener goCopingToResultOnClickListener;
 	private MyOnPageChangeListener myOnPageChangeListener;
 	
+	private int day=1;
+	private int timeslot=1; //TODO: default
 	private int type;
 	private int items;
 	private int impact;
 	private String description;
+	private boolean viewshow = false;
 	
 	public static final int STATE_TEST = 0;
 	public static final int STATE_NOTE = 1;
 	public static final int STATE_COPE = 2;
 	public static final int STATE_KNOW = 3;
+	
+	private static Typeface wordTypefaceBold = Typefaces.getWordTypefaceBold();
+	private static Typeface wordTypeface = Typefaces.getWordTypeface();
 	
 	public NoteDialog2(TestQuestionCaller testQuestionCaller, RelativeLayout mainLayout){
 		
@@ -101,6 +118,11 @@ public class NoteDialog2{
 		this.mainLayout = mainLayout;
 		
 		coping_msg = context.getResources().getStringArray(R.array.coping_list);
+		knowing_msg = context.getResources().getStringArray(R.array.knowing_list);
+		
+		Random rand = new Random();
+		if( knowing_index < 0 )
+			knowing_index = rand.nextInt(knowing_msg.length);
 		//activity = this.getActivity();
 	    
 		//view = inflater.inflate(R.layout.fragment_note, container, false);
@@ -128,7 +150,7 @@ public class NoteDialog2{
 		//
 		
 		//Title View
-		View title = BarButtonGenerator.createAddNoteView(selectListener);
+		View title = BarButtonGenerator.createAddNoteView(new DateSelectedListener(), new TimeslotSelectedListener() );
 		title_layout.addView(title);
 		
 		
@@ -152,7 +174,7 @@ public class NoteDialog2{
 				R.layout.bar_description, null);
 		
 		TextView type_title = (TextView)type_layout.findViewById(R.id.description_title);
-		type_title.setText("生活項目：");
+		type_title.setText("事件類型：");
 		type_title.setTypeface(Typefaces.getWordTypefaceBold());
 		typetext = (EditText)type_layout.findViewById(R.id.description_content);
 		typetext.setEnabled(false);
@@ -161,11 +183,52 @@ public class NoteDialog2{
 		LinearLayout spinner_layout = (LinearLayout) inflater.inflate(
 				R.layout.bar_spinner, null);
 			
-		sp_item = (Spinner)spinner_layout.findViewById(R.id.spinner_content);
-		SetItem(sp_item, R.array.item_select);
+		//sp_item = (Spinner)spinner_layout.findViewById(R.id.spinner_content);
+		//SetItem(sp_item, R.array.item_select);
+		
 		TextView spin_title = (TextView)spinner_layout.findViewById(R.id.spinner_title);
-		spin_title.setText("詳細事件：");
+		spin_title.setText("發生事件：");
 		spin_title.setTypeface(Typefaces.getWordTypefaceBold());
+		
+		sp_content = (TextView)spinner_layout.findViewById(R.id.spinner_content);
+		sp_content.setText("");
+		sp_content.setTypeface(Typefaces.getWordTypefaceBold());
+		sp_content.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				//listView.setVisibility(View.VISIBLE);
+				listViewShowHide();
+			}
+								
+		});
+		
+		listView = (ListView)spinner_layout.findViewById(R.id.item_listview);
+	    
+	    /*
+	    LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(     
+                LinearLayout.LayoutParams.MATCH_PARENT,     
+                //LinearLayout.LayoutParams.WRAP_CONTENT
+                //listView.getHeight()
+                listView.getLayoutParams().height
+        );
+	    
+	    Log.d(TAG, "ListView:" + String.valueOf(listView.getLayoutParams().height));*/
+		/*
+	    RelativeLayout.LayoutParams boxParam = (LayoutParams) listView.getLayoutParams();
+		//boxParam.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+		boxParam.width = LayoutParams.MATCH_PARENT;
+		boxParam.height = LayoutParams.MATCH_PARENT;*/
+	    
+	    // get content height
+	    /*
+	    int contentHeight = listView.getHeight();
+	    		
+	    // set listview height
+	    ViewGroup.LayoutParams lp = (LayoutParams) listView.getLayoutParams();
+	    lp.height = contentHeight*5;
+	    listView.setLayoutParams(lp);*/
+		
 		
 		
 		//Impact
@@ -180,12 +243,12 @@ public class NoteDialog2{
 				R.layout.bar_description, null);
 		
 		TextView dec_title = (TextView)discription_layout.findViewById(R.id.description_title);
-		dec_title.setText("內容簡述：");
+		dec_title.setText("補充說明：");
 		dec_title.setTypeface(Typefaces.getWordTypefaceBold());
 		edtext = (EditText)discription_layout.findViewById(R.id.description_content);
 		
 		//Bottom View
-		View bottom = BarButtonGenerator.createTwoButtonView(R.string.cancel, R.string.ok, endOnClickListener, endOnClickListener);
+		View bottom = BarButtonGenerator.createTwoButtonView(R.string.cancel, R.string.ok, new CancelOnClickListener(), endOnClickListener);
 		
 		main_layout.addView(center_layout);
 		main_layout.addView(type_layout);
@@ -194,7 +257,17 @@ public class NoteDialog2{
 		main_layout.addView(discription_layout);
 		
 		bottom_layout.addView(bottom);
+		title_layout.bringToFront();
+		bottom_layout.bringToFront();
 		//main_layout.addView(bottom);
+	}
+	private void listViewShowHide(){
+		if(!viewshow)
+			listView.setVisibility(View.VISIBLE);
+		else
+			listView.setVisibility(View.GONE);
+		
+		viewshow = !viewshow;
 	}
 	
 	public void copingSetting(){
@@ -206,6 +279,28 @@ public class NoteDialog2{
 		title_layout.removeAllViews();
 		main_layout.removeAllViews();
 		bottom_layout.removeAllViews();
+		
+		
+		//Title View
+		LinearLayout layout = (LinearLayout) inflater.inflate(
+				R.layout.bar_addnote, null);
+		
+		note_title = (TextView) layout
+				.findViewById(R.id.note_title);
+		Spinner sp_date = (Spinner)layout.findViewById(R.id.note_sp_date);
+	    Spinner sp_timeslot = (Spinner)layout.findViewById(R.id.note_sp_timeslot);
+	    
+	    note_title.setTypeface(wordTypefaceBold);
+	    note_title.setTextColor(context.getResources().getColor(R.color.text_gray2));
+	    note_title.setText(R.string.countdown);
+	    
+	    sp_date.setVisibility(View.INVISIBLE);
+	    sp_timeslot.setVisibility(View.INVISIBLE);
+		title_layout.addView(layout);
+		
+		
+		//View title = BarButtonGenerator.createWaitingTitle();
+		
 		
 		center_layout = (LinearLayout) inflater.inflate(R.layout.knowledge, null);
 		tv_knowdlege = (TextView)center_layout.findViewById(R.id.qtip_tv_tips);
@@ -233,6 +328,25 @@ public class NoteDialog2{
 		main_layout.removeAllViews();
 		bottom_layout.removeAllViews();
 		
+		LinearLayout layout = (LinearLayout) inflater.inflate(
+				R.layout.bar_addnote, null);
+		
+		note_title = (TextView) layout
+				.findViewById(R.id.note_title);
+		Spinner sp_date = (Spinner)layout.findViewById(R.id.note_sp_date);
+	    Spinner sp_timeslot = (Spinner)layout.findViewById(R.id.note_sp_timeslot);
+	    
+	    note_title.setTypeface(wordTypefaceBold);
+	    note_title.setTextColor(context.getResources().getColor(R.color.text_gray2));
+	    note_title.setText(R.string.countdown);
+	    
+	    sp_date.setVisibility(View.INVISIBLE);
+	    sp_timeslot.setVisibility(View.INVISIBLE);
+		title_layout.addView(layout);
+		
+		//View title = BarButtonGenerator.createWaitingTitle();
+		//title_layout.addView(title);
+		
 		center_layout = (LinearLayout) inflater.inflate(R.layout.knowledge, null);
 		tv_knowdlege = (TextView)center_layout.findViewById(R.id.qtip_tv_tips);
 		tv_title = (TextView)center_layout.findViewById(R.id.text_knowing_title);
@@ -258,12 +372,35 @@ public class NoteDialog2{
 		main_layout.removeAllViews();
 		bottom_layout.removeAllViews();
 		
-		View bottom = BarButtonGenerator.createTwoButtonView(R.string.last, R.string.next, endOnClickListener, endOnClickListener);
+		LinearLayout layout = (LinearLayout) inflater.inflate(
+				R.layout.bar_addnote, null);
+		
+		note_title = (TextView) layout
+				.findViewById(R.id.note_title);
+		Spinner sp_date = (Spinner)layout.findViewById(R.id.note_sp_date);
+	    Spinner sp_timeslot = (Spinner)layout.findViewById(R.id.note_sp_timeslot);
+	    
+	    note_title.setTypeface(wordTypefaceBold);
+	    note_title.setTextColor(context.getResources().getColor(R.color.text_gray2));
+	    note_title.setText(R.string.countdown);
+	    
+	    sp_date.setVisibility(View.INVISIBLE);
+	    sp_timeslot.setVisibility(View.INVISIBLE);
+		title_layout.addView(layout);
+		
+		//View title = BarButtonGenerator.createWaitingTitle();
+		//title_layout.addView(title);
+		
+		View bottom = BarButtonGenerator.createTwoButtonView(R.string.last, R.string.next, new CancelOnClickListener(), endOnClickListener);
 		bottom_layout.addView(bottom);
 		//main_layout.removeView(center_layout);
 		center_layout = (LinearLayout) inflater.inflate(R.layout.knowledge, null);
 		tv_knowdlege = (TextView)center_layout.findViewById(R.id.qtip_tv_tips);
-		tv_knowdlege.setText(DBTip.inst.getTip());
+		tv_knowdlege.setText(knowing_msg[knowing_index]); 
+		
+		tv_title = (TextView)center_layout.findViewById(R.id.text_knowing_title);
+		tv_title.setText(R.string.knowledge);
+		
 		main_layout.addView(center_layout);
 		
 		main_layout.getLayoutParams().height = center_layout.getLayoutParams().height;
@@ -281,11 +418,13 @@ public class NoteDialog2{
 		}
 		else if(state == STATE_COPE){
 			Toast.makeText(context, "請點選以查看檢測結果", Toast.LENGTH_SHORT).show();
+			note_title.setText(R.string.test_done);
 			View bottom = BarButtonGenerator.createOneButtonView( R.string.go_result, goResultOnClickListener );
 			bottom_layout.addView(bottom);
 		}
 		else if(state == STATE_KNOW){
 			Toast.makeText(context, "請點選以查看檢測結果", Toast.LENGTH_SHORT).show();
+			note_title.setText(R.string.test_done);
 			View bottom = BarButtonGenerator.createOneButtonView( R.string.go_result, goResultOnClickListener );
 			bottom_layout.addView(bottom);
 		}
@@ -321,6 +460,11 @@ public class NoteDialog2{
 		MainActivity.getMainActivity().enableTabAndClick(false);
 		boxLayout.setVisibility(View.VISIBLE);
 		
+		//chooseBox = new ChooseItemDialog(boxLayout, 1);
+		//chooseBox.initialize();
+		//chooseBox.show();
+		
+		
 		/*enableSend(false);
 		PreferenceControl.setTestSuccess();
 		help.setText("");
@@ -347,21 +491,6 @@ public class NoteDialog2{
 		if (boxLayout != null)
 			boxLayout.setVisibility(View.INVISIBLE);
 	}
-	/*
-	private void setStorage() {
-		File dir = MainStorage.getMainStorageDirectory();
-
-		mainDirectory = new File(dir, String.valueOf(timestamp));
-		if (!mainDirectory.exists())
-			if (!mainDirectory.mkdirs()) {
-				return;
-			}
-		questionFile = new QuestionFile(mainDirectory);
-	}
-	
-	public void writeQuestionFile(int type, int items, int impact) {
-		questionFile.write(type, items, impact);
-	}*/
 	
 	
 	/** 設定Spinner的Item */
@@ -370,7 +499,7 @@ public class NoteDialog2{
 		
 		ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, R.layout.my_spinner);
 		//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, strs );
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		//adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sp.setAdapter(adapter);
 		sp.setOnItemSelectedListener(new SpinnerXMLSelectedListener());
 		//sp.setPrompt("負面情緒");
@@ -379,17 +508,97 @@ public class NoteDialog2{
        // sp.performClick();
 	}
 	
-	private class SpinnerXMLSelectedListener implements OnItemSelectedListener{
+	private void SetListItem(int array){
+		//ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, android.R.layout.simple_list_item_1);
+		
+		sp_content.setText(""); //TODO: 假如點到同一個不要清掉
+		ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, R.layout.my_listitem);
+		listView.setAdapter(adapter);
+		listView.setOnItemClickListener(new OnItemClickListener(){
+		   View view2; //保存點選的View
+	       int select_item=-1;
+		   @Override
+		   public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+			   TextView c = (TextView) view.findViewById(android.R.id.text1);
+			    String playerChanged = c.getText().toString();
+
+			    //Toast.makeText(Settings.this,playerChanged, Toast.LENGTH_SHORT).show();  
+			 sp_content.setText(playerChanged);
+			 listView.setVisibility(View.GONE);
+			 
+		     // Toast.makeText(context,"你選擇的是"+ position, Toast.LENGTH_SHORT).show();     
+		       //======================
+              //點選某個item並呈現被選取的狀態
+			  /*
+              if ((select_item == -1) || (select_item==position)){
+                      view.setBackgroundColor(context.getResources().getColor(R.color.green)); //為View加上選取效果
+            	  	
+              }else{
+                      view2.setBackgroundDrawable(null); //將上一次點選的View保存在view2
+                      view.setBackgroundColor(context.getResources().getColor(R.color.green)); //為View加上選取效果
+              }
+              view2=view; //保存點選的View
+              select_item=position;//保存目前的View位置*/
+              //======================
+		   }
+		   
+		});
+		setListViewHeightBasedOnItems(listView);
+		listView.setVisibility(View.VISIBLE);
+		
+		
+		//.setOnItemSelectedListener(new SpinnerXMLSelectedListener());
+	}
+	
+	private class DateSelectedListener implements OnItemSelectedListener{
 		@Override
 		public void onItemSelected(AdapterView<?> arg0, View view, int arg2, long arg3) {
-			items = 100*type + arg2;
-			Log.d(TAG, items+"");
+			day = arg2;
+			//Log.d(TAG, view.toString());
+			//items = 100*type + arg2;
+			//Log.d(TAG, items+"");
 			//Toast.makeText(getContext(), "你選的是"+items.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
             //view2.setText("你使用什么样的手机："+adapter2.getItem(arg2));  
         }  
   
         public void onNothingSelected(AdapterView<?> arg0) {  
-        	type = 0;
+        	day = 1;
+        }  
+	}
+	
+	private class TimeslotSelectedListener implements OnItemSelectedListener{
+		@Override
+		public void onItemSelected(AdapterView<?> arg0, View view, int arg2, long arg3) {
+			timeslot = arg2;
+			//Log.d(TAG, view.toString());
+			//items = 100*type + arg2;
+			//Log.d(TAG, items+"");
+			//Toast.makeText(getContext(), "你選的是"+items.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+            //view2.setText("你使用什么样的手机："+adapter2.getItem(arg2));  
+        }  
+  
+        public void onNothingSelected(AdapterView<?> arg0) {  
+        	timeslot = 1;
+        }  
+	}
+	
+	
+	
+	
+	private class SpinnerXMLSelectedListener implements OnItemSelectedListener{
+		@Override
+		public void onItemSelected(AdapterView<?> arg0, View view, int arg2, long arg3) {
+			
+			//Log.d(TAG, view.toString());
+			items = 100*type + arg2;
+			Log.d(TAG, items+"");
+			
+			//Toast.makeText(getContext(), "你選的是"+items.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+            //view2.setText("你使用什么样的手机："+adapter2.getItem(arg2));  
+        }  
+  
+        public void onNothingSelected(AdapterView<?> arg0) {  
+        	type = -1;
         }  
 	}
 	class MyOnLongClickListener implements OnLongClickListener{
@@ -406,16 +615,33 @@ public class NoteDialog2{
 			
 			
 			if(state == STATE_NOTE){
-				impact = impactSeekBar.getProgress();
-				testQuestionCaller.writeQuestionFile(type, items, impact, edtext.getText().toString());
-			
-				Log.d(TAG, items+"\t"+impact);
+				if(type <= 0 ){
+					//CustomToastSmall.generateToast(R.string.note_check);
+					Toast.makeText(context, R.string.note_check ,Toast.LENGTH_SHORT).show();
+				}
+				else{
+					if(listView.getVisibility() == View.VISIBLE){
+						Toast.makeText(context, "請選擇項目再送出", Toast.LENGTH_SHORT).show();
+						listView.setVisibility(View.GONE);
+					}
+					else{
+					
+						
+						impact = impactSeekBar.getProgress();
+						testQuestionCaller.writeQuestionFile(day, timeslot, type, items, impact, edtext.getText().toString());
+				
+						Log.d(TAG, items+"\t"+impact);
+				
+						copingSetting();
+					}
+				}
+				
 			//questionLayout.setVisibility(View.GONE);
 			//clear();
 				
 				//testSetting(); //For Test
 				
-				copingSetting();
+				
 			//questionFile.write(0, 0, 0);
 			//startActivity(new Intent(that, EventCopeSkillActivity.class));
 			}
@@ -423,14 +649,40 @@ public class NoteDialog2{
 				knowingSetting();
 			}
 			else if(state == STATE_KNOW){
-				tv_knowdlege.setText(DBTip.inst.getTip());
+				knowing_index++;
+				if(knowing_index>=knowing_msg.length)
+					knowing_index-=knowing_msg.length;
+				tv_knowdlege.setText(knowing_msg[knowing_index]);
+				//tv_knowdlege.setText(DBTip.inst.getTip());
 			}
 	    }
 	}
 	
+	//把所選取的結果送出 
+	class CancelOnClickListener implements View.OnClickListener{
+		public void onClick(View v){
+			
+			if(state == STATE_NOTE){
+				//impact = impactSeekBar.getProgress();
+				testQuestionCaller.writeQuestionFile(day, timeslot, -1, -1, -1, edtext.getText().toString());
+				
+				copingSetting();
+				//questionFile.write(0, 0, 0);
+				//startActivity(new Intent(that, EventCopeSkillActivity.class));
+			}
+			else if(state == STATE_KNOW){
+				knowing_index--;
+				if(knowing_index<0)
+					knowing_index+=knowing_msg.length;
+				tv_knowdlege.setText(knowing_msg[knowing_index]);
+				//tv_knowdlege.setText(DBTip.inst.getTip());
+			}
+		}
+	}
+	
 	class GoResultOnClickListener implements View.OnClickListener{
 		public void onClick(View v){
-
+			CustomToast.generateToast(R.string.after_test_pass, 2);
 			MainActivity.getMainActivity().changeTab(1);
 			
 	    }
@@ -442,7 +694,7 @@ public class NoteDialog2{
 			
 			if(state == STATE_NOTE){
 				impact = impactSeekBar.getProgress();
-				testQuestionCaller.writeQuestionFile(type, items, impact, edtext.getText().toString());
+				testQuestionCaller.writeQuestionFile(day, timeslot, type, items, impact, edtext.getText().toString());
 			
 				Log.d(TAG, items+"\t"+impact);
 
@@ -549,8 +801,10 @@ public class NoteDialog2{
 		        	iv_cry.setImageResource(R.drawable.emoji5_pressed);
 		        	typetext.setHint(R.string.note_negative);
 		        	
-	        		SetItem(sp_item,R.array.note_negative);
-	        		sp_item.performClick();
+		        	SetListItem(R.array.note_negative);
+		        	//listViewShowHide();
+	        		//SetItem(sp_item,R.array.note_negative);
+	        		//spinner_content.performClick();
 	        		type = 1;
 	        		break;
 		        case R.id.vts_iv_not_good:
@@ -558,8 +812,9 @@ public class NoteDialog2{
 		        	iv_not_good.setImageResource(R.drawable.emoji2_pressed);
 		        	typetext.setHint(R.string.note_notgood);
 		        	
-		        	SetItem(sp_item,R.array.note_notgood);
-		        	sp_item.performClick();
+		        	SetListItem(R.array.note_notgood);
+		        	//SetItem(sp_item,R.array.note_notgood);
+		        	//spinner_content.performClick();
 		        	type = 2;
 			        break;
 		        case R.id.vts_iv_smile:
@@ -567,8 +822,9 @@ public class NoteDialog2{
 		        	iv_smile.setImageResource(R.drawable.emoji4_pressed);
 		        	typetext.setHint(R.string.note_positive);
 		        	
-		        	SetItem(sp_item, R.array.note_positive);
-		        	sp_item.performClick();
+		        	SetListItem(R.array.note_positive);
+		        	//SetItem(sp_item, R.array.note_positive);
+		        	//spinner_content.performClick();
 		        	type = 3;
 		        	break;
 		        case R.id.vts_iv_try:
@@ -576,8 +832,9 @@ public class NoteDialog2{
 		        	iv_try.setImageResource(R.drawable.emoji1_pressed);
 		        	typetext.setHint(R.string.note_selftest);
 		        	
-		        	SetItem(sp_item,R.array.note_selftest);
-		        	sp_item.performClick();
+		        	SetListItem(R.array.note_selftest);
+		        	//SetItem(sp_item,R.array.note_selftest);
+		        	//sp_item.performClick();
 		        	type = 4; 
 		        	break;
 		        case R.id.vts_iv_urge:
@@ -585,32 +842,39 @@ public class NoteDialog2{
 		        	iv_urge.setImageResource(R.drawable.emoji3_pressed);
 		        	typetext.setHint(R.string.note_temptation);
 		        	
-		        	SetItem(sp_item,R.array.note_temptation);
-		        	sp_item.performClick();
+		        	SetListItem(R.array.note_temptation);
+		        	//SetItem(sp_item,R.array.note_temptation);
+		        	//sp_item.performClick();
 		        	type = 5;
 		        	break;
 		        case R.id.vts_iv_playing:
 		        	resetView();
 		        	iv_playing.setImageResource(R.drawable.others_emoji2_pressed);
+		        	typetext.setHint(R.string.note_play);
 		        	
-		        	SetItem(sp_item,R.array.note_play);
-		        	sp_item.performClick();
+		        	SetListItem(R.array.note_play);
+		        	//SetItem(sp_item,R.array.note_play);
+		        	//sp_item.performClick();
 		        	type = 6;
 		        	break;
 		        case R.id.vts_iv_social:
 		        	resetView();
 		        	iv_social.setImageResource(R.drawable.others_emoji1_oressed);
+		        	typetext.setHint(R.string.note_social);
 		        	
-		        	SetItem(sp_item,R.array.note_social);
-		        	sp_item.performClick();
+		        	SetListItem(R.array.note_social);
+		        	//SetItem(sp_item,R.array.note_social);
+		        	//sp_item.performClick();
 		        	type = 7;
 		        	break;
 		        case R.id.vts_iv_conflict:
 		        	resetView();
 		        	iv_conflict.setImageResource(R.drawable.others_emoji3_pressed);
+		        	typetext.setHint(R.string.note_conflict);
 		        	
-		        	SetItem(sp_item,R.array.note_conflict);
-		        	sp_item.performClick();
+		        	SetListItem(R.array.note_conflict);
+		        	//SetItem(sp_item,R.array.note_conflict);
+		        	//sp_item.performClick();
 		        	type = 8;
 		        	break;
 		        	
@@ -670,6 +934,54 @@ public class NoteDialog2{
 			public void onPageScrolled(int arg0, float arg1, int arg2) {}
 		
 		}
+		
+		public float getDensity(){
+			 DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+			 return metrics.density;
+			}
+		
+		public float convertDpToPixel(float dp){
+		    float px = dp * getDensity();
+		    return px;
+		}
+		/**
+		 * Sets ListView height dynamically based on the height of the items.   
+		 *
+		 * @param listView to be resized
+		 * @return true if the listView is successfully resized, false otherwise
+		 */
+		public boolean setListViewHeightBasedOnItems(ListView listView) {
 
+		    ListAdapter listAdapter = listView.getAdapter();
+		    if (listAdapter != null) {
+
+		        int numberOfItems = listAdapter.getCount();
+
+		        // Get total height of all items.
+		        int totalItemsHeight = 0;
+		        for (int itemPos = 0; itemPos < numberOfItems; itemPos++) {
+		            View item = listAdapter.getView(itemPos, null, listView);
+		            item.measure(0, 0);
+		            totalItemsHeight += item.getMeasuredHeight();
+		        }
+
+		        // Get total height of all item dividers.
+		        int totalDividersHeight = listView.getDividerHeight() * 
+		                (numberOfItems - 1);
+
+		        // Set list height.
+		        ViewGroup.LayoutParams params = listView.getLayoutParams();
+		        //params.height = totalItemsHeight + totalDividersHeight;
+		        params.height = (int) (convertDpToPixel((float)40)* numberOfItems);
+		        listView.setLayoutParams(params);
+		        listView.requestLayout();
+
+		        return true;
+
+		    } else {
+		        return false;
+		    }
+
+		}
 	
 }

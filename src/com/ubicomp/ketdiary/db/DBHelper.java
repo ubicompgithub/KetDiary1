@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHelper extends SQLiteOpenHelper {
 
 	/* SQLiteOpenHelper. need to migrate with */
-	private static final String DATABASE_NAME = "drugfreediary";
+	private static final String DATABASE_NAME = "rehabdiary";
 	private static final int DB_VERSION = 2;
 
 	/**

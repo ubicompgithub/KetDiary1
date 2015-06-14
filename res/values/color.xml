@@ -9,6 +9,7 @@
     <color name="lite_gray">#FF7c7d7c</color>
     <color name="dark_gray">#FF898989</color>
     <color name="shadow">#99000000</color>
+    <color name="white_shadow">#99FFFFFF</color>
     <color name="white">#FFFFFFFF</color>
     <color name="black">#FF000000</color>
     <color name="test_bg">#FF100e0e</color>
@@ -31,5 +32,8 @@
     <color name="blue">#FF7dcdff</color>
     <color name="text_gray3">#FF9E9E9F</color>
     <color name="text_bg_gray">#FFf7f7f7</color>
+    
+    <color name="background_color">#888888</color>
+    <color name="text_color">#B3B3B4</color>
 
 </resources>

@@ -160,7 +160,7 @@
                         android:layout_marginLeft="18dp"
                         android:layout_toRightOf="@+id/about_logo0"
                         android:adjustViewBounds="true"
-                        android:scaleType="centerCrop"
+                        android:scaleType="fitXY"
                         android:src="@drawable/affiliation_logo_1" />
 
                     <ImageView

@@ -6,7 +6,7 @@ package com.ubicomp.ketdiary.db;
  * @author Andy Chen
  */
 public class ServerUrl {
-	private static final String SERVER_URL = "https://140.112.30.171/drugfreediary/";
+	private static final String SERVER_URL = "https://140.112.30.171/rehabdiary/";
 	
 	/** create instance*/
 	//public static ServerUrl inst = new ServerUrl();

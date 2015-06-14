@@ -1,5 +1,7 @@
 package com.ubicomp.ketdiary.ui;
 
+import java.util.Calendar;
+
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.check.TimeBlock;
 
 public class BarButtonGenerator {
 	private static final LayoutInflater inflater = (LayoutInflater) App
@@ -41,7 +44,7 @@ public class BarButtonGenerator {
 		return layout;
 	}
 	
-	public static View createAddNoteView(OnItemSelectedListener itemselectedListener){
+	public static View createAddNoteView(OnItemSelectedListener itemselectedListener1, OnItemSelectedListener itemselectedListener2){
 		LinearLayout layout = (LinearLayout) inflater.inflate(
 				R.layout.bar_addnote, null);
 		
@@ -50,19 +53,26 @@ public class BarButtonGenerator {
 		Spinner sp_date = (Spinner)layout.findViewById(R.id.note_sp_date);
 	    Spinner sp_timeslot = (Spinner)layout.findViewById(R.id.note_sp_timeslot);
 	    
+	    
 	    note_title.setTypeface(wordTypefaceBold);
 	    note_title.setTextColor(context.getResources().getColor(R.color.text_gray2));
 	    
-	    SetItem(sp_date, R.array.note_date, itemselectedListener);
-	    SetItem(sp_timeslot, R.array.note_time_slot, itemselectedListener);
+	    SetItem(sp_date, R.array.note_date, itemselectedListener1);
+	    SetItem(sp_timeslot, R.array.note_time_slot, itemselectedListener2);
+	    
+	    Calendar cal = Calendar.getInstance();
+		int hours = cal.get(Calendar.HOUR_OF_DAY);
+		int timeslot = TimeBlock.getTimeBlock(hours);
+		sp_timeslot.setSelection(timeslot);
+		
 	    
 		return layout;
 	}
 	
 	private static void SetItem(Spinner sp, int array, OnItemSelectedListener itemselectedListener){
-		ArrayAdapter adapter = ArrayAdapter.createFromResource(MainActivity.getMainActivity(), array, android.R.layout.simple_spinner_item);
+		ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, R.layout.title_spinner);
 		//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, strs );
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		//adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sp.setAdapter(adapter);
 		sp.setOnItemSelectedListener(itemselectedListener);
 		
@@ -85,6 +95,26 @@ public class BarButtonGenerator {
 		return layout;
 	}
 	
+	public static View createWaitingTitle(){
+		LinearLayout layout = (LinearLayout) inflater.inflate(
+				R.layout.bar_addnote, null);
+		
+		TextView note_title = (TextView) layout
+				.findViewById(R.id.note_title);
+		Spinner sp_date = (Spinner)layout.findViewById(R.id.note_sp_date);
+	    Spinner sp_timeslot = (Spinner)layout.findViewById(R.id.note_sp_timeslot);
+	    
+	    note_title.setTypeface(wordTypefaceBold);
+	    note_title.setTextColor(context.getResources().getColor(R.color.text_gray2));
+	    note_title.setText(R.string.countdown);
+	    
+	    sp_date.setVisibility(View.INVISIBLE);
+	    sp_timeslot.setVisibility(View.INVISIBLE);
+	    //SetItem(sp_date, R.array.note_date, itemselectedListener1);
+	    //SetItem(sp_timeslot, R.array.note_time_slot, itemselectedListener2);
+	    
+		return layout;
+	}
 	
 /*
 	public static View createTextView(int textStr) {

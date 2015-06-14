@@ -37,6 +37,7 @@ import com.ubicomp.ketdiary.fragment.StorytellingFragment;
 import com.ubicomp.ketdiary.fragment.TestFragment;
 import com.ubicomp.ketdiary.system.Config;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.ui.CheckResultDialog;
 import com.ubicomp.ketdiary.ui.CustomMenu;
 import com.ubicomp.ketdiary.ui.CustomTab;
 import com.ubicomp.ketdiary.ui.CustomToast;
@@ -74,6 +75,8 @@ public class MainActivity extends FragmentActivity {
 	private android.support.v4.app.FragmentTransaction ft;
 	private android.support.v4.app.FragmentManager fm;
 
+	private RelativeLayout mainLayout;
+	
 	private ImageView loading_page;
 	private LoadingPageTimer loadingPageTimer;
 	private Handler loadingHandler = new LoadingHandler();
@@ -93,11 +96,13 @@ public class MainActivity extends FragmentActivity {
 	
 	private CountDownTimer sensorCountDownTimer = null;
 	private boolean isRecovery = false;
+	private boolean restart = false;
 
 	private SoundPool soundpool;
 	private int timer_sound_id;
 
 	private int notify_action = 0;
+	private CheckResultDialog msgBox;
 
 	private boolean clickable = false;   // back 
 	private boolean doubleClickState = false;
@@ -122,18 +127,18 @@ public class MainActivity extends FragmentActivity {
 		count_down_layout = (RelativeLayout) findViewById(R.id.main_count_down_layout);
 		count_down_text = (TextView) findViewById(R.id.main_count_down_text);
 		
+		mainLayout = (RelativeLayout) findViewById(R.id.main_layout);
 		
 		if (soundpool == null) {
 			soundpool = new SoundPool(1, AudioManager.STREAM_MUSIC, 1);
 			timer_sound_id = soundpool.load(getApplicationContext(),
 					R.raw.end_count_down, 0);
 		}
-
+		
 		loadingHandler.sendEmptyMessage(0);
 
 		loadingPageTimer = new LoadingPageTimer();
 		loadingPageTimer.start();
-
 
 	}
 
@@ -150,7 +155,7 @@ public class MainActivity extends FragmentActivity {
 			
 			
 			Typefaces.initAll();
-			//CustomToast.settingSoundPool();
+			CustomToast.settingSoundPool();
 
 			tabHost.setup();
 
@@ -200,7 +205,7 @@ public class MainActivity extends FragmentActivity {
 				param.width = width * 3 / 2;
 				param.height = height * 3 / 2;
 				//count_down_text.setTextSize(21);
-				v.setBackgroundResource(R.drawable.count_down_circle_pressed);
+				//v.setBackgroundResource(R.drawable.count_down_circle_pressed);
 				v.setLayoutParams(param);
 				v.invalidate();
 				break;
@@ -219,7 +224,7 @@ public class MainActivity extends FragmentActivity {
 				break;
 
 			case MotionEvent.ACTION_UP:
-				v.setBackgroundResource(R.drawable.count_down_circle_normal);
+				//v.setBackgroundResource(R.drawable.count_down_circle_normal);
 				param.width = width;
 				param.height = height;
 				v.setLayoutParams(param);
@@ -245,6 +250,7 @@ public class MainActivity extends FragmentActivity {
 			finish();
 			return;
 		}*/
+		//showResult();
 		
 		PreferenceControl.setInApp(true);
 		boolean inApp = PreferenceControl.getInApp();	
@@ -268,8 +274,9 @@ public class MainActivity extends FragmentActivity {
 			setTimers();
 		
 		else if(PreferenceControl.getCheckResult() && pastTime >= WAIT_RESULT_TIME){
+			setResult();
 			//showResult();
-			setTimers();
+			//setTimers();
 			//changeTab(1);
 		}
 		else{
@@ -668,13 +675,14 @@ public class MainActivity extends FragmentActivity {
 
 		@Override
 		public void onFinish() {
-			soundpool.play(timer_sound_id, 1f, 1f, 0, 0, 1f);
+			//soundpool.play(timer_sound_id, 1f, 1f, 0, 0, 1f);
 			isRecovery = false;
 			count_down_layout.setVisibility(View.GONE);
 			
 			//showResult();
 			if (tabHost.getCurrentTab() == 0 && fragments[0] != null
 					&& fragments[0].isAdded()) {
+				soundpool.play(timer_sound_id, 1f, 1f, 0, 0, 1f);
 				((TestFragment) fragments[0]).msgBox.setResult();
 				//((TestFragment) fragments[0]).setState(TestFragment.STATE_INIT);
 				//((TestFragment) fragments[0]).enableStartButton(true);
@@ -682,9 +690,10 @@ public class MainActivity extends FragmentActivity {
 			else if(tabHost.getCurrentTab() == 1 && fragments[1] != null
 					&& fragments[1].isAdded()){
 				CustomToast.generateToast(R.string.after_test_pass, 2);
-				
+				PreferenceControl.setCheckResult( false );
 			}
 			else{
+				soundpool.play(timer_sound_id, 1f, 1f, 0, 0, 1f);
 				showResult();
 			}
 			
@@ -694,13 +703,38 @@ public class MainActivity extends FragmentActivity {
 		public void onTick(long millisUntilFinished) {
 			long time = millisUntilFinished / 1000L;
 			isRecovery = true;
-			count_down_text.setText(String.valueOf(time));
+			count_down_text.setText(String.valueOf(time)+"\"");//TODO:分跟秒要不一樣
 			count_down_layout.setVisibility(View.VISIBLE);
 
 		}
 	}
+	private void setResult(){
+		if (tabHost.getCurrentTab() == 0 && fragments[0] != null
+				&& fragments[0].isAdded()) {
+			//soundpool.play(timer_sound_id, 1f, 1f, 0, 0, 1f);
+			((TestFragment) fragments[0]).msgBox.setResult();
+			//((TestFragment) fragments[0]).setState(TestFragment.STATE_INIT);
+			//((TestFragment) fragments[0]).enableStartButton(true);
+		}
+		else if(tabHost.getCurrentTab() == 1 && fragments[1] != null
+				&& fragments[1].isAdded()){
+			CustomToast.generateToast(R.string.after_test_pass, 2);
+			PreferenceControl.setCheckResult( false );
+		}
+		else{
+			//soundpool.play(timer_sound_id, 1f, 1f, 0, 0, 1f);
+			//showResult();
+		}
+	}
 	
+
 	private void showResult(){
+		
+		msgBox = new CheckResultDialog(mainLayout);
+		msgBox.initialize();
+		msgBox.show();
+		
+		/*
 		new AlertDialog.Builder(this)
 	    .setTitle("檢測倒數結束")
 	    .setMessage("查看檢測結果?")
@@ -708,6 +742,7 @@ public class MainActivity extends FragmentActivity {
 	        @Override
 	        public void onClick(DialogInterface dialog, int which) {
 	            //Toast.makeText(getApplicationContext(),"走吧！一起吃", Toast.LENGTH_SHORT).show();
+	        	CustomToast.generateToast(R.string.after_test_pass, 2);
 	        	changeTab(1);
 	        }
 	    })
@@ -717,10 +752,10 @@ public class MainActivity extends FragmentActivity {
 	           //Toast.makeText(getApplicationContext(),"可是我好餓耶", Toast.LENGTH_SHORT).show();
 	        }
 	    })
-	    .show();
+	    .show();*/
 	}
 	
-
+	
 
 	public void setTimers() {
 		closeTimers();

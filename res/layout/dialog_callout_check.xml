@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/shadow" >
+
+    <RelativeLayout
+        android:layout_width="232.7dp"
+        android:layout_height="126dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/dialog_callout_bg"
+        android:splitMotionEvents="false" >
+
+        <TextView
+            android:id="@+id/call_help"
+            android:layout_width="222dp"
+            android:layout_height="76dp"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/normal_text_size" />
+
+        <TextView
+            android:id="@+id/call_cancel_button"
+            android:layout_width="111dp"
+            android:layout_height="51.3dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/call_help"
+            android:layout_marginBottom="8.7dp"
+            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/normal_text_size" />
+
+        <TextView
+            android:id="@+id/call_ok_button"
+            android:layout_width="111dp"
+            android:layout_height="51.3dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/call_help"
+            android:layout_marginBottom="8.7dp"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:text="@string/ok"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/normal_text_size" />
+    </RelativeLayout>
+
+</RelativeLayout>

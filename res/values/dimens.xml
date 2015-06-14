@@ -47,6 +47,7 @@
     <dimen name="chart_label_gap">3dp</dimen>
     <dimen name="chart_label_top">6dp</dimen>
     <dimen name="chart_label_top2">16dp</dimen>
+    <dimen name="drawer_normal_height">325dp</dimen>
     
     <dimen name="radar_chart_size">154.7dp</dimen>
     <dimen name="fb_gap">20dp</dimen>
@@ -57,4 +58,6 @@
     <dimen name="normal_margin">29.3dp</dimen>
     <dimen name="note_margin">20dp</dimen>
     <dimen name="impact_text_margin">30dp</dimen>
+    <dimen name="note_bottom_bar_height">70dp</dimen>
+    
 </resources>

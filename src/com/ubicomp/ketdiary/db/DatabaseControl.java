@@ -134,7 +134,7 @@ public class DatabaseControl {
 			int score = prev_data.getScore();
 			db = dbHelper.getWritableDatabase();
 			if (!update) {
-				boolean isPrime = !(data.isSameTimeBlock(prev_data));
+				boolean isPrime = !(data.isSameDay(prev_data));
 				int isPrimeValue = isPrime ? 1 : 0;
 				int addScore = 0;
 				addScore += isPrimeValue;
@@ -460,13 +460,14 @@ public class DatabaseControl {
 				int month = cal.get(Calendar.MONTH);
 				int day = cal.get(Calendar.DAY_OF_MONTH);
 				
-				return new NoteAdd(0, 0, year, month, day, 0, 0, 0, 0, null, 0, 0);
+				return new NoteAdd(0, 0, year, month, day,0 , 0, 0, 0, 0, null, 0, 0);
 			}
 			int isAfterTest = cursor.getInt(1);
 			long ts = cursor.getLong(5);
 			int year = cursor.getInt(7);
 			int month = cursor.getInt(8);
 			int day = cursor.getInt(9);
+			int timeslot = cursor.getInt(10);
 			int category = cursor.getInt(11);
 			int type = cursor.getInt(12);
 			int items = cursor.getInt(13);
@@ -474,7 +475,7 @@ public class DatabaseControl {
 			String reason = cursor.getString(15);
 			int weeklyScore = cursor.getInt(16);
 			int score = cursor.getInt(17);
-			return new NoteAdd(isAfterTest, ts, year, month, day, category, type, items, impact, reason, weeklyScore, score);
+			return new NoteAdd(isAfterTest, ts, year, month, day, timeslot, category, type, items, impact, reason, weeklyScore, score);
 		}
 	}
 
@@ -502,7 +503,7 @@ public class DatabaseControl {
 			content.put("day", data.getTv().getDay());
 			content.put("ts", data.getTv().getTimestamp());
 			content.put("week", data.getTv().getWeek());
-			content.put("timeslot", data.getRecordTv().getTimeslot());
+			content.put("timeslot", data.getTimeSlot());
 			content.put("recordYear", data.getRecordTv().getYear());
 			content.put("recordMonth", data.getRecordTv().getMonth());
 			content.put("recordDay", data.getRecordTv().getDay());
@@ -553,6 +554,7 @@ public class DatabaseControl {
 				int year = cursor.getInt(7);
 				int month = cursor.getInt(8);
 				int day = cursor.getInt(9);
+				int timeslot=cursor.getInt(10);
 				int category = cursor.getInt(11);
 				int type = cursor.getInt(12);
 				int items = cursor.getInt(13);
@@ -560,7 +562,7 @@ public class DatabaseControl {
 				String reason = cursor.getString(15);
 				int weeklyScore = cursor.getInt(16);
 				int score = cursor.getInt(17);
-				data[i] = new NoteAdd(isAfterTest, ts, year, month, day, category, type, items, impact, reason, weeklyScore, score);
+				data[i] = new NoteAdd(isAfterTest, ts, year, month, day, timeslot, category, type, items, impact, reason, weeklyScore, score);
 			}
 
 			cursor.close();

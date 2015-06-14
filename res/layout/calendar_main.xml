@@ -1,0 +1,79 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	 android:id="@+id/calendar_content"
+	 android:layout_width="match_parent"
+	 android:layout_height="match_parent"
+	 android:orientation="vertical"
+	 android:paddingBottom="20dp">  
+	   <LinearLayout 
+	    android:id="@+id/weekdays"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"  
+	    android:clickable="true"        
+	    android:orientation="horizontal"
+	    android:layout_marginLeft="34dp"
+	    android:layout_marginRight="11dp"
+	    android:layout_marginTop="5dp"
+	    android:layout_marginBottom="5dp">
+	     <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"    
+	     android:text="一"
+	     android:textColor="@color/text_color"
+	     android:textAppearance="?android:attr/textAppearanceMedium"
+	     android:layout_weight="1" />
+	     <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"    
+	     android:text="二"
+	     android:textColor="@color/text_color"
+	     android:textAppearance="?android:attr/textAppearanceMedium"
+	     android:layout_weight="1" />
+	     <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"    
+	     android:text="三"
+	     android:textColor="@color/text_color"
+	     android:textAppearance="?android:attr/textAppearanceMedium"
+	     android:layout_weight="1" />
+	     <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"    
+	     android:text="四"
+	     android:textColor="@color/text_color"
+	     android:textAppearance="?android:attr/textAppearanceMedium"
+	     android:layout_weight="1" />
+	     <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"    
+	     android:text="五"
+	     android:textColor="@color/text_color"
+	     android:textAppearance="?android:attr/textAppearanceMedium"
+	     android:layout_weight="1" />
+	     <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"    
+	     android:text="六"
+	     android:textColor="@color/text_color"
+	     android:textAppearance="?android:attr/textAppearanceMedium"
+	     android:layout_weight="1" />
+	     <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"    
+	     android:text="日"
+	     android:textColor="@color/text_color"
+	     android:textAppearance="?android:attr/textAppearanceMedium"
+	     android:layout_weight="1" />		        
+	</LinearLayout>
+	
+	<FrameLayout
+	    android:id="@+id/fl_view_pager"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:foregroundGravity="center">
+	    
+		<android.support.v4.view.ViewPager
+	     android:id="@+id/pager"
+	     android:layout_width="match_parent"
+	     android:layout_height="match_parent" />
+	</FrameLayout>	    
+</LinearLayout>

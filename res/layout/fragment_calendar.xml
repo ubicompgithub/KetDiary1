@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ScrollView
+        android:id="@+id/scrollme"
+        android:layout_below="@+id/weekdays"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         >
+ 
+	    <GridLayout
+	        android:id="@+id/gl_calendar"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:alignmentMode="alignMargins"
+	        android:layout_marginLeft="26dip"
+	        android:layout_gravity="right"
+	        android:columnCount="7" >
+	    </GridLayout>
+
+    </ScrollView>
+</RelativeLayout>

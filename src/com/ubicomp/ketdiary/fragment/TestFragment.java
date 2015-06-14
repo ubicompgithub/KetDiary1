@@ -16,6 +16,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,7 +69,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private RelativeLayout main_layout;
 	private LinearLayout water_layout;
 	private TextView label_btn, label_subtitle, label_title, debug_msg, test_msg;
-	private ImageView img_bg, img_ac, img_btn, img_info, img_water1, img_water2, img_water3;
+	private ImageView img_bg, img_ac, img_btn, img_info, img_water1, img_water2, img_water3, img_face;
 	
 	private boolean debug = PreferenceControl.isDeveloper();
 	
@@ -118,10 +119,15 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	/** Sound playing variables */
 	private SoundPool soundPool;
 	
-	private static final int[] ELECTRODE_RESOURCE = { 0, R.drawable.test_progress_1,
+	/*private static final int[] ELECTRODE_RESOURCE = { 0, R.drawable.test_progress_1,
 		R.drawable.test_progress_2, R.drawable.test_progress_3,
 		R.drawable.test_progress_4, R.drawable.test_progress_5,
-		R.drawable.test_progress_5 };
+		R.drawable.test_progress_5 };*/
+	
+	private static final int[] ELECTRODE_RESOURCE = { 0, R.drawable.test_progress_circle_2,
+		R.drawable.test_progress_circle_4, R.drawable.test_progress_circle_6,
+		R.drawable.test_progress_circle_8, R.drawable.test_progress_circle_10,
+		R.drawable.test_progress_circle_10 };
 	
 	private Typeface digitTypefaceBold, wordTypefaceBold;
 	private DecimalFormat format;
@@ -240,8 +246,11 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		img_bg = (ImageView)view.findViewById(R.id.iv_bar_bg);
 		img_ac = (ImageView)view.findViewById(R.id.iv_bar_ac);
 		img_btn = (ImageView)view.findViewById(R.id.vts_iv_cry);
+		img_face= (ImageView)view.findViewById(R.id.test_face);
+		
 		cameraLayout = (FrameLayout)view.findViewById(R.id.cameraLayout);
 		water_layout = (LinearLayout)view.findViewById(R.id.water_layout);
+		
 		
 		img_water1 = (ImageView)view.findViewById(R.id.iv_water1);
 		img_water2 = (ImageView)view.findViewById(R.id.iv_water2);
@@ -328,6 +337,10 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			img_btn.setEnabled(true);
 			label_btn.setText("開始");
 			label_btn.setTextSize(28);
+			
+			//String styledText = "請點選<font color='#f2a6a3'>開始</font>進行測試";
+			//label_subtitle.setText(Html.fromHtml(styledText), TextView.BufferType.SPANNABLE);
+			
 			label_subtitle.setText("請點選開始進行測試");
 			label_title.setText("測試尚未開始");
 			MainActivity.getMainActivity().enableTabAndClick(true);
@@ -486,7 +499,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			water_layout.setVisibility(View.VISIBLE);
 			//ble.bleWriteState((byte)3);
 			
-			
+			//img_face.setVisibility(View.VISIBLE);
 			cameraCountDownTimer = new CameraCountDownTimer();
 			cameraCountDownTimer.start();
 			
@@ -515,7 +528,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			state = STAGE2_STATE;
 			
 			label_btn.setText("");
-			img_bg.setVisibility(View.VISIBLE);
+			img_bg.setVisibility(View.INVISIBLE);
 			img_ac.setVisibility(View.VISIBLE);
 			img_btn.setVisibility(View.INVISIBLE);
 			//cameraLayout.setVisibility(View.VISIBLE);
@@ -586,7 +599,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			state = RUN_STATE;
 			
 			label_btn.setText("");
-			img_bg.setVisibility(View.VISIBLE);
+			//img_bg.setVisibility(View.VISIBLE);
 			img_ac.setVisibility(View.VISIBLE);
 			img_btn.setVisibility(View.INVISIBLE);
 			label_title.setText("口水確認中");
@@ -608,9 +621,9 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			}
 			
 			
-			//img_bg.setVisibility(View.INVISIBLE);
-			//img_ac.setVisibility(View.INVISIBLE);
-			//img_btn.setVisibility(View.VISIBLE);
+			img_bg.setVisibility(View.INVISIBLE);
+			img_ac.setVisibility(View.INVISIBLE);
+			img_btn.setVisibility(View.VISIBLE);
 		}
 	}
 	
@@ -624,7 +637,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			//DBControl.inst.startTesting();
 			stop();
 			
-	
+			
 			label_title.setText("測試完成!");
 			label_subtitle.setText("");
 			water_layout.setVisibility(View.VISIBLE);
@@ -729,12 +742,15 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	}
 	
 	
-	public void writeQuestionFile(int type, int items, int impact, String description) {
+	public void writeQuestionFile(int day, int timeslot, int type, int items, int impact, String description) {
 		if( questionFile!= null )
-			questionFile.write(type, items, impact, description);
+			questionFile.write(day, timeslot, type, items, impact, description);
 		
-		if( TDP!= null )
-			TDP.startAddNote();
+		if( TDP!= null ){
+			//TDP.startAddNote();
+			//TDP.getQuestionResult2(textFile)
+			TDP.startAddNote3(day, timeslot, type, items, impact, description);
+		}
 	}
 
 	//release resource
@@ -994,6 +1010,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 
 			@Override
 			public void onFinish() {
+				img_face.setVisibility(View.INVISIBLE);
 				Log.i(TAG3, "FINISH");
 				if(state == CAMERA_STATE)
 					setState(new FailState("測試超時"));
@@ -1012,7 +1029,14 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 				
 				//if(millisUntilFinished % 2500 == 0)
 				if(state == NOTENOUGH_STATE && count%2 == 0){
-					label_title.setText("請在"+millisUntilFinished/1000 +"秒內再吐一口水");
+					if(second_voltage){
+						label_title.setText("口水量已足夠");
+						label_subtitle.setText("");
+						img_water3.setImageResource(R.drawable.saliva3_yes);
+					}
+					else
+						label_title.setText("請在"+millisUntilFinished/1000 +"秒內再吐一口水");
+					
 				}
 				
 				if(count % 5 == 0)
@@ -1416,8 +1440,6 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	}
 
 	private class DebugOnClickListener implements View.OnClickListener {
-
-		private int cond;
 
 		@Override
 		public void onClick(View v) {

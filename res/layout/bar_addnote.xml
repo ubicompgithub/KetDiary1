@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/title_addnote"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/upperbarbg" >
+    android:layout_height="match_parent"
+     >
 
     <TextView
         android:id="@+id/note_title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="新增記事"
+        android:text="紀錄事件"
         android:textAppearance="?android:attr/textAppearanceLarge" 
         android:layout_weight="1"
         android:gravity="center"/>
@@ -17,9 +17,10 @@
     <Spinner
         android:id="@+id/note_sp_date"
         style="android:spinnerStyle"
-       android:layout_width="match_parent"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:gravity="center"
         android:spinnerMode="dropdown" />
 
     <Spinner
@@ -28,6 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:spinnerMode="dropdown" />
+        android:spinnerMode="dropdown"
+        android:gravity="center" />
 
 </LinearLayout>

@@ -32,6 +32,7 @@ import com.ubicomp.ketdiary.statistic.AnalysisRankView;
 import com.ubicomp.ketdiary.statistic.StatisticPageView;
 import com.ubicomp.ketdiary.statistic.StatisticPagerAdapter;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.ui.CustomToast;
 import com.ubicomp.ketdiary.ui.ScaleOnTouchListener;
 
 public class StatisticFragment extends Fragment {
@@ -129,10 +130,19 @@ public class StatisticFragment extends Fragment {
 		long curTime = System.currentTimeMillis();
 		long testTime = PreferenceControl.getLatestTestCompleteTime();
 		long pastTime = curTime - testTime;
+
 		
-		if( pastTime > MainActivity.WAIT_RESULT_TIME){
+		if( PreferenceControl.getCheckResult() && pastTime >= MainActivity.WAIT_RESULT_TIME){
+			CustomToast.generateToast(R.string.after_test_pass, 2);
 			PreferenceControl.setCheckResult( false );
 		}
+		else if ( PreferenceControl.getCheckResult() && pastTime < MainActivity.WAIT_RESULT_TIME ){
+			
+		}
+		else{
+			//CustomToast.generateToast(R.string.after_test_pass, 2);
+		}
+		
 		//ClickLog.Log(ClickLogId.STATISTIC_ENTER);
 		enablePage(true);
 		statisticFragment = this;

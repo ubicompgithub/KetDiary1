@@ -1,0 +1,44 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/upper_bar"
+        android:layout_width="match_parent"
+        android:layout_height="55dip"
+        android:background="@drawable/upper_bar_bg" >
+	    <ImageView
+	        android:id="@+id/back_to_calendar"
+	        android:layout_width="wrap_content"
+	        android:layout_height="30dp"
+	        android:src="@drawable/button_btcalendar"
+	        android:layout_alignParentLeft="true"
+	        android:layout_marginLeft="15dp"
+	        android:layout_marginTop="10dp"/>
+	    <TextView
+	        android:id="@+id/month_text_chart"
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:layout_toRightOf="@+id/back_to_calendar"       
+	        android:text=" 6月"
+	        android:textColor="@color/text_color"
+	        android:textAppearance="?android:attr/textAppearanceLarge"
+	        android:layout_marginLeft="2dp"
+	        android:layout_marginTop="10dp" />
+	    
+	    <ImageView
+			android:id="@+id/toggle_linechart"
+			android:src="@drawable/dropup_arrow"
+			android:layout_width="40dip"
+			android:layout_height="wrap_content"
+			android:clickable="true"
+			android:layout_toRightOf="@+id/month_text_chart"
+			android:layout_marginTop="17dp" />
+	    
+	    <ImageView 
+	        android:id="@+id/line_chart_filter"
+	        android:layout_width="31dp"
+	        android:layout_height="24dp"
+	        android:minWidth="0dp"
+	    	android:minHeight="0dp"
+	        android:background="@drawable/button_filter"
+	        android:layout_alignParentRight="true"
+	        android:layout_marginRight="20dp"
+	        android:layout_marginTop="13dp"/> 
+    </RelativeLayout>

@@ -20,9 +20,9 @@
     </string-array>
     
     <string-array name="note_date">
-        <item>5/16</item>
-        <item>5/15</item>
-        <item>5/14</item>
+        <item>今天</item>
+        <item>昨天</item>
+        <item>前天</item>
     </string-array>
     
     <string-array name="note_negative">

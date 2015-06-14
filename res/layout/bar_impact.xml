@@ -12,7 +12,7 @@
        android:layout_marginLeft="20dp"
        android:layout_marginTop="20dp"
        android:gravity="left"
-       android:text="對你的影響："
+       android:text="對你持續戒毒是好或壞的影響："
        android:textColor="@color/dark_gray"
        android:textSize="16sp" />
 

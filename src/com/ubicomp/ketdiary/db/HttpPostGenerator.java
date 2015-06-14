@@ -3,6 +3,7 @@ package com.ubicomp.ketdiary.db;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -13,8 +14,11 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 
+import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
 import com.ubicomp.ketdiary.data.structure.TestResult;
@@ -73,14 +77,25 @@ public class HttpPostGenerator {
 		String uid = PreferenceControl.getUID();
 		Log.i("debug", uid);
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-		nvps.add(new BasicNameValuePair("USERID", uid));
+		nvps.add(new BasicNameValuePair("uid", uid));
 		//@SuppressWarnings("deprecation")
-		//Calendar c = PreferenceControl.getStartDate();
-		//String joinDate = c.get(Calendar.YEAR) + "-"
-		//		+ (c.get(Calendar.MONTH) + 1) + "-"
-		//		+ c.get(Calendar.DAY_OF_MONTH);
-		//nvps.add(new BasicNameValuePair("JOIN_DATE", joinDate));
+		/*
+		Calendar c = PreferenceControl.getStartDate();
+		String joinDate = c.get(Calendar.YEAR) + "-"
+				+ (c.get(Calendar.MONTH) + 1) + "-"
+				+ c.get(Calendar.DAY_OF_MONTH);
 
+		nvps.add(new BasicNameValuePair("userData[]", joinDate));*/
+		nvps.add(new BasicNameValuePair("userData[]", PreferenceControl.getDeviceId()));
+		PackageInfo pinfo;
+		try {
+			pinfo = App.getContext().getPackageManager()
+					.getPackageInfo(App.getContext().getPackageName(), 0);
+			String versionName = pinfo.versionName;
+			nvps.add(new BasicNameValuePair("userData[]", versionName));
+		} catch (NameNotFoundException e) {
+		}
+		
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 		} catch (UnsupportedEncodingException e) {}
@@ -160,6 +175,7 @@ public class HttpPostGenerator {
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getIsAfterTest())));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getTv().getTimestamp())));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getRecordTv().getTimestamp())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getTimeSlot())));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getCategory())));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getType())));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getItems())));

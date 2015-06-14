@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/shadow" >
+
+    <RelativeLayout
+        android:layout_width="232.7dp"
+        android:layout_height="232.7dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/choosedate_dialog"
+        android:splitMotionEvents="false" >
+
+        <TextView
+            android:id="@+id/choose_title"
+            android:layout_width="222dp"
+            android:layout_height="76dp"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/normal_text_size" />
+
+        <TextView
+            android:id="@+id/choose_item1"
+            android:layout_width="232.7dp"
+            android:layout_height="51.3dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="14dp"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/normal_text_size" />
+
+        <TextView
+            android:id="@+id/choose_item2"
+            android:layout_width="232.7dp"
+            android:layout_height="51.3dp"
+            android:layout_above="@+id/choose_item1"
+            android:layout_alignParentLeft="true"
+            android:gravity="center"
+            android:text="@string/ok"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/normal_text_size" />
+
+        <TextView
+            android:id="@+id/choose_item3"
+            android:layout_width="232.7dp"
+            android:layout_height="51.3dp"
+            android:layout_above="@+id/choose_item2"
+            android:layout_alignParentLeft="true"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/normal_text_size" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

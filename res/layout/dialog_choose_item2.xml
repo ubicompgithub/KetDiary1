@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/shadow" >
+
+    <LinearLayout
+        android:layout_width="232.7dp"
+        android:layout_height="232.7dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/choosedate_dialog"
+        android:splitMotionEvents="false"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/choose_title"
+            android:layout_width="match_parent"
+            android:layout_height="76dp"
+            android:gravity="center"
+            android:textColor="@color/text_gray"
+            android:textSize="@dimen/normal_text_size" />
+
+        <ListView
+            android:id="@+id/choose_listview"
+            android:layout_width="match_parent"
+            android:layout_height="156dp"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:visibility="visible" >
+        </ListView>
+
+	</LinearLayout>
+
+
+</RelativeLayout>

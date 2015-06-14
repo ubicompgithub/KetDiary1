@@ -7,6 +7,7 @@ public class NoteAdd {
 	private int isAfterTest;
 	private TimeValue tv;
 	private TimeValue recordTv;
+	private int timeslot;
 	private int category;
 	private int type;
 	private int items;
@@ -15,14 +16,16 @@ public class NoteAdd {
 	private int weeklyScore;
 	private int score;
 
-	public NoteAdd(int isAfterTest, long tv, int rYear, int rMonth, int rDay, 
+	public NoteAdd(int isAfterTest, long tv, int rYear, int rMonth, int rDay, int timeslot,
 			int category, int type, int items, int impact, String description, int weeklyScore, int score) {
 		this.isAfterTest = isAfterTest;
 		this.tv = TimeValue.generate(tv);
+		
 		Calendar cal = Calendar.getInstance();
 		cal.set(rYear, rMonth, rDay, 0, 0, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 		this.recordTv = TimeValue.generate(cal.getTimeInMillis());
+		this.timeslot = timeslot;
 		this.category = category;
 		this.type = type;
 		this.items = items;
@@ -61,6 +64,10 @@ public class NoteAdd {
 
 	public TimeValue getRecordTv() {
 		return recordTv;
+	}
+	
+	public int getTimeSlot() {
+		return timeslot;
 	}
 
 	public int getIsAfterTest() {

@@ -3,8 +3,7 @@
     android:id="@+id/test_fragment_main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg">
-    
+    android:background="@drawable/bg" >
     
     <TextView
         android:id="@+id/test_message"
@@ -105,7 +104,6 @@
             android:id="@+id/iv_bar_ac"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/test_progress_bg"
             android:visibility="invisible" />
 
     </FrameLayout>
@@ -220,7 +218,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Note" />
+                android:text="Note"
+                android:visibility="invisible" />
 
         </LinearLayout>
 
