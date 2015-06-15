@@ -19,8 +19,7 @@
         android:layout_height="@dimen/note_bottom_bar_height"
         android:layout_alignParentBottom="true"
         android:background="@drawable/note_button_bg"
-        android:orientation="vertical"
-        android:layout_marginBottom="-10dp" >
+        android:orientation="vertical" >
         
     </LinearLayout>
     

@@ -3,6 +3,7 @@ package com.ubicomp.ketdiary.mydaybook;
 import java.util.Calendar;
 import java.util.Random;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.R;
 
 public class SectionFragment extends Fragment {
@@ -28,6 +30,7 @@ public class SectionFragment extends Fragment {
 
     private GridLayout glCalendar;
     private ScrollView sv;
+    private Context context;
     
     private TextView todayButton;
     private static View LastSelected;
@@ -35,6 +38,13 @@ public class SectionFragment extends Fragment {
     private static View viewToday;
     private static int selectedDay = thisDay;
     private static int selectedMonth = thisMonth;
+    
+    @Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		context = App.getContext();
+	}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,7 +65,7 @@ public class SectionFragment extends Fragment {
 			public void onClick(View v) {
 				selectedDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 				selectedMonth = Calendar.getInstance().get(Calendar.MONTH);
-				((MainActivity) getActivity()).setCurrentCalendarPage(thisMonth + 1 - Database.START_MONTH);
+				//((MainActivity) getActivity()).setCurrentCalendarPage(thisMonth + 1 - Database.START_MONTH);
 				
 				sv.smoothScrollTo(0 , 270*(thisDay+4)-1350-900);
 				
@@ -153,7 +163,7 @@ public class SectionFragment extends Fragment {
 							}
 						}
 						
-    					Toast.makeText(getActivity(), date_month_year, Toast.LENGTH_SHORT).show();
+    					Toast.makeText(context, date_month_year, Toast.LENGTH_SHORT).show();
     					
     					sv.smoothScrollTo(0 , 270*(Integer.parseInt(parsed_date[0])+4)-1350-900);
 				

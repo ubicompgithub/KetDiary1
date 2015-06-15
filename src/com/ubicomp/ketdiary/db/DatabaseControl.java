@@ -589,6 +589,54 @@ public class DatabaseControl {
 			db.close();
 		}
 	}
+	
+	
+	
+	/**
+	 * This method is used for getting all prime brac Detection
+	 * 
+	 * @return An array of Detection. If there are no detections, return null
+	 * @see ubicomp.soberdiary.data.structure.Detection
+	 */
+	
+	public NoteAdd[] getAllNoteAdd() {
+		synchronized (sqlLock) {
+			db = dbHelper.getReadableDatabase();
+			String sql = "SELECT * FROM NoteAdd ORDER BY recordYear, recordMonth, recordDay, timeslot DESC"; // TODO: Just get useful data
+			Cursor cursor = db.rawQuery(sql, null);
+			int count = cursor.getCount();
+			if (count == 0) {
+				cursor.close();
+				db.close();
+				return null;
+			}
+
+			NoteAdd[] noteAdd = new NoteAdd[count];
+			for (int i = 0; i < count; ++i) {
+				cursor.moveToPosition(i);
+				int isAfterTest = cursor.getInt(1);
+				long ts = cursor.getLong(5);
+				int year = cursor.getInt(7);
+				int month = cursor.getInt(8);
+				int day = cursor.getInt(9);
+				int timeslot = cursor.getInt(10);
+				int category = cursor.getInt(11);
+				int type = cursor.getInt(12);
+				int items = cursor.getInt(13);
+				int impact = cursor.getInt(14);
+				String reason = cursor.getString(15);
+				int weeklyScore = cursor.getInt(16);
+				int score = cursor.getInt(17);
+				noteAdd[i] = new NoteAdd(isAfterTest, ts, year, month, day, timeslot, category, type, items, impact, reason, weeklyScore, score);
+			}
+
+			cursor.close();
+			db.close();
+			return noteAdd;
+		}
+	}
+	
+	
 	/**
 	 * Get EmotionManagement results by date
 	 * 

@@ -13,6 +13,7 @@ public class TimeValue {
 	private int day;
 	private int hour;
 	private int timeslot;
+	private int day_of_week;
 	private int week;
 	private long timestamp;
 	public static final int TIME_MORNING = 0;
@@ -26,6 +27,7 @@ public class TimeValue {
 		int month = cal.get(Calendar.MONTH);
 		int day = cal.get(Calendar.DAY_OF_MONTH);
 		int hour = cal.get(Calendar.HOUR_OF_DAY);
+		int day_of_week = cal.get(Calendar.DAY_OF_WEEK);
 		int week = 0;//WeekNumCheck.getWeek(timestamp);
 		int timeslot;
 		if (hour < 12)
@@ -35,15 +37,16 @@ public class TimeValue {
 		else
 			timeslot = TimeValue.TIME_NIGHT;
 
-		return new TimeValue(year, month, day, hour, timeslot, timestamp, week);
+		return new TimeValue(year, month, day, hour, day_of_week, timeslot, timestamp, week);
 	}
 
-	protected TimeValue(int year, int month, int day, int hour, int timeslot,
+	protected TimeValue(int year, int month, int day, int hour, int day_of_week, int timeslot,
 			long timestamp, int week) {
 		this.year = year;
 		this.month = month;
 		this.day = day;
 		this.hour = hour;
+		this.day_of_week = day_of_week;
 		this.timeslot = timeslot;
 		this.timestamp = timestamp;
 		this.week = week;
@@ -126,6 +129,10 @@ public class TimeValue {
 
 	public int getDay() {
 		return day;
+	}
+	
+	public int getDayOfWeek(){
+		return day_of_week;
 	}
 
 	public int getHour() {

@@ -1,15 +1,18 @@
-package com.ubicomp.ketdiary.mydaybook;
+package com.ubicomp.ketdiary.fragment;
 
+import java.io.File;
 import java.util.Calendar;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -20,14 +23,36 @@ import android.widget.SlidingDrawer.OnDrawerOpenListener;
 import android.widget.TextView;
 
 import com.ubicomp.ketdiary.App;
+import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.data.structure.NoteAdd;
+import com.ubicomp.ketdiary.db.DatabaseControl;
+import com.ubicomp.ketdiary.db.NoteCategory2;
+import com.ubicomp.ketdiary.db.TestDataParser2;
+import com.ubicomp.ketdiary.file.MainStorage;
+import com.ubicomp.ketdiary.file.QuestionFile;
+import com.ubicomp.ketdiary.mydaybook.Database;
+import com.ubicomp.ketdiary.mydaybook.SectionsPagerAdapter;
 import com.ubicomp.ketdiary.mydaybook.linechart.ChartCaller;
 import com.ubicomp.ketdiary.mydaybook.linechart.LineChartTitle;
 import com.ubicomp.ketdiary.mydaybook.linechart.LineChartView;
+import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.ui.AddNoteDialog;
+import com.ubicomp.ketdiary.ui.CheckResultDialog;
+import com.ubicomp.ketdiary.ui.TestQuestionCaller;
 //import android.view.ViewGroup.LayoutParams;
 
-public class MainActivity extends FragmentActivity implements ChartCaller {
-
+public class DaybookFragment extends Fragment implements ChartCaller, TestQuestionCaller {
+	
+	public Activity activity = null;
+	private DaybookFragment daybookFragment;
+	private View view;
+	
+	private CheckResultDialog msgBox;
+	private RelativeLayout fragment_layout;
+	
+	private static final String TAG = "DayBook";
+	
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private ViewPager mViewPager;
 	private LinearLayout diaryList, boxesLayout, drawerContent;
@@ -43,6 +68,11 @@ public class MainActivity extends FragmentActivity implements ChartCaller {
 		
 	private static int sv_item_height;
 	
+	//file
+	private QuestionFile questionFile;
+	private File mainDirectory = null;
+	private TestDataParser2 TDP;
+	
 	private int fragmentIdx;
 	
 	public int selectedDay, selectedMonth;
@@ -55,57 +85,79 @@ public class MainActivity extends FragmentActivity implements ChartCaller {
 	
 	public View lineChartBar, lineChartView, lineChartFilter, calendarBar, calendarView;
 	
-	public ImageView lineChartFilterButton;
+	public ImageView lineChartFilterButton, addButton;
 	
 	private boolean isFilterIsOpen = false;
+	private AddNoteDialog notePage = null;
+	
+	private DatabaseControl db;
+	private NoteCategory2 dict;
+	private static final String[] dayOfWeek = {" ", "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
+	private static final String[] timeslot = {"上午", "下午", "晚上"};
 	
 	private int drawerHeight = App.getContext().getResources().getDimensionPixelSize(R.dimen.drawer_normal_height);
 	//public static List<Integer> filterList = new ArrayList<Integer>();
 
 	@SuppressWarnings("deprecation")
+	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
 		
-		context = this;
+		context = App.getContext();
+		db = new DatabaseControl();
+		dict = new NoteCategory2();
 		caller = this;
+		daybookFragment = this;
+	}
+	
+	
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		view = inflater.inflate(R.layout.fragment_mydaybook, container, false);
 		
-		drawerContent = (LinearLayout) findViewById(R.id.drawer_content);
-		upperBarContent = (RelativeLayout) findViewById(R.id.upper_bar);
-		LayoutInflater inflater = LayoutInflater.from(context);
-		calendarView = (View) inflater.inflate(R.layout.calendar_main, null, false);
-		calendarBar = (View) inflater.inflate(R.layout.calendar_upperbar, null, false);
+		fragment_layout = (RelativeLayout) view.findViewById(R.id.mydaybook_layout);
+		
+		drawerContent = (LinearLayout) view.findViewById(R.id.drawer_content);
+		upperBarContent = (RelativeLayout) view.findViewById(R.id.upper_bar);
+		
+		
+		//LayoutInflater inflater = LayoutInflater.from(context);
+		calendarView = (View) inflater.inflate(R.layout.calendar_main, null);
+		calendarBar = (View) inflater.inflate(R.layout.calendar_upperbar, null);
 		
 		drawerContent.addView(calendarView);
 		upperBarContent.addView(calendarBar);
 		
-		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());  
+		mSectionsPagerAdapter = new SectionsPagerAdapter(getActivity().getSupportFragmentManager());  
 		myConstant = new Database();
 		
 		// Set up the ViewPager with the sections adapter.
-		mViewPager = (ViewPager) findViewById(R.id.pager);  
+		mViewPager = (ViewPager) view.findViewById(R.id.pager);  
 		mViewPager.setAdapter(mSectionsPagerAdapter);	
 		
 		// Initialize the selectedDay and selectedMonth
 		selectedDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 		selectedMonth = Calendar.getInstance().get(Calendar.MONTH);
 		
-		backToTodayText = (TextView) findViewById(R.id.back_to_today);
+		backToTodayText = (TextView) view.findViewById(R.id.back_to_today);
 		backToTodayText.setText(Integer.toString(selectedDay));
 		
-		titleText = (TextView) findViewById(R.id.month_text);
+		titleText = (TextView) view.findViewById(R.id.month_text);
 		
-		drawer = (SlidingDrawer) findViewById(R.id.slidingDrawer1);
-		toggle = (ImageView) findViewById(R.id.toggle);
-		linechartIcon = (ImageView) findViewById(R.id.linechart_icon);
+		drawer = (SlidingDrawer) view.findViewById(R.id.slidingDrawer1);
+		toggle = (ImageView) view.findViewById(R.id.toggle);
+		linechartIcon = (ImageView) view.findViewById(R.id.linechart_icon);
 	
 		lineChartBar = (View) inflater.inflate(R.layout.linechart_upperbar, null, false);
 		lineChartView = (View) inflater.inflate(R.layout.linechart_main, null, false);
 		lineChartFilter = (View) inflater.inflate(R.layout.linechart_filter, null, false);
 	    calendarIcon = (ImageView) lineChartBar.findViewById(R.id.back_to_calendar);
 	    toggle_linechart = (ImageView) lineChartBar.findViewById(R.id.toggle_linechart);
-
+	    
+	    addButton = (ImageView) view.findViewById(R.id.add_button);
+	    
 		showDiary();
 				
 		drawer.toggle();
@@ -139,16 +191,16 @@ public class MainActivity extends FragmentActivity implements ChartCaller {
 				}
 				if  (!drawer.isOpened()) { drawer.toggle();}
 				
-				lineChart = (LineChartView) findViewById(R.id.lineChart);
+				lineChart = (LineChartView) view.findViewById(R.id.lineChart);
 		        lineChart.setChartData(getRandomData());
 		        lineChart.requestLayout();
 		        lineChart.getLayoutParams().width = 2200;
 		        
-		        chartTitle = (LineChartTitle) findViewById(R.id.chart_title);
+		        chartTitle = (LineChartTitle) view.findViewById(R.id.chart_title);
 		        chartTitle.setting(caller);
 		        setChartType(2);
 		        
-		        chartAreaLayout = (LinearLayout) findViewById(R.id.linechart_tabs);
+		        chartAreaLayout = (LinearLayout) view.findViewById(R.id.linechart_tabs);
 		        chartAreaLayout.setBackgroundResource(R.drawable.linechart_bg);
 				
 			}
@@ -254,7 +306,25 @@ public class MainActivity extends FragmentActivity implements ChartCaller {
 				}
 				
 			}
-		});		
+		});
+		
+		
+		notePage = new AddNoteDialog(daybookFragment, fragment_layout);
+		addButton.bringToFront();
+		addButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				notePage.initialize();
+				notePage.show();
+			}
+		});
+		
+		
+		
+		
+		
+		
+		return view;		
 	}
 	
 
@@ -279,24 +349,78 @@ public class MainActivity extends FragmentActivity implements ChartCaller {
 	
 	
 	@Override
-	protected void onResume() {
+	public void onResume() {
 		super.onResume();
+		
+		msgBox = new CheckResultDialog(fragment_layout);
+		
+		long curTime = System.currentTimeMillis();
+		long testTime = PreferenceControl.getLatestTestCompleteTime();
+		long pastTime = curTime - testTime;
+		int note_state = PreferenceControl.getAfterTestState();
+		
+		if(PreferenceControl.getCheckResult() && pastTime < MainActivity.WAIT_RESULT_TIME){ //還沒察看結果且時間還沒到
+		
+		}
+		else if(PreferenceControl.getCheckResult() && pastTime > MainActivity.WAIT_RESULT_TIME){//還沒察看結果且時間到了
+			msgBox.initialize();
+			msgBox.show();	
+		}
+		else{
+			
+		}
 	}
 	
 	private void showDiary() {		
-		diaryList = (LinearLayout) findViewById(R.id.item);
-				
+		diaryList = (LinearLayout) view.findViewById(R.id.item);
+		
+		
+		NoteAdd[] noteAdds = db.getAllNoteAdd();
+		Log.d(TAG, String.valueOf(noteAdds.length));
+		
+		for(int i=0; i < noteAdds.length; i++){
+			LayoutInflater inflater = LayoutInflater.from(context);
+			diaryItem = inflater.inflate(R.layout.diary_item, null);
+			LinearLayout layout = (LinearLayout)diaryItem.findViewById(R.id.diary_layout);
+			
+			TextView date_num = (TextView) diaryItem.findViewById(R.id.diary_date);
+			TextView week_num = (TextView) diaryItem.findViewById(R.id.diary_week);
+			TextView timeslot_num = (TextView) diaryItem.findViewById(R.id.diary_timeslot);
+			ImageView type_img = (ImageView) diaryItem.findViewById(R.id.diary_image_type);
+			TextView items_txt = (TextView) diaryItem.findViewById(R.id.diary_items);
+			
+			int date = noteAdds[i].getRecordTv().getDay();
+			int dayOfweek = noteAdds[i].getRecordTv().getDayOfWeek();
+			int slot = noteAdds[i].getTimeSlot();
+			int items = noteAdds[i].getItems();
+			
+			date_num.setText(""+ date + "號");
+			week_num.setText(dayOfWeek[ dayOfweek ]);
+			timeslot_num.setText(timeslot[ slot ] );
+			items_txt.setText( dict.getItems(items) );
+			
+			Log.d(TAG, date+"號,星期"+dayOfweek+"時段"+slot+"項目"+items);
+			
+			diaryList.addView(diaryItem);
+			boxesLayout = (LinearLayout) view.findViewById(R.layout.diary_item);
+		}
+		
+		
+		
+		
+		/*		
 		for (int n = 1  ; n <=30 ; n++) {
-			diaryItem = getLayoutInflater().inflate(R.layout.diary_item, null);
+			LayoutInflater inflater = LayoutInflater.from(context);
+			diaryItem = inflater.inflate(R.layout.diary_item, null);
 			
 			//sv_item_height = diaryItem.getMeasuredHeight();
 			TextView date_num = (TextView) diaryItem.findViewById(R.id.diary_date);
 			diaryList.addView(diaryItem);
 			date_num.setText(Integer.toString(n) + "號");
 			
-			boxesLayout = (LinearLayout) findViewById(R.layout.diary_item);
+			boxesLayout = (LinearLayout) view.findViewById(R.layout.diary_item);
 		
-		}
+		}*/
 	}
 	
 	public void setCurrentCalendarPage(int pageIdx){
@@ -311,5 +435,39 @@ public class MainActivity extends FragmentActivity implements ChartCaller {
 			drawer.toggle();
 		}
     }
+    
+    
+    public void writeQuestionFile(int day, int timeslot, int type, int items, int impact, String description) {
+    	
+    	setStorage();
+    	
+		if( questionFile!= null )
+			questionFile.write(day, timeslot, type, items, impact, description);
+		
+		if( TDP!= null ){
+			//TDP.startAddNote();
+			//TDP.getQuestionResult2(textFile)
+			TDP.startAddNote3(day, timeslot, type, items, impact, description);
+		}
+	}
+    
+    private void setStorage() {
+		File dir = MainStorage.getMainStorageDirectory();
+		
+		long timestamp = System.currentTimeMillis();
+		
+		mainDirectory = new File(dir, String.valueOf(0));
+		if (!mainDirectory.exists())
+			if (!mainDirectory.mkdirs()) {
+				return;
+			}
+		
+		
+		TDP = new TestDataParser2(0); 
+		//TDP.start();0
+		
+		
+		questionFile = new QuestionFile(mainDirectory);
+	}
 		
 }

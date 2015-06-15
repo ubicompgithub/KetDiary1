@@ -1,9 +1,7 @@
 package com.ubicomp.ketdiary;
 
-import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.media.AudioManager;
@@ -31,9 +29,9 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
+import com.ubicomp.ketdiary.fragment.DaybookFragment;
 import com.ubicomp.ketdiary.fragment.NoteFragment;
 import com.ubicomp.ketdiary.fragment.StatisticFragment;
-import com.ubicomp.ketdiary.fragment.StorytellingFragment;
 import com.ubicomp.ketdiary.fragment.TestFragment;
 import com.ubicomp.ketdiary.system.Config;
 import com.ubicomp.ketdiary.system.PreferenceControl;
@@ -418,7 +416,7 @@ public class MainActivity extends FragmentActivity {
 							fragments[i] = new StatisticFragment();
 							break;
 						case 2:
-							fragments[i] = new StorytellingFragment();
+							fragments[i] = new DaybookFragment();
 							break;
 						}
 						newFragment = true;
@@ -428,7 +426,7 @@ public class MainActivity extends FragmentActivity {
 						data.putInt("action", notify_action);
 						if (!newFragment) {
 							ft.remove(fragments[i]);
-							fragments[i] = new StorytellingFragment();
+							fragments[i] = new DaybookFragment();
 							newFragment = true;
 						}
 						fragments[i].setArguments(data);

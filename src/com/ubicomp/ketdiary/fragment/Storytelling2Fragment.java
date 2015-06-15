@@ -15,7 +15,7 @@ import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.CheckResultDialog;
 
-public class StorytellingFragment extends Fragment {
+public class Storytelling2Fragment extends Fragment {
 
 	private View view;
 	private ListView listView;
