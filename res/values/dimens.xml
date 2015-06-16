@@ -38,11 +38,10 @@
     <dimen name="chart_button_start_left">30dp</dimen>
     <dimen name="chart_button_start_top">55dp</dimen>
     <dimen name="chart_height">167dp</dimen>
-    <dimen name="chart_title_top">21dp</dimen>
-    <dimen name="chart_title_0">9dp</dimen>
-    <dimen name="chart_title_1">92dp</dimen>
-    <dimen name="chart_title_2">175dp</dimen>
-    <dimen name="chart_title_3">258dp</dimen>
+    <dimen name="chart_title_top">30dp</dimen>
+    <dimen name="chart_title_0">36dp</dimen>
+    <dimen name="chart_title_1">160dp</dimen>
+    <dimen name="chart_title_2">258dp</dimen>
     <dimen name="chart_label_base">13dp</dimen>
     <dimen name="chart_label_gap">3dp</dimen>
     <dimen name="chart_label_top">6dp</dimen>

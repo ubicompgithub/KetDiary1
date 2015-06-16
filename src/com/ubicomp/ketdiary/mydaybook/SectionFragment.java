@@ -163,7 +163,7 @@ public class SectionFragment extends Fragment {
 							}
 						}
 						
-    					Toast.makeText(context, date_month_year, Toast.LENGTH_SHORT).show();
+    					//Toast.makeText(context, date_month_year, Toast.LENGTH_SHORT).show();
     					
     					sv.smoothScrollTo(0 , 270*(Integer.parseInt(parsed_date[0])+4)-1350-900);
 				

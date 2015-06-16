@@ -1,6 +1,8 @@
 package com.ubicomp.ketdiary.mydaybook.linechart;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Random;
 
 import android.content.Context;
@@ -21,6 +23,8 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.data.structure.NoteAdd;
+import com.ubicomp.ketdiary.db.DatabaseControl;
 
 public class LineChartView extends View {
 
@@ -29,6 +33,10 @@ public class LineChartView extends View {
     private static final int offsetX = 60;
     private static int range;
     private float[] datapoints = new float[] {};
+    private List<Float> impact_data; 
+    private List<Integer> type_data;
+    
+    private static final String TAG = "LineChartView";
     
     private Paint paint = new Paint();
     private Bitmap mBitmap;
@@ -54,18 +62,56 @@ public class LineChartView extends View {
     private int mode = 0;  
     private int cursorLinePos = 5;
     private int initHeight;
+    
+    private DatabaseControl db;
 
 	public LineChartView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         gestureDetector = new GestureDetector(context, new GestureListener());
         initHeight = getHeight();
-
+        db = new DatabaseControl();
+        impact_data = new ArrayList<Float>();
+        type_data = new ArrayList<Integer>();
     }
 
     public void setChartData(float[] datapoints) {
-        this.datapoints = datapoints.clone();
-        invalidate();
+        //this.datapoints = datapoints.clone();
+        //invalidate();
+    	setChartData2();
+    }
+    
+    public void setChartData2() {
+    	NoteAdd[] noteAdds = db.getAllNoteAdd();
+    	int previous_date = 0;
+    	int data_num=-1;
+    	int count = 0;
+    	float cum_impact=0;
+    	Log.d(TAG, String.valueOf(noteAdds.length));
+		for(int i=0; i < noteAdds.length; i++){
+			int date = noteAdds[i].getRecordTv().getDay();
+			int type = noteAdds[i].getType();
+			int impact = noteAdds[i].getImpact()-3;
+			
+	
+			if(date!= previous_date){
+				if(count!= 0){
+					cum_impact/=(float)count;
+					impact_data.add(cum_impact);
+					type_data.add(type);
+					count = 1;
+				}
+				cum_impact = impact;
+			}
+			else{
+				cum_impact+=impact;
+				count++;
+			}
+			previous_date = date;
+		}
+		//datapoints = ArrayUtils.toPrimitive(list.toArray(new Float[0]), 0.0F);
+		//data.toArray( datapoints );
+		Log.d(TAG, impact_data.size()+" "+type_data.size());
     }
     
  // override onSizeChanged
@@ -153,7 +199,8 @@ public class LineChartView extends View {
     	int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
     	int currentDate = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
     	
-    	int numOfDays = datapoints.length;
+    	//int numOfDays = datapoints.length;
+    	int numOfDays = impact_data.size();
     	for (int i = 0; i < numOfDays ; i ++) {
     		if (mode == ZOOM2) {
     			if (i%5 != 0) continue;
@@ -180,9 +227,10 @@ public class LineChartView extends View {
     private void drawLineChart(Canvas canvas) {
         Path path = new Path();
         Paint p = new Paint();
-        path.moveTo(getXPos(0), getYPos(datapoints[0]));
-        for (int i = 1; i < datapoints.length; i++) {
-            path.lineTo(getXPos(i), getYPos(datapoints[i]));
+        //path.moveTo(getXPos(0), getYPos(datapoints[0]));
+        path.moveTo(getXPos(0), getYPos(impact_data.get(0)));
+        for (int i = 1; i < impact_data.size(); i++) {
+            path.lineTo(getXPos(i), getYPos(impact_data.get(i)));
         }
 
         paint.setStyle(Style.STROKE);
@@ -193,10 +241,11 @@ public class LineChartView extends View {
         canvas.drawPath(path, paint);
         paint.setShadowLayer(0, 0, 0, 0);
         
-        for (int i = 0; i < datapoints.length; i++) {
-        	Bitmap bmp = assignDot(datapoints[i]);
+        for (int i = 0; i < impact_data.size(); i++) {
+        	//Bitmap bmp = assignDot(impact_data.get(i));
+        	Bitmap bmp = assignDot2(i);
             bmp = getResizedBitmap(bmp, 25, 25);
-            canvas.drawBitmap(bmp, getXPos(i)-12, getYPos(datapoints[i])-10, p);
+            canvas.drawBitmap(bmp, getXPos(i)-12, getYPos(impact_data.get(i))-10, p);
         }
     }
     private Bitmap assignDot(float value) {
@@ -229,12 +278,47 @@ public class LineChartView extends View {
 		}
 		return bm;
     }
+    
+    private Bitmap assignDot2(int index) {
+    	Bitmap bm = null;
+
+		switch (index) {
+		case 1:
+			bm = d1;
+			break;
+		case 2:
+			bm = d2;
+			break;
+		case 3:
+			bm = d7;
+			break;
+		case 4:
+			bm = d4;
+			break;
+		case 5:
+			bm = d5;
+			break;
+		case 6:
+			bm = d6;
+			break;
+		case 7:
+			bm = d1;
+			break;
+		case 8:
+			bm = d7;
+			break;
+		default:
+			bm = d2;
+			break;
+		}
+		return bm;
+    }
     private void drawRectBar(Canvas canvas) {
     	Paint p = new Paint();
     	rectBarBg = getResizedBitmap(rectBarBg, 30, rectBarBg.getWidth());
     	canvas.drawBitmap(rectBarBg , 0 , getHeight() - 100 , p);
     	
-    	for (int i = 0; i < datapoints.length; i++) {
+    	for (int i = 0; i < impact_data.size(); i++) {
     		Random r = new Random();
     		int ran_num = r.nextInt(4 - 1) + 1;
     		if (ran_num == 1) {
@@ -266,7 +350,7 @@ public class LineChartView extends View {
 
     private float getXPos(float value) {
         float width = getWidth() - getPaddingLeft() - getPaddingRight();
-        float maxValue = datapoints.length - 1;
+        float maxValue = impact_data.size() - 1;
 
         // scale it to the view size
         value = (value / maxValue) * width;
@@ -295,7 +379,7 @@ public class LineChartView extends View {
     }
     
     public int getCursorPos(float x) {
-    	float xWidth = (getWidth() - getPaddingLeft() - getPaddingRight()) / datapoints.length;
+    	float xWidth = (getWidth() - getPaddingLeft() - getPaddingRight()) / impact_data.size();
     	int temp = (int) Math.round(x/xWidth); 
     	return temp;
     }

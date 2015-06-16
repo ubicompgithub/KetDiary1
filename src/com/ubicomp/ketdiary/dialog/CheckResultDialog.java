@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.ui;
+package com.ubicomp.ketdiary.dialog;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,6 +13,8 @@ import android.widget.RelativeLayout.LayoutParams;
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.ui.CustomToast;
+import com.ubicomp.ketdiary.ui.Typefaces;
 
 
 /**

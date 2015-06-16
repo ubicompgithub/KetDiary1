@@ -44,13 +44,13 @@ import com.ubicomp.ketdiary.camera.CameraRunHandler;
 import com.ubicomp.ketdiary.camera.ImageFileHandler;
 import com.ubicomp.ketdiary.camera.Tester;
 import com.ubicomp.ketdiary.db.TestDataParser2;
+import com.ubicomp.ketdiary.dialog.NoteDialog2;
+import com.ubicomp.ketdiary.dialog.TestQuestionCaller;
 import com.ubicomp.ketdiary.file.ColorRawFileHandler;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.QuestionFile;
 import com.ubicomp.ketdiary.file.VoltageFileHandler;
 import com.ubicomp.ketdiary.system.PreferenceControl;
-import com.ubicomp.ketdiary.ui.NoteDialog2;
-import com.ubicomp.ketdiary.ui.TestQuestionCaller;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
 public class TestFragment extends Fragment implements BluetoothListener, CameraCaller, TestQuestionCaller{
@@ -172,13 +172,15 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	
 	private static final int COUNT_DOWN_SECOND = 5;
 	private static final int WAIT_SALIVA_SECOND = 7;
-	
+	/*
 	private static final int FIRST_VOLTAGE_THRESHOLD = 25; //之後會是50 跟 40
 	private static final int SECOND_VOLTAGE_THRESHOLD= 15;
-	/*
+	
 	private static final int FIRST_VOLTAGE_THRESHOLD = 50; 
 	private static final int SECOND_VOLTAGE_THRESHOLD= 40;
 	*/
+	private static final int FIRST_VOLTAGE_THRESHOLD = 75; 
+	private static final int SECOND_VOLTAGE_THRESHOLD= 60;
 	
 	private static final int TIMEOUT_SECOND = 30;
 	private static final int CAMERATIMEOUT = 10;
@@ -356,7 +358,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			reset();
 			
 			
-			
+			/*
 			if(debug){
 				setState(new DoneState());
 			}
@@ -364,9 +366,9 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 				start_test = true;
 				setState(new ConnState());
 			}
-			/*
+			*/
 			start_test = true;
-			setState(new ConnState());*/
+			setState(new ConnState());
 		}
 	}
 	

@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.ui;
+package com.ubicomp.ketdiary.dialog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -93,7 +93,7 @@ public class NoteDialog{
 
 		//questionLayout = (LinearLayout) boxLayout
 				//.findViewById(R.id.msg_question_layout);
-		sp_date = (Spinner)boxLayout.findViewById(R.id.note_sp_date);
+		sp_date = (Spinner)boxLayout.findViewById(R.id.note_tx_date);
 	    sp_timeslot = (Spinner)boxLayout.findViewById(R.id.note_sp_timeslot);
 	    sp_item = (Spinner)boxLayout.findViewById(R.id.note_sp_items);
 	    bt_confirm=(Button)boxLayout.findViewById(R.id.button1);

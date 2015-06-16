@@ -29,17 +29,17 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
+import com.ubicomp.ketdiary.dialog.CheckResultDialog;
+import com.ubicomp.ketdiary.dialog.NoteDialog2;
 import com.ubicomp.ketdiary.fragment.DaybookFragment;
 import com.ubicomp.ketdiary.fragment.NoteFragment;
 import com.ubicomp.ketdiary.fragment.StatisticFragment;
 import com.ubicomp.ketdiary.fragment.TestFragment;
 import com.ubicomp.ketdiary.system.Config;
 import com.ubicomp.ketdiary.system.PreferenceControl;
-import com.ubicomp.ketdiary.ui.CheckResultDialog;
 import com.ubicomp.ketdiary.ui.CustomMenu;
 import com.ubicomp.ketdiary.ui.CustomTab;
 import com.ubicomp.ketdiary.ui.CustomToast;
-import com.ubicomp.ketdiary.ui.NoteDialog2;
 import com.ubicomp.ketdiary.ui.ScreenSize;
 import com.ubicomp.ketdiary.ui.Typefaces;
 

@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/note_all_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@color/white" >
 
     <LinearLayout
         android:id="@+id/note_title_layout"
@@ -10,7 +11,8 @@
         android:layout_height="70dp"
         android:orientation="vertical"
         android:layout_alignParentTop="true"
-        android:background="@drawable/upper_bar_bg" >
+        android:background="@drawable/upper_bar_bg"
+        android:paddingTop="22.5dp" >
     </LinearLayout>
     
     <LinearLayout
@@ -18,6 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/note_bottom_bar_height"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="-20dp"
         android:background="@drawable/note_button_bg"
         android:orientation="vertical" >
         
@@ -27,7 +30,8 @@
         android:id="@+id/note_main_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-10dp"
+        android:layout_marginTop="-15dp"
+        android:layout_marginBottom="0dp"
         android:layout_above="@id/note_bottom_layout"
         android:layout_below="@id/note_title_layout"
         android:background="@color/white"

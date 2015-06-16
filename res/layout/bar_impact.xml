@@ -45,7 +45,7 @@
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
                     android:paddingTop="10dp"
-                    android:progress="4"
+                    android:progress="3"
                     android:progressDrawable="@color/transparent"
                     android:thumb="@drawable/impact_thumb" />
                 

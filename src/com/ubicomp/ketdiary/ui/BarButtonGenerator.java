@@ -50,7 +50,7 @@ public class BarButtonGenerator {
 		
 		TextView note_title = (TextView) layout
 				.findViewById(R.id.note_title);
-		Spinner sp_date = (Spinner)layout.findViewById(R.id.note_sp_date);
+		Spinner sp_date = (Spinner)layout.findViewById(R.id.note_tx_date);
 	    Spinner sp_timeslot = (Spinner)layout.findViewById(R.id.note_sp_timeslot);
 	    
 	    
@@ -101,7 +101,7 @@ public class BarButtonGenerator {
 		
 		TextView note_title = (TextView) layout
 				.findViewById(R.id.note_title);
-		Spinner sp_date = (Spinner)layout.findViewById(R.id.note_sp_date);
+		Spinner sp_date = (Spinner)layout.findViewById(R.id.note_tx_date);
 	    Spinner sp_timeslot = (Spinner)layout.findViewById(R.id.note_sp_timeslot);
 	    
 	    note_title.setTypeface(wordTypefaceBold);

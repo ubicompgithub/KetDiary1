@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.ui;
+package com.ubicomp.ketdiary.dialog;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,17 +6,18 @@ import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.ui.Typefaces;
 
 
 /**
@@ -37,22 +38,26 @@ public class ChooseItemDialog{
 	private LinearLayout questionLayout;
 	
 	private RelativeLayout mainLayout;
-	
+	private ChooseItemCaller caller;
 	private TextView title;
 	/** @see Typefaces */
 	private Typeface wordTypeface, wordTypefaceBold, digitTypeface,
 			digitTypefaceBold;
 	
 	private ListView listView;
+	private int type;
+	private int select;
 	
 
 	
-	public ChooseItemDialog(RelativeLayout mainLayout, int type){
+	public ChooseItemDialog(ChooseItemCaller caller, RelativeLayout mainLayout, int type){
 		
 		this.context = App.getContext();
 		this.inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.mainLayout = mainLayout;
+		this.caller = caller;
+		this.type = type;
 		
 		wordTypeface = Typefaces.getWordTypeface();
 		wordTypefaceBold = Typefaces.getWordTypefaceBold();
@@ -71,7 +76,7 @@ public class ChooseItemDialog{
 		boxLayout.setVisibility(View.INVISIBLE);
 		
 		title = (TextView) boxLayout.findViewById(R.id.choose_title);
-		title.setText("日期");
+		
 		title.setTypeface(Typefaces.getWordTypefaceBold());
 		
 		listView = (ListView)boxLayout.findViewById(R.id.choose_listview);
@@ -81,16 +86,18 @@ public class ChooseItemDialog{
 	    };
 	    ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,R.layout.my_listitem,arr);*/
 		ArrayAdapter adapter;
-		
-		adapter = ArrayAdapter.createFromResource(context, R.array.note_date , R.layout.my_spinner);
-		if(type == 2)
-			adapter = ArrayAdapter.createFromResource(context, R.array.note_date , R.layout.my_spinner);
-		
+		title.setText("日期");
+		adapter = ArrayAdapter.createFromResource(context, R.array.note_date , R.layout.choose_listitem);
+		if(type == 2){
+			adapter = ArrayAdapter.createFromResource(context, R.array.note_time_slot , R.layout.choose_listitem);
+			title.setText("時段");
+		}
 	    listView.setAdapter(adapter);
 	    listView.setOnItemClickListener(new OnItemClickListener(){
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+				select = position;
 				clear();
 				close();
 			}
@@ -131,6 +138,8 @@ public class ChooseItemDialog{
 	public void close() {
 		if (boxLayout != null)
 			boxLayout.setVisibility(View.INVISIBLE);
+		
+		caller.resetView(type, select);
 	}
 	
 	

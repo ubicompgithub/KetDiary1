@@ -3,11 +3,10 @@
     android:id="@android:id/text1"
     android:layout_width="match_parent"
     android:layout_height="40dp"
-    android:background="@drawable/choose_color"
     android:ellipsize="marquee"
     android:gravity="center"
     android:singleLine="true"
-    android:textColor="@color/dark_gray"
+    android:textColor="@drawable/text_color2"
     android:textSize="16sp"
     android:textStyle="bold" >
 

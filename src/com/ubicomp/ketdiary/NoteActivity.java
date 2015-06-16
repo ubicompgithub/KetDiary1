@@ -59,7 +59,7 @@ public class NoteActivity extends Activity{
 	    //requestWindowFeature(Window.FEATURE_NO_TITLE); //before     
 	    setContentView(R.layout.activity_note);
 	    
-	    sp_date = (Spinner)findViewById(R.id.note_sp_date);
+	    sp_date = (Spinner)findViewById(R.id.note_tx_date);
 	    sp_timeslot = (Spinner)findViewById(R.id.note_sp_timeslot);
 	    sp_item = (Spinner)findViewById(R.id.note_sp_items);
 	    bt_confirm=(Button)findViewById(R.id.button1);

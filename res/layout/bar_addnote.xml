@@ -15,7 +15,7 @@
         android:gravity="center"/>
 
     <Spinner
-        android:id="@+id/note_sp_date"
+        android:id="@+id/note_tx_date"
         style="android:spinnerStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

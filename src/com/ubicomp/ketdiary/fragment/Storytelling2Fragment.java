@@ -12,8 +12,8 @@ import android.widget.TextView;
 
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.dialog.CheckResultDialog;
 import com.ubicomp.ketdiary.system.PreferenceControl;
-import com.ubicomp.ketdiary.ui.CheckResultDialog;
 
 public class Storytelling2Fragment extends Fragment {
 

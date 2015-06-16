@@ -37,10 +37,10 @@ public class NoteCategory2 {
 		dictionary.put(302, "興奮");
 		dictionary.put(303, "對目前生活感到滿意");
 		dictionary.put(304, "想起以前發生的好事");
-		dictionary.put(401, "想要證明毒品對自己不是問題");
-		dictionary.put(402, "試試偶爾吸毒但不會上癮");
-		dictionary.put(403, "試試和曾吸毒的朋友出去但不吸毒");
-		dictionary.put(404, "試試在大家都吸毒的場合但不吸毒");
+		dictionary.put(400, "想要證明毒品對自己不是問題");
+		dictionary.put(401, "試試偶爾吸毒但不會上癮");
+		dictionary.put(402, "試試和曾吸毒的朋友出去但不吸毒");
+		dictionary.put(403, "試試在大家都吸毒的場合但不吸毒");
 		dictionary.put(500, "在常用K或買K的地方");
 		dictionary.put(501, "看到想用K的東西");
 		dictionary.put(502, "聽到別人在談論用K經驗");

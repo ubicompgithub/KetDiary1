@@ -27,7 +27,7 @@
                     android:textAppearance="?android:attr/textAppearanceLarge" />
 
                 <Spinner
-                    android:id="@+id/note_sp_date"
+                    android:id="@+id/note_tx_date"
                     android:layout_width="121dp"
                     android:layout_height="45dp"
                     android:layout_weight="1" />

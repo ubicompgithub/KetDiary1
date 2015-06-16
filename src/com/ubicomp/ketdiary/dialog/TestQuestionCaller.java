@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.ui;
+package com.ubicomp.ketdiary.dialog;
 
 /**
  * Interface for calling the test questionnaire dialog

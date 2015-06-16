@@ -29,6 +29,10 @@ import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.db.NoteCategory2;
 import com.ubicomp.ketdiary.db.TestDataParser2;
+import com.ubicomp.ketdiary.dialog.AddNoteDialog;
+import com.ubicomp.ketdiary.dialog.AddNoteDialog2;
+import com.ubicomp.ketdiary.dialog.CheckResultDialog;
+import com.ubicomp.ketdiary.dialog.TestQuestionCaller2;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.QuestionFile;
 import com.ubicomp.ketdiary.mydaybook.Database;
@@ -37,12 +41,9 @@ import com.ubicomp.ketdiary.mydaybook.linechart.ChartCaller;
 import com.ubicomp.ketdiary.mydaybook.linechart.LineChartTitle;
 import com.ubicomp.ketdiary.mydaybook.linechart.LineChartView;
 import com.ubicomp.ketdiary.system.PreferenceControl;
-import com.ubicomp.ketdiary.ui.AddNoteDialog;
-import com.ubicomp.ketdiary.ui.CheckResultDialog;
-import com.ubicomp.ketdiary.ui.TestQuestionCaller;
 //import android.view.ViewGroup.LayoutParams;
 
-public class DaybookFragment extends Fragment implements ChartCaller, TestQuestionCaller {
+public class DaybookFragment extends Fragment implements ChartCaller, TestQuestionCaller2 {
 	
 	public Activity activity = null;
 	private DaybookFragment daybookFragment;
@@ -88,7 +89,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	public ImageView lineChartFilterButton, addButton;
 	
 	private boolean isFilterIsOpen = false;
-	private AddNoteDialog notePage = null;
+	private AddNoteDialog2 notePage = null;
 	
 	private DatabaseControl db;
 	private NoteCategory2 dict;
@@ -309,13 +310,15 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		});
 		
 		
-		notePage = new AddNoteDialog(daybookFragment, fragment_layout);
+		notePage = new AddNoteDialog2(daybookFragment, fragment_layout);
 		addButton.bringToFront();
 		addButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				notePage.initialize();
 				notePage.show();
+				addButton.setVisibility(View.INVISIBLE);
+				fragment_layout.setEnabled(false);
 			}
 		});
 		
@@ -352,6 +355,9 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	public void onResume() {
 		super.onResume();
 		
+		//setCurrentCalendarPage(selectedMonth + 1 - myConstant.START_MONTH);
+		
+		
 		msgBox = new CheckResultDialog(fragment_layout);
 		
 		long curTime = System.currentTimeMillis();
@@ -373,54 +379,113 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	
 	private void showDiary() {		
 		diaryList = (LinearLayout) view.findViewById(R.id.item);
-		
+		diaryList.removeAllViews();
 		
 		NoteAdd[] noteAdds = db.getAllNoteAdd();
 		Log.d(TAG, String.valueOf(noteAdds.length));
 		
-		for(int i=0; i < noteAdds.length; i++){
-			LayoutInflater inflater = LayoutInflater.from(context);
-			diaryItem = inflater.inflate(R.layout.diary_item, null);
-			LinearLayout layout = (LinearLayout)diaryItem.findViewById(R.id.diary_layout);
+		LayoutInflater inflater = LayoutInflater.from(context);
+		RelativeLayout lineView = (RelativeLayout)inflater.inflate(R.layout.white_line, null);
+		RelativeLayout white_line = (RelativeLayout)lineView.findViewById(R.id.white_line);
+		
+		int last_day = 0;
+		int last_timeslot = -1;
+		if(noteAdds != null){
+			for(int i=0; i < noteAdds.length; i++){
+				//LayoutInflater inflater = LayoutInflater.from(context);
+				diaryItem = inflater.inflate(R.layout.diary_item2, null);
+				LinearLayout layout = (LinearLayout)diaryItem.findViewById(R.id.diary_layout);
 			
 			TextView date_num = (TextView) diaryItem.findViewById(R.id.diary_date);
 			TextView week_num = (TextView) diaryItem.findViewById(R.id.diary_week);
 			TextView timeslot_num = (TextView) diaryItem.findViewById(R.id.diary_timeslot);
 			ImageView type_img = (ImageView) diaryItem.findViewById(R.id.diary_image_type);
 			TextView items_txt = (TextView) diaryItem.findViewById(R.id.diary_items);
+			TextView description_txt = (TextView) diaryItem.findViewById(R.id.diary_description);
+			TextView impact_txt = (TextView) diaryItem.findViewById(R.id.diary_impact);
 			
 			int date = noteAdds[i].getRecordTv().getDay();
 			int dayOfweek = noteAdds[i].getRecordTv().getDayOfWeek();
 			int slot = noteAdds[i].getTimeSlot();
+			int type = noteAdds[i].getType();
 			int items = noteAdds[i].getItems();
+			String descripton = noteAdds[i].getDescription();
+			int impact = noteAdds[i].getImpact();
 			
-			date_num.setText(""+ date + "號");
-			week_num.setText(dayOfWeek[ dayOfweek ]);
-			timeslot_num.setText(timeslot[ slot ] );
+			switch (type){
+				case 1:
+					type_img.setImageResource(R.drawable.emoji5);
+					break;
+				case 2:
+					type_img.setImageResource(R.drawable.emoji2);
+					break;
+				case 3:
+					type_img.setImageResource(R.drawable.emoji4);
+					break;
+				case 4:
+					type_img.setImageResource(R.drawable.emoji1);
+					break;
+				case 5:
+					type_img.setImageResource(R.drawable.emoji3);
+					break;
+				case 6:
+					type_img.setImageResource(R.drawable.others_emoji3);
+					break;
+				case 7:
+					type_img.setImageResource(R.drawable.others_emoji3);
+					break;
+				case 8:
+					break;
+			}
+			
+			if(date!= last_day){
+				date_num.setText(""+ date + "號");
+				week_num.setText(dayOfWeek[ dayOfweek ]);
+				timeslot_num.setText(timeslot[ slot ] );
+				
+			}
+			if(date == last_day){
+				if(slot!= last_timeslot){
+					date_num.setText("");
+					week_num.setText("");
+					timeslot_num.setText(timeslot[ slot ] );
+				}
+				else{
+					date_num.setText("");
+					week_num.setText("");
+					timeslot_num.setText("");
+				}
+			}
 			items_txt.setText( dict.getItems(items) );
+			//description_txt.setText(descripton);
+			//impact_txt.setText("影響：　"+String.valueOf(impact -4));
 			
+				
+			last_day = date;
+			last_timeslot = slot;
 			Log.d(TAG, date+"號,星期"+dayOfweek+"時段"+slot+"項目"+items);
 			
 			diaryList.addView(diaryItem);
+			//diaryList.addView(white_line);
 			boxesLayout = (LinearLayout) view.findViewById(R.layout.diary_item);
+			}
 		}
 		
-		
-		
-		
-		/*		
-		for (int n = 1  ; n <=30 ; n++) {
-			LayoutInflater inflater = LayoutInflater.from(context);
-			diaryItem = inflater.inflate(R.layout.diary_item, null);
+	
+		else{	//using dummy data
+			for (int n = 1  ; n <=30 ; n++) {
+				//LayoutInflater inflater = LayoutInflater.from(context);
+				diaryItem = inflater.inflate(R.layout.diary_item, null);
 			
-			//sv_item_height = diaryItem.getMeasuredHeight();
-			TextView date_num = (TextView) diaryItem.findViewById(R.id.diary_date);
-			diaryList.addView(diaryItem);
-			date_num.setText(Integer.toString(n) + "號");
+				//sv_item_height = diaryItem.getMeasuredHeight();
+				TextView date_num = (TextView) diaryItem.findViewById(R.id.diary_date);
+				diaryList.addView(diaryItem);
+				date_num.setText(Integer.toString(n) + "號");
 			
-			boxesLayout = (LinearLayout) view.findViewById(R.layout.diary_item);
+				boxesLayout = (LinearLayout) view.findViewById(R.layout.diary_item);
 		
-		}*/
+			}
+		}
 	}
 	
 	public void setCurrentCalendarPage(int pageIdx){
@@ -468,6 +533,14 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		
 		
 		questionFile = new QuestionFile(mainDirectory);
+	}
+
+
+	@Override
+	public void resetView() {
+		addButton.setVisibility(View.VISIBLE);
+		fragment_layout.setEnabled(true);
+		showDiary();
 	}
 		
 }
