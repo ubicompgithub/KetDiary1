@@ -13,9 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.R;
@@ -120,12 +120,21 @@ public class SectionFragment extends Fragment {
 		
 		View cellView;
 		TextView calDateText;
-
+		ImageView calDot1, calDot2, calDot3;
+		
+		
 		for (int i=0;i<maxWeeksOfMonth*maxDaysOfWeek;++i){
 					
 			cellView = inflater.inflate(R.layout.calendar_cell, null, false);
 			calDateText = (TextView) cellView.findViewById(R.id.tv_calendar_date);
-						
+			calDot1 = (ImageView) cellView.findViewById(R.id.iv_calendar_dot1);
+			calDot2 = (ImageView) cellView.findViewById(R.id.iv_calendar_dot2);
+			calDot3 = (ImageView) cellView.findViewById(R.id.iv_calendar_dot3);
+			
+			calDot1.setVisibility(View.INVISIBLE);
+			calDot2.setVisibility(View.INVISIBLE);
+			calDot3.setVisibility(View.INVISIBLE);
+			
 			cellView.setTag(Integer.toString(mCalendar.get(Calendar.DAY_OF_MONTH))+ "-"+ Integer.toString(mCalendar.get(Calendar.MONTH)+1)+ "-" +Integer.toString(mCalendar.get(Calendar.YEAR)) + "-" + Integer.toString(fragmentMonth));
 			cellView.setOnClickListener(new View.OnClickListener() {
 				
@@ -183,13 +192,43 @@ public class SectionFragment extends Fragment {
 			// Set cells that belong to current month 
 			if ( mCalendar.get(Calendar.MONTH) == fragmentMonth ){
 				calDateText.setBackgroundResource(R.drawable.bigbluedot);
-				
 				Random r = new Random();
-				int ran_num = r.nextInt(4 - 1) + 1;
 				
-				if (ran_num == 1) {}
-				else if (ran_num == 2) {calDateText.setBackgroundResource(R.drawable.bigreddot);}
-				else {calDateText.setBackgroundResource(R.drawable.biggraydot);}
+				if(mCalendar.get(Calendar.MONTH) == 5){
+					if ( mCalendar.get(Calendar.DAY_OF_WEEK) == 1 || mCalendar.get(Calendar.DAY_OF_WEEK) == 7){
+						calDateText.setBackgroundResource(R.drawable.bigreddot);
+					}
+				
+				
+					int ran_num = r.nextInt(4 - 1) + 1;
+				
+					if (ran_num == 1) {}
+					else if (ran_num == 2) {}//calDateText.setBackgroundResource(R.drawable.bigreddot);}
+					else {calDateText.setBackgroundResource(R.drawable.biggraydot);}
+					
+				}				
+				else{
+
+					int ran_num = r.nextInt(4 - 1) + 1;
+				
+					if (ran_num == 1) {
+						calDot1.setImageResource(R.drawable.reddot);
+						calDot1.setVisibility(View.VISIBLE);
+						calDot2.setImageResource(R.drawable.bluedot);
+						calDot2.setVisibility(View.VISIBLE);
+					}
+					else if (ran_num == 2) {
+						calDateText.setBackgroundResource(R.drawable.bigreddot);
+						calDot1.setImageResource(R.drawable.purpledot);
+						calDot1.setVisibility(View.VISIBLE);
+					}
+					
+					else {
+						calDateText.setBackgroundResource(R.drawable.biggraydot);
+						
+					}
+					
+				}
 				
 			}
 			else {calDateText.setTextColor(Color.BLACK);}
