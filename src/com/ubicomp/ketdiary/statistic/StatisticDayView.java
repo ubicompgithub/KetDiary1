@@ -5,19 +5,19 @@ import java.util.Calendar;
 
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.R;
-import com.ubicomp.ketdiary.check.TimeBlock;
+import com.ubicomp.ketdiary.data.structure.NoteAdd;
+import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.ui.CustomTypefaceSpan;
 import com.ubicomp.ketdiary.ui.Typefaces;
@@ -55,6 +55,12 @@ public class StatisticDayView extends StatisticPageView {
 	private Typeface digitTypefaceBold;
 	private Typeface wordTypeface;
 	private Typeface wordTypefaceBold;
+	
+	private final static int[] typeId = {0, R.drawable.statistic_note_negative,
+		R.drawable.statistic_note_physical, R.drawable.statistic_note_positive, 
+		R.drawable.statistic_note_selftest, R.drawable.statistic_note_temptation,
+		R.drawable.statistic_note_conflic, R.drawable.statistic_note_play, 
+	 	R.drawable.statistic_note_social};
 
 	/*private final static int[] emotionId = { R.drawable.emotion_0,
 			R.drawable.emotion_1, R.drawable.emotion_2, R.drawable.emotion_3,
@@ -65,7 +71,7 @@ public class StatisticDayView extends StatisticPageView {
 			R.drawable.craving_4, R.drawable.craving_5, R.drawable.craving_6,
 			R.drawable.craving_7, R.drawable.craving_8, R.drawable.craving_9, };*/
 
-	private int e_idx, c_idx;
+	private int e_idx, c_idx, type_idx;
 
 	public StatisticDayView() {
 		super(R.layout.statistic_day_view);
@@ -95,7 +101,7 @@ public class StatisticDayView extends StatisticPageView {
 			craving.setImageDrawable(null);
 	}
 
-	private float brac;
+	private float result;
 	private long brac_time;
 	private String output;
 
@@ -103,7 +109,12 @@ public class StatisticDayView extends StatisticPageView {
 	public void load() {
 
 		//Detection detection = db.getLatestDetection();
-
+		TestResult testResult = db.getLatestTestResult();
+		NoteAdd noteAdd = db.getTsNoteAdd(testResult.getTv().getTimestamp());
+		
+		type_idx = noteAdd.getType();
+		result = testResult.getResult();
+		brac_time = testResult.getTv().getTimestamp();
 		//brac = detection.getBrac();
 		//brac_time = detection.getTv().getTimestamp();
 		//e_idx = detection.getEmotion();
@@ -157,34 +168,31 @@ public class StatisticDayView extends StatisticPageView {
 		format.setMinimumFractionDigits(2);
 		format.setMaximumFractionDigits(2);
 		
-		/*
-		if (brac < Detection.BRAC_THRESHOLD)
-			output = "0.00";
-		else
-			output = format.format(brac);*/
 
-		/*
+
+		
 		if (brac_time == 0)
 			valueCircleDrawable = view.getResources().getDrawable(
-					R.drawable.statistic_day_main_circle_none);
-		else if (brac < Detection.BRAC_THRESHOLD)
+					R.drawable.statistic_notest);
+		else if (result == 0)
 			valueCircleDrawable = view.getResources().getDrawable(
-					R.drawable.statistic_day_main_circle_pass);
+					R.drawable.statistic_pass);
 		else
 			valueCircleDrawable = view.getResources().getDrawable(
-					R.drawable.statistic_day_main_circle_fail);*/
+					R.drawable.statistic_nopass);
 
 		circleDrawables = new Drawable[3];
 		circleDrawables[0] = view.getResources().getDrawable(
-				R.drawable.statistic_day_circle_none);
+				R.drawable.statistic_notest);
 		circleDrawables[1] = view.getResources().getDrawable(
-				R.drawable.statistic_day_circle_fail);
+				R.drawable.statistic_nopass);
 		circleDrawables[2] = view.getResources().getDrawable(
-				R.drawable.statistic_day_circle_pass);
+				R.drawable.statistic_pass);
 
-		if (e_idx >= 0)
-			//emotionDrawable = view.getResources().getDrawable(emotionId[e_idx]);
-		if (c_idx >= 0)
+		
+		
+		
+		//if (c_idx >= 0)
 			//desireDrawable = view.getResources().getDrawable(desireId[c_idx]);
 
 		valueCircle.setImageDrawable(valueCircleDrawable);
@@ -247,22 +255,27 @@ public class StatisticDayView extends StatisticPageView {
 					start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
 			bracTime.setText(s);
 		}
-
-		if (emotionDrawable != null)
+		type_idx = 1;
+		if (type_idx >= 0)
+			emotionDrawable = view.getResources().getDrawable(typeId[type_idx]);
+		
+		if (emotionDrawable != null){
 			emotion.setImageDrawable(emotionDrawable);
+			emotion.setVisibility(View.VISIBLE);
+		}
 
-		if (desireDrawable != null)
-			craving.setImageDrawable(desireDrawable);
+		/*if (desireDrawable != null)
+			craving.setImageDrawable(desireDrawable);*/
 
 		//Float[] bracs = db.getTodayPrimeBrac();
-		
+		/*
 		int blockMargin = App.getContext().getResources()
 				.getDimensionPixelSize(R.dimen.day_block_margin_size);
 		int circle_size = App.getContext().getResources()
 				.getDimensionPixelSize(R.dimen.day_circle_size);
 
 		int cur_hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-		/*
+		
 		for (int i = 0; i < nBlocks; ++i) {
 			RelativeLayout lLayout = new RelativeLayout(context);
 

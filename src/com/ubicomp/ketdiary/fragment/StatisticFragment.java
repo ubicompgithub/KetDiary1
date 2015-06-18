@@ -1,5 +1,7 @@
 package com.ubicomp.ketdiary.fragment;
 
+import java.util.ArrayList;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -15,8 +17,10 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
@@ -26,16 +30,20 @@ import android.widget.ScrollView;
 
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.statistic.AnalysisCounterView;
 import com.ubicomp.ketdiary.statistic.AnalysisProsConsView;
 import com.ubicomp.ketdiary.statistic.AnalysisRankView;
+import com.ubicomp.ketdiary.statistic.DetailChart;
+import com.ubicomp.ketdiary.statistic.RadarChart;
+import com.ubicomp.ketdiary.statistic.ShowRadarChart;
 import com.ubicomp.ketdiary.statistic.StatisticPageView;
 import com.ubicomp.ketdiary.statistic.StatisticPagerAdapter;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.CustomToast;
 import com.ubicomp.ketdiary.ui.ScaleOnTouchListener;
 
-public class StatisticFragment extends Fragment {
+public class StatisticFragment extends Fragment implements ShowRadarChart{
 	
 	/*
 	private View view;
@@ -75,6 +83,8 @@ public class StatisticFragment extends Fragment {
 	private AlphaAnimation questionAnimation;
 
 	//private QuestionnaireDialog msgBox;
+	private RadarChart radarChart;
+	private DetailChart detailChart;
 
 	
 
@@ -86,10 +96,10 @@ public class StatisticFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		activity = getActivity();
-		
-		//detailChart = new DetailChart(activity);
-		dot_on = getResources().getDrawable(R.drawable.dot_on);
-		dot_off = getResources().getDrawable(R.drawable.dot_off);
+		radarChart = new RadarChart(activity);
+		detailChart = new DetailChart(activity);
+		dot_on = getResources().getDrawable(R.drawable.statistic_node_yes);
+		dot_off = getResources().getDrawable(R.drawable.statistic_node_no);
 	}
 
 	@Override
@@ -151,7 +161,7 @@ public class StatisticFragment extends Fragment {
 		//analysisViews[0] = new AnalysisCounterView();
 		analysisViews[0] = new AnalysisProsConsView();
 		analysisViews[1] = new AnalysisCounterView();
-		analysisViews[2] = new AnalysisRankView();
+		analysisViews[2] = new AnalysisRankView(statisticFragment);
 		
 		statisticViewAdapter = new StatisticPagerAdapter();
 		//msgBox = new QuestionnaireDialog(this, (RelativeLayout) view);
@@ -310,4 +320,88 @@ public class StatisticFragment extends Fragment {
 	public Context getContext() {
 		return this.getActivity();
 	}
+	
+	private View rv;
+	private View dv;
+
+	public void showRadarChart(ArrayList<Double> scoreList) {
+		removeRadarChart();
+		removeDetailChart();
+
+		rv = radarChart.getView();
+
+		View.OnClickListener[] onClickListeners = new OnClickListener[4];
+		for (int i = 0; i < 4; ++i) {
+			onClickListeners[i] = new RadarOnClickListener(i);
+		}
+		radarChart.setting(scoreList, onClickListeners);
+		allLayout.addView(rv);
+		RelativeLayout.LayoutParams rvParam = (RelativeLayout.LayoutParams) rv
+				.getLayoutParams();
+		rvParam.width = rvParam.height = LayoutParams.MATCH_PARENT;
+		allLayout.invalidate();
+		rv.invalidate();
+		rv.setOnClickListener(new RadarOnClickListener(-1));
+		//ClickLog.Log(ClickLogId.STATISTIC_RADAR_CHART_OPEN);
+		enablePage(false);
+	}
+
+	private class RadarOnClickListener implements View.OnClickListener {
+
+		private int type;
+
+		public RadarOnClickListener(int type) {
+			this.type = type;
+		}
+
+		@Override
+		public void onClick(View v) {
+			//ClickLog.Log(ClickLogId.STATISTIC_RADAR_CHART_CLOSE);
+			removeRadarChart();
+			if (type >= 0) {
+				//ClickLog.Log(ClickLogId.STATISTIC_DETAIL_CHART_OPEN + type);
+				addDetailChart(type);
+			}
+		}
+
+	}
+
+	public void removeRadarChart() {
+		if (rv != null && rv.getParent() != null
+				&& rv.getParent().equals(allLayout))
+			allLayout.removeView(rv);
+		enablePage(true);
+	}
+
+	public void addDetailChart(int type) {
+		removeRadarChart();
+		removeDetailChart();
+
+		dv = detailChart.getView();
+		allLayout.addView(dv);
+		RelativeLayout.LayoutParams dvParam = (RelativeLayout.LayoutParams) dv
+				.getLayoutParams();
+		dvParam.width = dvParam.height = LayoutParams.MATCH_PARENT;
+		detailChart.setting(type, new DatabaseControl().getMyRank());
+		dv.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//ClickLog.Log(ClickLogId.STATISTIC_DETAIL_CHART_CLOSE);
+				removeDetailChart();
+			}
+		});
+		dv.invalidate();
+		enablePage(false);
+	}
+
+	public void removeDetailChart() {
+		if (dv != null && dv.getParent() != null
+				&& dv.getParent().equals(allLayout))
+			allLayout.removeView(dv);
+		detailChart.hide();
+		enablePage(true);
+	}
+	
+	
+	
 }

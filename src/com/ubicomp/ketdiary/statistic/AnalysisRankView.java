@@ -1,14 +1,24 @@
 package com.ubicomp.ketdiary.statistic;
 
+import java.util.ArrayList;
+
 import android.graphics.Typeface;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.check.StartDateCheck;
+import com.ubicomp.ketdiary.data.structure.Rank;
 import com.ubicomp.ketdiary.db.DatabaseControl;
+import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
 public class AnalysisRankView extends StatisticPageView {
@@ -38,18 +48,18 @@ public class AnalysisRankView extends StatisticPageView {
 
 	private RelativeLayout titleLayout;
 
-	//private NetworkTask netTask;
-	//private PointerHandler pointerHandler = new PointerHandler();
-	//private ShowRadarChart showRadarChart;
+	private NetworkTask netTask;
+	private PointerHandler pointerHandler = new PointerHandler();
+	private ShowRadarChart showRadarChart;
 
-	public AnalysisRankView() {
+	public AnalysisRankView(ShowRadarChart showRadarChart) {
 		super(R.layout.analysis_rank_view);
 		
 		db = new DatabaseControl();
 		helpStr = context.getResources().getStringArray(
 				R.array.analysis_rank_change_help);
 		wordTypeface = Typefaces.getWordTypeface();
-
+		this.showRadarChart = showRadarChart;
 		//title = (TextView) view.findViewById(R.id.analysis_rank_title);
 		//title.setTypeface(wordTypeface);
 
@@ -111,25 +121,8 @@ public class AnalysisRankView extends StatisticPageView {
 				.findViewById(R.id.analysis_rank_title_layout);
 	}
 
-	@Override
-	public void load() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onCancel() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void clear() {
-		// TODO Auto-generated method stub
-		
-	}
 	
-	/*
+	
 	@Override
 	public void clear() {
 		if (netTask != null && !netTask.isCancelled()) {
@@ -375,7 +368,7 @@ public class AnalysisRankView extends StatisticPageView {
 		contentLayoutMonth.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				//showRadarChart.showRadarChart(calculateRank());
+				showRadarChart.showRadarChart(calculateRank());
 			}
 		});
 
@@ -388,7 +381,7 @@ public class AnalysisRankView extends StatisticPageView {
 	public void onCancel() {
 		clear();
 	}
-	/*
+	
 	private Rank[] ranks;
 	private Rank[] short_ranks;
 	private UserLevelCollector levelCollector;
@@ -445,7 +438,7 @@ public class AnalysisRankView extends StatisticPageView {
 
 	private ArrayList<Double> calculateRank() {
 		ArrayList<Double> result = new ArrayList<Double>();
-		//Rank[] ranks = db.getAllRanks();
+		Rank[] ranks = db.getAllRanks();
 		if (ranks == null) {
 			result.add(0.1);
 			result.add(0.1);
@@ -484,5 +477,5 @@ public class AnalysisRankView extends StatisticPageView {
 		public void handleMessage(Message msg) {
 			setPointer(0, 0);
 		}
-	}*/
+	}
 }

@@ -1,0 +1,473 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PreSettingActivity" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/system_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/setting_title_bg_color"
+                android:padding="5dp"
+                android:text="System Information"
+                android:textColor="@color/white"
+                android:textSize="@dimen/large_title_size" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/system_info"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:id="@+id/version_prefix"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="System Version:"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+
+                    <TextView
+                        android:id="@+id/version"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="@color/lite_orange"
+                        android:textSize="@dimen/small_title_size" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/setting_title_bg_color"
+                android:padding="5dp"
+                android:text="User Information"
+                android:textColor="@color/white"
+                android:textSize="@dimen/large_title_size" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:id="@+id/uid_setting"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:id="@+id/uid_prefix"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="UID:"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+
+                    <EditText
+                        android:id="@+id/uid_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/setting_edit_bg"
+                        android:ems="10"
+                        android:paddingBottom="3dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="3dp"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+                </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/developer_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/radio_button"
+                    android:drawablePadding="5dp"
+                    android:padding="0dp"
+                    android:text="Is the user developer?"
+                    android:textColor="@color/white"
+                    android:textOff="no"
+                    android:textOn="yes"
+                    android:textSize="@dimen/small_title_size" />
+
+                <LinearLayout
+                    android:id="@+id/start_date_setting"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Start Date:"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+
+                    <TextView
+                        android:id="@+id/date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="@color/lite_orange"
+                        android:textSize="@dimen/small_title_size" />
+
+                    <Button
+                        android:id="@+id/date_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/setting_button"
+                        android:paddingBottom="3dp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:paddingTop="3dp"
+                        android:text="Edit"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+                </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/system_lock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/radio_button"
+                    android:drawablePadding="5dp"
+                    android:padding="0dp"
+                    android:text="Lock SoberDiary?"
+                    android:textColor="@color/white"
+                    android:textOff="no"
+                    android:textOn="yes"
+                    android:textSize="@dimen/small_title_size" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:id="@+id/lock_date_prefix"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Lock Date:"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+
+                    <TextView
+                        android:id="@+id/lock_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="@color/lite_orange"
+                        android:textSize="@dimen/small_title_size" />
+
+                    <Button
+                        android:id="@+id/lock_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/setting_button"
+                        android:paddingBottom="3dp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:paddingTop="3dp"
+                        android:text="Edit"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/setting_title_bg_color"
+                android:padding="5dp"
+                android:text="User\&apos;s Target  Setting"
+                android:textColor="@color/white"
+                android:textSize="@dimen/large_title_size" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Target:"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+
+                    <EditText
+                        android:id="@+id/target_good_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/setting_edit_bg"
+                        android:ems="8"
+                        android:paddingBottom="3dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="3dp"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total $:"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+
+                    <EditText
+                        android:id="@+id/target_money_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/setting_edit_bg"
+                        android:ems="8"
+                        android:inputType="number"
+                        android:paddingBottom="3dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="3dp"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" >
+                    </EditText>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$/Drink:"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+
+                    <EditText
+                        android:id="@+id/target_drink_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/setting_edit_bg"
+                        android:ems="8"
+                        android:inputType="number"
+                        android:paddingBottom="3dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="3dp"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" >
+                    </EditText>
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/uid_OK"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:background="@drawable/setting_button"
+                android:paddingBottom="3dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:paddingTop="3dp"
+                android:text="Save &amp; Exit"
+                android:textColor="@color/white"
+                android:textSize="@dimen/normal_title_size" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/setting_title_bg_color"
+                android:padding="5dp"
+                android:text="For Revisiting"
+                android:textColor="@color/white"
+                android:textSize="@dimen/large_title_size" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Exchange credits for coupons?"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+
+                    <Button
+                        android:id="@+id/clean_OK"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/setting_button"
+                        android:paddingBottom="3dp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:paddingTop="3dp"
+                        android:text="Exchange"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Restore user&apos;s data?"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+
+                    <Button
+                        android:id="@+id/restore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/setting_button"
+                        android:paddingBottom="3dp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:paddingTop="3dp"
+                        android:text="Restore"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Restore user&apos;s data from the SoberDiary Version 1?"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+
+                    <Button
+                        android:id="@+id/restore_ver1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/setting_button"
+                        android:paddingBottom="3dp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:paddingTop="3dp"
+                        android:text="Restore"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/setting_title_bg_color"
+                android:padding="5dp"
+                android:text="Debug Mode"
+                android:textColor="@color/white"
+                android:textSize="@dimen/large_title_size" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="vertical" >
+
+                <Button
+                    android:id="@+id/debug_normal_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/setting_button"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="3dp"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/normal_title_size" />
+
+                <Button
+                    android:id="@+id/debug_dummy_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/setting_button"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="3dp"
+                    android:text="Use Dummy Data"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/normal_title_size" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

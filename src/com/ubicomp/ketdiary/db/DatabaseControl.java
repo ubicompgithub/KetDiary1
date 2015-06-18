@@ -12,8 +12,10 @@ import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.check.StartDateCheck;
 import com.ubicomp.ketdiary.check.WeekNumCheck;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
+import com.ubicomp.ketdiary.data.structure.Rank;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.data.structure.TimeValue;
+import com.ubicomp.ketdiary.system.PreferenceControl;
 
 /**
  * This class is used for controlling database on the mobile phone side
@@ -475,7 +477,14 @@ public class DatabaseControl {
 			String reason = cursor.getString(15);
 			int weeklyScore = cursor.getInt(16);
 			int score = cursor.getInt(17);
-			return new NoteAdd(isAfterTest, ts, year, month, day, timeslot, category, type, items, impact, reason, weeklyScore, score);
+			
+			NoteAdd noteAdd = new NoteAdd(isAfterTest, ts, year, month, day, timeslot, 
+					category, type, items, impact, reason, weeklyScore, score);
+			
+			cursor.close();
+			db.close();
+			return noteAdd;
+			
 		}
 	}
 
@@ -627,7 +636,8 @@ public class DatabaseControl {
 				String reason = cursor.getString(15);
 				int weeklyScore = cursor.getInt(16);
 				int score = cursor.getInt(17);
-				noteAdd[i] = new NoteAdd(isAfterTest, ts, year, month, day, timeslot, category, type, items, impact, reason, weeklyScore, score);
+				noteAdd[i] = new NoteAdd(isAfterTest, ts, year, month, day, 
+						timeslot, category, type, items, impact, reason, weeklyScore, score);
 			}
 
 			cursor.close();
@@ -638,7 +648,7 @@ public class DatabaseControl {
 	
 	
 	/**
-	 * Get EmotionManagement results by date
+	 * Get NoteAdd results by date
 	 * 
 	 * @param rYear
 	 *            record Year
@@ -650,17 +660,16 @@ public class DatabaseControl {
 	 *         there are no EmotionManagement, return null.
 	 * @see ubicomp.soberdiary.data.structure.EmotionManagement
 	 */
-	/*
-	public EmotionManagement[] getDayEmotionManagement(int rYear, int rMonth,
-			int rDay) {
+	
+	public NoteAdd[] getDayNoteAdd(int rYear, int rMonth, int rDay) {
 		synchronized (sqlLock) {
-			EmotionManagement[] data = null;
+			NoteAdd[] data = null;
 
 			db = dbHelper.getReadableDatabase();
 			String sql;
 			Cursor cursor;
 
-			sql = "SELECT * FROM EmotionManagement WHERE recordYear = " + rYear
+			sql = "SELECT * FROM NoteAdd WHERE recordYear = " + rYear
 					+ " AND recordMonth = " + rMonth + " AND recordDay = "
 					+ rDay + " ORDER BY id DESC";
 			cursor = db.rawQuery(sql, null);
@@ -671,20 +680,25 @@ public class DatabaseControl {
 				return null;
 			}
 
-			data = new EmotionManagement[count];
+			data = new NoteAdd[count];
 
 			for (int i = 0; i < count; ++i) {
 				cursor.moveToPosition(i);
-				long ts = cursor.getLong(4);
+				int isAfterTest = cursor.getInt(1);
+				long ts = cursor.getLong(5);
 				int year = cursor.getInt(7);
 				int month = cursor.getInt(8);
 				int day = cursor.getInt(9);
-				int emotion = cursor.getInt(10);
-				int type = cursor.getInt(11);
-				String reason = cursor.getString(12);
-				int score = cursor.getInt(13);
-				data[i] = new EmotionManagement(ts, year, month, day, emotion,
-						type, reason, score);
+				int timeslot = cursor.getInt(10);
+				int category = cursor.getInt(11);
+				int type = cursor.getInt(12);
+				int items = cursor.getInt(13);
+				int impact = cursor.getInt(14);
+				String reason = cursor.getString(15);
+				int weeklyScore = cursor.getInt(16);
+				int score = cursor.getInt(17);
+				data[i] = new NoteAdd(isAfterTest, ts, year, month, day, 
+						timeslot, category, type, items, impact, reason, weeklyScore, score);
 			}
 
 			cursor.close();
@@ -692,8 +706,62 @@ public class DatabaseControl {
 
 			return data;
 		}
-	}*/
+	}
+	
+	/**
+	 * Get if there are EmotionManagement results at the date
+	 * 
+	 * @param tv
+	 *            TimeValue of the date
+	 * @return true if exists EmotionManagement
+	 * @see ubicomp.soberdiary.data.structure.TimeValue
+	 */
+	
+	public NoteAdd getTsNoteAdd(long ts) {
+		synchronized (sqlLock) {
+			NoteAdd data = null;
+			
+			db = dbHelper.getReadableDatabase();
+			String sql;
+			Cursor cursor;
 
+			sql = "SELECT * FROM NoteAdd WHERE" + " ts ="
+					+ ts  ;
+			cursor = db.rawQuery(sql, null);
+			int count = cursor.getCount();
+			if (!cursor.moveToFirst()) {
+				cursor.close();
+				db.close();
+				Calendar cal = Calendar.getInstance();
+				cal.setTimeInMillis(0);
+				int year = cal.get(Calendar.YEAR);
+				int month = cal.get(Calendar.MONTH);
+				int day = cal.get(Calendar.DAY_OF_MONTH);
+				
+				return new NoteAdd(0, 0, year, month, day, -1 , -1, -1, -1, -1, null, 0, 0);
+			}
+			int isAfterTest = cursor.getInt(1);
+			//long ts = cursor.getLong(5);
+			int year = cursor.getInt(7);
+			int month = cursor.getInt(8);
+			int day = cursor.getInt(9);
+			int timeslot = cursor.getInt(10);
+			int category = cursor.getInt(11);
+			int type = cursor.getInt(12);
+			int items = cursor.getInt(13);
+			int impact = cursor.getInt(14);
+			String reason = cursor.getString(15);
+			int weeklyScore = cursor.getInt(16);
+			int score = cursor.getInt(17);
+			
+			NoteAdd noteAdd = new NoteAdd(isAfterTest, ts, year, month, day, timeslot, 
+					category, type, items, impact, reason, weeklyScore, score);
+			
+			cursor.close();
+			db.close();
+			return noteAdd;
+		}
+	}
 	
 
 	/**
@@ -754,6 +822,223 @@ public class DatabaseControl {
 			return count > 0;
 		}
 	}*/
+	
+	
+	// Ranking
 
+	/**
+	 * Get the user's rank
+	 * 
+	 * @return Rank. If there are no data, return dummy data with UID=""
+	 * @see ubicomp.soberdiary.data.structure.Rank
+	 */
+	public Rank getMyRank() {
+		synchronized (sqlLock) {
+			db = dbHelper.getReadableDatabase();
+			String sql = "SELECT * FROM Ranking WHERE user_id='"
+					+ PreferenceControl.getUID() + "'";
+			Cursor cursor = db.rawQuery(sql, null);
+			if (!cursor.moveToFirst()) {
+				cursor.close();
+				db.close();
+				return new Rank("", 0);
+			}
+			String uid = cursor.getString(0);
+			int score = cursor.getInt(1);
+			int test = cursor.getInt(2);
+			int advice = cursor.getInt(3);
+			int manage = cursor.getInt(4);
+			int story = cursor.getInt(5);
+			int[] additionals = new int[8];
+			for (int j = 0; j < additionals.length; ++j)
+				additionals[j] = cursor.getInt(6 + j);
+			Rank rank = new Rank(uid, score, test, advice, manage, story,
+					additionals);
+			cursor.close();
+			db.close();
+			return rank;
+		}
+	}
+
+	/**
+	 * Get all user's ranks
+	 * 
+	 * @return An array of Rank. If there are no Rank, return null.
+	 * @see ubicomp.soberdiary.data.structure.Rank
+	 */
+	public Rank[] getAllRanks() {
+		synchronized (sqlLock) {
+			Rank[] ranks = null;
+			db = dbHelper.getReadableDatabase();
+			String sql = "SELECT * FROM Ranking ORDER BY total_score DESC, user_id ASC";
+			Cursor cursor = db.rawQuery(sql, null);
+			int count = cursor.getCount();
+			if (count == 0) {
+				cursor.close();
+				db.close();
+				return null;
+			}
+			ranks = new Rank[count];
+			for (int i = 0; i < count; ++i) {
+				cursor.moveToPosition(i);
+				String uid = cursor.getString(0);
+				int score = cursor.getInt(1);
+				int test = cursor.getInt(2);
+				int advice = cursor.getInt(3);
+				int manage = cursor.getInt(4);
+				int story = cursor.getInt(5);
+				int[] additionals = new int[8];
+				for (int j = 0; j < additionals.length; ++j)
+					additionals[j] = cursor.getInt(6 + j);
+				ranks[i] = new Rank(uid, score, test, advice, manage, story,
+						additionals);
+			}
+			cursor.close();
+			db.close();
+			return ranks;
+		}
+	}
+
+	/**
+	 * Get the user's rank in a short period
+	 * 
+	 * @return An array of Rank. If there are no Rank, return null.
+	 * @see ubicomp.soberdiary.data.structure.Rank
+	 */
+	public Rank[] getAllRankShort() {
+		synchronized (sqlLock) {
+			Rank[] ranks = null;
+			db = dbHelper.getReadableDatabase();
+			String sql = "SELECT * FROM RankingShort ORDER BY total_score DESC, user_id ASC";
+			Cursor cursor = db.rawQuery(sql, null);
+			int count = cursor.getCount();
+			if (count == 0) {
+				cursor.close();
+				db.close();
+				return null;
+			}
+			ranks = new Rank[count];
+			for (int i = 0; i < count; ++i) {
+				cursor.moveToPosition(i);
+				String uid = cursor.getString(0);
+				int score = cursor.getInt(1);
+				ranks[i] = new Rank(uid, score);
+			}
+			cursor.close();
+			db.close();
+			return ranks;
+		}
+	}
+
+	/**
+	 * Truncate the Ranking table
+	 * 
+	 * @see ubicomp.soberdiary.data.structure.Rank
+	 */
+	public void clearRank() {
+		synchronized (sqlLock) {
+			db = dbHelper.getWritableDatabase();
+			String sql = "DELETE  FROM Ranking";
+			db.execSQL(sql);
+			db.close();
+		}
+	}
+
+	/**
+	 * Update the Rank
+	 * 
+	 * @param data
+	 *            Updated Rank
+	 * @see ubicomp.soberdiary.data.structure.Rank
+	 */
+	public void updateRank(Rank data) {
+		synchronized (sqlLock) {
+			db = dbHelper.getWritableDatabase();
+			String sql = "SELECT * FROM Ranking WHERE user_id = '"
+					+ data.getUid() + "'";
+			Cursor cursor = db.rawQuery(sql, null);
+			if (cursor.getCount() == 0) {
+				ContentValues content = new ContentValues();
+				content.put("user_id", data.getUid());
+				content.put("total_score", data.getScore());
+				content.put("test_score", data.getTest());
+				content.put("advice_score", data.getAdvice());
+				content.put("manage_score", data.getManage());
+				content.put("story_score", data.getStory());
+				content.put("advice_questionnaire",
+						data.getAdviceQuestionnaire());
+				content.put("advice_emotion_diy", data.getAdviceEmotionDiy());
+				content.put("manage_voice", data.getManageVoice());
+				content.put("manage_emotion", data.getManageEmotion());
+				content.put("manage_additional", data.getManageAdditional());
+				content.put("story_read", data.getStoryRead());
+				content.put("story_test", data.getStoryTest());
+				content.put("story_fb", data.getStoryFb());
+				db.insert("Ranking", null, content);
+			} else {
+				sql = "UPDATE Ranking SET" + " total_score = "
+						+ data.getScore() + "," + " test_score = "
+						+ data.getTest() + "," + " advice_score = "
+						+ data.getAdvice() + "," + " manage_score="
+						+ data.getManage() + "," + " story_score = "
+						+ data.getStory() + "," + " advice_questionnaire="
+						+ data.getAdviceQuestionnaire() + ","
+						+ " advice_emotion_diy=" + data.getAdviceEmotionDiy()
+						+ "," + " manage_voice=" + data.getManageVoice() + ","
+						+ " manage_emotion=" + data.getManageEmotion() + ","
+						+ " manage_additional=" + data.getManageAdditional()
+						+ "," + " story_read=" + data.getStoryRead() + ","
+						+ " story_test=" + data.getStoryTest() + ","
+						+ " story_fb=" + data.getStoryFb()
+						+ " WHERE user_id = " + "'" + data.getUid() + "'";
+				db.execSQL(sql);
+			}
+			cursor.close();
+			db.close();
+		}
+	}
+
+	/**
+	 * Truncate the RankingShort table
+	 * 
+	 * @see ubicomp.soberdiary.data.structure.Rank
+	 */
+	public void clearRankShort() {
+		synchronized (sqlLock) {
+			db = dbHelper.getWritableDatabase();
+			String sql = "DELETE  FROM RankingShort";
+			db.execSQL(sql);
+			db.close();
+		}
+	}
+
+	/**
+	 * Update the Rank in a short period
+	 * 
+	 * @param data
+	 *            Updated Rank in a short period
+	 * @see ubicomp.soberdiary.data.structure.Rank
+	 */
+	public void updateRankShort(Rank data) {
+		synchronized (sqlLock) {
+			db = dbHelper.getWritableDatabase();
+			String sql = "SELECT * FROM RankingShort WHERE user_id = '"
+					+ data.getUid() + "'";
+			Cursor cursor = db.rawQuery(sql, null);
+			if (cursor.getCount() == 0) {
+				ContentValues content = new ContentValues();
+				content.put("user_id", data.getUid());
+				content.put("total_score", data.getScore());
+				db.insert("RankingShort", null, content);
+			} else {
+				sql = "UPDATE RankingShort SET" + " total_score = "
+						+ data.getScore() + " WHERE user_id = " + "'"
+						+ data.getUid() + "'";
+				db.execSQL(sql);
+			}
+			cursor.close();
+			db.close();
+		}
+	}
 
 }

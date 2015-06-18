@@ -42,6 +42,7 @@ import com.ubicomp.ketdiary.mydaybook.linechart.LineChartTitle;
 import com.ubicomp.ketdiary.mydaybook.linechart.LineChartView;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 //import android.view.ViewGroup.LayoutParams;
+import com.ubicomp.ketdiary.ui.ScaleOnTouchListener;
 
 public class DaybookFragment extends Fragment implements ChartCaller, TestQuestionCaller2 {
 	
@@ -321,7 +322,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 				fragment_layout.setEnabled(false);
 			}
 		});
-		
+		addButton.setOnTouchListener(new ScaleOnTouchListener());
 		
 		
 		
@@ -390,7 +391,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		
 		int last_day = 0;
 		int last_timeslot = -1;
-		if(noteAdds != null){
+		if(noteAdds.length!=0){
 			for(int i=0; i < noteAdds.length; i++){
 				//LayoutInflater inflater = LayoutInflater.from(context);
 				diaryItem = inflater.inflate(R.layout.diary_item2, null);

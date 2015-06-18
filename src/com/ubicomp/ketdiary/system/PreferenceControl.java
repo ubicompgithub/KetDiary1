@@ -4,10 +4,8 @@ import java.util.Calendar;
 
 import android.app.AlarmManager;
 import android.content.SharedPreferences;
-import android.graphics.Point;
 
 import com.ubicomp.ketdiary.App;
-import com.ubicomp.ketdiary.R;
 
 /**
  * Class for controlling Android Preference
@@ -158,9 +156,16 @@ public class PreferenceControl {
 		edit.commit();
 	}
 	
+	public static int getPoint() {
+		return sp.getInt("Point", 0);
+	}
 	
-	
-	
+	public static void setPoint(int addPoint) {
+		int last_point = getPoint();
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putInt("Point", last_point + addPoint);
+		edit.commit();
+	}
 	
 	
 

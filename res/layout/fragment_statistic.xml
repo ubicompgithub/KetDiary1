@@ -70,13 +70,13 @@
 
     <ImageView
         android:id="@+id/question_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="2dp"
         android:layout_marginTop="2dp"
         android:padding="13.3dp"
-        android:src="@drawable/coping_button"
-        android:visibility="invisible" />
+        android:src="@drawable/statistic_coping"
+        android:visibility="visible" />
 
 </RelativeLayout>

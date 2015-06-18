@@ -1,6 +1,7 @@
 package com.ubicomp.ketdiary.db;
 
 
+
 /** 
  * Return Server's Url
  * @author Andy Chen
@@ -35,4 +36,25 @@ public class ServerUrl {
 	public static String getNoteAddUrl(){
 		return SERVER_URL + "test/NoteAdd.php";
 	}
+	
+	/**
+	 * URL for querying the long-term ranking
+	 * 
+	 * @return url
+	 */
+	public static String SERVER_URL_RANK_ALL() {
+		final String URL = "rank/rankAll.php";
+		return SERVER_URL + URL;
+	}
+	/**
+	 * URL for querying the short-term ranking
+	 * 
+	 * @return url
+	 */
+	public static String SERVER_URL_RANK_WEEK() {
+		final String URL = "rank/rankWeek.php";
+		return SERVER_URL + URL;
+	}
+	
+	
 }

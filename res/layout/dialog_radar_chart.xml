@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/shadow" >
+
+    <RelativeLayout
+        android:layout_width="272dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/rank_chart_bg"
+        android:splitMotionEvents="true"
+        android:translationX="5dp"
+        android:translationY="-5dp" >
+
+        <TextView
+            android:id="@+id/rank_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="32dp"
+            android:text="@string/radar_title"
+            android:textColor="@color/black_gray"
+            android:textSize="@dimen/large_text_size" />
+
+        <RelativeLayout
+            android:id="@+id/radar_item_0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rank_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:translationX="3dp" >
+
+            <TextView
+                android:id="@+id/radar_score_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:text="99"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/small_title_size" />
+
+            <TextView
+                android:id="@+id/radar_score_text_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/radar_score_0"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="1dp"
+                android:layout_toRightOf="@+id/radar_score_0"
+                android:gravity="bottom"
+                android:text="@string/score"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/verysmall_text_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/radar_score_0"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="1dp"
+                android:layout_toRightOf="@+id/radar_score_text_0"
+                android:src="@drawable/rank_arrow" />
+
+            <TextView
+                android:id="@+id/radar_text_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/radar_score_0"
+                android:layout_marginTop="-3dp"
+                android:text="@string/radar_label0"
+                android:textColor="@color/black_gray" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/radar_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/radar_item_0"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/rank_chart_radar"
+            android:translationX="-6dp"
+            android:visibility="invisible" />
+
+        <com.ubicomp.ketdiary.statistic.RadarChartView
+            android:id="@+id/radar_chart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/radar_item_0"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/rank_chart_radar"
+            android:translationX="-6dp" />
+
+        <RelativeLayout
+            android:id="@+id/radar_item_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/radar_bg"
+            android:layout_alignTop="@+id/radar_bg"
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="52dp" >
+
+            <TextView
+                android:id="@+id/radar_score_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:text="99"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/small_title_size" />
+
+            <TextView
+                android:id="@+id/radar_score_text_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/radar_score_1"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="1dp"
+                android:layout_toRightOf="@+id/radar_score_1"
+                android:gravity="bottom"
+                android:text="@string/score"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/verysmall_text_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/radar_score_1"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="1dp"
+                android:layout_toRightOf="@+id/radar_score_text_1"
+                android:src="@drawable/rank_arrow" />
+
+            <TextView
+                android:id="@+id/radar_text_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/radar_score_1"
+                android:layout_marginTop="-3dp"
+                android:text="@string/radar_label1"
+                android:textColor="@color/black_gray" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/radar_item_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/radar_bg"
+            android:layout_toRightOf="@+id/radar_bg"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="52dp" >
+
+            <TextView
+                android:id="@+id/radar_score_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:text="99"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/small_title_size" />
+
+            <TextView
+                android:id="@+id/radar_score_text_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/radar_score_3"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="1dp"
+                android:layout_toRightOf="@+id/radar_score_3"
+                android:gravity="bottom"
+                android:text="@string/score"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/verysmall_text_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/radar_score_3"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="1dp"
+                android:layout_toRightOf="@+id/radar_score_text_3"
+                android:src="@drawable/rank_arrow" />
+
+            <TextView
+                android:id="@+id/radar_text_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/radar_score_3"
+                android:layout_marginTop="-3dp"
+                android:text="@string/radar_label3"
+                android:textColor="@color/black_gray" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/radar_item_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/radar_bg"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="3dp"
+            android:translationX="3dp" >
+
+            <TextView
+                android:id="@+id/radar_score_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:text="99"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/small_title_size" />
+
+            <TextView
+                android:id="@+id/radar_score_text_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/radar_score_2"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="1dp"
+                android:layout_toRightOf="@+id/radar_score_2"
+                android:gravity="bottom"
+                android:text="@string/score"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/verysmall_text_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/radar_score_2"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="1dp"
+                android:layout_toRightOf="@+id/radar_score_text_2"
+                android:src="@drawable/rank_arrow" />
+
+            <TextView
+                android:id="@+id/radar_text_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/radar_score_2"
+                android:layout_marginTop="-3dp"
+                android:text="@string/radar_label2"
+                android:textColor="@color/black_gray" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</FrameLayout>
