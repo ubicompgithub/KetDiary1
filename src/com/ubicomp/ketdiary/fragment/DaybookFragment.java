@@ -5,6 +5,7 @@ import java.util.Calendar;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -65,7 +66,6 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private SlidingDrawer drawer;
 	private ImageView toggle, toggle_linechart, linechartIcon, calendarIcon;
 	private Context context;
-	private Database myConstant;
 		
 	private static int sv_item_height;
 	
@@ -76,7 +76,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	
 	private int fragmentIdx;
 	
-	public int selectedDay, selectedMonth;
+	private static final int THIS_MONTH = Calendar.getInstance().get(Calendar.MONTH);
 	
 	private int chart_type = 2;
 	private LinearLayout chartAreaLayout;
@@ -100,7 +100,6 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	//public static List<Integer> filterList = new ArrayList<Integer>();
 
 	@SuppressWarnings("deprecation")
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -131,19 +130,20 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		drawerContent.addView(calendarView);
 		upperBarContent.addView(calendarBar);
 		
-		mSectionsPagerAdapter = new SectionsPagerAdapter(getActivity().getSupportFragmentManager());  
-		myConstant = new Database();
-		
+
 		// Set up the ViewPager with the sections adapter.
-		mViewPager = (ViewPager) view.findViewById(R.id.pager);  
+		View[] pageViewList = new View[Database.SUSTAINED_MONTHS];
+		for (int i = 0; i < Database.SUSTAINED_MONTHS; i++) {
+			pageViewList[i] = (View) inflater.inflate(R.layout.fragment_calendar, null);
+			pageViewList[i].setTag(i + Database.START_MONTH - 1);
+		}
+		mSectionsPagerAdapter = new SectionsPagerAdapter(pageViewList);
+
+		mViewPager = (ViewPager) view.findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);	
-		
-		// Initialize the selectedDay and selectedMonth
-		selectedDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-		selectedMonth = Calendar.getInstance().get(Calendar.MONTH);
-		
+				
 		backToTodayText = (TextView) view.findViewById(R.id.back_to_today);
-		backToTodayText.setText(Integer.toString(selectedDay));
+		backToTodayText.setText(Integer.toString(Calendar.getInstance().get(Calendar.DAY_OF_MONTH)));
 		
 		titleText = (TextView) view.findViewById(R.id.month_text);
 		
@@ -163,8 +163,8 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 				
 		drawer.toggle();
 		
-		setCurrentCalendarPage(selectedMonth + 1 - myConstant.START_MONTH);
-		titleText.setText( (selectedMonth + 1)  + "月");
+		setCurrentCalendarPage(THIS_MONTH + 1 - Database.START_MONTH);
+		titleText.setText( (THIS_MONTH + 1)  + "月");
 		
 		toggle_linechart.setOnClickListener(new ToggleListener());
 		toggle.setOnClickListener(new ToggleListener());
@@ -211,7 +211,6 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				Log.i("OMG", "hi");
 				if (isFilterIsOpen == false) {
 					drawerContent.removeAllViews();
@@ -268,11 +267,44 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			@Override
 			public void onPageSelected(int arg0) {
 				fragmentIdx = arg0;
-				titleText.setText( (myConstant.START_MONTH + fragmentIdx) + "月");
+				titleText.setText( (Database.START_MONTH + fragmentIdx) + "月");
 			}
 			
 		});
-				
+
+		backToTodayText.setOnClickListener(new View.OnClickListener() { 
+            @Override
+            public void onClick(View v) {
+                // sv.smoothScrollTo(0 , 270*(thisDay+4)-1350-900);
+                
+                View selectedView = mSectionsPagerAdapter.getSelectedView();
+                View thisDayView = mSectionsPagerAdapter.getThisDayView();
+
+                // Reset the last selected view
+                if(selectedView != thisDayView){
+                    int selectedPageMonth = Integer.valueOf(selectedView.getTag(SectionsPagerAdapter.TAG_CAL_CELL_PAGE_MONTH).toString());
+                    int selectedMonth = Integer.valueOf(selectedView.getTag(SectionsPagerAdapter.TAG_CAL_CELL_MONTH).toString());
+                    TextView selectedDayTextView = (TextView) selectedView.findViewById(R.id.tv_calendar_date);
+
+                    if(selectedPageMonth == selectedMonth)  // If selected month is exactly current page month
+                    	selectedDayTextView.setTextColor(Color.WHITE);
+                    else
+                    	selectedDayTextView.setTextColor(Color.BLACK);
+
+                    // Set the new selected day
+                    selectedView = thisDayView;
+                    // This MUST be called. It modifies selectedView instance in mSectionPagerAdapter.
+                    mSectionsPagerAdapter.asignSelecteViewToThisDayView();
+
+                    TextView newSelectedDayTextView = (TextView) selectedView.findViewById(R.id.tv_calendar_date);
+                    newSelectedDayTextView.setTextColor(Color.BLUE);
+                }
+
+                mViewPager.setCurrentItem(Calendar.getInstance().get(Calendar.MONTH) + 1 - Database.START_MONTH);
+            }
+        });
+
+
 		lineChartFilterButton = (ImageView) lineChartBar.findViewById(R.id.line_chart_filter);
 		lineChartFilterButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -355,7 +387,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	public void onResume() {
 		super.onResume();
 		
-		//setCurrentCalendarPage(selectedMonth + 1 - myConstant.START_MONTH);
+		//setCurrentCalendarPage(selectedMonth + 1 - Database.START_MONTH);
 		
 		
 		msgBox = new CheckResultDialog(fragment_layout);

@@ -388,4 +388,12 @@
 	<string name="positive_goal">正向目標</string>
 	<string name="check_result">看測試結果?</string>
 	<string name="knowledge">戒K小常識</string>
+	
+	
+	
+	<string name="TAG_CAL_CELL_DAY">tag_cal_cell_day</string>
+	<string name="TAG_CAL_CELL_MONTH">tag_cal_cell_month</string>
+	<string name="TAG_CAL_CELL_PAGE_MONTH">tag_cal_cell_page_month</string>
+	<string name="TAG_CAL_CELL_YEAR">tag_cal_cell_year</string>
+	
 </resources>
