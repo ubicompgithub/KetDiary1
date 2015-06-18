@@ -80,7 +80,7 @@ public class MainActivity extends FragmentActivity implements ChartCaller {
 		drawerContent.addView(calendarView);
 		upperBarContent.addView(calendarBar);
 		
-		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());  
+//		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());  
 		myConstant = new Database();
 		
 		// Set up the ViewPager with the sections adapter.
