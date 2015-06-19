@@ -84,7 +84,7 @@ public class TestDataParser2 {
 		if (timestamp == PreferenceControl.getUpdateDetectionTimestamp())
 			update = true;
 		PreferenceControl.setUpdateDetection(false);
-		PreferenceControl.setUpdateDetectionTimestamp(0);
+		//PreferenceControl.setUpdateDetectionTimestamp(0);
 		
 		//db.addTestResult(testResult);
 		//DBControl.inst.addTestResult(testResult);
@@ -133,7 +133,7 @@ public class TestDataParser2 {
 		if (timestamp == PreferenceControl.getUpdateDetectionTimestamp())
 			update = true;
 		PreferenceControl.setUpdateDetection(false);
-		PreferenceControl.setUpdateDetectionTimestamp(0);
+		//PreferenceControl.setUpdateDetectionTimestamp(0);
 		
 		//db.insertNoteAdd(noteAdd);
 		
@@ -161,7 +161,7 @@ public class TestDataParser2 {
 		if (timestamp == PreferenceControl.getUpdateDetectionTimestamp())
 			update = true;
 		PreferenceControl.setUpdateDetection(false);
-		PreferenceControl.setUpdateDetectionTimestamp(0);
+		//PreferenceControl.setUpdateDetectionTimestamp(0);
 		
 		//db.insertNoteAdd(noteAdd);
 		
@@ -194,7 +194,7 @@ public class TestDataParser2 {
 		if (timestamp == PreferenceControl.getUpdateDetectionTimestamp())
 			update = true;
 		PreferenceControl.setUpdateDetection(false);
-		PreferenceControl.setUpdateDetectionTimestamp(0);
+		//PreferenceControl.setUpdateDetectionTimestamp(0);
 		
 		db.insertNoteAdd(noteAdd);
 		

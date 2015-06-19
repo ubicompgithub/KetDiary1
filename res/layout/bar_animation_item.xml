@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bar_animation_bg" >
+
+    <LinearLayout
+        android:id="@+id/question_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/question_progress_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            >
+
+            <ImageView
+                android:id="@+id/question_progress_bar_bg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="35dp"
+                android:src="@drawable/emotion_diy_music_bar_bg" />
+
+            <ImageView
+                android:id="@+id/question_progress_bar_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="35dp"
+                android:src="@drawable/progress_bar_start" />
+
+            <ImageView
+                android:id="@+id/question_progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/question_progress_bar_start"
+                android:scaleType="fitXY"
+                android:src="@drawable/progress_bar_inner" />
+
+            <ImageView
+                android:id="@+id/question_progress_bar_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/question_progress_bar"
+                android:src="@drawable/progress_bar_end" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/question_control"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:weightSum="3" >
+
+            <ImageView
+                android:id="@+id/question_animation_left_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bar_three_button_left"
+                android:scaleType="center"
+                android:src="@drawable/icon_play" />
+
+            <ImageView
+                android:id="@+id/question_animation_center_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bar_three_button_center"
+                android:scaleType="center"
+                android:src="@drawable/icon_stop" />
+
+            <TextView
+                android:id="@+id/question_animation_right_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/bar_three_button_right"
+                android:gravity="center"
+                android:scaleType="center"
+                android:text="@string/done"
+                android:textColor="@color/text_gray"
+                android:textSize="@dimen/large_text_size" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/question_top"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:layout_above="@+id/question_bottom" >
+
+        <ImageView
+            android:id="@+id/question_animation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:cropToPadding="true" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

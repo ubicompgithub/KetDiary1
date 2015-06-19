@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="emotionDIY_solution">
+        <item>閉眼專注聆聽舒緩音樂</item>
+        <item>閉眼專注觀察呼吸</item>
+        <item>專心健走 10 ~ 30 分鐘</item>
+        <item>從事休閒活動</item>
+        <item>尋求社區心理諮商</item>
+        <item>與親友聊天</item>
+    </string-array>
+    
+    <string name="emotionDIY_title">心情DIY</string>
+    <string name="emotionDIY_help">照顧情緒，我可以：</string>
+    <string name="emotionDIY_toast">確定放棄填答心情DIY？</string>
+    <string name="emotion_end_message">完成後能得到點數，請繼續加油！\n(早午晚各能得到一點)</string>
+    <string name="emotion_connect_null">沒有聯絡對象\n請按返回鍵</string>
+    <string name="emotion_manage_title0">填寫</string>
+    <string name="emotion_manage_title1">的情緒管理</string>
+    <string name="emotion_manage_toast">確定放棄填寫情緒管理？</string>
+    
+    <string name="emotionDIY_end_toast">完成心情DIY</string>
+    <string name="emotion_manage_end_toast">做好情緒管理</string>
+    <string name="emotion_manage_check_toast">尚未填寫原因</string>
+    <string name="emotionDIY_help_case0">閉眼專注聆聽舒緩音樂</string>
+    <string name="emotionDIY_help_case1">嘗試閉眼專注觀察呼吸？\n您可以聽從指示引導或直接去做</string>
+    <string name="emotionDIY_help_case2">專心健走 10 ~ 30 分鐘？\n您可以聽從指示引導或直接去做</string>
+    <string name="emotionDIY_help_case3">從事休閒活動？\n您可以選擇以下內容</string>
+    <string name="emotionDIY_help_case3_2">未設定休閒活動，\n請按返回鍵</string>
+    <string name="emotionDIY_help_case4">您將要去做</string>
+    <string name="emotionDIY_help_guide">播放指示</string>
+    <string name="try_to_do">我會完成</string>
+    
+    <string name="end">結束</string>
+    <string name="check_end">確定結束？</string>
+    
+    <string-array name="emotion_manage_emotion">
+        <item>快樂</item>
+        <item>興奮</item>
+        <item>感覺被愛</item>
+        <item>悲傷</item>
+        <item>傷感</item>
+        <item>惱怒</item>
+        <item>後悔挫折</item>
+        <item>煩悶</item>
+        <item>害怕</item>
+        <item>擔心</item>
+    </string-array>
+    <string-array name="emotion_manage_related">
+        <item>人物</item>
+        <item>事件</item>
+        <item>物品</item>
+        <item>現在情境</item>
+    </string-array>
+    
+    <string name="emotion_manage_help1">您當時的情緒是：</string>
+    <string name="emotion_manage_help2">這個感覺跟什麼有關：</string>
+    <string name="emotion_manage_help3">請寫下影響您的</string>
+    <string name="emotion_manage_help4">這是影響您停酒的因素\n但您仍可堅持停酒</string>
+    <string name="emotion_manage_input">點此開始輸入</string>
+</resources>

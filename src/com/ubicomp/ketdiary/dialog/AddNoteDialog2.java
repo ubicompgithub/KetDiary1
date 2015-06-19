@@ -144,9 +144,8 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 	protected void setting() {
 		
 		day = 0;
-		timeslot = 0;
-		type = 0;
-		items = 0;
+		type = -1;
+		items = -1;
 		impact = 0 ;
 		description = "";
 		
@@ -155,6 +154,9 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		boxLayout.setVisibility(View.INVISIBLE);
 		title_layout = (LinearLayout) boxLayout.findViewById(R.id.note_title_layout);
 		main_layout = (LinearLayout) boxLayout.findViewById(R.id.note_main_layout);
+		
+		
+		
 		bottom_layout = (LinearLayout) boxLayout.findViewById(R.id.note_bottom_layout);
 		sv = (ScrollView) boxLayout.findViewById(R.id.note_main_scroll);
 		
@@ -174,6 +176,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		Calendar cal = Calendar.getInstance();
 		int hours = cal.get(Calendar.HOUR_OF_DAY);
 		int time_slot = TimeBlock.getTimeBlock(hours);
+		timeslot = time_slot;
 		
 		timeslot_txt.setText(Timeslot_str[time_slot]);
 		
@@ -230,7 +233,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 	    
 		initTypePager();
 			
-		//Description
+		//Type
 		LinearLayout type_layout = (LinearLayout) inflater.inflate(
 				R.layout.bar_description, null);
 		
@@ -239,6 +242,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		type_title.setTypeface(Typefaces.getWordTypefaceBold());
 		typetext = (EditText)type_layout.findViewById(R.id.description_content);
 		typetext.setEnabled(false);
+		typetext.setBackground(null);
 		
 		//Spinner
 		LinearLayout spinner_layout = (LinearLayout) inflater.inflate(
@@ -259,7 +263,8 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 			@Override
 			public void onClick(View v) {
 				//listView.setVisibility(View.VISIBLE);
-				listViewShowHide();
+				if(items!= -1)
+					listViewShowHide();
 			}
 								
 		});
@@ -316,6 +321,24 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		main_layout.addView(spinner_layout);
 		main_layout.addView(impact_layout);
 		main_layout.addView(discription_layout);
+		
+		center_layout.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				listView.setVisibility(View.GONE);
+			}
+			
+		});
+		
+		main_layout.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				listView.setVisibility(View.GONE);
+			}
+			
+		});
 		
 		//main_layout.addView(bottom);
 		bottom_layout.addView(bottom);
@@ -743,7 +766,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 				iv_playing.setOnClickListener(SelectItem);
 				iv_conflict.setOnClickListener(SelectItem);
 			}
-			Log.d("FORTEST", "aabb");
+			//Log.d("FORTEST", "aabb");
 			
 			return viewLists.get(position);	
 		}
@@ -757,6 +780,14 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 			@Override
 			public void onClick(View v) {
 		        switch(v.getId()){
+		        
+		        case R.id.self_bottom_layout:
+		        	listView.setVisibility(View.GONE);
+		        	break;
+		        	
+		        case R.id.other_bottom_layout:
+		        	listView.setVisibility(View.GONE);
+		        	break;
 		        
 		        case R.id.vts_iv_cry:
 		        	resetView();

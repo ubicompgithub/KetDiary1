@@ -14,6 +14,7 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
+import com.ubicomp.ketdiary.EmotionActivity;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.db.DatabaseControl;
@@ -64,6 +66,7 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 		
 		return view;
 	}*/
+	private static final String TAG = "Statistic";
 	
 	private StatisticPageView[] analysisViews;
 	private View view;
@@ -86,7 +89,7 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 	private RadarChart radarChart;
 	private DetailChart detailChart;
 
-	
+	private DatabaseControl db;
 
 	private int notify_action = 0;
 
@@ -100,6 +103,8 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 		detailChart = new DetailChart(activity);
 		dot_on = getResources().getDrawable(R.drawable.statistic_node_yes);
 		dot_off = getResources().getDrawable(R.drawable.statistic_node_no);
+		
+		db = new DatabaseControl();
 	}
 
 	@Override
@@ -140,11 +145,25 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 		long curTime = System.currentTimeMillis();
 		long testTime = PreferenceControl.getLatestTestCompleteTime();
 		long pastTime = curTime - testTime;
-
-		
+			
 		if( PreferenceControl.getCheckResult() && pastTime >= MainActivity.WAIT_RESULT_TIME){
-			CustomToast.generateToast(R.string.after_test_pass, 2);
-			PreferenceControl.setCheckResult( false );
+			MainActivity.getMainActivity().checkResultAddPoint();
+			/*
+			int addScore = PreferenceControl.getTestAddScore();
+			
+			PreferenceControl.setPoint(addScore);
+			
+			Log.d(TAG, "AddScore:"+addScore);
+			int result = db.getLatestTestResult().getResult(); //TODO: check if no data
+			
+			if (addScore == 0 && result == 1) // TestFail & get no credit //TODO: check TestResult
+				CustomToast.generateToast(R.string.after_test_fail, -1);
+			else if(result == 1)
+				CustomToast.generateToast(R.string.after_test_fail, addScore);
+			else
+				CustomToast.generateToast(R.string.after_test_pass, addScore);
+			
+			PreferenceControl.setCheckResult( false );*/
 		}
 		else if ( PreferenceControl.getCheckResult() && pastTime < MainActivity.WAIT_RESULT_TIME ){
 			
@@ -290,7 +309,7 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 			//ClickLog.Log(ClickLogId.STATISTIC_QUESTION_BUTTON);
 			//openQuestionnaire();
 			Intent intent = new Intent();
-			//intent.setClass(activity, CopingActivity.class);
+			intent.setClass(activity, EmotionActivity.class);
 			activity.startActivity(intent);
 		}
 	}

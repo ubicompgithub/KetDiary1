@@ -40,7 +40,6 @@ public class DBHelper extends SQLiteOpenHelper {
 		
 		
 		//  NoteAdd Table
-		
 		db.execSQL("CREATE TABLE NoteAdd ("
 				+ " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 				+ " isAfterTest INT NOT NULL," + " year INTEGER NOT NULL,"

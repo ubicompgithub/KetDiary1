@@ -14,7 +14,8 @@
         <RelativeLayout
             android:id="@+id/brac_statistics_layout"
             android:layout_width="match_parent"
-            android:layout_height="253.3dp" >
+            android:layout_height="253.3dp"
+            android:background="@drawable/statistic_bg" >
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/brac_statistics"
@@ -57,7 +58,8 @@
         <ScrollView
             android:id="@+id/brac_analysis"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            android:layout_marginTop="-8dp" >
 
             <LinearLayout
                 android:id="@+id/brac_analysis_layout"

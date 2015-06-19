@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bar_bg_title" >
+
+    <TextView
+        android:id="@+id/question_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:gravity="center"
+        android:maxLines="2"
+        android:textColor="@color/text_gray"
+        android:textSize="@dimen/large_text_size" />
+
+    <ImageView
+        android:id="@+id/question_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:layout_marginRight="16dp"
+        android:visibility="invisible"
+        android:src="@drawable/icon_list_down" />
+
+</RelativeLayout>

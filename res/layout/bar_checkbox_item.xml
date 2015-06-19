@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bar_transparent"
+    android:orientation="horizontal" >
+
+    <TextView
+        android:id="@+id/question_description"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="16dp"
+        android:layout_weight="5"
+        android:maxLines="2"
+        android:textColor="@color/text_gray"
+        android:textSize="@dimen/large_text_size" />
+
+    <RadioGroup
+        android:id="@+id/question_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="9dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/question_check_yes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:button="@null"
+            android:checked="true"
+            android:drawablePadding="7dp"
+            android:drawableRight="@drawable/radio_button"
+            android:padding="7dp"
+            android:text="@string/yes"
+            android:textColor="@color/text_gray" />
+
+        <RadioButton
+            android:id="@+id/question_check_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:button="@null"
+            android:drawablePadding="7dp"
+            android:drawableRight="@drawable/radio_button"
+            android:padding="7dp"
+            android:text="@string/no"
+            android:textColor="@color/text_gray" />
+    </RadioGroup>
+
+</LinearLayout>

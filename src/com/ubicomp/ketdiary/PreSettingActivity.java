@@ -15,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ubicomp.ketdiary.db.DatabaseDummyData;
 import com.ubicomp.ketdiary.system.PreferenceControl;
@@ -26,7 +27,7 @@ import com.ubicomp.ketdiary.system.PreferenceControl;
  */
 public class PreSettingActivity extends Activity {
 
-	private EditText uid, target_good, target, drink;
+	private EditText uid, did, target_good, target, drink;
 
 	private Button saveButton, exchangeButton, restoreButton, debugButton,
 			restoreVer1Button, dummyDataButton;
@@ -62,12 +63,15 @@ public class PreSettingActivity extends Activity {
 
 		uid = (EditText) this.findViewById(R.id.uid_edit);
 		uid.setText(PreferenceControl.getUID());
+		
+		did = (EditText) this.findViewById(R.id.did_edit);
+		did.setText(PreferenceControl.getDeviceId());
 
 		developer_switch = (CheckBox) this.findViewById(R.id.developer_switch);
 		developer_switch.setChecked(PreferenceControl.isDeveloper());
 
 		target_good = (EditText) this.findViewById(R.id.target_good_edit);
-		//target_good.setText(PreferenceControl.getSavingGoal());
+		target_good.setText(PreferenceControl.getSavingGoal());
 
 		target = (EditText) this.findViewById(R.id.target_money_edit);
 		target.setText(String.valueOf(PreferenceControl.getSavingGoalMoney()));
@@ -218,6 +222,8 @@ public class PreSettingActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			String text = uid.getText().toString();
+			String text2 = did.getText().toString();
+			
 			boolean check = true;
 			if (text.length() < MIN_NAME_LENGTH)
 				check = false;
@@ -243,9 +249,12 @@ public class PreSettingActivity extends Activity {
 				if (drink_t == 0)
 					check = false;
 			}
-
+			Toast.makeText(activity, String.valueOf(check), Toast.LENGTH_SHORT);
+			
 			if (check) {
 				PreferenceControl.setUID(text);
+				PreferenceControl.setDeviceId(text2);
+				
 				PreferenceControl.setIsDeveloper(developer_switch.isChecked());
 				PreferenceControl.setGoal(target_g, target_t, drink_t);
 				PreferenceControl.setStartDate(mYear, mMonth, mDay);

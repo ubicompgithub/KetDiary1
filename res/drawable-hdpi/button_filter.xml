@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/filter_icon_pressed"
-          android:state_focused="true" />
-    <item android:drawable="@drawable/filter_icon" />
+    <item android:drawable="@drawable/filter1_pressed"
+          android:state_pressed="true" />
+    <item android:drawable="@drawable/filter1" />
 </selector>

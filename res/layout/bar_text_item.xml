@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" 
+    android:background="@drawable/bar_bg_title"
+    >
+
+    <TextView
+        android:id="@+id/question_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="3" 
+        android:maxLines="2"
+        android:textSize="@dimen/large_text_size"
+        android:textColor="@color/gray"
+        android:layout_marginLeft="16dp"
+        />
+
+</LinearLayout>

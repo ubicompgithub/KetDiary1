@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -25,7 +26,7 @@ import com.ubicomp.ketdiary.ui.Typefaces;
  * @author Andy
  *
  */
-public class ChooseItemDialog{
+public class ChooseItemDialog implements OnClickListener{
 	
 	private Activity activity;
 	private ChooseItemDialog noteFragment = this;
@@ -35,6 +36,8 @@ public class ChooseItemDialog{
 	private Context context;
 	private LayoutInflater inflater;
 	private RelativeLayout boxLayout = null;
+	private RelativeLayout fullLayout;
+	 
 	private LinearLayout questionLayout;
 	
 	private RelativeLayout mainLayout;
@@ -74,6 +77,18 @@ public class ChooseItemDialog{
 		boxLayout = (RelativeLayout) inflater.inflate(
 				R.layout.dialog_choose_item2, null);
 		boxLayout.setVisibility(View.INVISIBLE);
+		
+		fullLayout=(RelativeLayout)boxLayout.findViewById(R.id.choose_full_layout);
+		fullLayout.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				close();
+				clear();
+			}
+			
+		});
 		
 		title = (TextView) boxLayout.findViewById(R.id.choose_title);
 		
@@ -140,6 +155,20 @@ public class ChooseItemDialog{
 			boxLayout.setVisibility(View.INVISIBLE);
 		
 		caller.resetView(type, select);
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch(v.getId()){
+		case R.id.choose_full_layout:
+			clear();
+			close();
+			
+			break;
+		}
+		//clear();
+		//close();
 	}
 	
 	

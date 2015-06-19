@@ -37,14 +37,29 @@
         android:id="@+id/main_count_down_layout"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@drawable/countdown_bg"
         android:visibility="gone" >
+        
+        <ImageView
+            android:id="@+id/main_count_down_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@anim/animation_clock" />
 
         <TextView
             android:id="@+id/main_count_down_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="17.5dp"
+            android:layout_centerInParent="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/normal_text_size"
+            android:layout_centerVertical="true" />
+        
+        <TextView
+            android:id="@+id/main_count_down_text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+			android:layout_toRightOf="@+id/main_count_down_text"
+			android:layout_marginLeft="3dp"
             android:textColor="@color/white"
             android:textSize="@dimen/normal_text_size"
             android:layout_centerVertical="true" />

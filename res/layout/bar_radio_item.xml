@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" 
+    android:background="@drawable/bar_button_transparent"
+    >
+
+    <TextView
+        android:id="@+id/question_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="3" 
+        android:maxLines="2"
+        android:textSize="@dimen/large_text_size"
+        android:textColor="@color/text_gray"
+        android:layout_marginLeft="16dp"
+        />
+
+    <ImageView
+        android:id="@+id/question_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:scaleX="2"
+        android:scaleY="2"
+        android:src="@drawable/icon_selected"
+        android:layout_marginRight="24dp"
+        />
+
+</LinearLayout>

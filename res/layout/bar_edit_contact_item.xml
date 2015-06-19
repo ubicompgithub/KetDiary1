@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bar_transparent" >
+
+    <TextView
+        android:id="@+id/question_name_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:text="@string/setting_name"
+        android:textColor="@color/text_gray"
+        android:textSize="@dimen/large_text_size" />
+
+    <EditText
+        android:id="@+id/question_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="9dp"
+        android:background="@drawable/edittext_name"
+        android:ems="3"
+        android:hint="@string/setting_name"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:maxLength="5"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:textColor="@color/text_gray"
+        android:textSize="@dimen/large_text_size" />
+
+    <TextView
+        android:id="@+id/question_phone_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@+id/question_name"
+        android:textColor="@color/text_gray"
+        android:textSize="@dimen/large_text_size" />
+
+    <EditText
+        android:id="@+id/question_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="9dp"
+        android:layout_toRightOf="@+id/question_name"
+        android:background="@drawable/edittext_phone"
+        android:ems="8"
+        android:hint="@string/setting_phone"
+        android:imeOptions="actionDone"
+        android:inputType="phone"
+        android:maxLength="15"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:textColor="@color/text_gray"
+        android:textSize="@dimen/large_text_size" />
+
+    <TextView
+        android:id="@+id/question_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="8dp"
+        android:padding="8dp"
+        android:text="@string/edit"
+        android:textColor="@color/text_gray"
+        android:textSize="@dimen/large_text_size" />
+
+</RelativeLayout>

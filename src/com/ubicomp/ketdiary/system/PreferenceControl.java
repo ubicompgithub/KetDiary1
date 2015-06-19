@@ -6,6 +6,7 @@ import android.app.AlarmManager;
 import android.content.SharedPreferences;
 
 import com.ubicomp.ketdiary.App;
+import com.ubicomp.ketdiary.R;
 
 /**
  * Class for controlling Android Preference
@@ -167,7 +168,15 @@ public class PreferenceControl {
 		edit.commit();
 	}
 	
+	public static int getTestAddScore() {
+		return sp.getInt("TestAddScore", 0);
+	}
 	
+	public static void setTestAddScore(int addScore) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putInt("TestAddScore", addScore);
+		edit.commit();
+	}
 
 	// haven't use
 	/**
@@ -324,6 +333,11 @@ public class PreferenceControl {
 		edit.putInt("targetMoney", money);
 		edit.putInt("perDrinkCost", drink_cost);
 		edit.commit();
+	}
+	
+	public static String getSavingGoal() {
+		return sp.getString("targetGood",
+				App.getContext().getString(R.string.default_goal_good));
 	}
 
 	public static int getSavingGoalMoney() {
@@ -519,6 +533,25 @@ public class PreferenceControl {
 		edit.commit();
 	}
 
-	
+	public static String[] getRecreations() {
+		String[] recreation = new String[5];
+		recreation[0] = sp.getString("recreation0",
+				App.getContext().getString(R.string.default_recreation_1));
+		recreation[1] = sp.getString("recreation1",
+				App.getContext().getString(R.string.default_recreation_2));
+		recreation[2] = sp.getString("recreation2",
+				App.getContext().getString(R.string.default_recreation_3));
+		recreation[3] = sp.getString("recreation3", "");
+		recreation[4] = sp.getString("recreation4", "");
+		return recreation;
+	}
+
+	public static void setRecreation(String recreation, int id) {
+		String key = "recreation" + id;
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putString(key, recreation);
+		edit.commit();
+
+	}
 
 }

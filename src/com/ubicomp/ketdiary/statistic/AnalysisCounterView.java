@@ -25,7 +25,13 @@ public class AnalysisCounterView extends StatisticPageView {
 	private Typeface wordTypeface, digitTypefaceBold;
 	//private ShowRadarChart showRadarChart;
 	
-	public AnalysisCounterView() {
+	private final static int[] levelId = {R.drawable.level0,
+		R.drawable.level1, R.drawable.level2, R.drawable.level3, 
+		R.drawable.level4, R.drawable.level5, R.drawable.level6, 
+	 	R.drawable.level7, R.drawable.level8, R.drawable.level9,
+	 	R.drawable.level10};
+	
+	public AnalysisCounterView() { //TODO: 1.讓加分的時候可以馬上看到圖有變 2. 雷達圖
 		super(R.layout.analysis_counter_view2);
 		db = new DatabaseControl();
 		//this.showRadarChart = showRadarChart;
@@ -100,40 +106,9 @@ public class AnalysisCounterView extends StatisticPageView {
 				titleLayout.setBackground(context.getResources().getDrawable(
 						R.drawable.analysis_title_bar));
 		}*/
-		switch(counter){
-		case 0:
-			levelCircle.setImageResource(R.drawable.level0);
-			break;
-		case 1:
-			levelCircle.setImageResource(R.drawable.level1);
-			break;
-		case 2:
-			levelCircle.setImageResource(R.drawable.level2);
-			break;
-		case 3:
-			levelCircle.setImageResource(R.drawable.level3);
-			break;
-		case 4:
-			levelCircle.setImageResource(R.drawable.level4);
-			break;
-		case 5:
-			levelCircle.setImageResource(R.drawable.level5);
-			break;
-		case 6:
-			levelCircle.setImageResource(R.drawable.level6);
-			break;
-		case 7:
-			levelCircle.setImageResource(R.drawable.level7);
-			break;
-		case 8:
-			levelCircle.setImageResource(R.drawable.level8);
-			break;
-		case 9:
-			levelCircle.setImageResource(R.drawable.level9);
-			break;
-	
-		}
-	
+
+		levelCircle.setImageResource(levelId[counter]);
+		
 		levelValue.setText("Lv."+level);
 		levelValue.invalidate();
 		levelHelp.setText("目前等級:\n"+level+"級");

@@ -8,7 +8,9 @@
         android:id="@+id/analysis_saving_title_layout"
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:background="@drawable/analyse_line" >
+        android:background="@drawable/analyse_line"
+        android:visibility="gone" >
+
     </RelativeLayout>
 
 

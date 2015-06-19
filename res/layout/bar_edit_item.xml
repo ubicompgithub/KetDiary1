@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bar_bg_button_normal"
+    >
+
+    <EditText
+        android:id="@+id/question_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6.7dp"
+        android:background="@drawable/edittext_emotion_management"
+        android:hint="@string/emotion_manage_input"
+        android:textColor="@color/black"
+        android:layout_centerVertical="true"
+        android:maxLength="255"
+        android:paddingLeft="10dp"
+        android:textSize="@dimen/large_text_size"/>
+
+    <ImageView
+        android:id="@+id/question_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/question_edit"
+        android:layout_centerVertical="true"
+        android:src="@drawable/icon_list_show"
+        android:visibility="invisible" />
+
+</RelativeLayout>

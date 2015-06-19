@@ -16,7 +16,6 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,8 +32,7 @@ import android.widget.Toast;
 
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
-import com.ubicomp.ketdiary.ResultService;
-import com.ubicomp.ketdiary.UploadService;
+import com.ubicomp.ketdiary.ResultService2;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE2;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothListener;
 import com.ubicomp.ketdiary.camera.CameraCaller;
@@ -44,8 +42,9 @@ import com.ubicomp.ketdiary.camera.CameraRunHandler;
 import com.ubicomp.ketdiary.camera.ImageFileHandler;
 import com.ubicomp.ketdiary.camera.Tester;
 import com.ubicomp.ketdiary.db.TestDataParser2;
-import com.ubicomp.ketdiary.dialog.NoteDialog2;
+import com.ubicomp.ketdiary.dialog.NoteDialog3;
 import com.ubicomp.ketdiary.dialog.TestQuestionCaller;
+import com.ubicomp.ketdiary.dialog.TestQuestionCaller2;
 import com.ubicomp.ketdiary.file.ColorRawFileHandler;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.QuestionFile;
@@ -53,7 +52,7 @@ import com.ubicomp.ketdiary.file.VoltageFileHandler;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
-public class TestFragment extends Fragment implements BluetoothListener, CameraCaller, TestQuestionCaller{
+public class TestFragment extends Fragment implements BluetoothListener, CameraCaller, TestQuestionCaller2{
 	
 	private static final String TAG = "BluetoothLE";
 	private static final String TAG2 = "debug";
@@ -93,7 +92,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private final boolean[] DONE_PROGRESS = { false, false, false };
 	
 	private TestDataParser2 TDP;
-	public NoteDialog2 msgBox = null;
+	public NoteDialog3 msgBox = null;
 	
 	/** Camare variables */
 	//private Camera mCamera = null;
@@ -290,7 +289,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			}
 		});
 		
-		msgBox = new NoteDialog2(testFragment, main_layout);
+		msgBox = new NoteDialog3(testFragment, main_layout);
 		
 		//For Testing Function
 		
@@ -358,7 +357,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			reset();
 			
 			
-			/*
+			
 			if(debug){
 				setState(new DoneState());
 			}
@@ -366,9 +365,9 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 				start_test = true;
 				setState(new ConnState());
 			}
-			*/
+			/*
 			start_test = true;
-			setState(new ConnState());
+			setState(new ConnState());*/
 		}
 	}
 	
@@ -672,7 +671,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			//msgBox.show();
 			
 			//
-			Intent startIntent =  new  Intent( getActivity() , ResultService. class );  
+			Intent startIntent =  new  Intent( getActivity() , ResultService2. class );  
 			getActivity().startService(startIntent);
 			
 			//startActivity(new Intent(, EventCopeSkillActivity.class));
@@ -947,7 +946,9 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		//setGuideMessage(R.string.test_guide_reset_top,R.string.test_guide_reset_bottom);
 
 		PreferenceControl.setUpdateDetectionTimestamp(timestamp);
-
+		long ts = PreferenceControl.getUpdateDetectionTimestamp();
+		Log.d(TAG1,""+timestamp);
+		
 		setStorage();
 		
 		
@@ -1373,8 +1374,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			camera_done = true;
 			
 			
-		TDP.start();
-		UploadService.startUploadService(activity);
+		//TDP.start();
+		//UploadService.startUploadService(activity);
 
 		
 	}
@@ -1492,8 +1493,10 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		}
 	}
 
+	@Override
+	public void resetView() {
+		
+		
+	}
 
-
-	
-	
 }

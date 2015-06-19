@@ -685,7 +685,17 @@ public class NoteDialog2{
 	
 	class GoResultOnClickListener implements View.OnClickListener{
 		public void onClick(View v){
-			CustomToast.generateToast(R.string.after_test_pass, 2);
+			
+			/*
+			int addScore = PreferenceControl.getTestAddScore();
+			Log.d(TAG, "AddScore:"+addScore);
+			
+			if (addScore == 0) // TestFail & get no credit
+				CustomToast.generateToast(R.string.after_test_fail, -1);
+			else
+				CustomToast.generateToast(R.string.after_test_pass, addScore);
+			*/
+			//CustomToast.generateToast(R.string.after_test_pass, 2);
 			MainActivity.getMainActivity().changeTab(1);
 			
 	    }

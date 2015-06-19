@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:drawable="@drawable/animation_music_0" android:duration="200"/>
+    <item android:drawable="@drawable/animation_music_1" android:duration="200"/>
+    <item android:drawable="@drawable/animation_music_2" android:duration="200"/>
+    <item android:drawable="@drawable/animation_music_3" android:duration="200"/>
+    <item android:drawable="@drawable/animation_music_4" android:duration="200"/>
+    <item android:drawable="@drawable/animation_music_5" android:duration="200"/>
+    <item android:drawable="@drawable/animation_music_6" android:duration="200"/>
+    <item android:drawable="@drawable/animation_music_7" android:duration="200"/>
+    <item android:drawable="@drawable/animation_music_8" android:duration="200"/>
+    <item android:drawable="@drawable/animation_music_9" android:duration="200"/>
+    <item android:drawable="@drawable/animation_music_10" android:duration="200"/>
+    <item android:drawable="@drawable/animation_music_11" android:duration="200"/>
+    <item android:drawable="@drawable/animation_music_12" android:duration="200"/>
+    <item android:drawable="@drawable/animation_music_13" android:duration="200"/>
+    <item android:drawable="@drawable/animation_music_14" android:duration="200"/>
+    <item android:drawable="@drawable/animation_music_15" android:duration="200"/>
+    <item android:drawable="@drawable/animation_music_16" android:duration="200"/>
+    <item android:drawable="@drawable/animation_music_17" android:duration="200"/>
+    <item android:drawable="@drawable/animation_music_18" android:duration="200"/>
+    <item android:drawable="@drawable/animation_music_19" android:duration="200"/>
+    <item android:drawable="@drawable/animation_music_20" android:duration="200"/>
+    <item android:drawable="@drawable/animation_music_21" android:duration="200"/>
+</animation-list>

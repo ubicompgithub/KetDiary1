@@ -255,8 +255,8 @@ public class StatisticDayView extends StatisticPageView {
 					start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
 			bracTime.setText(s);
 		}
-		type_idx = 1;
-		if (type_idx >= 0)
+		//type_idx = 1;
+		if (type_idx > 0)
 			emotionDrawable = view.getResources().getDrawable(typeId[type_idx]);
 		
 		if (emotionDrawable != null){

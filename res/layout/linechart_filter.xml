@@ -7,56 +7,65 @@
     android:background="@drawable/filter_bg">    
         <ImageView
 	        android:id="@+id/filter_all"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:src="@drawable/filter_all" 
-	        android:layout_weight="1"/>
+	        android:layout_width="30dp"
+	        android:layout_height="30dp"
+	        android:src="@drawable/filter_all_selected" 
+	        android:layout_weight="1"
+	        android:layout_gravity="center"/>
         <ImageView
 	        android:id="@+id/filter_1"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
+	        android:layout_width="30dp"
+	        android:layout_height="30dp"
 	        android:src="@drawable/filter_color1" 
-	        android:layout_weight="1"/>
+	        android:layout_weight="1"
+	        android:layout_gravity="center"/>
         <ImageView
 	        android:id="@+id/filter_2"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
+	        android:layout_width="30dp"
+	        android:layout_height="30dp"
 	        android:src="@drawable/filter_color2" 
-	        android:layout_weight="1"/>
+	        android:layout_weight="1"
+	        android:layout_gravity="center"/>
         <ImageView
 	        android:id="@+id/filter_3"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
+	        android:layout_width="30dp"
+	        android:layout_height="30dp"
 	        android:src="@drawable/filter_color3" 
-	        android:layout_weight="1"/>
+	        android:layout_weight="1"
+	        android:layout_gravity="center"/>
         <ImageView
 	        android:id="@+id/filter_4"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
+	        android:layout_width="30dp"
+	        android:layout_height="30dp"
 	        android:src="@drawable/filter_color4" 
-	        android:layout_weight="1"/>
+	        android:layout_weight="1"
+	        android:layout_gravity="center"/>
         <ImageView
 	        android:id="@+id/filter_5"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
+	        android:layout_width="30dp"
+	        android:layout_height="30dp"
 	        android:src="@drawable/filter_color5" 
-	        android:layout_weight="1"/>
+	        android:layout_weight="1"
+	        android:layout_gravity="center"/>
         <ImageView
 	        android:id="@+id/filter_6"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
+	        android:layout_width="30dp"
+	        android:layout_height="30dp"
 	        android:src="@drawable/filter_color6" 
-	        android:layout_weight="1"/>
+	        android:layout_weight="1"
+	        android:layout_gravity="center"/>
         <ImageView
 	        android:id="@+id/filter_7"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
+	        android:layout_width="30dp"
+	        android:layout_height="30dp"
 	        android:src="@drawable/filter_color7" 
-	        android:layout_weight="1"/>
+	        android:layout_weight="1"
+	        android:layout_gravity="center"/>
         <ImageView
 	        android:id="@+id/filter_8"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
+	        android:layout_width="30dp"
+	        android:layout_height="30dp"
 	        android:src="@drawable/filter_color8" 
-	        android:layout_weight="1"/>
+	        android:layout_weight="1"
+	        android:layout_gravity="center"/>
 </LinearLayout>

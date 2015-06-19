@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
+import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
@@ -29,6 +30,7 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
+import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.dialog.CheckResultDialog;
 import com.ubicomp.ketdiary.dialog.NoteDialog2;
 import com.ubicomp.ketdiary.fragment.DaybookFragment;
@@ -75,14 +77,15 @@ public class MainActivity extends FragmentActivity {
 
 	private RelativeLayout mainLayout;
 	
-	private ImageView loading_page;
+	private ImageView loading_page, animationImg;
 	private LoadingPageTimer loadingPageTimer;
 	private Handler loadingHandler = new LoadingHandler();
+	private AnimationDrawable animation;
 
 	private CustomMenu menu;
 
 	private RelativeLayout count_down_layout;
-	private TextView count_down_text;
+	private TextView count_down_text, count_down_label;
 
 	 private static final String TAG = "MAIN_ACTIVITY";
 
@@ -106,11 +109,13 @@ public class MainActivity extends FragmentActivity {
 	private boolean doubleClickState = false;
 	private long latestClickTime = 0;
 	
-	public static final long WAIT_RESULT_TIME = 1*60*1000;
+	private int changeClock=0;
+	
+	public static final long WAIT_RESULT_TIME = 10*1000;
 	public static final int ACTION_RECORD = 1;
 	public static final int ACTION_QUESTIONNAIRE = 2;
 	
-
+	private DatabaseControl db;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -121,9 +126,12 @@ public class MainActivity extends FragmentActivity {
 
 		loading_page = (ImageView) findViewById(R.id.loading_page);
 		tabHost = (TabHost) findViewById(android.R.id.tabhost);
+		animationImg = (ImageView) findViewById(R.id.main_count_down_image);
+		animation = (AnimationDrawable) animationImg.getDrawable();
 		
 		count_down_layout = (RelativeLayout) findViewById(R.id.main_count_down_layout);
 		count_down_text = (TextView) findViewById(R.id.main_count_down_text);
+		count_down_label= (TextView) findViewById(R.id.main_count_down_text2);
 		
 		mainLayout = (RelativeLayout) findViewById(R.id.main_layout);
 		
@@ -202,7 +210,8 @@ public class MainActivity extends FragmentActivity {
 				height = height > 0 ? height : v.getHeight();
 				param.width = width * 3 / 2;
 				param.height = height * 3 / 2;
-				//count_down_text.setTextSize(21);
+				count_down_text.setTextSize(21);
+				count_down_label.setTextSize(21);
 				//v.setBackgroundResource(R.drawable.count_down_circle_pressed);
 				v.setLayoutParams(param);
 				v.invalidate();
@@ -226,7 +235,8 @@ public class MainActivity extends FragmentActivity {
 				param.width = width;
 				param.height = height;
 				v.setLayoutParams(param);
-				//count_down_text.setTextSize(14);
+				count_down_text.setTextSize(14);
+				count_down_label.setTextSize(14);
 				v.invalidate();
 				break;
 			}
@@ -669,6 +679,7 @@ public class MainActivity extends FragmentActivity {
 
 		public SensorCountDownTimer(long millisInFuture) {
 			super(millisInFuture, 100);
+				animation.start();
 		}
 
 		@Override
@@ -687,8 +698,12 @@ public class MainActivity extends FragmentActivity {
 			}
 			else if(tabHost.getCurrentTab() == 1 && fragments[1] != null
 					&& fragments[1].isAdded()){
+				
+				checkResultAddPoint();
+				/*
+				PreferenceControl.setPoint(2);
 				CustomToast.generateToast(R.string.after_test_pass, 2);
-				PreferenceControl.setCheckResult( false );
+				PreferenceControl.setCheckResult( false );*/
 			}
 			else{
 				soundpool.play(timer_sound_id, 1f, 1f, 0, 0, 1f);
@@ -700,8 +715,25 @@ public class MainActivity extends FragmentActivity {
 		@Override
 		public void onTick(long millisUntilFinished) {
 			long time = millisUntilFinished / 1000L;
+			
+			if(time > 60){
+				count_down_text.setText(String.valueOf(time/60));
+				count_down_label.setText("'");
+				animationImg.setImageResource(R.anim.animation_clock2);
+				animation = (AnimationDrawable) animationImg.getDrawable();
+				animation.start();
+			}
+			else{
+				count_down_text.setText(String.valueOf(time));//TODO:分跟秒要不一樣
+				count_down_label.setText("\"");
+				animationImg.setImageResource(R.anim.animation_clock);
+				animation = (AnimationDrawable) animationImg.getDrawable();
+				animation.start();
+			}
+			
+			
 			isRecovery = true;
-			count_down_text.setText(String.valueOf(time)+"\"");//TODO:分跟秒要不一樣
+			
 			count_down_layout.setVisibility(View.VISIBLE);
 
 		}
@@ -716,8 +748,10 @@ public class MainActivity extends FragmentActivity {
 		}
 		else if(tabHost.getCurrentTab() == 1 && fragments[1] != null
 				&& fragments[1].isAdded()){
-			CustomToast.generateToast(R.string.after_test_pass, 2);
-			PreferenceControl.setCheckResult( false );
+			
+			checkResultAddPoint();
+			//CustomToast.generateToast(R.string.after_test_pass, 2);
+			//PreferenceControl.setCheckResult( false );
 		}
 		else{
 			//soundpool.play(timer_sound_id, 1f, 1f, 0, 0, 1f);
@@ -725,6 +759,24 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 	
+	public void checkResultAddPoint(){
+		db = new DatabaseControl();
+		int addScore = PreferenceControl.getTestAddScore();
+		
+		PreferenceControl.setPoint(addScore);
+		
+		Log.d(TAG, "AddScore:"+addScore);
+		int result = db.getLatestTestResult().getResult(); //TODO: check if no data
+		
+		if (addScore == 0 && result == 1) // TestFail & get no credit //TODO: check TestResult
+			CustomToast.generateToast(R.string.after_test_fail, -1);
+		else if(result == 1)
+			CustomToast.generateToast(R.string.after_test_fail, addScore);
+		else
+			CustomToast.generateToast(R.string.after_test_pass, addScore);
+		
+		PreferenceControl.setCheckResult( false );
+	}
 
 	private void showResult(){
 		

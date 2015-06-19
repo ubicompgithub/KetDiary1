@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:drawable="@drawable/count1" android:duration="50"/>
+    <item android:drawable="@drawable/count2" android:duration="50"/>
+    <item android:drawable="@drawable/count3" android:duration="50"/>
+    <item android:drawable="@drawable/count4" android:duration="50"/>
+    <item android:drawable="@drawable/count5" android:duration="50"/>
+    <item android:drawable="@drawable/count6" android:duration="50"/>
+    <item android:drawable="@drawable/count7" android:duration="50"/>
+    <item android:drawable="@drawable/count8" android:duration="50"/>
+    <item android:drawable="@drawable/count9" android:duration="50"/>
+    <item android:drawable="@drawable/count10" android:duration="50"/>
+    <item android:drawable="@drawable/count11" android:duration="50"/>
+    <item android:drawable="@drawable/count12" android:duration="50"/>
+    <item android:drawable="@drawable/count13" android:duration="50"/>
+    <item android:drawable="@drawable/count14" android:duration="50"/>
+    <item android:drawable="@drawable/count15" android:duration="50"/>
+    <item android:drawable="@drawable/count16" android:duration="50"/>
+    <item android:drawable="@drawable/count17" android:duration="50"/>
+    <item android:drawable="@drawable/count18" android:duration="50"/>
+    <item android:drawable="@drawable/count19" android:duration="50"/>
+    <item android:drawable="@drawable/count20" android:duration="50"/>
+	<item android:drawable="@drawable/count21" android:duration="50"/>
+	<item android:drawable="@drawable/count22" android:duration="50"/>
+	<item android:drawable="@drawable/count23" android:duration="50"/>
+	<item android:drawable="@drawable/count24" android:duration="50"/>
+	<item android:drawable="@drawable/count25" android:duration="50"/>
+	<item android:drawable="@drawable/count26" android:duration="50"/>
+	<item android:drawable="@drawable/count27" android:duration="50"/>
+	<item android:drawable="@drawable/count28" android:duration="50"/>
+	<item android:drawable="@drawable/count29" android:duration="50"/>
+	<item android:drawable="@drawable/count30" android:duration="50"/>
+</animation-list>

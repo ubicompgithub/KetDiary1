@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bar_transparent" >
+
+    <TextView
+        android:id="@+id/question_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_centerVertical="true"
+        android:textColor="@color/text_gray"
+        android:textSize="@dimen/large_text_size" />
+
+    <EditText
+        android:id="@+id/question_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="9dp"
+        android:background="@drawable/edittext_recreation"
+        android:hint="@string/emotion_manage_input"
+        android:imeOptions="actionDone"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:inputType="text"
+        android:maxLength="20"
+        android:textColor="@color/text_gray"
+        android:textSize="@dimen/large_text_size" />
+    
+    <TextView 
+        android:id="@+id/question_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+         android:layout_centerVertical="true"
+         android:layout_alignParentRight="true"
+         android:layout_marginRight="8dp"
+         android:padding="8dp"
+         android:textColor="@color/text_gray"
+         android:textSize="@dimen/large_text_size"
+         android:text="@string/edit"
+        />
+
+</RelativeLayout>

@@ -4,17 +4,20 @@ import java.util.Calendar;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.ubicomp.ketdiary.App;
-import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.check.TimeBlock;
 
@@ -116,7 +119,7 @@ public class BarButtonGenerator {
 		return layout;
 	}
 	
-/*
+
 	public static View createTextView(int textStr) {
 		LinearLayout layout = (LinearLayout) inflater.inflate(
 				R.layout.bar_text_item, null);
@@ -303,7 +306,7 @@ public class BarButtonGenerator {
 		return layout;
 	}
 
-	public static View createTwoButtonView(int leftTextId, int rightTextId,
+	public static View createTwoButtonView2(int leftTextId, int rightTextId,
 			OnClickListener leftListener, OnClickListener rightListener) {
 		LinearLayout layout = (LinearLayout) inflater.inflate(
 				R.layout.bar_yes_no_item, null);
@@ -335,6 +338,6 @@ public class BarButtonGenerator {
 		layout.setOnClickListener(listener);
 
 		return layout;
-	}*/
+	}
 
 }

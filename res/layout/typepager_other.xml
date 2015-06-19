@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingLeft="30dp"
-    android:paddingRight="30dp" >
+    android:paddingRight="30dp"
+    android:id="@+id/other_layout" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,7 +40,8 @@
         <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-30dp" >
+        android:layout_marginTop="-30dp"
+        android:id="@+id/other_bottom_layout" >
 
         <ImageView
             android:id="@+id/vts_iv_social"

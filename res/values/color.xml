@@ -35,5 +35,12 @@
     
     <color name="background_color">#888888</color>
     <color name="text_color">#B3B3B4</color>
+    
+    <color name="path_normal">#EDEDEE</color>
+    <color name="path_self_color">#FF9578</color>
+    <color name="path_other_color">#6BC6BA</color>
+    <color name="linechart_date_color">#7DCDFF</color>
+    <color name="linechart_score_color">#9E9E9F</color>
+    <color name="linechart_bgline_color">#F7F7F7</color>
 
 </resources>

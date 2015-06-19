@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="setting_title">設定</string>
+    <string name="setting_privacy">隱私設定</string>
+    <string name="setting_facebook">上傳臉書分享文字？</string>
+    <string name="setting_user_voice">上傳自我管理紀錄錄音？</string>
+    <string name="setting_recreation">休閒活動</string>
+    <string name="setting_contact">親友資訊</string>
+    <string name="setting_name">稱呼</string>
+    <string name="setting_phone">電話號碼</string>
+    <string name="setting_social">社區諮商</string>
+    <string name="setting_alarm">提醒設定</string>
+    <string name="setting_system">系統設定</string>
+    <string name="setting_bluetooth">前往藍牙設定頁面</string>
+
+</resources>

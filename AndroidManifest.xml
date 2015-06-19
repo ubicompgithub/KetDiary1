@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ubicomp.ketdiary"
-    android:versionCode="30"
-    android:versionName="1.30" >
+    android:versionCode="31"
+    android:versionName="1.31" >
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -67,6 +67,7 @@
         <service android:name=".AlarmService" />
         <service android:name=".UploadService" />
         <service android:name=".ResultService" />
+        <service android:name=".ResultService2" />
         <service
             android:name=".BluetoothLE.BluetoothLeService"
             android:enabled="true" >
@@ -114,6 +115,21 @@
             android:name=".EventCopeSkillActivity"
             android:label="@string/title_activity_dev"
             android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
+         <activity
+            android:name=".PreSettingActivity"
+            android:label="@string/title_activity_dev"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+        </activity>
+        <activity
+            android:name=".EmotionActivity"
+            android:label="@string/title_activity_dev"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+        </activity>
+        <activity
+            android:name=".CopingActivity"
+            android:label="@string/title_activity_dev"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
         
     </application>

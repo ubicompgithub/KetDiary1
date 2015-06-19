@@ -33,7 +33,7 @@
     	    android:textColor="@color/dark_gray" />
 
     	<ImageView
-        	android:id="@+id/note_sp_timeslot"
+        	android:id="@+id/note_im_date"
         	android:layout_width="match_parent"
         	android:layout_height="match_parent"
         	android:gravity="center"
