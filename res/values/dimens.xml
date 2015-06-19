@@ -50,6 +50,11 @@
     <dimen name="chart_label_top">6dp</dimen>
     <dimen name="chart_label_top2">16dp</dimen>
     <dimen name="drawer_normal_height">325dp</dimen>
+    <dimen name="drawer_with_filter_height">384dp</dimen>
+    <dimen name="filter_normal_height">58dp</dimen>
+    <dimen name="filter_landscape_height">45dp</dimen>
+    <dimen name="filter_button_width">30dp</dimen>
+    <dimen name="filter_button_height">30dp</dimen>
     
     <dimen name="radar_chart_size">154.7dp</dimen>
     <dimen name="fb_gap">20dp</dimen>

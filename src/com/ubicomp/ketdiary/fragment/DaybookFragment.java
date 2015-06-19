@@ -5,6 +5,7 @@ import java.util.Calendar;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -30,7 +31,6 @@ import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.db.NoteCategory2;
 import com.ubicomp.ketdiary.db.TestDataParser2;
-import com.ubicomp.ketdiary.dialog.AddNoteDialog;
 import com.ubicomp.ketdiary.dialog.AddNoteDialog2;
 import com.ubicomp.ketdiary.dialog.CheckResultDialog;
 import com.ubicomp.ketdiary.dialog.TestQuestionCaller2;
@@ -42,8 +42,8 @@ import com.ubicomp.ketdiary.mydaybook.linechart.ChartCaller;
 import com.ubicomp.ketdiary.mydaybook.linechart.LineChartTitle;
 import com.ubicomp.ketdiary.mydaybook.linechart.LineChartView;
 import com.ubicomp.ketdiary.system.PreferenceControl;
-//import android.view.ViewGroup.LayoutParams;
 import com.ubicomp.ketdiary.ui.ScaleOnTouchListener;
+//import android.view.ViewGroup.LayoutParams;
 
 public class DaybookFragment extends Fragment implements ChartCaller, TestQuestionCaller2 {
 	
@@ -63,6 +63,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private TextView titleText, backToTodayText;
 	private View diaryItem;
 	
+
 	@SuppressWarnings("deprecation")
 	private SlidingDrawer drawer;
 	private ImageView toggle, toggle_linechart, linechartIcon, calendarIcon;
@@ -79,27 +80,43 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	
 	private static final int THIS_MONTH = Calendar.getInstance().get(Calendar.MONTH);
 	
-	private int chart_type = 2;
+	public static int chart_type = 2;
+	
 	private LinearLayout chartAreaLayout;
 	private LineChartView lineChart;
 	private LineChartTitle chartTitle;
 	private ChartCaller caller;
 	
-	public View lineChartBar, lineChartView, lineChartFilter, calendarBar, calendarView;
+	public View lineChartBar, lineChartView, lineChartFilter, calendarBar, calendarView, filterView;
 	
-	public ImageView lineChartFilterButton, addButton;
+	public ImageView addButton;
 	
 	private boolean isFilterIsOpen = false;
 	private AddNoteDialog2 notePage = null;
+	
 	
 	private DatabaseControl db;
 	private NoteCategory2 dict;
 	private static final String[] dayOfWeek = {" ", "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
 	private static final String[] timeslot = {"上午", "下午", "晚上"};
 	
-	private int drawerHeight = App.getContext().getResources().getDimensionPixelSize(R.dimen.drawer_normal_height);
 	//public static List<Integer> filterList = new ArrayList<Integer>();
 
+	private ImageView filterAll, filter1, filter2, filter3, filter4, filter5, filter6, filter7, filter8;
+	public ImageView lineChartFilterButton, calendarFilterButton, rotateLineChart;
+	
+	public static boolean[] filterButtonIsPressed = {true, false, false, false, false, false, false, false, false};
+	private ImageView[] filterButtonArray = {filterAll, filter1, filter2, filter3, filter4, filter5, filter6, filter7, filter8};
+	
+	private boolean isFilterOpen = false;
+	private boolean isRotated = false;
+	
+	private int drawerHeight = App.getContext().getResources().getDimensionPixelSize(R.dimen.drawer_normal_height);
+	private int drawerHeightWithFilter = App.getContext().getResources().getDimensionPixelSize(R.dimen.drawer_with_filter_height);
+	private int filterHeight = App.getContext().getResources().getDimensionPixelSize(R.dimen.filter_normal_height);
+	private int filterHeightLandscape = App.getContext().getResources().getDimensionPixelSize(R.dimen.filter_landscape_height);
+	
+	
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -155,11 +172,31 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		lineChartBar = (View) inflater.inflate(R.layout.linechart_upperbar, null, false);
 		lineChartView = (View) inflater.inflate(R.layout.linechart_main, null, false);
 		lineChartFilter = (View) inflater.inflate(R.layout.linechart_filter, null, false);
+		rotateLineChart = (ImageView) lineChartBar.findViewById(R.id.rotate_button);
 	    calendarIcon = (ImageView) lineChartBar.findViewById(R.id.back_to_calendar);
 	    toggle_linechart = (ImageView) lineChartBar.findViewById(R.id.toggle_linechart);
 	    
 	    addButton = (ImageView) view.findViewById(R.id.add_button);
+		filterAll = (ImageView) lineChartFilter.findViewById(R.id.filter_all);
+	    filter1 = (ImageView) lineChartFilter.findViewById(R.id.filter_1);
+	    filter2 = (ImageView) lineChartFilter.findViewById(R.id.filter_2);
+	    filter3 = (ImageView) lineChartFilter.findViewById(R.id.filter_3);
+	    filter4 = (ImageView) lineChartFilter.findViewById(R.id.filter_4);
+	    filter5 = (ImageView) lineChartFilter.findViewById(R.id.filter_5);
+	    filter6 = (ImageView) lineChartFilter.findViewById(R.id.filter_6);
+	    filter7 = (ImageView) lineChartFilter.findViewById(R.id.filter_7);
+	    filter8 = (ImageView) lineChartFilter.findViewById(R.id.filter_8);
 	    
+	    filterAll.setOnClickListener(new FilterListener());
+	    filter1.setOnClickListener(new FilterListener());
+	    filter2.setOnClickListener(new FilterListener());
+	    filter3.setOnClickListener(new FilterListener());
+	    filter4.setOnClickListener(new FilterListener());
+	    filter5.setOnClickListener(new FilterListener());
+	    filter6.setOnClickListener(new FilterListener());
+	    filter7.setOnClickListener(new FilterListener());
+	    filter8.setOnClickListener(new FilterListener());	
+		
 		showDiary();
 				
 		drawer.toggle();
@@ -194,7 +231,6 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 				if  (!drawer.isOpened()) { drawer.toggle();}
 				
 				lineChart = (LineChartView) view.findViewById(R.id.lineChart);
-		        lineChart.setChartData(getRandomData());
 		        lineChart.requestLayout();
 		        lineChart.getLayoutParams().width = 2200;
 		        
@@ -357,8 +393,30 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		addButton.setOnTouchListener(new ScaleOnTouchListener());
 		
 		
+		rotateLineChart.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+
+				// TODO Auto-generated method stub
+				if (isRotated) {
+					MainActivity.getMainActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+					isRotated = false;
+				}
+				else {
+
+					MainActivity.getMainActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+					isRotated = true;
+				}
+				
+			}
+		});
 		
-		
+		lineChartFilterButton = (ImageView) lineChartBar.findViewById(R.id.line_chart_filter);
+		calendarFilterButton = (ImageView) calendarBar.findViewById(R.id.calendar_filter);
+		lineChartFilterButton.setOnClickListener(new FilterButtonListener());
+		calendarFilterButton.setOnClickListener(new FilterButtonListener());
+		MainActivity.getMainActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		
 		return view;		
 	}
@@ -373,16 +431,75 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		switch (chart_type) {
 		case 0:
 			chartTitle.setBackgroundResource(R.drawable.tab1_pressed);
+			setFilterType(chart_type);
 			break;
 		case 1:
 			chartTitle.setBackgroundResource(R.drawable.tab2_pressed);
+			setFilterType(chart_type);
 			break;
 		case 2:
 			chartTitle.setBackgroundResource(R.drawable.tab3_pressed);
+			setFilterType(chart_type);
 			break;		
 		}
 	}
 	
+		public void setFilterType(int type) {
+		switch (type) {
+		case 0: {
+			//Log.i("OMG", "CASE0");
+			if (isFilterOpen) {
+				filter1.setVisibility(View.VISIBLE);
+				filter2.setVisibility(View.VISIBLE);
+				filter3.setVisibility(View.VISIBLE);
+				filter4.setVisibility(View.VISIBLE);
+				filter5.setVisibility(View.VISIBLE);
+				filter6.setVisibility(View.GONE); filterButtonIsPressed[6] = false;
+				filter7.setVisibility(View.GONE); filterButtonIsPressed[7] = false;
+				filter8.setVisibility(View.GONE); filterButtonIsPressed[8] = false;
+				filterView.setPadding(100, 0, 100, 0);
+			}
+			lineChartFilterButton.setVisibility(View.VISIBLE);
+			lineChart.invalidate();
+			break;
+		}
+		case 1: {
+			//Log.i("OMG", "CASE1");
+			if (isFilterOpen)  {
+				filter1.setVisibility(View.GONE); filterButtonIsPressed[1] = false;
+				filter2.setVisibility(View.GONE); filterButtonIsPressed[2] = false;
+				filter3.setVisibility(View.GONE); filterButtonIsPressed[3] = false;
+				filter4.setVisibility(View.GONE); filterButtonIsPressed[4] = false;
+				filter5.setVisibility(View.GONE); filterButtonIsPressed[5] = false;
+				filter6.setVisibility(View.VISIBLE);
+				filter7.setVisibility(View.VISIBLE);
+				filter8.setVisibility(View.VISIBLE);
+				filterView.setPadding(100, 0, 100, 0);
+			}
+			lineChartFilterButton.setVisibility(View.VISIBLE);
+			lineChart.invalidate();
+			break;
+		}
+		
+		case 2: {
+			//Log.i("OMG", "CASE2");
+			if (isFilterOpen) {
+				LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
+				lp.height = drawerHeight;
+				lp.addRule(RelativeLayout.BELOW, lineChartBar.getId());
+				drawer.setLayoutParams(lp);
+				
+				drawerContent.removeAllViews();
+				
+				drawerContent.addView(lineChartView);
+				isFilterOpen = false;
+			}
+			lineChartFilterButton.setVisibility(View.INVISIBLE);
+			lineChart.invalidate();
+			break;
+		}
+	  }
+	}
 	
 	@Override
 	public void onResume() {
@@ -410,12 +527,30 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		}
 	}
 	
+	private void setFilterSize() {
+		filterView = (View) view.findViewById(R.id.linechart_filter_area);
+		filterView.requestLayout();
+		if (isRotated) {
+			filterView.getLayoutParams().height = filterHeightLandscape;
+			//filterView.setPadding(10, 10, 10, 10);
+		}
+		else {
+			filterView.getLayoutParams().height = filterHeight;
+			//filterView.setPadding(30, 30, 30, 30);
+		}
+		
+	}
+	
 	private void showDiary() {		
 		diaryList = (LinearLayout) view.findViewById(R.id.item);
 		diaryList.removeAllViews();
 		
 		NoteAdd[] noteAdds = db.getAllNoteAdd();
-		Log.d(TAG, String.valueOf(noteAdds.length));
+		if(noteAdds == null){
+			return;
+		}
+		
+		//Log.d(TAG, String.valueOf(noteAdds.length));
 		
 		LayoutInflater inflater = LayoutInflater.from(context);
 		RelativeLayout lineView = (RelativeLayout)inflater.inflate(R.layout.white_line, null);
@@ -534,6 +669,174 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		}
     }
     
+	    private class FilterButtonListener implements View.OnClickListener {
+    	
+    	@Override
+    	public void onClick(View v) {
+    		if (v.getId() == R.id.line_chart_filter) {
+    			if (isFilterOpen == false) {				
+					LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
+					//Log.i("OMG", "H: "+lp.height);
+					lp.height = drawerHeightWithFilter;
+					lp.addRule(RelativeLayout.BELOW, lineChartBar.getId());
+					drawer.setLayoutParams(lp);
+					
+					drawerContent.removeAllViews();
+					
+					drawerContent.addView(lineChartFilter);
+					isFilterOpen = true;
+					setFilterSize();
+					Log.i("OMG", "CASE: "+ chart_type);
+					setFilterType(chart_type);
+					drawerContent.addView(lineChartView);
+					
+				}
+				else {
+					LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
+					lp.height = drawerHeight;
+					lp.addRule(RelativeLayout.BELOW, lineChartBar.getId());
+					drawer.setLayoutParams(lp);
+					
+					drawerContent.removeAllViews();
+					
+					drawerContent.addView(lineChartView);
+					isFilterOpen = false;
+				}
+    			
+    		} else {
+    			if (isFilterOpen == false) {				
+					LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
+					//Log.i("OMG", "H: "+lp.height);
+					lp.height = drawerHeightWithFilter;
+					lp.addRule(RelativeLayout.BELOW, calendarBar.getId());
+					drawer.setLayoutParams(lp);
+					
+					drawerContent.removeAllViews();
+					
+					drawerContent.addView(lineChartFilter);
+					isFilterOpen = true;
+					setFilterSize();
+					drawerContent.addView(calendarView);
+					
+				}
+				else {
+					LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
+					lp.height = drawerHeight;
+					lp.addRule(RelativeLayout.BELOW, calendarBar.getId());
+					drawer.setLayoutParams(lp);
+					
+					drawerContent.removeAllViews();
+					
+					drawerContent.addView(calendarView);
+					isFilterOpen = false;
+				}
+    		} 		
+    	}    	
+    }
+    
+
+    private class FilterListener implements View.OnClickListener {
+    	
+
+    	@Override
+    	public void onClick(View v) {
+    		switch (v.getId()) {
+    		case (R.id.filter_all): {  
+    		    filterButtonIsPressed[0] = true; 
+    		    filterAll.setImageResource(R.drawable.filter_all_selected);
+    			setAllButtonImage();
+    			lineChart.invalidate();
+    			break;
+    		}
+    		case (R.id.filter_1): {
+    			if (filterButtonIsPressed[1]) { filterButtonIsPressed[1] = false; filter1.setImageResource(R.drawable.filter_color1); }
+    			else {filterButtonIsPressed[1] = true; filter1.setImageResource(R.drawable.filter_color1_selected); filterButtonIsPressed[0] = false;}
+    			setAllButtonImage();
+    			lineChart.invalidate();
+    			break;	
+    		}
+    		
+    		case (R.id.filter_2): {
+    			if (filterButtonIsPressed[2]) { filterButtonIsPressed[2] = false; filter2.setImageResource(R.drawable.filter_color2); }
+    			else {filterButtonIsPressed[2] = true; filter2.setImageResource(R.drawable.filter_color2_selected); filterButtonIsPressed[0] = false;}
+    			setAllButtonImage();
+    			lineChart.invalidate();
+    			break;
+    			
+    		}
+    		
+    		case (R.id.filter_3): {
+    			if (filterButtonIsPressed[3]) { filterButtonIsPressed[3] = false; filter3.setImageResource(R.drawable.filter_color3);}
+    			else {filterButtonIsPressed[3] = true; filter3.setImageResource(R.drawable.filter_color3_selected); filterButtonIsPressed[0] = false; }
+    			setAllButtonImage();
+    			lineChart.invalidate();
+    			break;
+    			
+    		}
+    		
+    		case (R.id.filter_4): {
+    			if (filterButtonIsPressed[4]) { filterButtonIsPressed[4] = false; filter4.setImageResource(R.drawable.filter_color4);}
+    			else {filterButtonIsPressed[4] = true; filter4.setImageResource(R.drawable.filter_color4_selected); filterButtonIsPressed[0] = false;}
+    			setAllButtonImage();
+    			lineChart.invalidate();
+    			break;
+    			
+    		}
+    		case (R.id.filter_5): {
+    			if (filterButtonIsPressed[5]) { filterButtonIsPressed[5] = false; filter5.setImageResource(R.drawable.filter_color5);}
+    			else {filterButtonIsPressed[5] = true; filter5.setImageResource(R.drawable.filter_color5_selected); filterButtonIsPressed[0] = false;}
+    			setAllButtonImage();
+    			lineChart.invalidate();
+    			break;    			
+    		}
+    		case (R.id.filter_6): {
+    			if (filterButtonIsPressed[6]) { filterButtonIsPressed[6] = false; filter6.setImageResource(R.drawable.filter_color6);}
+    			else {filterButtonIsPressed[6] = true; filter6.setImageResource(R.drawable.filter_color6_selected); filterButtonIsPressed[0] = false;}
+    			setAllButtonImage();
+    			lineChart.invalidate();
+    			break;
+    		}
+    		case (R.id.filter_7): {
+    			if (filterButtonIsPressed[7]) { filterButtonIsPressed[7] = false; filter7.setImageResource(R.drawable.filter_color7);}
+    			else {filterButtonIsPressed[7] = true; filter7.setImageResource(R.drawable.filter_color7_selected); filterButtonIsPressed[0] = false;}
+    			setAllButtonImage();
+    			lineChart.invalidate();
+    			break;
+    		}
+    		case (R.id.filter_8): {
+    			if (filterButtonIsPressed[8]) { filterButtonIsPressed[8] = false; filter8.setImageResource(R.drawable.filter_color8);}
+    			else {filterButtonIsPressed[8] = true; filter8.setImageResource(R.drawable.filter_color8_selected); filterButtonIsPressed[0] = false;}
+    			setAllButtonImage();
+    			lineChart.invalidate();
+    			break;
+    		}	
+    		}
+    	}
+    }
+    	
+
+
+
+
+
+
+
+
+    	private void setAllButtonImage() {
+    		if (filterButtonIsPressed[0]) {
+    			filter1.setImageResource(R.drawable.filter_color1);
+    			filter2.setImageResource(R.drawable.filter_color2);
+    			filter3.setImageResource(R.drawable.filter_color3);
+    			filter4.setImageResource(R.drawable.filter_color4);
+    			filter5.setImageResource(R.drawable.filter_color5);
+    			filter6.setImageResource(R.drawable.filter_color6);
+    			filter7.setImageResource(R.drawable.filter_color7);
+    			filter8.setImageResource(R.drawable.filter_color8);
+    		}
+    		else {
+    			filterAll.setImageResource(R.drawable.filter_all);
+    		}
+    	}
     
     public void writeQuestionFile(int day, int timeslot, int type, int items, int impact, String description) {
     	
@@ -568,7 +871,11 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		questionFile = new QuestionFile(mainDirectory);
 	}
 
-
+    public static int getChartType () {
+		return chart_type;
+	}
+    
+    
 	@Override
 	public void resetView() {
 		addButton.setVisibility(View.VISIBLE);
@@ -576,4 +883,9 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		showDiary();
 	}
 		
+
+
+
+
+
 }
