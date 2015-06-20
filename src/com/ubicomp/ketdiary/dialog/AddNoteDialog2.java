@@ -497,7 +497,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		//PreferenceControl.setAfterTestState(STATE_NOTE);
 		//questionLayout.setVisibility(View.VISIBLE);
 		
-		MainActivity.getMainActivity().enableTabAndClick(false);
+		//MainActivity.getMainActivity().enableTabAndClick(false);
 		boxLayout.setVisibility(View.VISIBLE);
 		
 		//chooseBox = new ChooseItemDialog(boxLayout, 1);

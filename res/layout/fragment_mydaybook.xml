@@ -1,18 +1,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mydaybook_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
     android:background="@drawable/wholebg"
-    android:id="@+id/mydaybook_layout" >
+    android:clickable="false"
+    android:orientation="vertical" >
         
     <RelativeLayout
-         android:id="@+id/upper_bar"
-         android:layout_alignParentTop="true"
-         android:layout_width="match_parent"
-	     android:layout_height="55dip"
-	     android:orientation="horizontal"
-	     android:layout_marginBottom="-8dp" >           	               
+        android:id="@+id/upper_bar"
+        android:layout_width="match_parent"
+        android:layout_height="55dip"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="-8dp"
+        android:clickable="true"
+        android:orientation="horizontal" >
+           	               
     </RelativeLayout>
     
     <ImageView

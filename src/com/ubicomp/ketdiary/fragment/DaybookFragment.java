@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -153,6 +154,9 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		drawerContent.addView(calendarView);
 		upperBarContent.addView(calendarBar);
 		
+		//MainActivity.getMainActivity().setClickable(false);
+		
+		//calendarBar.setEnabled(false);
 
 		// Set up the ViewPager with the sections adapter.
 		View[] pageViewList = new View[Database.SUSTAINED_MONTHS];
@@ -422,6 +426,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		lineChartFilterButton.setOnClickListener(new FilterButtonListener());
 		calendarFilterButton.setOnClickListener(new FilterButtonListener());
 		MainActivity.getMainActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		
 		
 		return view;		
 	}

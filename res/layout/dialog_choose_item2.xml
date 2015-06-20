@@ -24,6 +24,8 @@
         <ListView
             android:id="@+id/choose_listview"
             android:layout_width="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_height="156dp"
             android:divider="@null"
             android:dividerHeight="0dp"

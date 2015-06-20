@@ -496,7 +496,7 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	private void setClickable(boolean enable) {
+	public void setClickable(boolean enable) {
 		clickable = enable;
 	}
 
