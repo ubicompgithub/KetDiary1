@@ -1,5 +1,6 @@
 package com.ubicomp.ketdiary.mydaybook.linechart;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -21,6 +22,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.fragment.DaybookFragment;
@@ -35,25 +37,9 @@ public class LineChartView extends View {
     public  List<DummyData> datapoints = new ArrayList<DummyData>();
     
     private Paint paint = new Paint();
-    private Bitmap mBitmap;
 
-    private Bitmap d1 = BitmapFactory.decodeResource(getResources(), R.drawable.dot_color1);
-    private Bitmap d2 = BitmapFactory.decodeResource(getResources(), R.drawable.dot_color2);
-    private Bitmap d3 = BitmapFactory.decodeResource(getResources(), R.drawable.dot_color3);
-    private Bitmap d4 = BitmapFactory.decodeResource(getResources(), R.drawable.dot_color4);
-    private Bitmap d5 = BitmapFactory.decodeResource(getResources(), R.drawable.dot_color5);
-    private Bitmap d6 = BitmapFactory.decodeResource(getResources(), R.drawable.dot_color6);
-    private Bitmap d7 = BitmapFactory.decodeResource(getResources(), R.drawable.dot_color7);
-    private Bitmap d8 = BitmapFactory.decodeResource(getResources(), R.drawable.dot_color8);
-    private Bitmap[] dotArray= {d1, d2, d3, d4, d5, d6, d7, d8};
-    
-    private Bitmap cursorImg = BitmapFactory.decodeResource(getResources(), R.drawable.linechart_cursor);
-    private Bitmap legendImg = BitmapFactory.decodeResource(getResources(), R.drawable.linechart_legend);
-    
-    private Bitmap rectBarBg = BitmapFactory.decodeResource(getResources(), R.drawable.gray_underbar);
-    private Bitmap passBarBg = BitmapFactory.decodeResource(getResources(), R.drawable.pass_rect);
-    private Bitmap noPassBarBg = BitmapFactory.decodeResource(getResources(), R.drawable.nopass_rect);
-    
+    private int[] dots = {R.drawable.dot_color1, R.drawable.dot_color2, R.drawable.dot_color3, R.drawable.dot_color4, R.drawable.dot_color5, R.drawable.dot_color6, R.drawable.dot_color7, R.drawable.dot_color8};
+
     private GestureDetector gestureDetector; 
     
     private static int NONE = 0;
@@ -87,18 +73,15 @@ public class LineChartView extends View {
 				activityType = r2.nextInt(9 - 6) + 6;
 			}
 			
-			Bitmap bmp = dotArray[activityType-1];
 			
 			Random r3 = new Random();
 			int score = r3.nextInt(4 - (-3)) + (-3);
 			Random r4 = new Random();
 			boolean passTest;
-			int pass = r4.nextInt(3 - 1) + 1;
+			int pass = r4.nextInt(4 - 1) + 1;
 			
-			if (pass == 1) {passTest = true;}
-			else {passTest = false;}
 			
-			DummyData singleData = new DummyData(who, score, activityType, bmp , 6, i+1, passTest);
+			DummyData singleData = new DummyData(who, score, activityType, 6, i+1, pass);
 			datapoints.add(singleData);	
 		}
 		/*Log.i("OMG", "type:" + MainActivity.getChartType());
@@ -199,8 +182,6 @@ public class LineChartView extends View {
  	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
  		super.onSizeChanged(w, h, oldw, oldh);
 
- 		// your Canvas will draw onto the defined Bitmap
- 		mBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
  	}
     
     @Override 
@@ -386,14 +367,18 @@ public class LineChartView extends View {
         	 for (int i = 0; i < datapoints.size(); i++) {
         		if (datapoints.get(i).activityType > 5) continue;
  	        	if (drawTheDotOrNot(datapoints.get(i).activityType)) {
- 	        	Bitmap bmp = datapoints.get(i).dotColor;
- 	            bmp = getResizedBitmap(bmp, 25, 25);
- 	            canvas.drawBitmap(bmp, getXPos(i)-12, getYPos(datapoints.get(i).score)-10, p);
+	 	        	Bitmap tmp = BitmapFactory.decodeResource(getResources(), dots[datapoints.get(i).activityType+1]);
+	 	            Bitmap resizedImg = getResizedBitmap(tmp, 25, 25);
+	 	            tmp.recycle();
+	 	            System.gc();
+	 	            canvas.drawBitmap(resizedImg, getXPos(i)-12, getYPos(datapoints.get(i).score)-10, p);
  	        	}
  	        }
         	break;
         }
         case 1: {
+        	 
+        	
         	 paint.setStyle(Style.STROKE);
  	         paint.setStrokeWidth(4);
  	         paint.setColor(getResources().getColor(R.color.path_normal));
@@ -405,9 +390,11 @@ public class LineChartView extends View {
         	 for (int i = 0; i < datapoints.size(); i++) {
          		if (datapoints.get(i).activityType < 6) continue;
   	        	if (drawTheDotOrNot(datapoints.get(i).activityType)) {
-  	        	Bitmap bmp = datapoints.get(i).dotColor;
-  	            bmp = getResizedBitmap(bmp, 25, 25);
-  	            canvas.drawBitmap(bmp, getXPos(i)-12, getYPos(datapoints.get(i).score)-10, p);
+  	        		Bitmap tmp =  BitmapFactory.decodeResource(getResources(), dots[datapoints.get(i).activityType-1]);
+  	 	            Bitmap resizedImg = getResizedBitmap(tmp, 25, 25);
+  	 	            tmp.recycle();
+  	 	            System.gc();
+  	 	            canvas.drawBitmap(resizedImg, getXPos(i)-12, getYPos(datapoints.get(i).score)-10, p);
   	        	}
   	        }
         	break;
@@ -427,7 +414,10 @@ public class LineChartView extends View {
 	        
 	        paint.setShadowLayer(0, 0, 0, 0);
 	        paint_self.setShadowLayer(0, 0, 0, 0);
-        	Bitmap legend = getResizedBitmap(legendImg, 40, 350);
+	        Bitmap tmp = BitmapFactory.decodeResource(getResources(), R.drawable.linechart_legend);
+        	Bitmap legend = getResizedBitmap(tmp, 40, 350);
+        	tmp.recycle();
+        	System.gc();
         	canvas.drawBitmap(legend, getPaddingLeft(), getPaddingTop(), p);
         	break;
         }       
@@ -446,18 +436,29 @@ public class LineChartView extends View {
     
     private void drawRectBar(Canvas canvas) {
     	Paint p = new Paint();
-    	rectBarBg = getResizedBitmap(rectBarBg, 30, rectBarBg.getWidth());
-    	canvas.drawBitmap(rectBarBg , 0 , getHeight() - offsetY , p);
     	
     	for (int i = 0; i < datapoints.size(); i++) {
-    		if (datapoints.get(i).passTest) {
-    			passBarBg = getResizedBitmap(passBarBg, 28, 60);
+    		if (datapoints.get(i).passTest == 1) {
+    			Bitmap temp = getLocalBitmap(App.getContext(), R.drawable.pass_rect);
+    			Bitmap passBarBg = getResizedBitmap(temp, 28, 60);
+    			temp.recycle();
+    			System.gc();
 	            canvas.drawBitmap(passBarBg, getXPos(i)-25, getHeight()-offsetY, p);
     		}
-    		else {
-    			noPassBarBg = getResizedBitmap(noPassBarBg, 28, 60);
+    		else if (datapoints.get(i).passTest == 2){
+    			Bitmap temp = getLocalBitmap(App.getContext(), R.drawable.nopass_rect);
+    			Bitmap noPassBarBg = getResizedBitmap(temp, 28, 60);
+    			temp.recycle();
+    			System.gc();
 	            canvas.drawBitmap(noPassBarBg, getXPos(i)-25, getHeight()-offsetY, p);
-    		}   			
+    		}
+    		else {
+    			Bitmap temp = getLocalBitmap(App.getContext(), R.drawable.skip_rect);
+    			Bitmap skipBarBg = getResizedBitmap(temp, 28, 60);
+    			temp.recycle();
+    			System.gc();
+	            canvas.drawBitmap(skipBarBg, getXPos(i)-25, getHeight()-offsetY, p);
+    		}
         }    	
     }
     
@@ -469,7 +470,10 @@ public class LineChartView extends View {
     	//p.setStyle(Style.STROKE);
     	//p.setStrokeWidth(5);
     	//p.setPathEffect(new DashPathEffect(new float[] {10,20}, 0));
-    	Bitmap cursor = getResizedBitmap(cursorImg, getHeight() - 2*getPaddingTop() - 2*getPaddingBottom() , 25);
+    	Bitmap tmp = getLocalBitmap(App.getContext(), R.drawable.linechart_cursor);
+    	Bitmap cursor = getResizedBitmap(tmp, getHeight() - 2*getPaddingTop() - 2*getPaddingBottom() , 25);
+    	tmp.recycle();
+    	System.gc();
     	canvas.drawBitmap(cursor, getXPos(cursorLinePos) - 13, 0, p);
     	
     }
@@ -491,6 +495,19 @@ public class LineChartView extends View {
         return value + offsetX;
     }
     
+    public Bitmap getLocalBitmap(Context con, int resourceId){
+        InputStream inputStream = con.getResources().openRawResource(resourceId);
+        return BitmapFactory.decodeStream(inputStream, null, getBitmapOptions(2));
+    }
+    
+    public BitmapFactory.Options getBitmapOptions(int scale){
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPurgeable = true;
+        options.inInputShareable = true;
+        options.inSampleSize = scale;
+        return options;
+    }
+    
     
     public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth)
     {
@@ -506,6 +523,34 @@ public class LineChartView extends View {
         // recreate the new Bitmap
         Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
         return resizedBitmap;
+    }
+    
+    public Bitmap sizeDownBitmap(String path){
+    	 //Only decode image size. Not whole image
+
+        BitmapFactory.Options option = new BitmapFactory.Options();
+        option.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, option);
+
+        //The new size to decode to 
+        final int NEW_SIZE=100;
+        
+        //Now we have image width and height. We should find the correct scale value. (power of 2)
+        int width=option.outWidth;
+        int height=option.outHeight;
+        int scale=1;
+        while(true){
+
+            if(width/2<NEW_SIZE || height/2<NEW_SIZE)
+                break;
+            width/=2;
+            height/=2;
+            scale++;
+        }
+        //Decode again with inSampleSize
+        option = new BitmapFactory.Options();
+        option.inSampleSize=scale;
+        return BitmapFactory.decodeFile(path, option);
     }
     
     public int getCursorPos(float x) {
