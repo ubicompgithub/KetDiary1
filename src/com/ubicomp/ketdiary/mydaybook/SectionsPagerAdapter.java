@@ -3,12 +3,9 @@ package com.ubicomp.ketdiary.mydaybook;
 import java.util.Calendar;
 import java.util.Random;
 
-import com.ubicomp.ketdiary.App;
-import com.ubicomp.ketdiary.R;
-
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +14,9 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.ubicomp.ketdiary.App;
+import com.ubicomp.ketdiary.R;
 
 public class SectionsPagerAdapter extends PagerAdapter {
 
@@ -31,6 +31,8 @@ public class SectionsPagerAdapter extends PagerAdapter {
     public static final int TAG_CAL_CELL_MONTH = R.string.TAG_CAL_CELL_MONTH;
     public static final int TAG_CAL_CELL_PAGE_MONTH = R.string.TAG_CAL_CELL_PAGE_MONTH;
     public static final int TAG_CAL_CELL_YEAR = R.string.TAG_CAL_CELL_YEAR;
+    
+    private Context context;
 
     private LayoutInflater inflater;
 
@@ -38,7 +40,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
 
     public SectionsPagerAdapter(View[] pageViewList){
         this.pageViewList = pageViewList;
-
+        context = App.getContext();
         inflater = LayoutInflater.from(App.getContext());
         
     }
@@ -134,6 +136,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
             calDateText.setGravity(Gravity.CENTER);
             
             calDateText.setText(mCalendar.get(Calendar.DAY_OF_MONTH) + "");
+            //calDateText.setTextColor(context.getResources().getColor(R.color.text_gray2));
             
             // Set cells that belong to current month 
             if ( mCalendar.get(Calendar.MONTH) == pageViewMonth ){
@@ -177,7 +180,10 @@ public class SectionsPagerAdapter extends PagerAdapter {
                 }
                 
             }
-            else {calDateText.setTextColor(Color.BLACK);}
+            else {
+            	calDateText.setTextColor(context.getResources().getColor(R.color.text_gray2));
+            	calDateText.setVisibility(View.INVISIBLE);
+            }
             
             
             // Initialize the selected view on current day

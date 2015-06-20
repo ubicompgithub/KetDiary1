@@ -100,6 +100,11 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private static final String[] dayOfWeek = {" ", "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
 	private static final String[] timeslot = {"上午", "下午", "晚上"};
 	
+	private final static int[] typeId = {0, R.drawable.book_type1,
+		R.drawable.book_type2, R.drawable.book_type3, R.drawable.book_type4, 
+		R.drawable.book_type5, 	R.drawable.book_type6, R.drawable.book_type7, 
+	 	R.drawable.book_type8};
+	
 	//public static List<Integer> filterList = new ArrayList<Integer>();
 
 	private ImageView filterAll, filter1, filter2, filter3, filter4, filter5, filter6, filter7, filter8;
@@ -561,15 +566,15 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		if(noteAdds.length!=0){
 			for(int i=0; i < noteAdds.length; i++){
 				//LayoutInflater inflater = LayoutInflater.from(context);
-				diaryItem = inflater.inflate(R.layout.diary_item2, null);
-				LinearLayout layout = (LinearLayout)diaryItem.findViewById(R.id.diary_layout);
+				diaryItem = inflater.inflate(R.layout.diary_item, null);
+				//LinearLayout layout = (LinearLayout)diaryItem.findViewById(R.id.diary_layout);
 			
 			TextView date_num = (TextView) diaryItem.findViewById(R.id.diary_date);
 			TextView week_num = (TextView) diaryItem.findViewById(R.id.diary_week);
 			TextView timeslot_num = (TextView) diaryItem.findViewById(R.id.diary_timeslot);
 			ImageView type_img = (ImageView) diaryItem.findViewById(R.id.diary_image_type);
 			TextView items_txt = (TextView) diaryItem.findViewById(R.id.diary_items);
-			TextView description_txt = (TextView) diaryItem.findViewById(R.id.diary_description);
+			//TextView description_txt = (TextView) diaryItem.findViewById(R.id.diary_description);
 			TextView impact_txt = (TextView) diaryItem.findViewById(R.id.diary_impact);
 			
 			int date = noteAdds[i].getRecordTv().getDay();
@@ -580,32 +585,14 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			String descripton = noteAdds[i].getDescription();
 			int impact = noteAdds[i].getImpact();
 			
-			switch (type){
-				case 1:
-					type_img.setImageResource(R.drawable.emoji5);
-					break;
-				case 2:
-					type_img.setImageResource(R.drawable.emoji2);
-					break;
-				case 3:
-					type_img.setImageResource(R.drawable.emoji4);
-					break;
-				case 4:
-					type_img.setImageResource(R.drawable.emoji1);
-					break;
-				case 5:
-					type_img.setImageResource(R.drawable.emoji3);
-					break;
-				case 6:
-					type_img.setImageResource(R.drawable.others_emoji3);
-					break;
-				case 7:
-					type_img.setImageResource(R.drawable.others_emoji3);
-					break;
-				case 8:
-					break;
-			}
+			if(type > 0 && type <=8)
+				type_img.setImageResource(typeId[type]);
 			
+			
+			date_num.setText(""+ date + "號");
+			week_num.setText(dayOfWeek[ dayOfweek ]);
+			timeslot_num.setText(timeslot[ slot ] );
+			/*
 			if(date!= last_day){
 				date_num.setText(""+ date + "號");
 				week_num.setText(dayOfWeek[ dayOfweek ]);
@@ -623,10 +610,10 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 					week_num.setText("");
 					timeslot_num.setText("");
 				}
-			}
+			}*/
 			items_txt.setText( dict.getItems(items) );
 			//description_txt.setText(descripton);
-			//impact_txt.setText("影響：　"+String.valueOf(impact -4));
+			impact_txt.setText(String.valueOf(impact -4));
 			
 				
 			last_day = date;
