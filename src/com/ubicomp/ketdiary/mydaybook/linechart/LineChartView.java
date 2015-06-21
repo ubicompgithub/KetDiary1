@@ -367,7 +367,7 @@ public class LineChartView extends View {
         	 for (int i = 0; i < datapoints.size(); i++) {
         		if (datapoints.get(i).activityType > 5) continue;
  	        	if (drawTheDotOrNot(datapoints.get(i).activityType)) {
-	 	        	Bitmap tmp = BitmapFactory.decodeResource(getResources(), dots[datapoints.get(i).activityType+1]);
+	 	        	Bitmap tmp = BitmapFactory.decodeResource(getResources(), dots[datapoints.get(i).activityType-1]);
 	 	            Bitmap resizedImg = getResizedBitmap(tmp, 25, 25);
 	 	            tmp.recycle();
 	 	            System.gc();
