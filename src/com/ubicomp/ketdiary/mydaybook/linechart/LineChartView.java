@@ -21,8 +21,9 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.data.structure.NoteAdd;
+import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.fragment.DaybookFragment;
 import com.ubicomp.ketdiary.mydaybook.DummyData;
 
@@ -33,6 +34,8 @@ public class LineChartView extends View {
     private static int offsetX = 60;
     private static int range;
     public  List<DummyData> datapoints = new ArrayList<DummyData>();
+    
+    private static final String TAG = "LineChartView";
     
     private Paint paint = new Paint();
     private Bitmap mBitmap;
@@ -55,6 +58,7 @@ public class LineChartView extends View {
     private Bitmap noPassBarBg = BitmapFactory.decodeResource(getResources(), R.drawable.nopass_rect);
     
     private GestureDetector gestureDetector; 
+    private DatabaseControl db;
     
     private static int NONE = 0;
     private static int ZOOM1 = 1;
@@ -67,8 +71,66 @@ public class LineChartView extends View {
 	public LineChartView(Context context, AttributeSet attrs) {
         super(context, attrs);
         gestureDetector = new GestureDetector(context, new GestureListener());
+        db = new DatabaseControl();
+        
     	dummyDataGenerator();
 
+    }
+	
+	public void setChartData2() {
+    	NoteAdd[] noteAdds = db.getAllNoteAdd();
+    	int previous_date = 0;
+    	int data_num=-1;
+    	int count = 0;
+    	float[] cum_impact = {0,0};
+    	
+    	if(noteAdds == null)
+    		return;
+    	
+    	Log.d(TAG, String.valueOf(noteAdds.length));
+		for(int i=0; i < noteAdds.length; i++){
+			int category =noteAdds[i].getCategory();
+			int month = noteAdds[i].getRecordTv().getMonth();
+			int date = noteAdds[i].getRecordTv().getDay();
+			int type = noteAdds[i].getType();
+			int impact = noteAdds[i].getImpact()-3;
+			
+			if(category == 1){
+				if(date!= previous_date){
+					if(count!= 0){
+						cum_impact/=(float)count;
+						impact_data.add(cum_impact);
+						type_data.add(type);
+						count = 1;
+					}
+					cum_impact = impact;
+				}
+				else{
+					cum_impact+=impact;
+					count++;
+				}
+				previous_date = date;
+			}
+			else if(category == 2){
+				if(date!= previous_date){
+					if(count!= 0){
+						cum_impact/=(float)count;
+						impact_data.add(cum_impact);
+						type_data.add(type);
+						count = 1;
+					}
+					cum_impact = impact;
+				}
+				else{
+					cum_impact+=impact;
+					count++;
+				}
+				previous_date = date;
+			}
+		}
+		//datapoints = ArrayUtils.toPrimitive(list.toArray(new Float[0]), 0.0F);
+		//data.toArray( datapoints );
+		//Log.d(TAG, impact_data.size()+" "+type_data.size());
     }
 
 	
