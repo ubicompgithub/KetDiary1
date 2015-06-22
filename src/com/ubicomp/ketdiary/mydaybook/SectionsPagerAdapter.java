@@ -17,6 +17,9 @@ import android.widget.TextView;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.data.structure.NoteAdd;
+import com.ubicomp.ketdiary.db.DatabaseControl;
+import com.ubicomp.ketdiary.ui.Typefaces;
 
 public class SectionsPagerAdapter extends PagerAdapter {
 
@@ -35,14 +38,26 @@ public class SectionsPagerAdapter extends PagerAdapter {
     private Context context;
 
     private LayoutInflater inflater;
+    private DatabaseControl db;
 
     private boolean[] isPageViewInitialized = new boolean[Database.SUSTAINED_MONTHS];
+    
+    private static final int[] dotId2 = { 0, R.drawable.dot_color1, R.drawable.dot_color2,
+    	R.drawable.dot_color3, R.drawable.dot_color4, R.drawable.dot_color5,
+    	R.drawable.dot_color6, R.drawable.dot_color7, R.drawable.dot_color8
+    };
+    
+    private static final int[] dotId = { 0, R.drawable.cell_dot1, R.drawable.cell_dot2,
+    	R.drawable.cell_dot3, R.drawable.cell_dot4, R.drawable.cell_dot5,
+    	R.drawable.cell_dot6, R.drawable.cell_dot7, R.drawable.cell_dot8
+    };
 
     public SectionsPagerAdapter(View[] pageViewList){
         this.pageViewList = pageViewList;
         context = App.getContext();
         inflater = LayoutInflater.from(App.getContext());
         
+        db = new DatabaseControl();
     }
 	
 	@Override
@@ -92,6 +107,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
         View cellView;
         TextView calDateText;
         ImageView calDot1, calDot2, calDot3;
+        NoteAdd[] noteAdds;
 
         for (int i=0;i<maxWeeksOfMonth*maxDaysOfWeek;++i){
                     
@@ -119,14 +135,14 @@ public class SectionsPagerAdapter extends PagerAdapter {
                         TextView selectedDayTextView = (TextView) selectedView.findViewById(R.id.tv_calendar_date);
 
                         if(selectedPageMonth == selectedMonth)  // If selected month is exactly current page month
-                            selectedDayTextView.setTextColor(Color.WHITE);
+                            selectedDayTextView.setTextColor(context.getResources().getColor(R.color.text_gray2));
                         else
                             selectedDayTextView.setTextColor(Color.BLACK);
 
                         // Set the new selected day
                         selectedView = v;
                         TextView newSelectedDayTextView = (TextView) selectedView.findViewById(R.id.tv_calendar_date);
-                        newSelectedDayTextView.setTextColor(Color.BLUE);
+                        newSelectedDayTextView.setTextColor(context.getResources().getColor(R.color.blue));
                     }
                     // sv.smoothScrollTo(0 , 270*(Integer.parseInt(parsed_date[0])+4)-1350-900);
                     
@@ -138,6 +154,38 @@ public class SectionsPagerAdapter extends PagerAdapter {
             calDateText.setText(mCalendar.get(Calendar.DAY_OF_MONTH) + "");
             //calDateText.setTextColor(context.getResources().getColor(R.color.text_gray2));
             
+            
+            
+            if ( mCalendar.get(Calendar.MONTH) == pageViewMonth ){
+            	noteAdds = db.getDayNoteAdd(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
+            	if(noteAdds != null){
+            		if(noteAdds.length>=3){
+            			calDot1.setImageResource(dotId[noteAdds[0].getType()]);
+            			calDot1.setVisibility(View.VISIBLE);
+            			calDot2.setImageResource(dotId[noteAdds[1].getType()]);
+            			calDot2.setVisibility(View.VISIBLE);
+            			calDot3.setImageResource(dotId[noteAdds[2].getType()]);
+            			calDot3.setVisibility(View.VISIBLE);
+            		}
+            		else if(noteAdds.length==2){
+            			calDot1.setImageResource(dotId[noteAdds[0].getType()]);
+            			calDot1.setVisibility(View.VISIBLE);
+            			calDot2.setImageResource(dotId[noteAdds[1].getType()]);
+            			calDot2.setVisibility(View.VISIBLE);
+            		}
+            		else if(noteAdds.length==1){
+            			calDot1.setImageResource(dotId[noteAdds[0].getType()]);
+            			calDot1.setVisibility(View.VISIBLE);
+            		}           	
+            	}
+            }
+            else {
+            	//calDateText.setTextColor(context.getResources().getColor(R.color.dark_gray));
+            	calDateText.setVisibility(View.INVISIBLE);
+            }
+            calDateText.setTextColor(context.getResources().getColor(R.color.text_gray2));
+            calDateText.setTypeface(Typefaces.getDigitTypefaceBold());
+            /*
             // Set cells that belong to current month 
             if ( mCalendar.get(Calendar.MONTH) == pageViewMonth ){
                 calDateText.setBackgroundResource(R.drawable.bigbluedot);
@@ -183,7 +231,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
             else {
             	calDateText.setTextColor(context.getResources().getColor(R.color.text_gray2));
             	calDateText.setVisibility(View.INVISIBLE);
-            }
+            }*/
             
             
             // Initialize the selected view on current day
@@ -202,7 +250,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
 
                 if (mCalendar.get(Calendar.DAY_OF_MONTH) == selectedDay && mCalendar.get(Calendar.MONTH) == selectedMonth) {
                     selectedView = cellView;
-                    calDateText.setTextColor(Color.BLUE);
+                    calDateText.setTextColor(context.getResources().getColor(R.color.blue));
                 }
             }
             

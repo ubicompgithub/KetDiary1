@@ -40,6 +40,7 @@ import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.check.TimeBlock;
 import com.ubicomp.ketdiary.file.QuestionFile;
+import com.ubicomp.ketdiary.file.ReadDummyData;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.BarButtonGenerator;
 import com.ubicomp.ketdiary.ui.CustomToast;
@@ -184,6 +185,17 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		date_txt.setTypeface(Typefaces.getWordTypefaceBold());
 		timeslot_txt.setTypeface(Typefaces.getWordTypefaceBold());
 		
+		title_txt.setOnClickListener(new OnClickListener(){
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				ReadDummyData ddd = new ReadDummyData(activity);
+				ddd.execute();
+			}
+			
+		});
+		
 		date_layout.setOnClickListener(new OnClickListener(){
 			
 
@@ -193,6 +205,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 				//main_layout.setEnabled(false);
 				//bottom_layout.setEnabled(false);
 				//boxLayout.setEnabled(false);
+				listView.setVisibility(View.GONE);
 				setEnabledAll(boxLayout, false);
 				
 				chooseBox = new ChooseItemDialog(addNoteDialog,boxLayout, 1);
@@ -207,6 +220,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 
 			@Override
 			public void onClick(View v) {
+				listView.setVisibility(View.GONE);
 				setEnabledAll(boxLayout, false);
 				chooseBox = new ChooseItemDialog(addNoteDialog,boxLayout, 2);
 				chooseBox.initialize();
@@ -527,6 +541,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		//ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, android.R.layout.simple_spinner_item);
 		
 		ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, R.layout.my_spinner);
+		
 		//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, strs );
 		//adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sp.setAdapter(adapter);

@@ -15,26 +15,28 @@
         android:id="@+id/ll_calendar_dots"
         android:layout_width="35dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        
+        android:orientation="horizontal"        
         android:gravity="center" >
-
         <ImageView
             android:id="@+id/iv_calendar_dot1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/purpledot" />
+            android:src="@drawable/cell_dot1"
+            android:layout_weight="1" />
 
         <ImageView
             android:id="@+id/iv_calendar_dot2"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/bluedot" />
+            android:src="@drawable/cell_dot2"
+            android:layout_weight="1" />
 
         <ImageView
             android:id="@+id/iv_calendar_dot3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/cell_dot3"
+            android:layout_weight="1" />
         
     </LinearLayout>
 

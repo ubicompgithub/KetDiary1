@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:layout_weight="5"
         android:gravity="center"
-        android:text="紀錄事件"
+        android:text="記錄事件"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/dark_gray" />
 	

@@ -333,7 +333,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
                     TextView selectedDayTextView = (TextView) selectedView.findViewById(R.id.tv_calendar_date);
 
                     if(selectedPageMonth == selectedMonth)  // If selected month is exactly current page month
-                    	selectedDayTextView.setTextColor(Color.WHITE);
+                    	selectedDayTextView.setTextColor(context.getResources().getColor(R.color.text_gray2));
                     else
                     	selectedDayTextView.setTextColor(Color.BLACK);
 
@@ -343,7 +343,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
                     mSectionsPagerAdapter.asignSelecteViewToThisDayView();
 
                     TextView newSelectedDayTextView = (TextView) selectedView.findViewById(R.id.tv_calendar_date);
-                    newSelectedDayTextView.setTextColor(Color.BLUE);
+                    newSelectedDayTextView.setTextColor(context.getResources().getColor(R.color.blue));
                 }
 
                 mViewPager.setCurrentItem(Calendar.getInstance().get(Calendar.MONTH) + 1 - Database.START_MONTH);
@@ -410,11 +410,13 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 				// TODO Auto-generated method stub
 				if (isRotated) {
 					MainActivity.getMainActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+					//MainActivity.getMainActivity().setTabHostVisible(View.VISIBLE);
 					isRotated = false;
 				}
 				else {
 
 					MainActivity.getMainActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+					//MainActivity.getMainActivity().setTabHostVisible(View.INVISIBLE);
 					isRotated = true;
 				}
 				
@@ -618,7 +620,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			}*/
 			items_txt.setText( dict.getItems(items) );
 			//description_txt.setText(descripton);
-			impact_txt.setText(String.valueOf(impact -4));
+			impact_txt.setText(String.valueOf(impact -3));
 			
 				
 			last_day = date;

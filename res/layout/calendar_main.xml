@@ -15,6 +15,7 @@
 	    android:layout_marginTop="5dp"
 	    android:layout_marginBottom="5dp">
 	     <TextView
+	         android:id="@+id/week1"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"    
 	     android:text="一"
@@ -22,6 +23,7 @@
 	     android:textAppearance="?android:attr/textAppearanceMedium"
 	     android:layout_weight="1" />
 	     <TextView
+	         android:id="@+id/week2"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"    
 	     android:text="二"
@@ -29,6 +31,7 @@
 	     android:textAppearance="?android:attr/textAppearanceMedium"
 	     android:layout_weight="1" />
 	     <TextView
+	         android:id="@+id/week3"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"    
 	     android:text="三"
@@ -36,6 +39,7 @@
 	     android:textAppearance="?android:attr/textAppearanceMedium"
 	     android:layout_weight="1" />
 	     <TextView
+	         android:id="@+id/week4"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"    
 	     android:text="四"
@@ -43,6 +47,7 @@
 	     android:textAppearance="?android:attr/textAppearanceMedium"
 	     android:layout_weight="1" />
 	     <TextView
+	         android:id="@+id/week5"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"    
 	     android:text="五"
@@ -50,6 +55,7 @@
 	     android:textAppearance="?android:attr/textAppearanceMedium"
 	     android:layout_weight="1" />
 	     <TextView
+	         android:id="@+id/week6"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"    
 	     android:text="六"
@@ -57,6 +63,7 @@
 	     android:textAppearance="?android:attr/textAppearanceMedium"
 	     android:layout_weight="1" />
 	     <TextView
+	         android:id="@+id/week7"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"    
 	     android:text="日"

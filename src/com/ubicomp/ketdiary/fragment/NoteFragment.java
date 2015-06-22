@@ -180,8 +180,8 @@ public class NoteFragment extends Fragment{
 	    vPager = (ViewPager) view.findViewById(R.id.viewpager);
 		LayoutInflater li = getLayoutInflater(null);
 		ArrayList<View> aList = new ArrayList<View>();
-		aList.add(li.inflate(R.layout.view_typepager_self, null));
-		aList.add(li.inflate(R.layout.view_typepager_other, null));
+		//aList.add(li.inflate(R.layout.view_typepager_self, null));
+		//aList.add(li.inflate(R.layout.view_typepager_other, null));
 		TypePageAdapter mAdapter = new TypePageAdapter(aList);		
 		vPager.setAdapter(mAdapter);
 	}

@@ -36,7 +36,7 @@ public class LineChartTitle extends View {
 	
 	private int textSize = App.getContext().getResources().getDimensionPixelSize(R.dimen.large_text_size);
 	
-	private String[] title_str = { "自己", "他人" ,"自己+他人" };
+	private String[] title_str = { "自我狀態", "人際互動" ,"綜合分析" };
 	private Paint text_paint_large = new Paint();
 	private Paint text_paint_large_2 = new Paint();
 	

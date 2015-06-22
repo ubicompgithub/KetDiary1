@@ -16,8 +16,9 @@
     
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/note_bottom_bar_height"
-        android:background="@drawable/note_button_devide" />
+        android:layout_height="53dp"
+        android:background="@drawable/note_button_devide"
+        android:layout_marginTop="8dp" />
 
     <TextView
         android:id="@+id/bar_button_right"

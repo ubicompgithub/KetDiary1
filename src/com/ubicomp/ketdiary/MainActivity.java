@@ -362,6 +362,10 @@ public class MainActivity extends FragmentActivity {
 
 		ft.commit();
 	}
+	
+	public void setTabHostVisible(int Visibility){
+		tabHost.getTabWidget().setVisibility(Visibility);
+	}
 
 	public class TabChangeListener implements TabHost.OnTabChangeListener {
 

@@ -611,7 +611,7 @@ public class DatabaseControl {
 	public NoteAdd[] getAllNoteAdd() {
 		synchronized (sqlLock) {
 			db = dbHelper.getReadableDatabase();
-			String sql = "SELECT * FROM NoteAdd WHERE impact > 0 AND items > 0 ORDER BY recordYear, recordMonth, recordDay, timeslot ASC"; // TODO: Just get useful data
+			String sql = "SELECT * FROM NoteAdd WHERE impact >= 0 AND items > 0 ORDER BY recordYear, recordMonth, recordDay, timeslot ASC"; // TODO: Just get useful data
 			Cursor cursor = db.rawQuery(sql, null);
 			int count = cursor.getCount();
 			if (count == 0) {
@@ -671,7 +671,7 @@ public class DatabaseControl {
 
 			sql = "SELECT * FROM NoteAdd WHERE recordYear = " + rYear
 					+ " AND recordMonth = " + rMonth + " AND recordDay = "
-					+ rDay + " ORDER BY id DESC";
+					+ rDay +" AND type > -1 ORDER BY id DESC";
 			cursor = db.rawQuery(sql, null);
 			int count = cursor.getCount();
 			if (count == 0) {
