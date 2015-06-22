@@ -181,8 +181,10 @@ public class MainActivity extends FragmentActivity {
 			fragments = new Fragment[3];
 			tabHost.setOnTabChangedListener(new TabChangeListener());
 
-			setDefaultTab();
-
+			//setDefaultTab();
+			setDefaultTab2();
+			enableTab(false);
+			
 			TabWidget tabWidget = tabHost.getTabWidget();
 
 			int count = tabWidget.getChildCount();
@@ -359,6 +361,18 @@ public class MainActivity extends FragmentActivity {
 
 		//customTabs[1].showHighlight(PreferenceControl.getCouponChange());
 		customTabs[2].showHighlight(PreferenceControl.getPageChange());
+
+		ft.commit();
+	}
+	
+	private void setDefaultTab2() {
+		ft = fm.beginTransaction();
+		fragments[2] = new DaybookFragment();
+		ft.add(android.R.id.tabcontent, fragments[2], tabName[2]);
+		setTabState(tabName[2]);
+
+		//customTabs[1].showHighlight(PreferenceControl.getCouponChange());
+		//customTabs[2].showHighlight(PreferenceControl.getPageChange());
 
 		ft.commit();
 	}

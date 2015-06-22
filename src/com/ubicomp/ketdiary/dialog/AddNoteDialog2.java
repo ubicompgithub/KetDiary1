@@ -863,7 +863,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		        	SetListItem(R.array.note_play);
 		        	//SetItem(sp_item,R.array.note_play);
 		        	//sp_item.performClick();
-		        	type = 6;
+		        	type = 8;
 		        	break;
 		        case R.id.vts_iv_social:
 		        	resetView();
@@ -883,7 +883,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		        	SetListItem(R.array.note_conflict);
 		        	//SetItem(sp_item,R.array.note_conflict);
 		        	//sp_item.performClick();
-		        	type = 8;
+		        	type = 6;
 		        	break;
 		        	
 		        }

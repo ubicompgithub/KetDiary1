@@ -168,7 +168,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 
 		mViewPager = (ViewPager) view.findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);	
-				
+	
 		backToTodayText = (TextView) view.findViewById(R.id.back_to_today);
 		backToTodayText.setText(Integer.toString(Calendar.getInstance().get(Calendar.DAY_OF_MONTH)));
 		
@@ -410,13 +410,15 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 				// TODO Auto-generated method stub
 				if (isRotated) {
 					MainActivity.getMainActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-					//MainActivity.getMainActivity().setTabHostVisible(View.VISIBLE);
+					MainActivity.getMainActivity().setTabHostVisible(View.VISIBLE);
+					addButton.setVisibility(View.VISIBLE);
 					isRotated = false;
 				}
 				else {
 
 					MainActivity.getMainActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-					//MainActivity.getMainActivity().setTabHostVisible(View.INVISIBLE);
+					MainActivity.getMainActivity().setTabHostVisible(View.GONE);
+					addButton.setVisibility(View.INVISIBLE);
 					isRotated = true;
 				}
 				
@@ -875,6 +877,20 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		addButton.setVisibility(View.VISIBLE);
 		fragment_layout.setEnabled(true);
 		showDiary();
+		
+		lineChart.invalidate();
+		
+		//update Calendar View
+		mViewPager.removeAllViews();
+		LayoutInflater inflater = LayoutInflater.from(context);
+		View[] pageViewList = new View[Database.SUSTAINED_MONTHS];
+		for (int i = 0; i < Database.SUSTAINED_MONTHS; i++) {
+			pageViewList[i] = (View) inflater.inflate(R.layout.fragment_calendar, null);
+			pageViewList[i].setTag(i + Database.START_MONTH - 1);
+		}
+		mSectionsPagerAdapter = new SectionsPagerAdapter(pageViewList);
+		mViewPager.setAdapter(mSectionsPagerAdapter);
+		mViewPager.setCurrentItem(Calendar.getInstance().get(Calendar.MONTH) + 1 - Database.START_MONTH);
 	}
 		
 

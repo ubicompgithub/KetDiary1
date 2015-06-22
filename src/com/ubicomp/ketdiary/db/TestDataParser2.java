@@ -176,7 +176,7 @@ public class TestDataParser2 {
 		Calendar cal = Calendar.getInstance();
 		//cal.setTimeInMillis(0);
 		int year = cal.get(Calendar.YEAR);
-		int month = cal.get(Calendar.MONTH);
+		int month = cal.get(Calendar.MONTH)+1;
 		int days = cal.get(Calendar.DAY_OF_MONTH);
 		
 		int date = days - day;
@@ -186,7 +186,7 @@ public class TestDataParser2 {
 		else if(type > 5)
 			category=2;
 		else
-			category=0;
+			category=-1;
 
 		long timestamp = ts;
 		NoteAdd noteAdd = new NoteAdd(1, ts, year, month, date, timeslot, category, type, items, impact, descripiton, 0, 0);

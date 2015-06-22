@@ -46,6 +46,7 @@ public class LineChartTitle extends View {
 		text_paint_large.setTextSize(textSize);
 		text_paint_large.setTextAlign(Align.LEFT);
 		text_paint_large.setTypeface(Typefaces.getWordTypefaceBold());
+		text_paint_large.setColor(getResources().getColor(R.color.dark_gray));
 		text_paint_large_2.setColor(getResources().getColor(R.color.linechart_date_color));
 		text_paint_large_2.setTextSize(textSize);
 		text_paint_large_2.setTextAlign(Align.LEFT);

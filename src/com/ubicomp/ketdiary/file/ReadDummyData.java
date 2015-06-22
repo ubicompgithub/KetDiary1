@@ -3,19 +3,18 @@ package com.ubicomp.ketdiary.file;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.Calendar;
-
-import com.ubicomp.ketdiary.data.structure.NoteAdd;
-import com.ubicomp.ketdiary.data.structure.TimeValue;
-import com.ubicomp.ketdiary.db.DatabaseControl;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
+import android.util.Log;
+
+import com.ubicomp.ketdiary.data.structure.NoteAdd;
+import com.ubicomp.ketdiary.db.DatabaseControl;
 
 public class ReadDummyData extends AsyncTask<Void, Void, Void> {
 	
 	private Context context;
+	private static final String TAG = "ReadDummyData";
 	
 	public ReadDummyData(Context context) {
 		this.context = context;
@@ -68,7 +67,7 @@ public class ReadDummyData extends AsyncTask<Void, Void, Void> {
 	    		noteAdd = new NoteAdd(isAfterTest,0, rYear, rMonth, rDay, timeslot, category, type, items, impact, description, 0, 0); 
 	        	//noteAdd = new NoteAdd(broken_text[0], broken_text[1], broken_text[2], broken_text[3], broken_text[4], 
 	        	//		broken_text[4], broken_text[4], broken_text[4], broken_text[4], 6, "test", 0, 0);
-	        	
+	        	Log.d(TAG, ""+rMonth);
 	    		db.insertNoteAdd(noteAdd);
 	        }
 	    }catch(Exception e){

@@ -1,5 +1,6 @@
 package com.ubicomp.ketdiary.mydaybook.linechart;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -21,6 +22,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.ubicomp.ketdiary.App;
+import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.db.DatabaseControl;
@@ -30,33 +33,17 @@ import com.ubicomp.ketdiary.mydaybook.DummyData;
 public class LineChartView extends View {
 
     private static final int LINES = 7;
-    private static int offsetY = 90;
-    private static int offsetX = 60;
-    private static int range;
+    private static float offsetY = 90;
+    private static float offsetX = 60;
+    private static float range;
     public  List<DummyData> datapoints = new ArrayList<DummyData>();
-    
+    public  List<DummyData> datapoints2 = new ArrayList<DummyData>();
     private static final String TAG = "LineChartView";
     
     private Paint paint = new Paint();
-    private Bitmap mBitmap;
 
-    private Bitmap d1 = BitmapFactory.decodeResource(getResources(), R.drawable.dot_color1);
-    private Bitmap d2 = BitmapFactory.decodeResource(getResources(), R.drawable.dot_color2);
-    private Bitmap d3 = BitmapFactory.decodeResource(getResources(), R.drawable.dot_color3);
-    private Bitmap d4 = BitmapFactory.decodeResource(getResources(), R.drawable.dot_color4);
-    private Bitmap d5 = BitmapFactory.decodeResource(getResources(), R.drawable.dot_color5);
-    private Bitmap d6 = BitmapFactory.decodeResource(getResources(), R.drawable.dot_color6);
-    private Bitmap d7 = BitmapFactory.decodeResource(getResources(), R.drawable.dot_color7);
-    private Bitmap d8 = BitmapFactory.decodeResource(getResources(), R.drawable.dot_color8);
-    private Bitmap[] dotArray= {d1, d2, d3, d4, d5, d6, d7, d8};
-    
-    private Bitmap cursorImg = BitmapFactory.decodeResource(getResources(), R.drawable.linechart_cursor);
-    private Bitmap legendImg = BitmapFactory.decodeResource(getResources(), R.drawable.linechart_legend);
-    
-    private Bitmap rectBarBg = BitmapFactory.decodeResource(getResources(), R.drawable.gray_underbar);
-    private Bitmap passBarBg = BitmapFactory.decodeResource(getResources(), R.drawable.pass_rect);
-    private Bitmap noPassBarBg = BitmapFactory.decodeResource(getResources(), R.drawable.nopass_rect);
-    
+    private int[] dots = {R.drawable.dot_color1, R.drawable.dot_color2, R.drawable.dot_color3, R.drawable.dot_color4, R.drawable.dot_color5, R.drawable.dot_color6, R.drawable.dot_color7, R.drawable.dot_color8};
+
     private GestureDetector gestureDetector; 
     private DatabaseControl db;
     
@@ -73,22 +60,26 @@ public class LineChartView extends View {
         gestureDetector = new GestureDetector(context, new GestureListener());
         db = new DatabaseControl();
         
-    	dummyDataGenerator();
-
+    	//dummyDataGenerator();
+        setChartData2();
     }
 	
 	public void setChartData2() {
     	NoteAdd[] noteAdds = db.getAllNoteAdd();
     	int previous_date = 0;
     	int data_num=-1;
-    	int count = 0;
-    	float[] cum_impact = {0,0};
+    	int count = 1;
+    	float cum_impact = 0;
+    	DummyData singleData;
     	
     	if(noteAdds == null)
     		return;
     	
     	Log.d(TAG, String.valueOf(noteAdds.length));
+    	
+    	
 		for(int i=0; i < noteAdds.length; i++){
+						
 			int category =noteAdds[i].getCategory();
 			int month = noteAdds[i].getRecordTv().getMonth();
 			int date = noteAdds[i].getRecordTv().getDay();
@@ -99,8 +90,9 @@ public class LineChartView extends View {
 				if(date!= previous_date){
 					if(count!= 0){
 						cum_impact/=(float)count;
-						impact_data.add(cum_impact);
-						type_data.add(type);
+						
+						singleData = new DummyData(category, cum_impact, type, month, date, 1);
+						datapoints.add(singleData);	
 						count = 1;
 					}
 					cum_impact = impact;
@@ -111,12 +103,24 @@ public class LineChartView extends View {
 				}
 				previous_date = date;
 			}
-			else if(category == 2){
+			else
+				continue;
+		}
+		for(int i=0; i < noteAdds.length; i++){
+			
+			int category =noteAdds[i].getCategory();
+			int month = noteAdds[i].getRecordTv().getMonth();
+			int date = noteAdds[i].getRecordTv().getDay();
+			int type = noteAdds[i].getType();
+			int impact = noteAdds[i].getImpact()-3;
+			
+			if(category == 2){
 				if(date!= previous_date){
 					if(count!= 0){
 						cum_impact/=(float)count;
-						impact_data.add(cum_impact);
-						type_data.add(type);
+						
+						singleData = new DummyData(category, cum_impact, type, month, date, 1);
+						datapoints2.add(singleData);	
 						count = 1;
 					}
 					cum_impact = impact;
@@ -127,10 +131,16 @@ public class LineChartView extends View {
 				}
 				previous_date = date;
 			}
+			else
+				continue;
 		}
+		
+		
+		
+		
 		//datapoints = ArrayUtils.toPrimitive(list.toArray(new Float[0]), 0.0F);
 		//data.toArray( datapoints );
-		//Log.d(TAG, impact_data.size()+" "+type_data.size());
+		Log.d(TAG, datapoints.size()+" "+datapoints2.size());
     }
 
 	
@@ -149,18 +159,15 @@ public class LineChartView extends View {
 				activityType = r2.nextInt(9 - 6) + 6;
 			}
 			
-			Bitmap bmp = dotArray[activityType-1];
 			
 			Random r3 = new Random();
-			int score = r3.nextInt(4 - (-3)) + (-3);
+			float score = r3.nextInt(4 - (-3)) + (-3);
 			Random r4 = new Random();
 			boolean passTest;
-			int pass = r4.nextInt(3 - 1) + 1;
+			int pass = r4.nextInt(4 - 1) + 1;
 			
-			if (pass == 1) {passTest = true;}
-			else {passTest = false;}
 			
-			DummyData singleData = new DummyData(who, score, activityType, bmp , 6, i+1, passTest);
+			DummyData singleData = new DummyData(who, score, activityType, 6, i+1, pass);
 			datapoints.add(singleData);	
 		}
 		/*Log.i("OMG", "type:" + MainActivity.getChartType());
@@ -261,8 +268,6 @@ public class LineChartView extends View {
  	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
  		super.onSizeChanged(w, h, oldw, oldh);
 
- 		// your Canvas will draw onto the defined Bitmap
- 		mBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
  	}
     
     @Override 
@@ -342,9 +347,16 @@ public class LineChartView extends View {
     
     private void drawDate(Canvas canvas) {
     	int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
-    	int currentDate = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+    	//int currentDate = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);//TODO: change to start day
+    	int currentDate=1;
     	
+    	switch (checkLineChartType()) {
+    	case 0:
     	int numOfDays = datapoints.size();
+    	if(numOfDays > 0){
+    		currentDate = datapoints.get(0).day;
+    	}
+    		
     	for (int i = 0; i < numOfDays ; i ++) {
     		if (mode == ZOOM2) {
     			if (i%5 != 0) continue;
@@ -356,6 +368,49 @@ public class LineChartView extends View {
     		paint.setTextSize(35);
             canvas.drawText(String.valueOf(currentDate+i), getXPos(i), getHeight() - 120, paint);
     	}
+    	break;
+    	case 1:
+        	numOfDays = datapoints2.size();
+        	if(numOfDays > 0){
+        		currentDate = datapoints2.get(0).day;
+        	}
+        	
+        	for (int i = 0; i < numOfDays ; i ++) {
+        		if (mode == ZOOM2) {
+        			if (i%5 != 0) continue;
+        		}
+    		
+        		paint.setStyle(Style.FILL);
+        	    paint.setColor(getResources().getColor(R.color.linechart_date_color));
+        	    paint.setTextAlign(Align.CENTER);
+        		paint.setTextSize(35);
+                canvas.drawText(String.valueOf(currentDate+i), getXPos(i), getHeight() - 120, paint);
+        	}
+        	break; 
+    	case 2:
+    		numOfDays = datapoints2.size() >=  datapoints.size()? datapoints2.size() : datapoints.size();
+    		
+    		if(numOfDays > 0){
+        		currentDate = datapoints2.size() >=  datapoints.size()? datapoints2.get(0).day : datapoints.get(0).day;
+        	}
+    		
+        	for (int i = 0; i < numOfDays ; i ++) {
+        		if (mode == ZOOM2) {
+        			if (i%5 != 0) continue;
+        		}
+    		
+        		paint.setStyle(Style.FILL);
+        	    paint.setColor(getResources().getColor(R.color.linechart_date_color));
+        	    paint.setTextAlign(Align.CENTER);
+        		paint.setTextSize(35);
+                canvas.drawText(String.valueOf(currentDate+i), getXPos(i), getHeight() - 120, paint);
+        	}    		
+    		break;
+    	}
+    	
+    		
+    		
+    		
     }
 
 	private int getLineDistance() {
@@ -389,16 +444,16 @@ public class LineChartView extends View {
         	
         }
         startPoint = 0;
-        for (int i = 0; i < datapoints.size(); i++) {
-        	if (datapoints.get(i).activityType > 5) {
-        	path_other.moveTo(getXPos(i), getYPos(datapoints.get(i).score));
+        for (int i = 0; i < datapoints2.size(); i++) {
+        	if (datapoints2.get(i).activityType > 5) {
+        	path_other.moveTo(getXPos(i), getYPos(datapoints2.get(i).score));
         	startPoint = i;
         	break;
         	}
         }
-        for (int i = startPoint; i < datapoints.size(); i++) {
-        	if (datapoints.get(i).activityType > 5) {
-            path_other.lineTo(getXPos(i), getYPos(datapoints.get(i).score));
+        for (int i = startPoint; i < datapoints2.size(); i++) {
+        	if (datapoints2.get(i).activityType > 5) {
+            path_other.lineTo(getXPos(i), getYPos(datapoints2.get(i).score));
         	}
         	
         }
@@ -448,14 +503,18 @@ public class LineChartView extends View {
         	 for (int i = 0; i < datapoints.size(); i++) {
         		if (datapoints.get(i).activityType > 5) continue;
  	        	if (drawTheDotOrNot(datapoints.get(i).activityType)) {
- 	        	Bitmap bmp = datapoints.get(i).dotColor;
- 	            bmp = getResizedBitmap(bmp, 25, 25);
- 	            canvas.drawBitmap(bmp, getXPos(i)-12, getYPos(datapoints.get(i).score)-10, p);
+	 	        	Bitmap tmp = BitmapFactory.decodeResource(getResources(), dots[datapoints.get(i).activityType-1]);
+	 	            Bitmap resizedImg = getResizedBitmap(tmp, 25, 25);
+	 	            tmp.recycle();
+	 	            System.gc();
+	 	            canvas.drawBitmap(resizedImg, getXPos(i)-12, getYPos(datapoints.get(i).score)-10, p);
  	        	}
  	        }
         	break;
         }
         case 1: {
+        	 
+        	
         	 paint.setStyle(Style.STROKE);
  	         paint.setStrokeWidth(4);
  	         paint.setColor(getResources().getColor(R.color.path_normal));
@@ -464,12 +523,14 @@ public class LineChartView extends View {
  	         canvas.drawPath(path_other, paint);
  	         paint.setShadowLayer(0, 0, 0, 0);
         	
-        	 for (int i = 0; i < datapoints.size(); i++) {
-         		if (datapoints.get(i).activityType < 6) continue;
-  	        	if (drawTheDotOrNot(datapoints.get(i).activityType)) {
-  	        	Bitmap bmp = datapoints.get(i).dotColor;
-  	            bmp = getResizedBitmap(bmp, 25, 25);
-  	            canvas.drawBitmap(bmp, getXPos(i)-12, getYPos(datapoints.get(i).score)-10, p);
+        	 for (int i = 0; i < datapoints2.size(); i++) {
+         		if (datapoints2.get(i).activityType < 6) continue;
+  	        	if (drawTheDotOrNot(datapoints2.get(i).activityType)) {
+  	        		Bitmap tmp =  BitmapFactory.decodeResource(getResources(), dots[datapoints2.get(i).activityType-1]);
+  	 	            Bitmap resizedImg = getResizedBitmap(tmp, 25, 25);
+  	 	            tmp.recycle();
+  	 	            System.gc();
+  	 	            canvas.drawBitmap(resizedImg, getXPos(i)-12, getYPos(datapoints2.get(i).score)-10, p);
   	        	}
   	        }
         	break;
@@ -489,7 +550,10 @@ public class LineChartView extends View {
 	        
 	        paint.setShadowLayer(0, 0, 0, 0);
 	        paint_self.setShadowLayer(0, 0, 0, 0);
-        	Bitmap legend = getResizedBitmap(legendImg, 40, 350);
+	        Bitmap tmp = BitmapFactory.decodeResource(getResources(), R.drawable.linechart_legend);
+        	Bitmap legend = getResizedBitmap(tmp, 40, 350);
+        	tmp.recycle();
+        	System.gc();
         	canvas.drawBitmap(legend, getPaddingLeft(), getPaddingTop(), p);
         	break;
         }       
@@ -508,18 +572,29 @@ public class LineChartView extends View {
     
     private void drawRectBar(Canvas canvas) {
     	Paint p = new Paint();
-    	rectBarBg = getResizedBitmap(rectBarBg, 30, rectBarBg.getWidth());
-    	canvas.drawBitmap(rectBarBg , 0 , getHeight() - offsetY , p);
     	
     	for (int i = 0; i < datapoints.size(); i++) {
-    		if (datapoints.get(i).passTest) {
-    			passBarBg = getResizedBitmap(passBarBg, 28, 60);
+    		if (datapoints.get(i).passTest == 1) {
+    			Bitmap temp = getLocalBitmap(App.getContext(), R.drawable.pass_rect);
+    			Bitmap passBarBg = getResizedBitmap(temp, 28, 60);
+    			temp.recycle();
+    			System.gc();
 	            canvas.drawBitmap(passBarBg, getXPos(i)-25, getHeight()-offsetY, p);
     		}
-    		else {
-    			noPassBarBg = getResizedBitmap(noPassBarBg, 28, 60);
+    		else if (datapoints.get(i).passTest == 2){
+    			Bitmap temp = getLocalBitmap(App.getContext(), R.drawable.nopass_rect);
+    			Bitmap noPassBarBg = getResizedBitmap(temp, 28, 60);
+    			temp.recycle();
+    			System.gc();
 	            canvas.drawBitmap(noPassBarBg, getXPos(i)-25, getHeight()-offsetY, p);
-    		}   			
+    		}
+    		else {
+    			Bitmap temp = getLocalBitmap(App.getContext(), R.drawable.skip_rect);
+    			Bitmap skipBarBg = getResizedBitmap(temp, 28, 60);
+    			temp.recycle();
+    			System.gc();
+	            canvas.drawBitmap(skipBarBg, getXPos(i)-25, getHeight()-offsetY, p);
+    		}
         }    	
     }
     
@@ -531,7 +606,10 @@ public class LineChartView extends View {
     	//p.setStyle(Style.STROKE);
     	//p.setStrokeWidth(5);
     	//p.setPathEffect(new DashPathEffect(new float[] {10,20}, 0));
-    	Bitmap cursor = getResizedBitmap(cursorImg, getHeight() - 2*getPaddingTop() - 2*getPaddingBottom() , 25);
+    	Bitmap tmp = getLocalBitmap(App.getContext(), R.drawable.linechart_cursor);
+    	Bitmap cursor = getResizedBitmap(tmp, getHeight() - 2*getPaddingTop() - 2*getPaddingBottom() , 25);
+    	tmp.recycle();
+    	System.gc();
     	canvas.drawBitmap(cursor, getXPos(cursorLinePos) - 13, 0, p);
     	
     }
@@ -553,6 +631,19 @@ public class LineChartView extends View {
         return value + offsetX;
     }
     
+    public Bitmap getLocalBitmap(Context con, int resourceId){
+        InputStream inputStream = con.getResources().openRawResource(resourceId);
+        return BitmapFactory.decodeStream(inputStream, null, getBitmapOptions(2));
+    }
+    
+    public BitmapFactory.Options getBitmapOptions(int scale){
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPurgeable = true;
+        options.inInputShareable = true;
+        options.inSampleSize = scale;
+        return options;
+    }
+    
     
     public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth)
     {
@@ -568,6 +659,34 @@ public class LineChartView extends View {
         // recreate the new Bitmap
         Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
         return resizedBitmap;
+    }
+    
+    public Bitmap sizeDownBitmap(String path){
+    	 //Only decode image size. Not whole image
+
+        BitmapFactory.Options option = new BitmapFactory.Options();
+        option.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, option);
+
+        //The new size to decode to 
+        final int NEW_SIZE=100;
+        
+        //Now we have image width and height. We should find the correct scale value. (power of 2)
+        int width=option.outWidth;
+        int height=option.outHeight;
+        int scale=1;
+        while(true){
+
+            if(width/2<NEW_SIZE || height/2<NEW_SIZE)
+                break;
+            width/=2;
+            height/=2;
+            scale++;
+        }
+        //Decode again with inSampleSize
+        option = new BitmapFactory.Options();
+        option.inSampleSize=scale;
+        return BitmapFactory.decodeFile(path, option);
     }
     
     public int getCursorPos(float x) {

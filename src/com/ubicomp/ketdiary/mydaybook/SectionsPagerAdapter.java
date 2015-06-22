@@ -1,11 +1,11 @@
 package com.ubicomp.ketdiary.mydaybook;
 
 import java.util.Calendar;
-import java.util.Random;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +22,9 @@ import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
 public class SectionsPagerAdapter extends PagerAdapter {
-
+	
+	private static final String TAG = "Calendar";
+	
     private View[] pageViewList;
     private Calendar mCalendar;
     private static final int THIS_DAY = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
@@ -157,8 +159,11 @@ public class SectionsPagerAdapter extends PagerAdapter {
             
             
             if ( mCalendar.get(Calendar.MONTH) == pageViewMonth ){
-            	noteAdds = db.getDayNoteAdd(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
+            	noteAdds = db.getDayNoteAdd(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH)+1, mCalendar.get(Calendar.DAY_OF_MONTH));
+            	
+            	
             	if(noteAdds != null){
+            		Log.d(TAG,""+noteAdds[0].getRecordTv().getMonth());
             		if(noteAdds.length>=3){
             			calDot1.setImageResource(dotId[noteAdds[0].getType()]);
             			calDot1.setVisibility(View.VISIBLE);
@@ -174,8 +179,8 @@ public class SectionsPagerAdapter extends PagerAdapter {
             			calDot2.setVisibility(View.VISIBLE);
             		}
             		else if(noteAdds.length==1){
-            			calDot1.setImageResource(dotId[noteAdds[0].getType()]);
-            			calDot1.setVisibility(View.VISIBLE);
+            			calDot2.setImageResource(dotId[noteAdds[0].getType()]);
+            			calDot2.setVisibility(View.VISIBLE);
             		}           	
             	}
             }
@@ -209,14 +214,14 @@ public class SectionsPagerAdapter extends PagerAdapter {
                     int ran_num = r.nextInt(4 - 1) + 1;
                 
                     if (ran_num == 1) {
-                        calDot1.setImageResource(R.drawable.reddot);
+                        calDot1.setImageResource(dotId[2]);
                         calDot1.setVisibility(View.VISIBLE);
-                        calDot2.setImageResource(R.drawable.bluedot);
+                        calDot2.setImageResource(dotId[6]);
                         calDot2.setVisibility(View.VISIBLE);
                     }
                     else if (ran_num == 2) {
                         calDateText.setBackgroundResource(R.drawable.bigreddot);
-                        calDot1.setImageResource(R.drawable.purpledot);
+                        calDot1.setImageResource(dotId[2]);
                         calDot1.setVisibility(View.VISIBLE);
                     }
                     
