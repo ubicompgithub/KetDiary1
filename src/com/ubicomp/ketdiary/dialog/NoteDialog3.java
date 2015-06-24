@@ -20,7 +20,6 @@ import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -192,7 +191,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 				//boxLayout.setEnabled(false);
 				setEnabledAll(boxLayout, false);
 				
-				chooseBox = new ChooseItemDialog(noteDialog, boxLayout, 1);
+				chooseBox = new ChooseItemDialog(noteDialog, boxLayout, 1, day);
 				chooseBox.initialize();
 				chooseBox.show();
 			}
@@ -205,7 +204,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 			@Override
 			public void onClick(View v) {
 				setEnabledAll(boxLayout, false);
-				chooseBox = new ChooseItemDialog(noteDialog, boxLayout, 2);
+				chooseBox = new ChooseItemDialog(noteDialog, boxLayout, 2, day);
 				chooseBox.initialize();
 				chooseBox.show();			
 			}
@@ -595,8 +594,8 @@ public class NoteDialog3 implements ChooseItemCaller{
 						listView.setVisibility(View.GONE);
 					}
 					else{
-					
 						
+						PreferenceControl.setIsFilled(1);
 						impact = impactSeekBar.getProgress();
 						testQuestionCaller.writeQuestionFile(day, timeslot, type, items, impact, edtext.getText().toString());
 				
@@ -605,15 +604,6 @@ public class NoteDialog3 implements ChooseItemCaller{
 						copingSetting();
 					}
 				}
-				
-			//questionLayout.setVisibility(View.GONE);
-			//clear();
-				
-				//testSetting(); //For Test
-				
-				
-			//questionFile.write(0, 0, 0);
-			//startActivity(new Intent(that, EventCopeSkillActivity.class));
 			}
 			else if(state == STATE_COPE){
 				knowingSetting();
@@ -636,6 +626,8 @@ public class NoteDialog3 implements ChooseItemCaller{
 				//impact = impactSeekBar.getProgress();
 				testQuestionCaller.writeQuestionFile(day, timeslot, -1, -1, -1, edtext.getText().toString());
 				
+				PreferenceControl.setIsFilled(0);
+				
 				copingSetting();
 				//questionFile.write(0, 0, 0);
 				//startActivity(new Intent(that, EventCopeSkillActivity.class));
@@ -653,16 +645,6 @@ public class NoteDialog3 implements ChooseItemCaller{
 	class GoResultOnClickListener implements View.OnClickListener{
 		public void onClick(View v){
 			
-			/*
-			int addScore = PreferenceControl.getTestAddScore();
-			Log.d(TAG, "AddScore:"+addScore);
-			
-			if (addScore == 0) // TestFail & get no credit
-				CustomToast.generateToast(R.string.after_test_fail, -1);
-			else
-				CustomToast.generateToast(R.string.after_test_pass, addScore);
-			*/
-			//CustomToast.generateToast(R.string.after_test_pass, 2);
 			MainActivity.getMainActivity().changeTab(1);
 			
 	    }
@@ -671,16 +653,28 @@ public class NoteDialog3 implements ChooseItemCaller{
 	class GoCopingToResultOnClickListener implements View.OnClickListener{
 		public void onClick(View v){
 			
-			
 			if(state == STATE_NOTE){
-				impact = impactSeekBar.getProgress();
-				testQuestionCaller.writeQuestionFile(day, timeslot, type, items, impact, edtext.getText().toString());
-			
-				Log.d(TAG, items+"\t"+impact);
-
-				copingSettingToResult();
+				if(type <= 0 ){
+					//CustomToastSmall.generateToast(R.string.note_check);
+					Toast.makeText(context, R.string.note_check ,Toast.LENGTH_SHORT).show();
+				}
+				else{
+					if(listView.getVisibility() == View.VISIBLE){
+						Toast.makeText(context, "請選擇項目再送出", Toast.LENGTH_SHORT).show();
+						listView.setVisibility(View.GONE);
+					}
+					else{
+						
+						PreferenceControl.setIsFilled(1);
+						impact = impactSeekBar.getProgress();
+						testQuestionCaller.writeQuestionFile(day, timeslot, type, items, impact, edtext.getText().toString());
+				
+						Log.d(TAG, items+"\t"+impact);
+				
+						copingSettingToResult();
+					}
+				}
 			}
-
 	    }
 	}
 	

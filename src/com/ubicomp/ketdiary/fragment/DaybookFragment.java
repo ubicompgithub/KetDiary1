@@ -10,9 +10,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.ScrollView;
 import android.widget.SlidingDrawer;
 import android.widget.SlidingDrawer.OnDrawerCloseListener;
 import android.widget.SlidingDrawer.OnDrawerOpenListener;
@@ -63,6 +64,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private RelativeLayout upperBarContent;
 	private TextView titleText, backToTodayText;
 	private View diaryItem;
+	private ScrollView sv;
 	
 
 	@SuppressWarnings("deprecation")
@@ -100,6 +102,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private NoteCategory2 dict;
 	private static final String[] dayOfWeek = {" ", "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
 	private static final String[] timeslot = {"上午", "下午", "晚上"};
+	private static final String[] monthName = {"一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"};
 	
 	private final static int[] typeId = {0, R.drawable.book_type1,
 		R.drawable.book_type2, R.drawable.book_type3, R.drawable.book_type4, 
@@ -146,7 +149,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		drawerContent = (LinearLayout) view.findViewById(R.id.drawer_content);
 		upperBarContent = (RelativeLayout) view.findViewById(R.id.upper_bar);
 		
-		
+		sv = (ScrollView)view.findViewById(R.id.diary_view);
 		//LayoutInflater inflater = LayoutInflater.from(context);
 		calendarView = (View) inflater.inflate(R.layout.calendar_main, null);
 		calendarBar = (View) inflater.inflate(R.layout.calendar_upperbar, null);
@@ -521,6 +524,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		
 		//setCurrentCalendarPage(selectedMonth + 1 - Database.START_MONTH);
 		
+		sv.fullScroll(View.FOCUS_DOWN);
 		
 		msgBox = new CheckResultDialog(fragment_layout);
 		
@@ -633,9 +637,10 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			//diaryList.addView(white_line);
 			boxesLayout = (LinearLayout) view.findViewById(R.layout.diary_item);
 			}
-		}
-		
-	
+			
+			
+			
+		}	
 		else{	//using dummy data
 			for (int n = 1  ; n <=30 ; n++) {
 				//LayoutInflater inflater = LayoutInflater.from(context);
@@ -650,6 +655,18 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		
 			}
 		}
+		sv.fullScroll(View.FOCUS_DOWN);
+		//sv.smoothScrollTo(0 , (int)convertDpToPixel(125)*(noteAdds.length) +1000000);
+	}
+	
+	public float getDensity(){
+		 DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+		 return metrics.density;
+		}
+	
+	public float convertDpToPixel(float dp){
+	    float px = dp * getDensity();
+	    return px;
 	}
 	
 	public void setCurrentCalendarPage(int pageIdx){
@@ -844,7 +861,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		if( TDP!= null ){
 			//TDP.startAddNote();
 			//TDP.getQuestionResult2(textFile)
-			TDP.startAddNote3(day, timeslot, type, items, impact, description);
+			TDP.startAddNote3(0, day, timeslot, type, items, impact, description);
 		}
 	}
     
@@ -878,7 +895,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		fragment_layout.setEnabled(true);
 		showDiary();
 		
-		lineChart.invalidate();
+		//lineChart.invalidate();
 		
 		//update Calendar View
 		mViewPager.removeAllViews();
@@ -891,6 +908,10 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		mSectionsPagerAdapter = new SectionsPagerAdapter(pageViewList);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
 		mViewPager.setCurrentItem(Calendar.getInstance().get(Calendar.MONTH) + 1 - Database.START_MONTH);
+		
+		//sv.smoothScrollTo(0 , (int)convertDpToPixel(125)*diaryList.getChildCount());
+		//sv.fullScroll(View.FOCUS_DOWN);
+		Log.d(TAG, "DiaryCount:"+diaryList.getChildCount());
 	}
 		
 

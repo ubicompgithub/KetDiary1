@@ -29,6 +29,8 @@ public class TestDataParser2 {
 	protected DatabaseControl db;
 	//protected DBControl db;
 	
+	public NoteAdd noteAdd = null;
+	
 	public static final int NOTHING = 0;
 	public static final int ERROR = -1;
 	public static final int SUCCESS = 1;
@@ -142,41 +144,13 @@ public class TestDataParser2 {
 	}
 	
 	/** start to handle the noteAdd data */
-	public void startAddNote2() {
-
-		File mainStorageDir = MainStorage.getMainStorageDirectory();
-		File questionFile;
-
-
-		questionFile = new File(mainStorageDir.getPath() + File.separator + ts
-			+ File.separator + "question.txt");
-
-		Log.i(TAG, "TDP AddNote2 Start");
-		
-		//NoteAdd noteAdd = getQuestionResult2(questionFile);
-
-		long timestamp = ts;
-		//NoteAdd noteAdd = new NoteAdd(1, ts, year, month, day, category, type, item, impact, "test", 0, 0);
-		boolean update = false;
-		if (timestamp == PreferenceControl.getUpdateDetectionTimestamp())
-			update = true;
-		PreferenceControl.setUpdateDetection(false);
-		//PreferenceControl.setUpdateDetectionTimestamp(0);
-		
-		//db.insertNoteAdd(noteAdd);
-		
-		//db.addTestResult(testResult);
-		//DBControl.inst.addNoteAdd(noteAdd);
-	}
-	
-	/** start to handle the noteAdd data */
-	public void startAddNote3(int day, int timeslot, int type, int items, int impact, String descripiton) {
+	public void startAddNote2(int isAfterTest, int day, int timeslot, int type, int items, int impact, String descripiton) {
 
 		Log.i(TAG, "TDP AddNote3 Start");
 		Calendar cal = Calendar.getInstance();
 		//cal.setTimeInMillis(0);
 		int year = cal.get(Calendar.YEAR);
-		int month = cal.get(Calendar.MONTH)+1;
+		int month = cal.get(Calendar.MONTH);
 		int days = cal.get(Calendar.DAY_OF_MONTH);
 		
 		int date = days - day;
@@ -187,9 +161,62 @@ public class TestDataParser2 {
 			category=2;
 		else
 			category=-1;
+		
+		if(category == -1){
+			items = -1;
+			impact = -1;
+			
+			return;
+		}
 
 		long timestamp = ts;
-		NoteAdd noteAdd = new NoteAdd(1, ts, year, month, date, timeslot, category, type, items, impact, descripiton, 0, 0);
+		if(ts == 0)
+			ts = System.currentTimeMillis();
+		
+		noteAdd = new NoteAdd(isAfterTest, ts, year, month, date, timeslot, category, type, items, impact, descripiton, 0, 0);
+		boolean update = false;
+		if (timestamp == PreferenceControl.getUpdateDetectionTimestamp())
+			update = true;
+		PreferenceControl.setUpdateDetection(false);
+		//PreferenceControl.setUpdateDetectionTimestamp(0);
+		
+		db.insertNoteAdd(noteAdd);
+		
+		//db.addTestResult(testResult);
+		//DBControl.inst.addNoteAdd(noteAdd);
+	}
+	
+	/** start to handle the noteAdd data */
+	public void startAddNote3(int isAfterTest, int day, int timeslot, int type, int items, int impact, String descripiton) {
+
+		Log.i(TAG, "TDP AddNote3 Start");
+		Calendar cal = Calendar.getInstance();
+		//cal.setTimeInMillis(0);
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH);
+		int days = cal.get(Calendar.DAY_OF_MONTH);
+		
+		int date = days - day;
+		int category;
+		if(type <=5 && type > 0)
+			category=1;
+		else if(type > 5)
+			category=2;
+		else
+			category=-1;
+		
+		if(category == -1){
+			items = -1;
+			impact = -1;
+			
+			return;
+		}
+
+		long timestamp = ts;
+		if(ts == 0)
+			ts = System.currentTimeMillis();
+		
+		noteAdd = new NoteAdd(isAfterTest, ts, year, month, date, timeslot, category, type, items, impact, descripiton, 0, 0);
 		boolean update = false;
 		if (timestamp == PreferenceControl.getUpdateDetectionTimestamp())
 			update = true;

@@ -100,8 +100,8 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 	private GoCopingToResultOnClickListener goCopingToResultOnClickListener;
 	private MyOnPageChangeListener myOnPageChangeListener;
 	
-	private int day=1;
-	private int timeslot=1; //TODO: default
+	private int day=0;
+	private int timeslot=0; //TODO: default
 	private int type;
 	private int items;
 	private int impact;
@@ -174,12 +174,9 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		date_txt = (TextView)title.findViewById(R.id.note_tx_date);
 		timeslot_txt= (TextView)title.findViewById(R.id.note_tx_timeslot);
 		
-		Calendar cal = Calendar.getInstance();
-		int hours = cal.get(Calendar.HOUR_OF_DAY);
-		int time_slot = TimeBlock.getTimeBlock(hours);
-		timeslot = time_slot;
+		checkAndSetTimeSlot();
 		
-		timeslot_txt.setText(Timeslot_str[time_slot]);
+		
 		
 		title_txt.setTypeface(Typefaces.getWordTypefaceBold());
 		date_txt.setTypeface(Typefaces.getWordTypefaceBold());
@@ -208,7 +205,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 				listView.setVisibility(View.GONE);
 				setEnabledAll(boxLayout, false);
 				
-				chooseBox = new ChooseItemDialog(addNoteDialog,boxLayout, 1);
+				chooseBox = new ChooseItemDialog(addNoteDialog,boxLayout, 1, day);
 				chooseBox.initialize();
 				chooseBox.show();
 			}
@@ -222,7 +219,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 			public void onClick(View v) {
 				listView.setVisibility(View.GONE);
 				setEnabledAll(boxLayout, false);
-				chooseBox = new ChooseItemDialog(addNoteDialog,boxLayout, 2);
+				chooseBox = new ChooseItemDialog(addNoteDialog,boxLayout, 2, day);
 				chooseBox.initialize();
 				chooseBox.show();			
 			}
@@ -360,6 +357,14 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		//bottom_layout.setVisibility(View.GONE);
 		bottom_layout.bringToFront();
 		//main_layout.addView(bottom);
+	}
+	
+	private void checkAndSetTimeSlot(){ 
+		Calendar cal = Calendar.getInstance();
+		int hours = cal.get(Calendar.HOUR_OF_DAY);
+		int time_slot = TimeBlock.getTimeBlock(hours);
+		timeslot = time_slot;
+		timeslot_txt.setText(Timeslot_str[time_slot]);
 	}
 	
 	public void setEnabledAll(View v, boolean enabled) {
@@ -995,9 +1000,15 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		@Override
 		public void resetView(int type, int select) {
 			setEnabledAll(boxLayout, true);
+			if(select == -1) //什麼都沒選
+				return;
+			
 			if(type == 1){
 				day = select;
 				date_txt.setText(Date_str[select]);
+				
+				if(day == 0)//在別天選晚上時段, 回到今天還是要擋掉未來時段
+					checkAndSetTimeSlot();
 			}
 			else{
 				timeslot = select;

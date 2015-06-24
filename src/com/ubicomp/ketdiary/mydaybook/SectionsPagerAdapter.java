@@ -146,6 +146,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
                         TextView newSelectedDayTextView = (TextView) selectedView.findViewById(R.id.tv_calendar_date);
                         newSelectedDayTextView.setTextColor(context.getResources().getColor(R.color.blue));
                     }
+                    
                     // sv.smoothScrollTo(0 , 270*(Integer.parseInt(parsed_date[0])+4)-1350-900);
                     
                 }
@@ -159,7 +160,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
             
             
             if ( mCalendar.get(Calendar.MONTH) == pageViewMonth ){
-            	noteAdds = db.getDayNoteAdd(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH)+1, mCalendar.get(Calendar.DAY_OF_MONTH));
+            	noteAdds = db.getDayNoteAdd(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
             	
             	
             	if(noteAdds != null){

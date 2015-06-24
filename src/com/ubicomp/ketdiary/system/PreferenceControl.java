@@ -177,6 +177,17 @@ public class PreferenceControl {
 		edit.putInt("TestAddScore", addScore);
 		edit.commit();
 	}
+	
+	
+	public static int getIsFilled() {
+		return sp.getInt("IsFilled", 0);
+	}
+	
+	public static void setIsFilled(int isFilled) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putInt("IsFilled", isFilled);
+		edit.commit();
+	}
 
 	// haven't use
 	/**

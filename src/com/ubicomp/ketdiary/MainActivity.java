@@ -1,5 +1,7 @@
 package com.ubicomp.ketdiary;
 
+import java.util.Random;
+
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +32,8 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
+import com.ubicomp.ketdiary.data.structure.NoteAdd;
+import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.dialog.CheckResultDialog;
 import com.ubicomp.ketdiary.dialog.NoteDialog2;
@@ -181,9 +185,9 @@ public class MainActivity extends FragmentActivity {
 			fragments = new Fragment[3];
 			tabHost.setOnTabChangedListener(new TabChangeListener());
 
-			//setDefaultTab();
-			setDefaultTab2();
-			enableTab(false);
+			setDefaultTab();
+			//setDefaultTab2();
+			//enableTab(false);
 			
 			TabWidget tabWidget = tabHost.getTabWidget();
 
@@ -779,19 +783,33 @@ public class MainActivity extends FragmentActivity {
 	
 	public void checkResultAddPoint(){
 		db = new DatabaseControl();
-		int addScore = PreferenceControl.getTestAddScore();
+		int addScore=0;
+		//NoteAdd noteAdd = ((TestFragment) fragments[0]).TDP.noteAdd;//TODO: set NoteAdd, get NoteAdd
+		
+		long timestamp = PreferenceControl.getUpdateDetectionTimestamp();
+		int result = PreferenceControl.getTestResult();//TODO: check if no data
+		int isFilled = PreferenceControl.getIsFilled();
+				
+		TestResult testResult = new TestResult(result, timestamp, "tmp_id",	1, isFilled, 0, 0);
+		
+		addScore = db.insertTestResult(testResult, false);
+			
+		Log.d(TAG,""+timestamp+" "+addScore);
+		//PreferenceControl.setTestAddScore(addScore);
+		
+		
 		
 		PreferenceControl.setPoint(addScore);
-		
-		Log.d(TAG, "AddScore:"+addScore);
-		int result = db.getLatestTestResult().getResult(); //TODO: check if no data
-		
+		Log.d(TAG, "AddScore:"+addScore);		
 		if (addScore == 0 && result == 1) // TestFail & get no credit //TODO: check TestResult
 			CustomToast.generateToast(R.string.after_test_fail, -1);
 		else if(result == 1)
 			CustomToast.generateToast(R.string.after_test_fail, addScore);
 		else
 			CustomToast.generateToast(R.string.after_test_pass, addScore);
+		
+		
+		
 		
 		PreferenceControl.setCheckResult( false );
 	}

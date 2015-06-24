@@ -763,6 +763,53 @@ public class DatabaseControl {
 		}
 	}
 	
+	
+	public NoteAdd[] getDayNoteAddPos(int rYear, int rMonth, int rDay) {
+		synchronized (sqlLock) {
+			NoteAdd[] data = null;
+
+			db = dbHelper.getReadableDatabase();
+			String sql;
+			Cursor cursor;
+
+			sql = "SELECT * FROM NoteAdd WHERE recordYear = " + rYear
+					+ " AND recordMonth = " + rMonth + " AND recordDay = "
+					+ rDay +" AND type > -1 ORDER BY id DESC";
+			cursor = db.rawQuery(sql, null);
+			int count = cursor.getCount();
+			if (count == 0) {
+				cursor.close();
+				db.close();
+				return null;
+			}
+
+			data = new NoteAdd[count];
+
+			for (int i = 0; i < count; ++i) {
+				cursor.moveToPosition(i);
+				int isAfterTest = cursor.getInt(1);
+				long ts = cursor.getLong(5);
+				int year = cursor.getInt(7);
+				int month = cursor.getInt(8);
+				int day = cursor.getInt(9);
+				int timeslot = cursor.getInt(10);
+				int category = cursor.getInt(11);
+				int type = cursor.getInt(12);
+				int items = cursor.getInt(13);
+				int impact = cursor.getInt(14);
+				String reason = cursor.getString(15);
+				int weeklyScore = cursor.getInt(16);
+				int score = cursor.getInt(17);
+				data[i] = new NoteAdd(isAfterTest, ts, year, month, day, 
+						timeslot, category, type, items, impact, reason, weeklyScore, score);
+			}
+
+			cursor.close();
+			db.close();
+
+			return data;
+		}
+	}
 
 	/**
 	 * Get the latest 4 reasons of EmotionManagement by reason type

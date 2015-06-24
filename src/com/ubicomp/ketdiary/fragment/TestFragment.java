@@ -91,7 +91,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private final boolean[] INIT_PROGRESS = { false, false, false };
 	private final boolean[] DONE_PROGRESS = { false, false, false };
 	
-	private TestDataParser2 TDP;
+	public TestDataParser2 TDP;
 	public NoteDialog3 msgBox = null;
 	
 	/** Camare variables */
@@ -750,7 +750,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		if( TDP!= null ){
 			//TDP.startAddNote();
 			//TDP.getQuestionResult2(textFile)
-			TDP.startAddNote3(day, timeslot, type, items, impact, description);
+			TDP.startAddNote2(1, day, timeslot, type, items, impact, description);
 		}
 	}
 

@@ -54,7 +54,7 @@ public class ReadDummyData extends AsyncTask<Void, Void, Void> {
 	        	broken_text = lines.split(" ");
 	        	int isAfterTest = Integer.parseInt(broken_text[0]);
 	        	int rYear = Integer.parseInt(broken_text[1]);
-	        	int rMonth = Integer.parseInt(broken_text[2]);
+	        	int rMonth = Integer.parseInt(broken_text[2])-1;
 	        	int rDay = Integer.parseInt(broken_text[3]);
 	    		int timeslot = Integer.parseInt(broken_text[4]);;
 	    		int category = Integer.parseInt(broken_text[5]);;

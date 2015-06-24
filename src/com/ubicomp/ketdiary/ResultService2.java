@@ -41,7 +41,7 @@ public class ResultService2 extends Service implements BluetoothListener {
     @Override  
     public  void  onCreate() {  
         super .onCreate();  
-        notification =  new  Notification(R.drawable.ntu_logo, "有通知到來" , System.currentTimeMillis());  
+        notification =  new  Notification(R.drawable.app_icon, "有通知到來" , System.currentTimeMillis());  
         Intent notificationIntent =  new  Intent( this , MainActivity.class );  
         pendingIntent = PendingIntent.getActivity( this ,  0 ,  
                 notificationIntent,  0 );  
@@ -98,18 +98,22 @@ public class ResultService2 extends Service implements BluetoothListener {
 				Log.d("InApp",String.valueOf(inApp));
 				if(!inApp)
 					notificationManager.notify(0, notification);
+				
+				
 				/*
 				if(ble!=null){
 					isConnect = false;
 					ble.bleDisconnect();
 					ble = null;
 				}*/
-				long timestamp = PreferenceControl.getUpdateDetectionTimestamp();
+				
 				
 				Random rand = new Random();
 				result = rand.nextInt(2); //Random Gen Result
 				//test_msg.setText(test_guide_msg[idx]);
+				PreferenceControl.setTestResult(result);
 				
+				/*
 				//Toast.makeText(myservice, "Result:"+result, Toast.LENGTH_SHORT).show();
 				TestResult testResult = new TestResult(result, timestamp, "tmp_id", 
 						0, 1, 0, 0); //TODO: check IsFilled

@@ -1,8 +1,11 @@
 package com.ubicomp.ketdiary.dialog;
 
+import java.util.Calendar;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,6 +21,7 @@ import android.widget.TextView;
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.check.TimeBlock;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
 
@@ -30,7 +34,7 @@ public class ChooseItemDialog implements OnClickListener{
 	
 	private Activity activity;
 	private ChooseItemDialog noteFragment = this;
-	private static final String TAG = "ADD_PAGE";
+	private static final String TAG = "CHOOSE_ITEM";
 	
 	private TestQuestionCaller testQuestionCaller;
 	private Context context;
@@ -49,11 +53,18 @@ public class ChooseItemDialog implements OnClickListener{
 	
 	private ListView listView;
 	private int type;
-	private int select;
+	private int select = -1;
+	private int day;
+	private int time_slot=4;
 	
-
+	private static final int[] TimeslotId = {R.array.note_time_slot, R.array.note_time_slot2, R.array.note_time_slot3};
+	private static final int DAY_TYPE = 1;
+	private static final int SLOT_TYPE = 2;
 	
-	public ChooseItemDialog(ChooseItemCaller caller, RelativeLayout mainLayout, int type){
+	private static final int TODAY = 0;
+	private static final int OTHERDAY = 1;
+	
+	public ChooseItemDialog(ChooseItemCaller caller, RelativeLayout mainLayout, int type , int day){
 		
 		this.context = App.getContext();
 		this.inflater = (LayoutInflater) context
@@ -61,18 +72,19 @@ public class ChooseItemDialog implements OnClickListener{
 		this.mainLayout = mainLayout;
 		this.caller = caller;
 		this.type = type;
+		this.day = day;
 		
 		wordTypeface = Typefaces.getWordTypeface();
 		wordTypefaceBold = Typefaces.getWordTypefaceBold();
 		digitTypeface = Typefaces.getDigitTypeface();
 		digitTypefaceBold = Typefaces.getDigitTypefaceBold();
 		
-	    setting(type);
+	    setting();
 	    mainLayout.addView(boxLayout);
 
 	}
 	
-	protected void setting(int type) {
+	protected void setting() {
 		
 		boxLayout = (RelativeLayout) inflater.inflate(
 				R.layout.dialog_choose_item2, null);
@@ -103,21 +115,54 @@ public class ChooseItemDialog implements OnClickListener{
 		ArrayAdapter adapter;
 		title.setText("日期");
 		adapter = ArrayAdapter.createFromResource(context, R.array.note_date , R.layout.choose_listitem);
-		if(type == 2){
-			adapter = ArrayAdapter.createFromResource(context, R.array.note_time_slot , R.layout.choose_listitem);
+		
+		if(type == SLOT_TYPE){
+			time_slot = 2;
+			if(day == TODAY){ //是今天才去判斷
+				Calendar cal = Calendar.getInstance();
+				int hours = cal.get(Calendar.HOUR_OF_DAY);
+				time_slot = TimeBlock.getTimeBlock(hours);
+			}
+			
+			adapter = ArrayAdapter.createFromResource(context, TimeslotId[time_slot] , R.layout.choose_listitem);
 			title.setText("時段");
+			
 		}
-	    listView.setAdapter(adapter);
+		
+	    listView.setAdapter(adapter);  
 	    listView.setOnItemClickListener(new OnItemClickListener(){
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-				select = position;
-				clear();
-				close();
+				if(type == DAY_TYPE){
+					select = position;
+					close();
+					clear();
+				}
+				else if(type == SLOT_TYPE){
+					if(position > time_slot)
+						return;
+					
+					select = position;			
+					close();
+					clear();				
+				}
+				
 			}
 			   
 		});
+	}
+	
+	public View getViewByPosition(int pos, ListView listView) {
+	    final int firstListItemPosition = listView.getFirstVisiblePosition();
+	    final int lastListItemPosition = firstListItemPosition + listView.getChildCount() - listView.getHeaderViewsCount();
+
+	    if (pos < firstListItemPosition || pos > lastListItemPosition ) {
+	        return listView.getAdapter().getView(pos, null, listView);
+	    } else {
+	        final int childIndex = pos - firstListItemPosition;
+	        return listView.getChildAt(childIndex);
+	    }
 	}
 	
 
@@ -155,6 +200,7 @@ public class ChooseItemDialog implements OnClickListener{
 			boxLayout.setVisibility(View.INVISIBLE);
 		
 		caller.resetView(type, select);
+		Log.d(TAG, "Select:"+select);
 	}
 
 	@Override
@@ -162,8 +208,8 @@ public class ChooseItemDialog implements OnClickListener{
 		// TODO Auto-generated method stub
 		switch(v.getId()){
 		case R.id.choose_full_layout:
-			clear();
 			close();
+			clear();
 			
 			break;
 		}

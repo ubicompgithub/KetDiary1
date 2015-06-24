@@ -26,7 +26,7 @@ public class ResultService extends Service{
     @Override  
     public  void  onCreate() {  
         super .onCreate();  
-        notification =  new  Notification(R.drawable.ntu_logo, "有通知到來" , System.currentTimeMillis());  
+        notification =  new  Notification(R.drawable.app_icon, "有通知到來" , System.currentTimeMillis());  
         Intent notificationIntent =  new  Intent( this , MainActivity.class );  
         pendingIntent = PendingIntent.getActivity( this ,  0 ,  
                 notificationIntent,  0 );  

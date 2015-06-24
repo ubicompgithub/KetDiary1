@@ -12,6 +12,8 @@ import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.ubicomp.ketdiary.db.DatabaseControl;
+
 /**
  * Service for handling message received from AlarmReceiver
  * 
@@ -38,12 +40,12 @@ public class AlarmService extends Service {
 
 		Log.d(TAG, "Regular Service");
 
-		//DatabaseControl db = new DatabaseControl();
+		DatabaseControl db = new DatabaseControl();
 
 		Calendar cal = Calendar.getInstance();
 
-		//if (db.detectionIsDone())
-		//	return Service.START_REDELIVER_INTENT;
+		if (db.detectionIsDone())
+			return Service.START_REDELIVER_INTENT;
 
 		int cur_hour = cal.get(Calendar.HOUR_OF_DAY);
 		if (cur_hour < 8)
@@ -66,7 +68,7 @@ public class AlarmService extends Service {
 
 			notificationBuilder.setContentTitle(title);
 			notificationBuilder.setContentText(msgText);
-			//notificationBuilder.setSmallIcon(R.drawable.app_icon);
+			notificationBuilder.setSmallIcon(R.drawable.app_icon);
 			notificationBuilder.setContentIntent(pIntent);
 
 			if (Build.VERSION.SDK_INT < 16)

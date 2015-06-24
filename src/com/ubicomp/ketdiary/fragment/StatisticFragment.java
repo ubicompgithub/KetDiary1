@@ -288,7 +288,7 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 			questionAnimation.setRepeatCount(Animation.INFINITE);
 			questionAnimation.setRepeatMode(Animation.REVERSE);
 
-			setQuestionAnimation();
+			//setQuestionAnimation();
 
 			MainActivity.getMainActivity().enableTabAndClick(true);
 			//LoadingDialogControl.dismiss();
