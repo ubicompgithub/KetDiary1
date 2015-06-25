@@ -225,14 +225,14 @@ public class NoteDialog3 implements ChooseItemCaller{
 	    
 		initTypePager();
 			
-		//Description
+		//Type
 		LinearLayout type_layout = (LinearLayout) inflater.inflate(
-				R.layout.bar_description, null);
+				R.layout.bar_type_name, null);
 		
-		TextView type_title = (TextView)type_layout.findViewById(R.id.description_title);
+		TextView type_title = (TextView)type_layout.findViewById(R.id.type_title);
 		type_title.setText("事件類型：");
 		type_title.setTypeface(Typefaces.getWordTypefaceBold());
-		typetext = (EditText)type_layout.findViewById(R.id.description_content);
+		typetext = (EditText)type_layout.findViewById(R.id.type_content);
 		typetext.setEnabled(false);
 		
 		//Spinner
@@ -956,12 +956,27 @@ public class NoteDialog3 implements ChooseItemCaller{
 		    }
 
 		}
+		
+		private void checkAndSetTimeSlot(){ 
+			Calendar cal = Calendar.getInstance();
+			int hours = cal.get(Calendar.HOUR_OF_DAY);
+			int time_slot = TimeBlock.getTimeBlock(hours);
+			timeslot = time_slot;
+			timeslot_txt.setText(Timeslot_str[time_slot]);
+		}
+
 		@Override
 		public void resetView(int type, int select) {
 			setEnabledAll(boxLayout, true);
+			if(select == -1) //什麼都沒選
+				return;
+			
 			if(type == 1){
 				day = select;
 				date_txt.setText(Date_str[select]);
+				
+				if(day == 0)//在別天選晚上時段, 回到今天還是要擋掉未來時段
+					checkAndSetTimeSlot();
 			}
 			else{
 				timeslot = select;
@@ -969,6 +984,5 @@ public class NoteDialog3 implements ChooseItemCaller{
 			}
 			
 		}
-	
 	
 }

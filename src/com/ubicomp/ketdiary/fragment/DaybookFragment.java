@@ -30,6 +30,7 @@ import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
+import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.db.NoteCategory2;
 import com.ubicomp.ketdiary.db.TestDataParser2;
@@ -64,13 +65,13 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private RelativeLayout upperBarContent;
 	private TextView titleText, backToTodayText;
 	private View diaryItem;
-	private ScrollView sv;
+	private static ScrollView sv;
 	
 
 	@SuppressWarnings("deprecation")
 	private SlidingDrawer drawer;
 	private ImageView toggle, toggle_linechart, linechartIcon, calendarIcon;
-	private Context context;
+	private static Context context;
 		
 	private static int sv_item_height;
 	
@@ -97,7 +98,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private boolean isFilterIsOpen = false;
 	private AddNoteDialog2 notePage = null;
 	
-	
+	private static NoteAdd[] noteAdds = null;
 	private DatabaseControl db;
 	private NoteCategory2 dict;
 	private static final String[] dayOfWeek = {" ", "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
@@ -325,7 +326,9 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
             @Override
             public void onClick(View v) {
                 // sv.smoothScrollTo(0 , 270*(thisDay+4)-1350-900);
-                
+            	sv.fullScroll(View.FOCUS_DOWN);
+            	//sv.smoothScrollTo(0 , (int)convertDpToPixel(125)*diaryList.getChildCount());
+            	
                 View selectedView = mSectionsPagerAdapter.getSelectedView();
                 View thisDayView = mSectionsPagerAdapter.getThisDayView();
 
@@ -336,7 +339,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
                     TextView selectedDayTextView = (TextView) selectedView.findViewById(R.id.tv_calendar_date);
 
                     if(selectedPageMonth == selectedMonth)  // If selected month is exactly current page month
-                    	selectedDayTextView.setTextColor(context.getResources().getColor(R.color.text_gray2));
+                    	selectedDayTextView.setTextColor(context.getResources().getColor(R.color.white));
                     else
                     	selectedDayTextView.setTextColor(Color.BLACK);
 
@@ -563,7 +566,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		diaryList = (LinearLayout) view.findViewById(R.id.item);
 		diaryList.removeAllViews();
 		
-		NoteAdd[] noteAdds = db.getAllNoteAdd();
+		noteAdds = db.getAllNoteAdd();
 		if(noteAdds == null){
 			return;
 		}
@@ -576,11 +579,13 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		
 		int last_day = 0;
 		int last_timeslot = -1;
+		
+		
 		if(noteAdds.length!=0){
 			for(int i=0; i < noteAdds.length; i++){
 				//LayoutInflater inflater = LayoutInflater.from(context);
 				diaryItem = inflater.inflate(R.layout.diary_item, null);
-				//LinearLayout layout = (LinearLayout)diaryItem.findViewById(R.id.diary_layout);
+				LinearLayout layout = (LinearLayout)diaryItem.findViewById(R.id.diary_layout);
 			
 			TextView date_num = (TextView) diaryItem.findViewById(R.id.diary_date);
 			TextView week_num = (TextView) diaryItem.findViewById(R.id.diary_week);
@@ -589,6 +594,21 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			TextView items_txt = (TextView) diaryItem.findViewById(R.id.diary_items);
 			//TextView description_txt = (TextView) diaryItem.findViewById(R.id.diary_description);
 			TextView impact_txt = (TextView) diaryItem.findViewById(R.id.diary_impact);
+			
+			TestResult testResult = 
+					db.getDayTestResult( noteAdds[i].getRecordTv().getYear(), noteAdds[i].getRecordTv().getMonth(), noteAdds[i].getRecordTv().getDay() );
+        	
+    		if(testResult.getTv().getTimestamp() != 0){
+    			int result = testResult.getResult();
+    			if(result == 0)
+    				layout.setBackgroundResource(R.drawable.diary_pass);
+    			else if(result == 1){
+    				layout.setBackgroundResource(R.drawable.diary_nopass);
+    			}
+    		}
+    		else{
+    			layout.setBackgroundResource(R.drawable.diary_notest);
+    		}
 			
 			int date = noteAdds[i].getRecordTv().getDay();
 			int dayOfweek = noteAdds[i].getRecordTv().getDayOfWeek();
@@ -659,12 +679,12 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		//sv.smoothScrollTo(0 , (int)convertDpToPixel(125)*(noteAdds.length) +1000000);
 	}
 	
-	public float getDensity(){
+	public static float getDensity(){
 		 DisplayMetrics metrics = context.getResources().getDisplayMetrics();
 		 return metrics.density;
 		}
 	
-	public float convertDpToPixel(float dp){
+	public static float convertDpToPixel(float dp){
 	    float px = dp * getDensity();
 	    return px;
 	}
@@ -912,6 +932,24 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		//sv.smoothScrollTo(0 , (int)convertDpToPixel(125)*diaryList.getChildCount());
 		//sv.fullScroll(View.FOCUS_DOWN);
 		Log.d(TAG, "DiaryCount:"+diaryList.getChildCount());
+	}
+	
+	public static void scrolltoItem(int year, int month, int day){
+		
+		if(noteAdds == null)
+			return;
+		if(noteAdds.length == 0)
+			return;
+		for(int i=0; i < noteAdds.length; i++){
+			int rYear = noteAdds[i].getRecordTv().getYear();
+			int rMonth = noteAdds[i].getRecordTv().getMonth();
+			int rDay = noteAdds[i].getRecordTv().getDay();
+			
+			if(rYear == year && rMonth == month && rDay == day){
+				sv.smoothScrollTo(0 , (int)convertDpToPixel(125)*(i-2));				
+			}
+			
+		}
 	}
 		
 

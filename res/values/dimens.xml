@@ -39,9 +39,9 @@
     <dimen name="chart_button_start_top">55dp</dimen>
     <dimen name="chart_height">167dp</dimen>
     <dimen name="chart_title_top">30dp</dimen>
-    <dimen name="chart_title_0">30dp</dimen>
-    <dimen name="chart_title_1">150dp</dimen>
-    <dimen name="chart_title_2">270dp</dimen>
+    <dimen name="chart_title_0">23dp</dimen>
+    <dimen name="chart_title_1">125dp</dimen>
+    <dimen name="chart_title_2">230dp</dimen>
     <dimen name="chart_title_0_r">82dp</dimen>
     <dimen name="chart_title_1_r">298dp</dimen>
     <dimen name="chart_title_2_r">491dp</dimen>

@@ -184,7 +184,43 @@ public class DatabaseControl {
 			}
 		}
 	}
+	
+	public TestResult getDayTestResult(int rYear, int rMonth, int rDay) {
+		synchronized (sqlLock) {
 
+			db = dbHelper.getReadableDatabase();
+			String sql;
+			Cursor cursor;
+
+			sql = "SELECT * FROM TestResult WHERE year = " + rYear
+					+ " AND month = " + rMonth + " AND day = "
+					+ rDay +" AND isPrime = 1";
+			cursor = db.rawQuery(sql, null);
+			int count = cursor.getCount();
+			if (!cursor.moveToFirst()) {
+				cursor.close();
+				db.close();
+				return new TestResult(0, 0, "ket_default", 0, 0, 0, 0);
+			}
+			
+
+			int result = cursor.getInt(1);
+			String cassetteId = cursor.getString(2);
+			long ts = cursor.getLong(6);
+			int isPrime = cursor.getInt(8);
+			int isFilled= cursor.getInt(9);
+			int weeklyScore = cursor.getInt(10);
+			int score = cursor.getInt(11);
+			TestResult testResult = new TestResult(result, ts, cassetteId, isPrime, isFilled, weeklyScore, score);
+			cursor.close();
+			db.close();
+
+			return testResult;
+		}
+	}
+	
+	
+	
 	/**
 	 * This method is used for getting result of today's prime detections
 	 * 

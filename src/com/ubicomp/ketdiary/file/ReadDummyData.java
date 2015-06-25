@@ -64,7 +64,7 @@ public class ReadDummyData extends AsyncTask<Void, Void, Void> {
 	    		String description= "";
 
 	        	
-	    		noteAdd = new NoteAdd(isAfterTest,0, rYear, rMonth, rDay, timeslot, category, type, items, impact, description, 0, 0); 
+	    		noteAdd = new NoteAdd(isAfterTest, System.currentTimeMillis(), rYear, rMonth, rDay, timeslot, category, type, items, impact, description, 0, 0); 
 	        	//noteAdd = new NoteAdd(broken_text[0], broken_text[1], broken_text[2], broken_text[3], broken_text[4], 
 	        	//		broken_text[4], broken_text[4], broken_text[4], broken_text[4], 6, "test", 0, 0);
 	        	Log.d(TAG, ""+rMonth);

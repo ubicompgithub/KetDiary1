@@ -18,7 +18,11 @@ import android.widget.TextView;
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
+import com.ubicomp.ketdiary.data.structure.TestResult;
+import com.ubicomp.ketdiary.data.structure.TimeValue;
 import com.ubicomp.ketdiary.db.DatabaseControl;
+import com.ubicomp.ketdiary.fragment.DaybookFragment;
+import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
 public class SectionsPagerAdapter extends PagerAdapter {
@@ -92,6 +96,9 @@ public class SectionsPagerAdapter extends PagerAdapter {
 
         int pageViewMonth = Integer.valueOf((pageView.getTag()).toString());
         GridLayout glCalendar = (GridLayout) pageView.findViewById(R.id.gl_calendar);
+        
+        Calendar startDay = PreferenceControl.getStartDate();
+        Calendar today = Calendar.getInstance();
 
         // Initialize the calendar
         Calendar mCalendar = Calendar.getInstance();
@@ -104,13 +111,16 @@ public class SectionsPagerAdapter extends PagerAdapter {
         mCalendar.set(Calendar.DAY_OF_MONTH, 1);
 
         mCalendar.add(Calendar.DAY_OF_MONTH, -(mCalendar.get(Calendar.DAY_OF_WEEK)-2));
-
+        TimeValue tv = TimeValue.generate(mCalendar.getTimeInMillis());
         
+        		
         View cellView;
         TextView calDateText;
         ImageView calDot1, calDot2, calDot3;
+        int result;
         NoteAdd[] noteAdds;
-
+        TestResult testResult=null;
+ 
         for (int i=0;i<maxWeeksOfMonth*maxDaysOfWeek;++i){
                     
             cellView = inflater.inflate(R.layout.calendar_cell, null, false);
@@ -137,7 +147,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
                         TextView selectedDayTextView = (TextView) selectedView.findViewById(R.id.tv_calendar_date);
 
                         if(selectedPageMonth == selectedMonth)  // If selected month is exactly current page month
-                            selectedDayTextView.setTextColor(context.getResources().getColor(R.color.text_gray2));
+                            selectedDayTextView.setTextColor(context.getResources().getColor(R.color.white));
                         else
                             selectedDayTextView.setTextColor(Color.BLACK);
 
@@ -145,6 +155,11 @@ public class SectionsPagerAdapter extends PagerAdapter {
                         selectedView = v;
                         TextView newSelectedDayTextView = (TextView) selectedView.findViewById(R.id.tv_calendar_date);
                         newSelectedDayTextView.setTextColor(context.getResources().getColor(R.color.blue));
+                        
+                        int selectedYear = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_YEAR).toString());
+                        selectedMonth = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_MONTH).toString());
+                        int selectedDay = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_DAY).toString());
+                        DaybookFragment.scrolltoItem(selectedYear, selectedMonth, selectedDay);
                     }
                     
                     // sv.smoothScrollTo(0 , 270*(Integer.parseInt(parsed_date[0])+4)-1350-900);
@@ -156,41 +171,64 @@ public class SectionsPagerAdapter extends PagerAdapter {
             
             calDateText.setText(mCalendar.get(Calendar.DAY_OF_MONTH) + "");
             //calDateText.setTextColor(context.getResources().getColor(R.color.text_gray2));
+            calDateText.setTextColor(context.getResources().getColor(R.color.text_gray2));
+            calDateText.setTypeface(Typefaces.getDigitTypefaceBold());
             
             
             
-            if ( mCalendar.get(Calendar.MONTH) == pageViewMonth ){
-            	noteAdds = db.getDayNoteAdd(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
+            if ( mCalendar.get(Calendar.MONTH) == pageViewMonth){
             	
             	
-            	if(noteAdds != null){
-            		Log.d(TAG,""+noteAdds[0].getRecordTv().getMonth());
-            		if(noteAdds.length>=3){
-            			calDot1.setImageResource(dotId[noteAdds[0].getType()]);
-            			calDot1.setVisibility(View.VISIBLE);
-            			calDot2.setImageResource(dotId[noteAdds[1].getType()]);
-            			calDot2.setVisibility(View.VISIBLE);
-            			calDot3.setImageResource(dotId[noteAdds[2].getType()]);
-            			calDot3.setVisibility(View.VISIBLE);
+            	if(mCalendar.getTimeInMillis()> startDay.getTimeInMillis() && mCalendar.getTimeInMillis() <= today.getTimeInMillis()){
+            	
+            		noteAdds = db.getDayNoteAdd(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
+            	            	
+            		if(noteAdds != null){
+            			Log.d(TAG,""+noteAdds[0].getRecordTv().getMonth());
+            			if(noteAdds.length>=3){
+            				calDot1.setImageResource(dotId[noteAdds[0].getType()]);
+            				calDot1.setVisibility(View.VISIBLE);
+            				calDot2.setImageResource(dotId[noteAdds[1].getType()]);
+            				calDot2.setVisibility(View.VISIBLE);
+            				calDot3.setImageResource(dotId[noteAdds[2].getType()]);
+            				calDot3.setVisibility(View.VISIBLE);
+            			}
+            			else if(noteAdds.length==2){
+            				calDot1.setImageResource(dotId[noteAdds[0].getType()]);
+            				calDot1.setVisibility(View.VISIBLE);
+            				calDot2.setImageResource(dotId[noteAdds[1].getType()]);
+            				calDot2.setVisibility(View.VISIBLE);
+            			}
+            			else if(noteAdds.length==1){
+            				calDot2.setImageResource(dotId[noteAdds[0].getType()]);
+            				calDot2.setVisibility(View.VISIBLE);
+            			}           	
             		}
-            		else if(noteAdds.length==2){
-            			calDot1.setImageResource(dotId[noteAdds[0].getType()]);
-            			calDot1.setVisibility(View.VISIBLE);
-            			calDot2.setImageResource(dotId[noteAdds[1].getType()]);
-            			calDot2.setVisibility(View.VISIBLE);
+
+            		testResult = db.getDayTestResult( mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH) );
+            	
+            		if(testResult.getTv().getTimestamp() != 0){
+            			result = testResult.getResult();
+            			if(result == 0)
+            				calDateText.setBackgroundResource(R.drawable.bigbluedot);
+            			else if(result == 1){
+            				calDateText.setBackgroundResource(R.drawable.bigreddot);
+            			}
             		}
-            		else if(noteAdds.length==1){
-            			calDot2.setImageResource(dotId[noteAdds[0].getType()]);
-            			calDot2.setVisibility(View.VISIBLE);
-            		}           	
+            		else{
+            			calDateText.setBackgroundResource(R.drawable.biggraydot);
+            		}
+            		calDateText.setTextColor(context.getResources().getColor(R.color.white));
+            	}
+            	else{
+            		calDateText.setTextColor(context.getResources().getColor(R.color.text_gray2));
             	}
             }
             else {
             	//calDateText.setTextColor(context.getResources().getColor(R.color.dark_gray));
             	calDateText.setVisibility(View.INVISIBLE);
             }
-            calDateText.setTextColor(context.getResources().getColor(R.color.text_gray2));
-            calDateText.setTypeface(Typefaces.getDigitTypefaceBold());
+            
             /*
             // Set cells that belong to current month 
             if ( mCalendar.get(Calendar.MONTH) == pageViewMonth ){
@@ -264,8 +302,8 @@ public class SectionsPagerAdapter extends PagerAdapter {
             mCalendar.add(Calendar.DAY_OF_MONTH, 1);
             
             LayoutParams params=cellView.getLayoutParams();
-            params.width=135;
-            params.height=160;
+            params.width=118;
+            params.height=130;
             cellView.setLayoutParams(params);
         }
 

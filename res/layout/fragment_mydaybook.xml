@@ -3,14 +3,14 @@
     android:id="@+id/mydaybook_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/wholebg"
+    android:background="@color/white"
     android:clickable="false"
     android:orientation="vertical" >
         
     <RelativeLayout
         android:id="@+id/upper_bar"
         android:layout_width="match_parent"
-        android:layout_height="55dip"
+        android:layout_height="55dp"
         android:layout_alignParentTop="true"
         android:layout_marginBottom="-8dp"
         android:clickable="true"
@@ -46,7 +46,7 @@
     <SlidingDrawer
         android:id="@+id/slidingDrawer1"
         android:layout_width="match_parent"
-        android:layout_height="325dp"
+        android:layout_height="280dp"
         android:content="@+id/drawer_content"
         android:handle="@+id/handle"
         android:rotation="180"
