@@ -58,14 +58,14 @@
 	        android:id="@+id/filter_7"
 	        android:layout_width="30dp"
 	        android:layout_height="30dp"
-	        android:src="@drawable/filter_color7" 
+	        android:src="@drawable/filter_color8" 
 	        android:layout_weight="1"
 	        android:layout_gravity="center"/>
         <ImageView
 	        android:id="@+id/filter_8"
 	        android:layout_width="30dp"
 	        android:layout_height="30dp"
-	        android:src="@drawable/filter_color8" 
+	        android:src="@drawable/filter_color7" 
 	        android:layout_weight="1"
 	        android:layout_gravity="center"/>
 </LinearLayout>

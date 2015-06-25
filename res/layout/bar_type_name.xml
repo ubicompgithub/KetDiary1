@@ -27,8 +27,9 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
-        android:paddingLeft="8dip"
+        android:background="@color/white"
         android:ems="10"
+        android:paddingLeft="8dip"
         android:textColor="@color/dark_gray"
         android:textColorHint="@color/dark_gray" />
 

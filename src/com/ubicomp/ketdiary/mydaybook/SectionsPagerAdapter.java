@@ -154,7 +154,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
                         // Set the new selected day
                         selectedView = v;
                         TextView newSelectedDayTextView = (TextView) selectedView.findViewById(R.id.tv_calendar_date);
-                        newSelectedDayTextView.setTextColor(context.getResources().getColor(R.color.blue));
+                        newSelectedDayTextView.setTextColor(context.getResources().getColor(R.color.black));
                         
                         int selectedYear = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_YEAR).toString());
                         selectedMonth = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_MONTH).toString());
@@ -185,6 +185,45 @@ public class SectionsPagerAdapter extends PagerAdapter {
             	            	
             		if(noteAdds != null){
             			Log.d(TAG,""+noteAdds[0].getRecordTv().getMonth());
+            			
+            			int[] typedot = new int[3];
+            			int k = -1;
+            			for(int j=0; j<noteAdds.length; j++){
+            				int type = noteAdds[j].getType();
+            				if(k>=2)
+            					break;
+            				
+            				if(DaybookFragment.filterButtonIsPressed[0]){
+            					typedot[++k] = type;
+            					continue;
+            				}
+            				
+
+            				if(DaybookFragment.filterButtonIsPressed[type])
+            					typedot[++k] = type;
+            				
+            				
+            			}
+            			if(k>=2){
+            				calDot1.setImageResource(dotId[typedot[0]]);
+            				calDot1.setVisibility(View.VISIBLE);
+            				calDot2.setImageResource(dotId[typedot[1]]);
+            				calDot2.setVisibility(View.VISIBLE);
+            				calDot3.setImageResource(dotId[typedot[2]]);
+            				calDot3.setVisibility(View.VISIBLE);
+            			}
+            			else if(k==1){
+            				calDot1.setImageResource(dotId[typedot[0]]);
+            				calDot1.setVisibility(View.VISIBLE);
+            				calDot2.setImageResource(dotId[typedot[1]]);
+            				calDot2.setVisibility(View.VISIBLE);
+            			}
+            			else if(k==0){
+            				calDot2.setImageResource(dotId[typedot[0]]);
+            				calDot2.setVisibility(View.VISIBLE);
+            			}  
+            			
+            			/*
             			if(noteAdds.length>=3){
             				calDot1.setImageResource(dotId[noteAdds[0].getType()]);
             				calDot1.setVisibility(View.VISIBLE);
@@ -202,7 +241,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
             			else if(noteAdds.length==1){
             				calDot2.setImageResource(dotId[noteAdds[0].getType()]);
             				calDot2.setVisibility(View.VISIBLE);
-            			}           	
+            			} */         	
             		}
 
             		testResult = db.getDayTestResult( mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH) );

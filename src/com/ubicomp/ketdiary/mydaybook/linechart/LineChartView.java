@@ -29,6 +29,7 @@ import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.fragment.DaybookFragment;
 import com.ubicomp.ketdiary.mydaybook.DummyData;
+import com.ubicomp.ketdiary.system.PreferenceControl;
 
 public class LineChartView extends View {
 
@@ -46,6 +47,7 @@ public class LineChartView extends View {
 
     private GestureDetector gestureDetector; 
     private DatabaseControl db;
+    private Calendar startDay;
     
     private static int NONE = 0;
     private static int ZOOM1 = 1;
@@ -59,10 +61,17 @@ public class LineChartView extends View {
         super(context, attrs);
         gestureDetector = new GestureDetector(context, new GestureListener());
         db = new DatabaseControl();
-        
+        startDay = PreferenceControl.getStartDate();
     	//dummyDataGenerator();
-        setChartData2();
+        //setChartData2();
     }
+	private void setChartData3(){
+		
+		
+		
+		
+	}
+	
 	
 	public void setChartData2() {
     	NoteAdd[] noteAdds = db.getAllNoteAdd();

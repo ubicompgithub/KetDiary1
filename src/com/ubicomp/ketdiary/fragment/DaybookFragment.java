@@ -349,7 +349,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
                     mSectionsPagerAdapter.asignSelecteViewToThisDayView();
 
                     TextView newSelectedDayTextView = (TextView) selectedView.findViewById(R.id.tv_calendar_date);
-                    newSelectedDayTextView.setTextColor(context.getResources().getColor(R.color.blue));
+                    newSelectedDayTextView.setTextColor(context.getResources().getColor(R.color.black));
                 }
 
                 mViewPager.setCurrentItem(Calendar.getInstance().get(Calendar.MONTH) + 1 - Database.START_MONTH);
@@ -766,6 +766,11 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
     		} 		
     	}    	
     }
+	private void setAllFilter(boolean enable){
+		for(int i=1; i<filterButtonIsPressed.length; i++){
+			filterButtonIsPressed[i] = enable;
+		}
+	}
     
 
     private class FilterListener implements View.OnClickListener {
@@ -774,18 +779,21 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
     	@Override
     	public void onClick(View v) {
     		switch (v.getId()) {
-    		case (R.id.filter_all): {  
+    		case (R.id.filter_all): { 
+    			setAllFilter(false);
     		    filterButtonIsPressed[0] = true; 
     		    filterAll.setImageResource(R.drawable.filter_all_selected);
     			setAllButtonImage();
-    			lineChart.invalidate();
+    			if(lineChart!=null)
+    				lineChart.invalidate();
     			break;
     		}
     		case (R.id.filter_1): {
     			if (filterButtonIsPressed[1]) { filterButtonIsPressed[1] = false; filter1.setImageResource(R.drawable.filter_color1); }
     			else {filterButtonIsPressed[1] = true; filter1.setImageResource(R.drawable.filter_color1_selected); filterButtonIsPressed[0] = false;}
     			setAllButtonImage();
-    			lineChart.invalidate();
+    			if(lineChart!=null)
+    				lineChart.invalidate();
     			break;	
     		}
     		
@@ -793,7 +801,8 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
     			if (filterButtonIsPressed[2]) { filterButtonIsPressed[2] = false; filter2.setImageResource(R.drawable.filter_color2); }
     			else {filterButtonIsPressed[2] = true; filter2.setImageResource(R.drawable.filter_color2_selected); filterButtonIsPressed[0] = false;}
     			setAllButtonImage();
-    			lineChart.invalidate();
+    			if(lineChart!=null)
+    				lineChart.invalidate();
     			break;
     			
     		}
@@ -802,7 +811,8 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
     			if (filterButtonIsPressed[3]) { filterButtonIsPressed[3] = false; filter3.setImageResource(R.drawable.filter_color3);}
     			else {filterButtonIsPressed[3] = true; filter3.setImageResource(R.drawable.filter_color3_selected); filterButtonIsPressed[0] = false; }
     			setAllButtonImage();
-    			lineChart.invalidate();
+    			if(lineChart!=null)
+    				lineChart.invalidate();
     			break;
     			
     		}
@@ -811,7 +821,8 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
     			if (filterButtonIsPressed[4]) { filterButtonIsPressed[4] = false; filter4.setImageResource(R.drawable.filter_color4);}
     			else {filterButtonIsPressed[4] = true; filter4.setImageResource(R.drawable.filter_color4_selected); filterButtonIsPressed[0] = false;}
     			setAllButtonImage();
-    			lineChart.invalidate();
+    			if(lineChart!=null)
+    				lineChart.invalidate();
     			break;
     			
     		}
@@ -819,31 +830,36 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
     			if (filterButtonIsPressed[5]) { filterButtonIsPressed[5] = false; filter5.setImageResource(R.drawable.filter_color5);}
     			else {filterButtonIsPressed[5] = true; filter5.setImageResource(R.drawable.filter_color5_selected); filterButtonIsPressed[0] = false;}
     			setAllButtonImage();
-    			lineChart.invalidate();
+    			if(lineChart!=null)
+    				lineChart.invalidate();
     			break;    			
     		}
     		case (R.id.filter_6): {
     			if (filterButtonIsPressed[6]) { filterButtonIsPressed[6] = false; filter6.setImageResource(R.drawable.filter_color6);}
     			else {filterButtonIsPressed[6] = true; filter6.setImageResource(R.drawable.filter_color6_selected); filterButtonIsPressed[0] = false;}
     			setAllButtonImage();
-    			lineChart.invalidate();
+    			if(lineChart!=null)
+    				lineChart.invalidate();
     			break;
     		}
     		case (R.id.filter_7): {
     			if (filterButtonIsPressed[7]) { filterButtonIsPressed[7] = false; filter7.setImageResource(R.drawable.filter_color7);}
     			else {filterButtonIsPressed[7] = true; filter7.setImageResource(R.drawable.filter_color7_selected); filterButtonIsPressed[0] = false;}
     			setAllButtonImage();
-    			lineChart.invalidate();
+    			if(lineChart!=null)
+    				lineChart.invalidate();
     			break;
     		}
     		case (R.id.filter_8): {
     			if (filterButtonIsPressed[8]) { filterButtonIsPressed[8] = false; filter8.setImageResource(R.drawable.filter_color8);}
     			else {filterButtonIsPressed[8] = true; filter8.setImageResource(R.drawable.filter_color8_selected); filterButtonIsPressed[0] = false;}
     			setAllButtonImage();
-    			lineChart.invalidate();
+    			if(lineChart!=null)
+    				lineChart.invalidate();
     			break;
     		}	
     		}
+    		updateCalendarView();
     	}
     }
     	
@@ -918,6 +934,14 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		//lineChart.invalidate();
 		
 		//update Calendar View
+		updateCalendarView();
+		
+		//sv.smoothScrollTo(0 , (int)convertDpToPixel(125)*diaryList.getChildCount());
+		//sv.fullScroll(View.FOCUS_DOWN);
+		Log.d(TAG, "DiaryCount:"+diaryList.getChildCount());
+	}
+	
+	private void updateCalendarView(){
 		mViewPager.removeAllViews();
 		LayoutInflater inflater = LayoutInflater.from(context);
 		View[] pageViewList = new View[Database.SUSTAINED_MONTHS];
@@ -928,10 +952,6 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		mSectionsPagerAdapter = new SectionsPagerAdapter(pageViewList);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
 		mViewPager.setCurrentItem(Calendar.getInstance().get(Calendar.MONTH) + 1 - Database.START_MONTH);
-		
-		//sv.smoothScrollTo(0 , (int)convertDpToPixel(125)*diaryList.getChildCount());
-		//sv.fullScroll(View.FOCUS_DOWN);
-		Log.d(TAG, "DiaryCount:"+diaryList.getChildCount());
 	}
 	
 	public static void scrolltoItem(int year, int month, int day){
