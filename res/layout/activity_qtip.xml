@@ -115,14 +115,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:background="@drawable/tab_bar"
-        android:orientation="horizontal" >
-    </LinearLayout>
     
     <!-- Used for Debugging -->
 	 

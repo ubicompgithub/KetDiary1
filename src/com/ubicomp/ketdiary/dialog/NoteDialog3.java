@@ -135,10 +135,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 		endOnClickListener = new EndOnClickListener();
 		goResultOnClickListener = new GoResultOnClickListener();
 		goCopingToResultOnClickListener = new GoCopingToResultOnClickListener();
-				
-	    setting();
-	    mainLayout.addView(boxLayout);
-	    
+				 
 	
 	}
 	
@@ -395,7 +392,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 	    
 	    note_title.setTypeface(wordTypefaceBold);
 	    note_title.setTextColor(context.getResources().getColor(R.color.text_gray2));
-	    note_title.setText(R.string.countdown);
+	    note_title.setText(R.string.test_done);
 	    
 
 		title_layout.addView(layout);
@@ -503,6 +500,8 @@ public class NoteDialog3 implements ChooseItemCaller{
 	
 	/** Initialize the dialog */
 	public void initialize() {
+		 setting();
+		 mainLayout.addView(boxLayout);
 	}
 	
 	/** show the dialog */
