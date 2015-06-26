@@ -13,6 +13,7 @@ import com.ubicomp.ketdiary.check.StartDateCheck;
 import com.ubicomp.ketdiary.check.WeekNumCheck;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.Rank;
+import com.ubicomp.ketdiary.data.structure.TestDetail;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.data.structure.TimeValue;
 import com.ubicomp.ketdiary.system.PreferenceControl;
@@ -1172,5 +1173,107 @@ public class DatabaseControl {
 			db.close();
 		}
 	}
+	
+	// TestDetail
+
+		/**
+		 * Insert a TestDetail recorded detailed information of breath condition
+		 * when the user takes BrAC tests
+		 * 
+		 * @param data
+		 *            inserted BreathDetail
+		 * @see ubicomp.soberdiary.data.structure.BreathDetail
+		 */
+		public void insertTestDetail(TestDetail data) {
+			synchronized (sqlLock) {
+				db = dbHelper.getWritableDatabase();
+
+				String sql = "SELECT * FROM TestDetail WHERE ts ="
+						+ data.getTv().getTimestamp();
+				Cursor cursor = db.rawQuery(sql, null);
+				if (!cursor.moveToFirst()) {
+					ContentValues content = new ContentValues();
+					content.put("year", data.getTv().getYear());
+					content.put("month", data.getTv().getMonth());
+					content.put("day", data.getTv().getDay());
+					content.put("ts", data.getTv().getTimestamp());
+					content.put("week", data.getTv().getWeek());
+					content.put("cassetteId", data.getCassetteId());
+					content.put("failedState", data.getFailedState());
+					content.put("firstVoltage", data.getFirstVoltage());
+					content.put("secondVoltage", data.getSecondVoltage());
+					content.put("devicePower", data.getDevicePower());
+					content.put("colorReading", data.getColorReading());
+					content.put("connectionFailRate",
+							data.getConnectionFailRate());
+					content.put("failedReason", data.getFailedReason());
+					db.insert("TestDetail", null, content);
+				}
+				cursor.close();
+				db.close();
+			}
+		}
+
+		/**
+		 * Get all TestDetail which are not uploaded to the server
+		 * 
+		 * @return An array of BreathDetail. If there are no BreathDetail, return
+		 *         null.
+		 * @see ubicomp.soberdiary.data.structure.BreathDetail
+		 */
+		public TestDetail[] getNotUploadedTestDetail() {
+			synchronized (sqlLock) {
+				TestDetail[] data = null;
+				db = dbHelper.getReadableDatabase();
+				String sql;
+				Cursor cursor;
+				sql = "SELECT * FROM TestDetail WHERE upload = 0";
+				cursor = db.rawQuery(sql, null);
+				int count = cursor.getCount();
+				if (count == 0) {
+					cursor.close();
+					db.close();
+					return null;
+				}
+
+				data = new TestDetail[count];
+
+				for (int i = 0; i < count; ++i) {
+					cursor.moveToPosition(i);
+					long ts = cursor.getLong(5);
+					String cassetteId = cursor.getString(1) ;
+					int failedState = cursor.getInt(7);
+					int firstVoltage = cursor.getInt(8);
+					int secondVoltage = cursor.getInt(9);
+					int devicePower = cursor.getInt(10);
+					int colorReading = cursor.getInt(11);
+					float connectionFailRate = cursor.getFloat(12);
+					String failedReason = cursor.getString(13);
+
+					data[i] = new TestDetail(cassetteId, ts, failedState, firstVoltage,
+							secondVoltage, devicePower, colorReading,
+			                connectionFailRate, failedReason);
+				}
+				cursor.close();
+				db.close();
+				return data;
+			}
+		}
+
+		/**
+		 * Label the TestDetail uploaded
+		 * 
+		 * @param ts
+		 *            Timestamp of the uploaded TestDetail
+		 * @see ubicomp.soberdiary.data.structure.TestDetail
+		 */
+		public void setTestDetailUploaded(long ts) {
+			synchronized (sqlLock) {
+				db = dbHelper.getWritableDatabase();
+				String sql = "UPDATE TestDetail SET upload = 1 WHERE ts = " + ts;
+				db.execSQL(sql);
+				db.close();
+			}
+		}
 
 }

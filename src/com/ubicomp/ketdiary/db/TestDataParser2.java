@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
+import com.ubicomp.ketdiary.data.structure.TestDetail;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.system.PreferenceControl;
@@ -227,6 +228,18 @@ public class TestDataParser2 {
 		
 		//db.addTestResult(testResult);
 		//DBControl.inst.addNoteAdd(noteAdd);
+	}
+	
+	public void startTestDetail(String cassetteId, int failedState,int firstVoltage,
+			int secondVoltage, int devicePower, int colorReading,
+            float connectionFailRate, String failedReason) {
+		
+		TestDetail testDetail = new TestDetail(cassetteId, ts, failedState, firstVoltage,
+				secondVoltage, devicePower, colorReading,
+                connectionFailRate, failedReason);
+		
+		db.insertTestDetail(testDetail);
+
 	}
 	
 	/**

@@ -112,6 +112,16 @@ public class PreferenceControl {
 	}
 	
 	
+	public static boolean getCollectData() {
+		return sp.getBoolean("collectdata", false);
+	}
+
+	public static void setCollectData(boolean collectdata) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putBoolean("collectdata", collectdata);
+		edit.commit();
+	}
+	
 	/**
 	 * set Test state
 	 * 

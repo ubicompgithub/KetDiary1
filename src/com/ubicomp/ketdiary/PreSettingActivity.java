@@ -53,6 +53,7 @@ public class PreSettingActivity extends Activity {
 	private int target_t, drink_t;
 
 	private CheckBox developer_switch;
+	private CheckBox collectdata_switch;
 
 	private static final int DATE_DIALOG_ID = 0;
 	private static final int LOCK_DIALOG_ID = 1;
@@ -69,6 +70,9 @@ public class PreSettingActivity extends Activity {
 		did = (EditText) this.findViewById(R.id.did_edit);
 		did.setText(PreferenceControl.getDeviceId());
 
+		collectdata_switch = (CheckBox) this.findViewById(R.id.collectdata_switch);
+		collectdata_switch.setChecked(PreferenceControl.getCollectData());
+		
 		developer_switch = (CheckBox) this.findViewById(R.id.developer_switch);
 		developer_switch.setChecked(PreferenceControl.isDeveloper());
 
@@ -303,6 +307,7 @@ public class PreSettingActivity extends Activity {
 				PreferenceControl.setDeviceId(text2);
 				
 				PreferenceControl.setIsDeveloper(developer_switch.isChecked());
+				PreferenceControl.setCollectData(collectdata_switch.isChecked());
 				PreferenceControl.setGoal(target_g, target_t, drink_t);
 				
 				PreferenceControl.setVoltage1(v1);

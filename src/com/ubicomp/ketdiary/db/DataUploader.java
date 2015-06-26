@@ -23,7 +23,7 @@ import com.ubicomp.ketdiary.data.structure.TestResult;
 /**
  * Used for upload data to the server
  * 
- * @author Stanley Wang
+ * @author Andy Chen
  */
 public class DataUploader {
 
@@ -118,6 +118,15 @@ public class DataUploader {
 						Log.d(TAG, "FAIL TO UPLOAD - NOTEADD");
 				}
 			}
+			// TestDetail
+			TestDetail testDetails[] = db.getNotUploadedTestDetail();
+			if (testDetails != null) {
+				for (int i = 0; i < testDetails.length; ++i) {
+					if (connectToServer(testDetails[i]) == ERROR)
+						Log.d(TAG, "FAIL TO UPLOAD - TestDetail");
+				}
+			}			
+			
 			
 			return null;
 		}
@@ -205,7 +214,8 @@ public class DataUploader {
 						.getSecureHttpClient();
 				HttpPost httpPost = HttpPostGenerator.genPost(data);
 				if (upload(httpClient, httpPost)){
-					//db.setEmotionManagementUploaded(data.getTv().getTimestamp());
+					db.setTestDetailUploaded(data.getTv().getTimestamp());
+					Log.d(TAG, "Upload TestDetail Success.");
 				}
 				else
 					return ERROR;

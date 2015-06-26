@@ -142,6 +142,21 @@
                     android:textOff="no"
                     android:textOn="yes"
                     android:textSize="@dimen/small_title_size" />
+                
+                <CheckBox
+                    android:id="@+id/collectdata_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/radio_button"
+                    android:drawablePadding="5dp"
+                    android:padding="0dp"
+                    android:text="Collect data?"
+                    android:textColor="@color/white"
+                    android:textOff="no"
+                    android:textOn="yes"
+                    android:textSize="@dimen/small_title_size" />
 
                 <LinearLayout
                     android:id="@+id/start_date_setting"

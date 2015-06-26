@@ -188,21 +188,22 @@ public class HttpPostGenerator {
 	}
 	
 	public static HttpPost genPost(TestDetail data){
-		HttpPost httpPost = new HttpPost(ServerUrl.getNoteAddUrl());
+		HttpPost httpPost = new HttpPost(ServerUrl.getTestDetail2Url());
 		String uid = PreferenceControl.getUID();
 		String deviceId=PreferenceControl.getDeviceId();
 		
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("uid", uid));
-		//nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.isAfterTest)));
-		
-		//nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.tv.getTimestamp())));
-		//nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.recordTv)));
-		//nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.category)));
-		//nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.type)));
-		//nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.items)));
-		//nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.impact)));
-		//nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.description)));
+		nvps.add(new BasicNameValuePair("data[]", deviceId));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getCassetteId())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.tv.getTimestamp())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getFailedState())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getFirstVoltage())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getSecondVoltage())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getDevicePower())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getColorReading())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getConnectionFailRate())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getFailedReason())));
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 		} catch (UnsupportedEncodingException e) {}

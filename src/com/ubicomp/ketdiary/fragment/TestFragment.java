@@ -72,6 +72,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	
 	private boolean isDeveloper = PreferenceControl.isDeveloper();
 	private boolean debug = PreferenceControl.isDebugMode();
+	private boolean collectdata = PreferenceControl.getCollectData();
 	
 	//debug View
 	private ScrollView debugScrollView;
@@ -169,6 +170,17 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private int state;
 	private int resultState;
 	//private boolean second_pass=false;
+	
+	// test Detail parameter
+	private String cassetteId ="";
+	private int failedState;
+	private int firstVoltage;
+	private int secondVoltage;
+	private int devicePower;
+	private int colorReading;
+	private float connectionFailRate;
+	private String failedReason; 
+	
 	
 	private static final int COUNT_DOWN_SECOND = 5;
 	private static final int WAIT_SALIVA_SECOND = 7;
@@ -366,10 +378,11 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			if(isDeveloper){
 				setState(new DoneState());
 			}
-			else{
+			else {
 				start_test = true;
 				setState(new ConnState());
 			}
+			
 			/*
 			start_test = true;
 			setState(new ConnState());*/
@@ -393,6 +406,12 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		@Override
 		public void onStart(){
 			state = FAIL_STATE;
+			failedReason =  err_msg;
+			if( TDP!= null ){
+				TDP.startTestDetail(cassetteId, failedState, firstVoltage,
+						secondVoltage, devicePower, colorReading,
+		                connectionFailRate, failedReason);
+			}
 			
 			test_msg.setText("");
 			label_btn.setText("確認");
@@ -946,6 +965,15 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		in_stage1 = false;
 		test_done = false;
 		camera_initial=false;
+		
+		cassetteId ="";
+		failedState=0;
+		firstVoltage=0;
+		secondVoltage=0;
+		devicePower=0;
+		colorReading=0;
+		connectionFailRate=0;
+		failedReason=""; 
 
 		timestamp = System.currentTimeMillis();
 		voltage_count = 0;
@@ -999,6 +1027,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		public void onFinish() {
 			showDebug(">Try to start the device");
 			//startConnection();
+			failedState = state;
 			setState(new FailState("請開啟檢測器"));
 		}
 
@@ -1021,13 +1050,19 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			public void onFinish() {
 				img_face.setVisibility(View.INVISIBLE);
 				Log.i(TAG3, "FINISH");
-				if(state == CAMERA_STATE)
+				if(state == CAMERA_STATE){
+					failedState = state;
 					setState(new FailState("測試超時"));
+				}
 				else if (state == NOTENOUGH_STATE){ // 判斷第二個電極是否通過
-					if(voltage < SECOND_VOLTAGE_THRESHOLD)
+					if(voltage < SECOND_VOLTAGE_THRESHOLD){
+						secondVoltage = voltage;
 						setState(new RunState());
-					else
+					}
+					else{
+						failedState = state;
 						setState(new FailState("測試失敗,請更換試紙匣後重試"));
+					}
 				}
 				
 				//cameraRecorder.closeSuccess();
@@ -1065,8 +1100,10 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 
 		@Override
 		public void onFinish() {
-			if(is_timeout)
+			if(is_timeout){
+				failedState = state;
 				setState(new FailState("測試超時"));
+			}
 			
 		}
 
@@ -1117,9 +1154,16 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			showDebug(">Start to run the  device");
 			//runBT();
 			if(voltage < FIRST_VOLTAGE_THRESHOLD)
-				setState(new CameraState());
-			else
+				if(collectdata){
+					Toast.makeText(activity, "Collect Data Mode", Toast.LENGTH_SHORT).show();	
+				}
+				else{
+					setState(new CameraState());
+				}
+			else{
+				failedState = state;
 				setState(new FailState("請更換試紙匣後重試"));
+			}
 		}
 
 		@Override
@@ -1187,6 +1231,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
     @Override
     public void bleNotSupported() {
     	  Toast.makeText(activity, "BLE not support", Toast.LENGTH_SHORT).show();
+    	  failedState = state;
     	  setState(new FailState("裝置不支援"));
 //        this.finish();
     }
@@ -1195,6 +1240,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
     public void bleConnectionTimeout() {
     	Log.i(TAG, "connect timeout");
         Toast.makeText(activity, "BLE connection timeout", Toast.LENGTH_SHORT).show();
+        failedState = state;
         setState(new FailState("連接逾時"));
     }
 
@@ -1213,10 +1259,14 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
         
         is_connect = false;
         
-        if(state != IDLE_STATE && state!= FAIL_STATE && state!= DONE_STATE)
+        if(state != IDLE_STATE && state!= FAIL_STATE && state!= DONE_STATE){
+        	failedState = state;
         	setState(new FailState("連接中斷"));
-        else if (state == STAGE2_STATE)
+        }
+        else if (state == STAGE2_STATE){
+        	failedState = state;
         	setState(new FailState("測試完成")); //temporary solution
+        }
         //if(ble != null) {
         //    ble = null;
         //}
@@ -1240,6 +1290,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
     	
         if(state != IDLE_STATE){
         	Toast.makeText(activity, "No test plug", Toast.LENGTH_SHORT).show();
+        	failedState = state;
         	setState(new FailState("請將試紙匣插入裝置"));
         }
     }
@@ -1248,6 +1299,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
     public void blePlugInserted(byte[] plugId) {
         //Log.i(TAG, "Test plug is inserted");
         ble_pluginserted = true;
+        cassetteId = "tmp_id"; //TODO: set cassetteId in here.
         //check ID here
         if( state == CONN_STATE )
         	updateInitState(Tester._BT);
@@ -1334,10 +1386,11 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		showDebug(">"+str3);
 		writeToVoltageFile(str3+"\n");
 		
-		if(state == CAMERA_STATE && state == STAGE2_STATE && state == NOTENOUGH_STATE && state == RUN_STATE)
-			writeToVoltageFile(str+str2+"\n");
+		//if(state == CAMERA_STATE && state == STAGE2_STATE && state == NOTENOUGH_STATE && state == RUN_STATE)
+		//	writeToVoltageFile(str+str2+"\n");
 		
 		if(state == CAMERA_STATE && voltage > FIRST_VOLTAGE_THRESHOLD ){
+			firstVoltage = voltage;
 			setState(new Stage2State());
 			first_voltage=true;
 		}
@@ -1434,6 +1487,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		CAMERATIMEOUT = PreferenceControl.getVoltageCountDown();
 		isDeveloper = PreferenceControl.isDeveloper();
 		debug = PreferenceControl.isDebugMode();
+		collectdata = PreferenceControl.getCollectData();
 		
 		Log.d(TAG1, "V1: "+FIRST_VOLTAGE_THRESHOLD+" V2: "+SECOND_VOLTAGE_THRESHOLD+" TIMEOUT: "+CAMERATIMEOUT);
 		Log.d(TAG1, "isDeveloper: "+isDeveloper+" debug: "+debug);
