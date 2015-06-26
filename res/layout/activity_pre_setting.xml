@@ -232,6 +232,144 @@
                         android:textSize="@dimen/small_title_size" />
                 </LinearLayout>
             </LinearLayout>
+            
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/setting_title_bg_color"
+                android:padding="5dp"
+                android:text="Test parameter"
+                android:textColor="@color/white"
+                android:textSize="@dimen/large_title_size" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Voltage1:"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+
+                    <EditText
+                        android:id="@+id/voltage1_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/setting_edit_bg"
+                        android:ems="8"
+                        android:inputType="number"
+                        android:paddingBottom="3dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="3dp"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Voltage2:"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+
+                    <EditText
+                        android:id="@+id/voltage2_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/setting_edit_bg"
+                        android:ems="8"
+                        android:inputType="number"
+                        android:paddingBottom="3dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="3dp"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" >
+                    </EditText>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ACountDown:"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+
+                    <EditText
+                        android:id="@+id/after_countdown_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/setting_edit_bg"
+                        android:ems="8"
+                        android:inputType="number"
+                        android:paddingBottom="3dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="3dp"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" >
+                    </EditText>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="VCountDown:"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+
+                    <EditText
+                        android:id="@+id/voltage1_countdown_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/setting_edit_bg"
+                        android:ems="8"
+                        android:inputType="number"
+                        android:paddingBottom="3dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="3dp"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" >
+                    </EditText>
+                </LinearLayout>
+                
+            </LinearLayout>
+            
+            
+            
 
             <TextView
                 android:layout_width="match_parent"

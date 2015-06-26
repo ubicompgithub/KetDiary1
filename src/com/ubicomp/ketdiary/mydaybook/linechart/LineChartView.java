@@ -23,24 +23,26 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.ubicomp.ketdiary.App;
-import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
+import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.fragment.DaybookFragment;
 import com.ubicomp.ketdiary.mydaybook.DummyData;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 
 public class LineChartView extends View {
-
+	
+	private static final String TAG = "LineChartView";
+	
     private static final int LINES = 7;
     private static float offsetY = 90;
     private static float offsetX = 60;
     private static float range;
     public  List<DummyData> datapoints = new ArrayList<DummyData>();
     public  List<DummyData> datapoints2 = new ArrayList<DummyData>();
-    private static final String TAG = "LineChartView";
-    
+    private DummyData[] dataset = null;
+    		
     private Paint paint = new Paint();
 
     private int[] dots = {R.drawable.dot_color1, R.drawable.dot_color2, R.drawable.dot_color3, R.drawable.dot_color4, R.drawable.dot_color5, R.drawable.dot_color6, R.drawable.dot_color7, R.drawable.dot_color8};
@@ -56,6 +58,7 @@ public class LineChartView extends View {
     private int mode = 0;  
     private int cursorLinePos = 5;
     private int initHeight;
+    private int numOfDays = 0;
 
 	public LineChartView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -64,9 +67,34 @@ public class LineChartView extends View {
         startDay = PreferenceControl.getStartDate();
     	//dummyDataGenerator();
         //setChartData2();
+        Calendar currentDay = Calendar.getInstance(); 
+    	currentDay.setTimeInMillis(startDay.getTimeInMillis());
+    	
+    	numOfDays = daysOfTwo(startDay, Calendar.getInstance());
+    	
+    	dataset = new DummyData[numOfDays];
+    	
+    	Log.d("drawDate", "numOfDays:"+numOfDays);
     }
 	private void setChartData3(){
-		
+		Calendar currentDay = Calendar.getInstance(); 
+    	currentDay.setTimeInMillis(startDay.getTimeInMillis());
+    	
+    	TestResult testResult;
+    	NoteAdd noteAdd[];
+    	//numOfDays = daysOfTwo(startDay, Calendar.getInstance());  	
+    	for (int i = 0; i < numOfDays ; i ++) {
+    		testResult = db.getDayTestResult(currentDay.get(Calendar.YEAR), 
+    				currentDay.get(Calendar.MONTH), currentDay.get(Calendar.DAY_OF_MONTH));
+    				
+    		
+    		
+    		//dataset[0] = new DummyData(category, cum_impact, type, month, date, 1);
+    		
+    		
+    		
+    		currentDay.add(Calendar.DAY_OF_MONTH, 1);
+    	}
 		
 		
 		
@@ -100,7 +128,7 @@ public class LineChartView extends View {
 					if(count!= 0){
 						cum_impact/=(float)count;
 						
-						singleData = new DummyData(category, cum_impact, type, month, date, 1);
+						singleData = new DummyData(category, cum_impact, cum_impact, type, month, date, 1);
 						datapoints.add(singleData);	
 						count = 1;
 					}
@@ -128,7 +156,7 @@ public class LineChartView extends View {
 					if(count!= 0){
 						cum_impact/=(float)count;
 						
-						singleData = new DummyData(category, cum_impact, type, month, date, 1);
+						singleData = new DummyData(category, cum_impact, cum_impact, type, month, date, 1);
 						datapoints2.add(singleData);	
 						count = 1;
 					}
@@ -176,7 +204,7 @@ public class LineChartView extends View {
 			int pass = r4.nextInt(4 - 1) + 1;
 			
 			
-			DummyData singleData = new DummyData(who, score, activityType, 6, i+1, pass);
+			DummyData singleData = new DummyData(who, score, score, activityType, 6, i+1, pass);
 			datapoints.add(singleData);	
 		}
 		/*Log.i("OMG", "type:" + MainActivity.getChartType());
@@ -325,7 +353,7 @@ public class LineChartView extends View {
     	if  (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) { offsetY = 90; }
     	else { offsetY = 30; }
         drawBackground(canvas);
-        drawDate(canvas);
+        drawDate2(canvas);
         drawCursor(canvas);
         drawLineChart(canvas);
         drawRectBar(canvas);
@@ -351,6 +379,48 @@ public class LineChartView extends View {
             	canvas.drawText(String.valueOf((-1*y)+4), getPaddingLeft(), yPos, line_paint);
             }
         }
+    }
+    
+    public int daysOfTwo(Calendar befor, Calendar after) {
+        long m = after.getTimeInMillis() - befor.getTimeInMillis();
+        m=m/(24*60*60*1000);
+        //判斷是不是同一天
+        if(m==0 && after.get(Calendar.DAY_OF_YEAR)!=befor.get(Calendar.DAY_OF_YEAR)){
+            m+=1;
+        }
+        return (int)m;
+    }
+    
+    private void drawDate2(Canvas canvas) {
+    	
+    	Calendar currentDay = Calendar.getInstance(); 
+    	currentDay.setTimeInMillis(startDay.getTimeInMillis());
+    	
+    	//numOfDays = daysOfTwo(startDay, Calendar.getInstance());
+    	
+    	
+    	for (int i = 0; i < numOfDays ; i ++) {
+    		int currentMonth = currentDay.get(Calendar.MONTH)+1;
+        	int currentDate= currentDay.get(Calendar.DAY_OF_MONTH);
+    		
+    		if(currentDate == 1){
+    			paint.setStyle(Style.FILL);
+    			paint.setColor(getResources().getColor(R.color.linechart_date_color));
+    			paint.setTextAlign(Align.CENTER);
+    			paint.setTextSize(35);
+    			canvas.drawText(currentMonth+"/"+currentDate, getXPos2(i), getHeight() - 120, paint);
+    		}
+    		else if(currentDate % 5 == 0){
+    			paint.setStyle(Style.FILL);
+    			paint.setColor(getResources().getColor(R.color.linechart_date_color));
+    			paint.setTextAlign(Align.CENTER);
+    			paint.setTextSize(35);
+    			canvas.drawText(""+currentDate, getXPos2(i), getHeight() - 120, paint);
+    		}
+    		currentDay.add(Calendar.DAY_OF_MONTH, 1);
+    		
+    	}
+    		
     }
 
     
@@ -441,28 +511,28 @@ public class LineChartView extends View {
     	int startPoint = 0;
         for (int i = 0; i < datapoints.size(); i++) {
         	if (datapoints.get(i).activityType < 6) {
-        	path_self.moveTo(getXPos(i), getYPos(datapoints.get(i).score));
+        	path_self.moveTo(getXPos(i), getYPos(datapoints.get(i).self_score));
         	startPoint = i;
         	break;
         	}
         }
         for (int i = startPoint; i < datapoints.size(); i++) {
         	if (datapoints.get(i).activityType < 6) {
-            path_self.lineTo(getXPos(i), getYPos(datapoints.get(i).score));
+            path_self.lineTo(getXPos(i), getYPos(datapoints.get(i).self_score));
         	}
         	
         }
         startPoint = 0;
         for (int i = 0; i < datapoints2.size(); i++) {
         	if (datapoints2.get(i).activityType > 5) {
-        	path_other.moveTo(getXPos(i), getYPos(datapoints2.get(i).score));
+        	path_other.moveTo(getXPos(i), getYPos(datapoints2.get(i).self_score));
         	startPoint = i;
         	break;
         	}
         }
         for (int i = startPoint; i < datapoints2.size(); i++) {
         	if (datapoints2.get(i).activityType > 5) {
-            path_other.lineTo(getXPos(i), getYPos(datapoints2.get(i).score));
+            path_other.lineTo(getXPos(i), getYPos(datapoints2.get(i).self_score));
         	}
         	
         }
@@ -516,7 +586,7 @@ public class LineChartView extends View {
 	 	            Bitmap resizedImg = getResizedBitmap(tmp, 25, 25);
 	 	            tmp.recycle();
 	 	            System.gc();
-	 	            canvas.drawBitmap(resizedImg, getXPos(i)-12, getYPos(datapoints.get(i).score)-10, p);
+	 	            canvas.drawBitmap(resizedImg, getXPos(i)-12, getYPos(datapoints.get(i).self_score)-10, p);
  	        	}
  	        }
         	break;
@@ -539,7 +609,7 @@ public class LineChartView extends View {
   	 	            Bitmap resizedImg = getResizedBitmap(tmp, 25, 25);
   	 	            tmp.recycle();
   	 	            System.gc();
-  	 	            canvas.drawBitmap(resizedImg, getXPos(i)-12, getYPos(datapoints2.get(i).score)-10, p);
+  	 	            canvas.drawBitmap(resizedImg, getXPos(i)-12, getYPos(datapoints2.get(i).self_score)-10, p);
   	        	}
   	        }
         	break;
@@ -579,7 +649,7 @@ public class LineChartView extends View {
     	else return DaybookFragment.filterButtonIsPressed[typeOfActivity]; 
     }
     
-    private void drawRectBar(Canvas canvas) {
+    private void drawRectBar(Canvas canvas) { //TODO: 
     	Paint p = new Paint();
     	
     	for (int i = 0; i < datapoints.size(); i++) {
@@ -639,6 +709,15 @@ public class LineChartView extends View {
 
         return value + offsetX;
     }
+    
+    private float getXPos2(float value) {
+        float width = getWidth() - getPaddingLeft() - getPaddingRight();
+        float maxValue = datapoints.size() - 1;
+
+
+        return 35*value+getPaddingLeft()+offsetX;
+    }
+    
     
     public Bitmap getLocalBitmap(Context con, int resourceId){
         InputStream inputStream = con.getResources().openRawResource(resourceId);

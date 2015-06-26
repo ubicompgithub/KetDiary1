@@ -91,7 +91,7 @@ public class MainActivity extends FragmentActivity {
 	private RelativeLayout count_down_layout;
 	private TextView count_down_text, count_down_label;
 
-	 private static final String TAG = "MAIN_ACTIVITY";
+	private static final String TAG = "MAIN_ACTIVITY";
 
 	private boolean canUpdate;
 	private CountDownTimer updateTestTimer = null;
@@ -115,7 +115,7 @@ public class MainActivity extends FragmentActivity {
 	
 	private int changeClock=0;
 	
-	public static final long WAIT_RESULT_TIME = 10*1000;
+	public static long WAIT_RESULT_TIME = PreferenceControl.getAfterCountDown() * 1000;
 	public static final int ACTION_RECORD = 1;
 	public static final int ACTION_QUESTIONNAIRE = 2;
 	
@@ -265,10 +265,10 @@ public class MainActivity extends FragmentActivity {
 			return;
 		}*/
 		//showResult();
-		
-		PreferenceControl.setInApp(true);
+		WAIT_RESULT_TIME = PreferenceControl.getAfterCountDown() * 1000;
+		PreferenceControl.setInApp(true);		
 		boolean inApp = PreferenceControl.getInApp();	
-		Log.d("InApp",String.valueOf(inApp));
+		Log.d("InApp",String.valueOf(inApp)+"WAIT_TIME: "+ WAIT_RESULT_TIME);
 		
 		long curTime = System.currentTimeMillis();
 		long testTime = PreferenceControl.getLatestTestCompleteTime();

@@ -28,6 +28,7 @@ import com.ubicomp.ketdiary.system.PreferenceControl;
 public class PreSettingActivity extends Activity {
 
 	private EditText uid, did, target_good, target, drink;
+	private EditText voltage1, voltage2, ACountDown, VCountDown;
 
 	private Button saveButton, exchangeButton, restoreButton, debugButton,
 			restoreVer1Button, dummyDataButton;
@@ -37,6 +38,7 @@ public class PreSettingActivity extends Activity {
 
 	private int mYear, mMonth, mDay;
 	private int lYear, lMonth, lDay;
+	private int v1, v2, aCount, vCount;
 
 	private TextView mDateDisplay;
 	private Button mPickDate;
@@ -78,7 +80,19 @@ public class PreSettingActivity extends Activity {
 
 		drink = (EditText) this.findViewById(R.id.target_drink_edit);
 		drink.setText(String.valueOf(PreferenceControl.getSavingDrinkCost()));
-
+		
+		voltage1 = (EditText) this.findViewById(R.id.voltage1_edit);
+		voltage1.setText(String.valueOf(PreferenceControl.getVoltag1()));
+		
+		voltage2 = (EditText) this.findViewById(R.id.voltage2_edit);
+		voltage2.setText(String.valueOf(PreferenceControl.getVoltag2()));
+		
+		ACountDown = (EditText) this.findViewById(R.id.after_countdown_edit);
+		ACountDown.setText(String.valueOf(PreferenceControl.getAfterCountDown()));
+		
+		VCountDown = (EditText) this.findViewById(R.id.voltage1_countdown_edit);
+		VCountDown.setText(String.valueOf(PreferenceControl.getVoltageCountDown()));
+		
 		mDateDisplay = (TextView) findViewById(R.id.date);
 		mPickDate = (Button) findViewById(R.id.date_button);
 
@@ -227,7 +241,7 @@ public class PreSettingActivity extends Activity {
 			boolean check = true;
 			if (text.length() < MIN_NAME_LENGTH)
 				check = false;
-			if (!text.startsWith("sober"))
+			if (!text.startsWith("rehab"))
 				check = false;
 
 			target_g = target_good.getText().toString();
@@ -249,7 +263,40 @@ public class PreSettingActivity extends Activity {
 				if (drink_t == 0)
 					check = false;
 			}
-			Toast.makeText(activity, String.valueOf(check), Toast.LENGTH_SHORT);
+			// new Add
+			if (voltage1.getText().toString().length() == 0)
+				check = false;
+			else {
+				v1 = Integer.valueOf(voltage1.getText().toString());
+				if (v1 == 0)
+					check = false;
+			}
+			
+			if (voltage2.getText().toString().length() == 0)
+				check = false;
+			else {
+				v2 = Integer.valueOf(voltage2.getText().toString());
+				if (v2 == 0)
+					check = false;
+			}
+			
+			if (ACountDown.getText().toString().length() == 0)
+				check = false;
+			else {
+				aCount = Integer.valueOf(ACountDown.getText().toString());
+				if (aCount == 0)
+					check = false;
+			}
+			
+			if (VCountDown.getText().toString().length() == 0)
+				check = false;
+			else {
+				vCount = Integer.valueOf(VCountDown.getText().toString());
+				if (vCount == 0)
+					check = false;
+			}
+			
+			Toast.makeText(activity, String.valueOf(check), Toast.LENGTH_SHORT).show();
 			
 			if (check) {
 				PreferenceControl.setUID(text);
@@ -257,6 +304,12 @@ public class PreSettingActivity extends Activity {
 				
 				PreferenceControl.setIsDeveloper(developer_switch.isChecked());
 				PreferenceControl.setGoal(target_g, target_t, drink_t);
+				
+				PreferenceControl.setVoltage1(v1);
+				PreferenceControl.setVoltage2(v2);
+				PreferenceControl.setAfterCountDown(aCount);
+				PreferenceControl.setVoltageCountDown(vCount);
+				
 				PreferenceControl.setStartDate(mYear, mMonth, mDay);
 
 				PreferenceControl.setLocked(lDateCheckBox.isChecked());

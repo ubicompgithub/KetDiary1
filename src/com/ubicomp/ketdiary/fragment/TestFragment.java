@@ -1,6 +1,7 @@
 package com.ubicomp.ketdiary.fragment;
 
 import java.io.File;
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.util.Random;
 
@@ -43,7 +44,6 @@ import com.ubicomp.ketdiary.camera.ImageFileHandler;
 import com.ubicomp.ketdiary.camera.Tester;
 import com.ubicomp.ketdiary.db.TestDataParser2;
 import com.ubicomp.ketdiary.dialog.NoteDialog3;
-import com.ubicomp.ketdiary.dialog.TestQuestionCaller;
 import com.ubicomp.ketdiary.dialog.TestQuestionCaller2;
 import com.ubicomp.ketdiary.file.ColorRawFileHandler;
 import com.ubicomp.ketdiary.file.MainStorage;
@@ -70,7 +70,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private TextView label_btn, label_subtitle, label_title, debug_msg, test_msg;
 	private ImageView img_bg, img_ac, img_btn, img_info, img_water1, img_water2, img_water3, img_face;
 	
-	private boolean debug = PreferenceControl.isDeveloper();
+	private boolean isDeveloper = PreferenceControl.isDeveloper();
+	private boolean debug = PreferenceControl.isDebugMode();
 	
 	//debug View
 	private ScrollView debugScrollView;
@@ -178,11 +179,15 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private static final int FIRST_VOLTAGE_THRESHOLD = 50; 
 	private static final int SECOND_VOLTAGE_THRESHOLD= 40;
 	*/
-	private static final int FIRST_VOLTAGE_THRESHOLD = 75; 
-	private static final int SECOND_VOLTAGE_THRESHOLD= 60;
+	//private static final int FIRST_VOLTAGE_THRESHOLD = 75; 
+	//private static final int SECOND_VOLTAGE_THRESHOLD= 60;
+	
+	private static int FIRST_VOLTAGE_THRESHOLD = PreferenceControl.getVoltag1(); 
+	private static int SECOND_VOLTAGE_THRESHOLD= PreferenceControl.getVoltag2();
+	private static int CAMERATIMEOUT = PreferenceControl.getVoltageCountDown();
 	
 	private static final int TIMEOUT_SECOND = 30;
-	private static final int CAMERATIMEOUT = 10;
+	//private static final int CAMERATIMEOUT = 10;
 	private static final int CONFIRM_SECOND = 5;
 	
 	private static final int FAIL_STATE = -1;
@@ -217,7 +222,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		msgHandler = new ChangeMsgHandler();
 		resultState = PreferenceControl.getAfterTestState();
 		
-		
+		Log.d(TAG1, debug+" "+isDeveloper);
 		/*
 		if (soundpool == null) {
 			soundpool = new SoundPool(1, AudioManager.STREAM_MUSIC, 1);
@@ -358,7 +363,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			
 			
 			
-			if(debug){
+			if(isDeveloper){
 				setState(new DoneState());
 			}
 			else{
@@ -894,6 +899,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		// dismiss sleep
 		//getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		checkDebug(is_debug);//PreferenceControl.isDebugMode());
+		checkPreference();
 		//reset();
 		long curTime = System.currentTimeMillis();
 		long testTime = PreferenceControl.getLatestTestCompleteTime();
@@ -1318,13 +1324,11 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		
 		if( voltage > FIRST_VOLTAGE_THRESHOLD )
 			voltage_count++;
-		
-		
-		
+	
 		String str = String.valueOf(voltage);
-		String str2 = String.valueOf(header);
+		String str2 = String.format("%02x", header & 0xff);
 		
-		String str3= " "+str2+" "+str;
+		String str3= System.currentTimeMillis()+" "+state+" "+str2+" "+str;
 		Log.i(TAG2, str3);
 		
 		showDebug(">"+str3);
@@ -1424,6 +1428,16 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		}		
 	}
 	
+	private void checkPreference(){
+		FIRST_VOLTAGE_THRESHOLD = PreferenceControl.getVoltag1(); 
+		SECOND_VOLTAGE_THRESHOLD= PreferenceControl.getVoltag2();
+		CAMERATIMEOUT = PreferenceControl.getVoltageCountDown();
+		isDeveloper = PreferenceControl.isDeveloper();
+		debug = PreferenceControl.isDebugMode();
+		
+		Log.d(TAG1, "V1: "+FIRST_VOLTAGE_THRESHOLD+" V2: "+SECOND_VOLTAGE_THRESHOLD+" TIMEOUT: "+CAMERATIMEOUT);
+		Log.d(TAG1, "isDeveloper: "+isDeveloper+" debug: "+debug);
+	}
 	
 	
 	private void checkDebug(boolean debug) {

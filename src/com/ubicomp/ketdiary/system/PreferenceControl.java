@@ -41,7 +41,7 @@ public class PreferenceControl {
 	
 	/** Default setting at the first time of launching SoberDiary */
 	public static void defaultSetting() {
-		setUID("sober_default_test");
+		setUID("rehab_default_test");
 		setDeviceId("ket_000");
 		setIsDeveloper(true);
 		Calendar cal = Calendar.getInstance();
@@ -55,7 +55,7 @@ public class PreferenceControl {
 	 * @return uid (default: sober_default_test)
 	 */
 	public static String getUID() {
-		return sp.getString("uid", "sober_default_test");
+		return sp.getString("uid", "rehab_default_test");
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class PreferenceControl {
 	 * @return true of the UID is default UID
 	 */
 	public static boolean defaultCheck() {
-		return getUID().equals("sober_default_test");
+		return getUID().equals("rehab_default_test");
 	}
      
 	
@@ -188,10 +188,50 @@ public class PreferenceControl {
 		edit.putInt("IsFilled", isFilled);
 		edit.commit();
 	}
-
+	
+	
+	public static int getVoltag1() {
+		return sp.getInt("Voltage1", 75);
+	}
+	
+	public static void setVoltage1(int voltage1) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putInt("Voltage1", voltage1);
+		edit.commit();
+	}
+	
+	public static int getVoltag2() {
+		return sp.getInt("Voltage2", 60);
+	}
+	
+	public static void setVoltage2(int voltage2) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putInt("Voltage2", voltage2);
+		edit.commit();
+	}
+	
+	public static int getAfterCountDown() {
+		return sp.getInt("AfterCountDown", 10);
+	}
+	
+	public static void setAfterCountDown(int afterCountDown) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putInt("AfterCountDown", afterCountDown);
+		edit.commit();
+	}
+	
+	public static int getVoltageCountDown() {
+		return sp.getInt("VoltageCountDown", 10);
+	}
+	
+	public static void setVoltageCountDown(int voltageCountDown) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putInt("VoltageCountDown", voltageCountDown);
+		edit.commit();
+	}
 	// haven't use
 	/**
-	 * Check if it is the first time launching SoberDiary
+	 * Check if it is the first time launching RehabDiary
 	 * 
 	 * @return true if UID is ""
 	 */

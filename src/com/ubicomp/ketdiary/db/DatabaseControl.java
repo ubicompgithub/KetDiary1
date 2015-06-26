@@ -185,22 +185,22 @@ public class DatabaseControl {
 		}
 	}
 	
-	public TestResult getDayTestResult(int rYear, int rMonth, int rDay) {
+	public TestResult getDayTestResult(int Year, int Month, int Day) {
 		synchronized (sqlLock) {
 
 			db = dbHelper.getReadableDatabase();
 			String sql;
 			Cursor cursor;
 
-			sql = "SELECT * FROM TestResult WHERE year = " + rYear
-					+ " AND month = " + rMonth + " AND day = "
-					+ rDay +" AND isPrime = 1";
+			sql = "SELECT * FROM TestResult WHERE year = " + Year
+					+ " AND month = " + Month + " AND day = "
+					+ Day +" AND isPrime = 1";
 			cursor = db.rawQuery(sql, null);
 			int count = cursor.getCount();
 			if (!cursor.moveToFirst()) {
 				cursor.close();
 				db.close();
-				return new TestResult(0, 0, "ket_default", 0, 0, 0, 0);
+				return new TestResult(-1, 0, "ket_default", 0, 0, 0, 0);
 			}
 			
 
@@ -743,6 +743,55 @@ public class DatabaseControl {
 			return data;
 		}
 	}
+	
+	
+	public NoteAdd[] getDayNoteAddbyCategory(int rYear, int rMonth, int rDay, int category) {
+		synchronized (sqlLock) {
+			NoteAdd[] data = null;
+
+			db = dbHelper.getReadableDatabase();
+			String sql;
+			Cursor cursor;
+
+			sql = "SELECT * FROM NoteAdd WHERE recordYear = " + rYear
+					+ " AND recordMonth = " + rMonth + " AND recordDay = "
+					+ rDay +" AND category = " + category + " ORDER BY id DESC";
+			cursor = db.rawQuery(sql, null);
+			int count = cursor.getCount();
+			if (count == 0) {
+				cursor.close();
+				db.close();
+				return null;
+			}
+
+			data = new NoteAdd[count];
+
+			for (int i = 0; i < count; ++i) {
+				cursor.moveToPosition(i);
+				int isAfterTest = cursor.getInt(1);
+				long ts = cursor.getLong(5);
+				int year = cursor.getInt(7);
+				int month = cursor.getInt(8);
+				int day = cursor.getInt(9);
+				int timeslot = cursor.getInt(10);
+				int category2 = cursor.getInt(11);
+				int type = cursor.getInt(12);
+				int items = cursor.getInt(13);
+				int impact = cursor.getInt(14);
+				String reason = cursor.getString(15);
+				int weeklyScore = cursor.getInt(16);
+				int score = cursor.getInt(17);
+				data[i] = new NoteAdd(isAfterTest, ts, year, month, day, 
+						timeslot, category, type, items, impact, reason, weeklyScore, score);
+			}
+
+			cursor.close();
+			db.close();
+
+			return data;
+		}
+	}
+	
 	
 	/**
 	 * Get if there are EmotionManagement results at the date
