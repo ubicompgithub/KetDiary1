@@ -333,7 +333,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
 
                 if (mCalendar.get(Calendar.DAY_OF_MONTH) == selectedDay && mCalendar.get(Calendar.MONTH) == selectedMonth) {
                     selectedView = cellView;
-                    calDateText.setTextColor(context.getResources().getColor(R.color.blue));
+                    calDateText.setTextColor(context.getResources().getColor(R.color.black));
                 }
             }
             

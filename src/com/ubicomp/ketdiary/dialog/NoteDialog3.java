@@ -141,7 +141,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 	
 	protected void setting() {
 		
-	day = 0;
+		day = 0;
 		type = -1;
 		items = -1;
 		impact = 0 ;
@@ -617,7 +617,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 	    }
 	}
 	
-	//把所選取的結果送出 
+	//把所選取的結果取消
 	class CancelOnClickListener implements View.OnClickListener{
 		public void onClick(View v){
 			
@@ -640,6 +640,30 @@ public class NoteDialog3 implements ChooseItemCaller{
 			}
 		}
 	}
+	
+	//把所選取的結果取消
+		class CancelGoCopingOnClickListener implements View.OnClickListener{
+			public void onClick(View v){
+				
+				if(state == STATE_NOTE){
+					//impact = impactSeekBar.getProgress();
+					testQuestionCaller.writeQuestionFile(day, timeslot, -1, -1, -1, edtext.getText().toString());
+					
+					PreferenceControl.setIsFilled(0);
+					
+					copingSettingToResult();
+					//questionFile.write(0, 0, 0);
+					//startActivity(new Intent(that, EventCopeSkillActivity.class));
+				}
+				else if(state == STATE_KNOW){
+					knowing_index--;
+					if(knowing_index<0)
+						knowing_index+=knowing_msg.length;
+					tv_knowdlege.setText(knowing_msg[knowing_index]);
+					//tv_knowdlege.setText(DBTip.inst.getTip());
+				}
+			}
+		}
 	
 	class GoResultOnClickListener implements View.OnClickListener{
 		public void onClick(View v){

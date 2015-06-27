@@ -19,13 +19,15 @@
     </RelativeLayout>
     
     <ImageView
-      	android:id="@+id/add_button"
-        android:layout_height="wrap_content"
+        android:id="@+id/add_button"
         android:layout_width="wrap_content"
-        android:background="@drawable/mybutton_add"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:alpha="0.5"
+        android:background="@drawable/mybutton_add"
         android:clickable="true" >
+
 	</ImageView>
 	    
     

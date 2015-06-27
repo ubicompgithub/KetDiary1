@@ -109,7 +109,7 @@ public class LineChartView extends View {
     		testResult = db.getDayTestResult(year, month, day);    		
     		result = testResult.getResult();
     		
-    		noteAdd = db.getDayNoteAddbyCategory(year, month, day, 1);
+    		noteAdd = db.getDayNoteAddbyCategory(year, month, day, 0);
     		if(noteAdd!= null){
     			for(int j=0; j<noteAdd.length; j++){
     				count++;
@@ -122,7 +122,7 @@ public class LineChartView extends View {
     			
     		}
     		count = 0;
-    		noteAdd = db.getDayNoteAddbyCategory(year, month, day, 2);
+    		noteAdd = db.getDayNoteAddbyCategory(year, month, day, 1);
     		if(noteAdd!= null){
     			for(int j=0; j<noteAdd.length; j++){
     				count++;
@@ -693,38 +693,6 @@ public class LineChartView extends View {
         	}
         	
         }
-        /*
-        if (checkLineChartType() <2 ) {
-	        path.moveTo(getXPos(0), getYPos(datapoints.get(0).score));
-	        for (int i = 1; i < datapoints.size(); i++) {
-	            path.lineTo(getXPos(i), getYPos(datapoints.get(i).score));
-	        }
-	
-	        paint.setStyle(Style.STROKE);
-	        paint.setStrokeWidth(4);
-	        paint.setColor(getResources().getColor(R.color.path_normal));
-	        paint.setAntiAlias(true);
-	        paint.setShadowLayer(4, 2, 2, 0x80000000);
-	        canvas.drawPath(path, paint);
-	        paint.setShadowLayer(0, 0, 0, 0);
-        }
-        else {
-        
-            paint.setStyle(Style.STROKE);
-	        paint.setStrokeWidth(4);
-	        paint.setColor(getResources().getColor(R.color.path_other_color));
-	        paint.setAntiAlias(true);
-	        paint.setShadowLayer(4, 2, 2, 0x80000000);
-	        canvas.drawPath(path_other, paint);
-	        
-	        Paint paint_self = paint;
-	        paint_self.setColor(getResources().getColor(R.color.path_self_color));
-	        canvas.drawPath(path_self, paint_self);
-	        
-	        paint.setShadowLayer(0, 0, 0, 0);
-	        paint_self.setShadowLayer(0, 0, 0, 0);
-        }
-        */
         switch (checkLineChartType()) {
         
         case 0: {
