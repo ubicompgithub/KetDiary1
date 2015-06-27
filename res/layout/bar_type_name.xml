@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="horizontal"
-    android:layout_marginBottom="15dp" >
+    android:layout_marginBottom="10dp" >
 
     <TextView
         android:id="@+id/type_title"
@@ -12,25 +12,25 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="-5dp"
         android:layout_marginBottom="0dp"
         android:text="Medium Text"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/dark_gray"
         android:textSize="16sp" />
 
-    <EditText
+    <TextView
         android:id="@+id/type_content"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="50dp"
         android:layout_gravity="center"
+        android:gravity="center"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/white"
-        android:ems="10"
-        android:paddingLeft="8dip"
+        android:layout_marginTop="-5dp"
+        android:paddingLeft="8dp"
+        android:text=""
         android:textColor="@color/dark_gray"
-        android:textColorHint="@color/dark_gray" />
+        android:textSize="16sp" />
 
 </LinearLayout>

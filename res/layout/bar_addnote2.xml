@@ -38,7 +38,7 @@
         	android:layout_height="match_parent"
         	android:gravity="center"
         	android:layout_weight="3"
-        	android:src="@drawable/dropdown_arrow"
+        	android:src="@drawable/down_arrow_change"
         	android:paddingEnd="5dp" />
     </LinearLayout>
     
@@ -65,7 +65,7 @@
         	android:layout_height="match_parent"
         	android:gravity="center"
         	android:layout_weight="3"
-        	android:src="@drawable/dropdown_arrow"
+        	android:src="@drawable/down_arrow_change"
         	android:paddingEnd="5dp" />
     </LinearLayout>
 

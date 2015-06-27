@@ -559,7 +559,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 	
 	private void SetListItem(int array){
 		//ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, android.R.layout.simple_list_item_1);
-		
+		items = -1;
 		sp_content.setText(""); //TODO: 假如點到同一個不要清掉
 		ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, R.layout.my_listitem);
 		listView.setAdapter(adapter);
@@ -588,40 +588,6 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		//.setOnItemSelectedListener(new SpinnerXMLSelectedListener());
 	}
 	
-	private class DateSelectedListener implements OnItemSelectedListener{
-		@Override
-		public void onItemSelected(AdapterView<?> arg0, View view, int arg2, long arg3) {
-			day = arg2;
-			//Log.d(TAG, view.toString());
-			//items = 100*type + arg2;
-			//Log.d(TAG, items+"");
-			//Toast.makeText(getContext(), "你選的是"+items.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
-            //view2.setText("你使用什么样的手机："+adapter2.getItem(arg2));  
-        }  
-  
-        public void onNothingSelected(AdapterView<?> arg0) {  
-        	day = 1;
-        }  
-	}
-	
-	private class TimeslotSelectedListener implements OnItemSelectedListener{
-		@Override
-		public void onItemSelected(AdapterView<?> arg0, View view, int arg2, long arg3) {
-			timeslot = arg2;
-			//Log.d(TAG, view.toString());
-			//items = 100*type + arg2;
-			//Log.d(TAG, items+"");
-			//Toast.makeText(getContext(), "你選的是"+items.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
-            //view2.setText("你使用什么样的手机："+adapter2.getItem(arg2));  
-        }  
-  
-        public void onNothingSelected(AdapterView<?> arg0) {  
-        	timeslot = 1;
-        }  
-	}
-	
-	
-	
 
 	class MyOnLongClickListener implements OnLongClickListener{
 	    public boolean onLongClick(View v){
@@ -635,7 +601,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 	class EndOnClickListener implements View.OnClickListener{
 		public void onClick(View v){
 			
-			Log.d(TAG, items+"\t"+impact);
+			Log.d(TAG, items+" "+impact);
 			if(state == STATE_NOTE){
 				if(type <= 0 || items < 100){
 					//CustomToastSmall.generateToast(R.string.note_check);
