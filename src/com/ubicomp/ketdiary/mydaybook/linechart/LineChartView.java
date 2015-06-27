@@ -104,7 +104,7 @@ public class LineChartView extends View {
     		int year = currentDay.get(Calendar.YEAR);
     		int month = currentDay.get(Calendar.MONTH);
     		int day = currentDay.get(Calendar.DAY_OF_MONTH);;
-    		int result;
+    		int result = -1;
     		
     		testResult = db.getDayTestResult(year, month, day);    		
     		result = testResult.getResult();

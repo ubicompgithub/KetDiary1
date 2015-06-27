@@ -61,7 +61,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private ViewPager mViewPager;
-	private LinearLayout diaryList, boxesLayout, drawerContent;
+	private LinearLayout diaryList, boxesLayout, drawerContent, caltoggleLayout, charttoggleLayout;
 	private RelativeLayout upperBarContent;
 	private TextView titleText, backToTodayText;
 	private View diaryItem;
@@ -176,18 +176,19 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		backToTodayText = (TextView) view.findViewById(R.id.back_to_today);
 		backToTodayText.setText(Integer.toString(Calendar.getInstance().get(Calendar.DAY_OF_MONTH)));
 		
+		caltoggleLayout = (LinearLayout) view.findViewById(R.id.toggle_layout);
 		titleText = (TextView) view.findViewById(R.id.month_text);
 		
 		drawer = (SlidingDrawer) view.findViewById(R.id.slidingDrawer1);
 		toggle = (ImageView) view.findViewById(R.id.toggle);
 		linechartIcon = (ImageView) view.findViewById(R.id.linechart_icon);
-	
 		lineChartBar = (View) inflater.inflate(R.layout.linechart_upperbar, null, false);
 		lineChartView = (View) inflater.inflate(R.layout.linechart_main, null, false);
 		lineChartFilter = (View) inflater.inflate(R.layout.linechart_filter, null, false);
 		rotateLineChart = (ImageView) lineChartBar.findViewById(R.id.rotate_button);
 	    calendarIcon = (ImageView) lineChartBar.findViewById(R.id.back_to_calendar);
 	    toggle_linechart = (ImageView) lineChartBar.findViewById(R.id.toggle_linechart);
+	    charttoggleLayout = (LinearLayout) lineChartBar.findViewById(R.id.toggle_layout);
 	    
 	    addButton = (ImageView) view.findViewById(R.id.add_button);
 		filterAll = (ImageView) lineChartFilter.findViewById(R.id.filter_all);
@@ -217,9 +218,14 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		setCurrentCalendarPage(THIS_MONTH + 1 - Database.START_MONTH);
 		titleText.setText( (THIS_MONTH + 1)  + "月");
 		
+		
+		charttoggleLayout.setOnClickListener(new ToggleListener() );
+		caltoggleLayout.setOnClickListener(new ToggleListener() );
+		//caltoggleLayout.setOnClickListener(new ToggleListener() );
 		toggle_linechart.setOnClickListener(new ToggleListener());
 		toggle.setOnClickListener(new ToggleListener());
 		titleText.setOnClickListener(new ToggleListener());
+		
 		
 		//for ( int i = 0; i < 9; i++ ) { filterList.add(i);} 
 	
@@ -442,10 +448,6 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	}
 	
 
-	private float[] getRandomData() {
-        return new float[] { 0, -3, 1, -2, -1, -3, 3, 2, 0, 1, -2, -1, 2, -2, 0, 1, -3, -1, 2, -1, 1, 3};
-    }
-	
 	public void setChartType(int type) {
 		chart_type = type;
 		switch (chart_type) {
@@ -525,6 +527,9 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	public void onResume() {
 		super.onResume();
 		
+		for(int i=0; i<filterButtonIsPressed.length; i++)
+			filterButtonIsPressed[i] = false;
+		filterButtonIsPressed[0] = true;
 		//setCurrentCalendarPage(selectedMonth + 1 - Database.START_MONTH);
 		
 		sv.fullScroll(View.FOCUS_DOWN);
@@ -583,6 +588,12 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		
 		if(noteAdds.length!=0){
 			for(int i=0; i < noteAdds.length; i++){
+				int type = noteAdds[i].getType();
+				if(type > 0 && type <=8){
+					if(!filterButtonIsPressed[type] && !filterButtonIsPressed[0])
+						continue;
+				}
+				
 				//LayoutInflater inflater = LayoutInflater.from(context);
 				diaryItem = inflater.inflate(R.layout.diary_item, null);
 				LinearLayout layout = (LinearLayout)diaryItem.findViewById(R.id.diary_layout);
@@ -613,7 +624,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			int date = noteAdds[i].getRecordTv().getDay();
 			int dayOfweek = noteAdds[i].getRecordTv().getDayOfWeek();
 			int slot = noteAdds[i].getTimeSlot();
-			int type = noteAdds[i].getType();
+			type = noteAdds[i].getType();
 			int items = noteAdds[i].getItems();
 			String descripton = noteAdds[i].getDescription();
 			int impact = noteAdds[i].getImpact();
@@ -860,6 +871,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
     		}	
     		}
     		updateCalendarView();
+    		showDiary();
     	}
     }
     	
@@ -897,7 +909,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		if( TDP!= null ){
 			//TDP.startAddNote();
 			//TDP.getQuestionResult2(textFile)
-			TDP.startAddNote3(0, day, timeslot, type, items, impact, description);
+			TDP.startAddNote2(0, day, timeslot, type, items, impact, description);
 		}
 	}
     

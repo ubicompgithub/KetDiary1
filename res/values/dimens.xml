@@ -49,8 +49,10 @@
     <dimen name="chart_label_gap">3dp</dimen>
     <dimen name="chart_label_top">6dp</dimen>
     <dimen name="chart_label_top2">16dp</dimen>
-    <dimen name="drawer_normal_height">325dp</dimen>
-    <dimen name="drawer_with_filter_height">384dp</dimen>
+    
+    <dimen name="drawer_normal_height">280dp</dimen>
+    <dimen name="drawer_with_filter_height">330dp</dimen>
+    
     <dimen name="filter_normal_height">58dp</dimen>
     <dimen name="filter_landscape_height">45dp</dimen>
     <dimen name="filter_button_width">30dp</dimen>

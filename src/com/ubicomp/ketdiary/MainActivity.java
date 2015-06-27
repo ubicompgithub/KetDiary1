@@ -652,6 +652,10 @@ public class MainActivity extends FragmentActivity {
 				return true;
 			} else {
 				if (clickable) {
+					
+					
+					
+					
 					return super.onKeyUp(keyCode, event);
 				} else
 					return true;

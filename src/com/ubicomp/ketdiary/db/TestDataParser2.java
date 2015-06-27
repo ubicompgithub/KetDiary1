@@ -9,11 +9,13 @@ import android.content.Context;
 import android.util.Log;
 
 import com.ubicomp.ketdiary.App;
+import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.ui.CustomToast;
 
 /**
  * Handle the BrAC detection data
@@ -170,21 +172,17 @@ public class TestDataParser2 {
 			return;
 		}
 
-		long timestamp = ts;
 		if(ts == 0)
 			ts = System.currentTimeMillis();
 		
 		noteAdd = new NoteAdd(isAfterTest, ts, year, month, date, timeslot, category, type, items, impact, descripiton, 0, 0);
-		boolean update = false;
-		if (timestamp == PreferenceControl.getUpdateDetectionTimestamp())
-			update = true;
-		PreferenceControl.setUpdateDetection(false);
-		//PreferenceControl.setUpdateDetectionTimestamp(0);
+
+
 		
-		db.insertNoteAdd(noteAdd);
+		int addScore  = db.insertNoteAdd(noteAdd);
+		CustomToast.generateToast(R.string.note_done, addScore);
 		
-		//db.addTestResult(testResult);
-		//DBControl.inst.addNoteAdd(noteAdd);
+
 	}
 	
 	/** start to handle the noteAdd data */

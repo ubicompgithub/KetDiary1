@@ -75,9 +75,9 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 	private Button bt_confirm, bt_cancel;
 	private SeekBar impactSeekBar;
 	private TextView text_self, text_other, text_item, text_impact, text_description,
-	     tv_knowdlege, tv_title, note_title, sp_content, date_txt, timeslot_txt, title_txt;
+	     tv_knowdlege, tv_title, note_title, sp_content, date_txt, timeslot_txt, title_txt, typetext;
 	
-	private EditText edtext, typetext;
+	private EditText edtext;
 	private ListView listView;
 	
 	private String[] coping_msg;
@@ -246,14 +246,14 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 			
 		//Type
 		LinearLayout type_layout = (LinearLayout) inflater.inflate(
-				R.layout.bar_description, null);
+				R.layout.bar_type_name, null);
 		
-		TextView type_title = (TextView)type_layout.findViewById(R.id.description_title);
+		TextView type_title = (TextView)type_layout.findViewById(R.id.type_title);
 		type_title.setText("事件類型：");
 		type_title.setTypeface(Typefaces.getWordTypefaceBold());
-		typetext = (EditText)type_layout.findViewById(R.id.description_content);
-		typetext.setEnabled(false);
-		typetext.setBackground(null);
+		typetext = (TextView)type_layout.findViewById(R.id.type_content);
+		typetext.setTypeface(Typefaces.getWordTypefaceBold());
+
 		
 		//Spinner
 		LinearLayout spinner_layout = (LinearLayout) inflater.inflate(
@@ -778,7 +778,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		        case R.id.vts_iv_cry:
 		        	resetView();
 		        	iv_cry.setImageResource(R.drawable.emoji5_pressed);
-		        	typetext.setHint(R.string.note_negative);
+		        	typetext.setText(R.string.note_negative);
 		        	
 		        	SetListItem(R.array.note_negative);
 		        	//listViewShowHide();
@@ -789,7 +789,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		        case R.id.vts_iv_not_good:
 		        	resetView();
 		        	iv_not_good.setImageResource(R.drawable.emoji2_pressed);
-		        	typetext.setHint(R.string.note_notgood);
+		        	typetext.setText(R.string.note_notgood);
 		        	
 		        	SetListItem(R.array.note_notgood);
 		        	//SetItem(sp_item,R.array.note_notgood);
@@ -799,7 +799,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		        case R.id.vts_iv_smile:
 		        	resetView();
 		        	iv_smile.setImageResource(R.drawable.emoji4_pressed);
-		        	typetext.setHint(R.string.note_positive);
+		        	typetext.setText(R.string.note_positive);
 		        	
 		        	SetListItem(R.array.note_positive);
 		        	//SetItem(sp_item, R.array.note_positive);
@@ -809,7 +809,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		        case R.id.vts_iv_try:
 		        	resetView();
 		        	iv_try.setImageResource(R.drawable.emoji1_pressed);
-		        	typetext.setHint(R.string.note_selftest);
+		        	typetext.setText(R.string.note_selftest);
 		        	
 		        	SetListItem(R.array.note_selftest);
 		        	//SetItem(sp_item,R.array.note_selftest);
@@ -819,7 +819,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		        case R.id.vts_iv_urge:
 		        	resetView();
 		        	iv_urge.setImageResource(R.drawable.emoji3_pressed);
-		        	typetext.setHint(R.string.note_temptation);
+		        	typetext.setText(R.string.note_temptation);
 		        	
 		        	SetListItem(R.array.note_temptation);
 		        	//SetItem(sp_item,R.array.note_temptation);
@@ -829,7 +829,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		        case R.id.vts_iv_playing:
 		        	resetView();
 		        	iv_playing.setImageResource(R.drawable.others_emoji1_oressed);
-		        	typetext.setHint(R.string.note_play);
+		        	typetext.setText(R.string.note_play);
 		        	
 		        	SetListItem(R.array.note_play);
 		        	//SetItem(sp_item,R.array.note_play);
@@ -839,7 +839,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		        case R.id.vts_iv_social:
 		        	resetView();
 		        	iv_social.setImageResource(R.drawable.others_emoji2_pressed);
-		        	typetext.setHint(R.string.note_social);
+		        	typetext.setText(R.string.note_social);
 		        	
 		        	SetListItem(R.array.note_social);
 		        	//SetItem(sp_item,R.array.note_social);
@@ -849,7 +849,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		        case R.id.vts_iv_conflict:
 		        	resetView();
 		        	iv_conflict.setImageResource(R.drawable.others_emoji3_pressed);
-		        	typetext.setHint(R.string.note_conflict);
+		        	typetext.setText(R.string.note_conflict);
 		        	
 		        	SetListItem(R.array.note_conflict);
 		        	//SetItem(sp_item,R.array.note_conflict);

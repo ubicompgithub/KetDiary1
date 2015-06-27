@@ -12,26 +12,33 @@
 	        android:layout_alignParentLeft="true"
 	        android:layout_marginLeft="15dp"
 	        android:layout_marginTop="10dp"/>
-	    <TextView
-	        android:id="@+id/month_text_chart"
+	    
+	    <LinearLayout
+	        android:id="@+id/toggle_layout"
 	        android:layout_width="wrap_content"
 	        android:layout_height="match_parent"
-	        android:layout_toRightOf="@+id/back_to_calendar"       
-	        android:text=" 6月"
-	        android:textColor="@color/text_color"
-	        android:textAppearance="?android:attr/textAppearanceLarge"
-	        android:layout_marginLeft="2dp"
-	        android:layout_marginTop="10dp" />
+	        android:layout_toLeftOf="@+id/rotate_button"
+	        android:layout_toRightOf="@+id/back_to_calendar"
+	        android:orientation="horizontal" >
+
+	    	<TextView
+	       	 	android:id="@+id/month_text_chart"
+	        	android:layout_width="wrap_content"
+	        	android:layout_height="match_parent"   
+	        	android:text=" 6月"
+	        	android:textColor="@color/text_color"
+	        	android:textAppearance="?android:attr/textAppearanceLarge"
+	        	android:layout_marginLeft="2dp"
+	        	android:layout_marginTop="10dp" />
 	    
-	    <ImageView
-			android:id="@+id/toggle_linechart"
-			android:src="@drawable/dropup_arrow"
-			android:layout_width="15dip"
-			android:layout_height="wrap_content"
-			android:clickable="true"
-			android:layout_toRightOf="@+id/month_text_chart"
-			android:layout_marginTop="15dp"
-			android:layout_marginLeft="8dp" />
+	    	<ImageView
+				android:id="@+id/toggle_linechart"
+				android:src="@drawable/dropup_arrow"
+				android:layout_width="15dip"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="15dp"
+				android:layout_marginLeft="8dp" />
+	    </LinearLayout>
 	    
 	    <ImageView
 			android:id="@+id/rotate_button"

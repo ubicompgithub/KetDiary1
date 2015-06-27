@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -116,7 +117,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
         		
         View cellView;
         TextView calDateText;
-        ImageView calDot1, calDot2, calDot3;
+        ImageView calDot1, calDot2, calDot3, date_result;
         int result;
         NoteAdd[] noteAdds;
         TestResult testResult=null;
@@ -128,6 +129,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
             calDot1 = (ImageView) cellView.findViewById(R.id.iv_calendar_dot1);
             calDot2 = (ImageView) cellView.findViewById(R.id.iv_calendar_dot2);
             calDot3 = (ImageView) cellView.findViewById(R.id.iv_calendar_dot3);
+            date_result = (ImageView) cellView.findViewById(R.id.iv_date_result);
             
             calDot1.setVisibility(View.INVISIBLE);
             calDot2.setVisibility(View.INVISIBLE);
@@ -141,11 +143,12 @@ public class SectionsPagerAdapter extends PagerAdapter {
                 @Override
                 public void onClick(View v) {
 
-                    if(selectedView != v){
+                    if(selectedView != v){//TODO: set future and before unclickable
                         int selectedPageMonth = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_PAGE_MONTH).toString());
                         int selectedMonth = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_MONTH).toString());
                         TextView selectedDayTextView = (TextView) selectedView.findViewById(R.id.tv_calendar_date);
-
+                        selectedDayTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                        
                         if(selectedPageMonth == selectedMonth)  // If selected month is exactly current page month
                             selectedDayTextView.setTextColor(context.getResources().getColor(R.color.white));
                         else
@@ -154,12 +157,15 @@ public class SectionsPagerAdapter extends PagerAdapter {
                         // Set the new selected day
                         selectedView = v;
                         TextView newSelectedDayTextView = (TextView) selectedView.findViewById(R.id.tv_calendar_date);
-                        newSelectedDayTextView.setTextColor(context.getResources().getColor(R.color.black));
+                        newSelectedDayTextView.setTextColor(context.getResources().getColor(R.color.black));                       
+                        newSelectedDayTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                         
                         int selectedYear = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_YEAR).toString());
                         selectedMonth = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_MONTH).toString());
                         int selectedDay = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_DAY).toString());
                         DaybookFragment.scrolltoItem(selectedYear, selectedMonth, selectedDay);
+                        
+                       
                     }
                     
                     // sv.smoothScrollTo(0 , 270*(Integer.parseInt(parsed_date[0])+4)-1350-900);
@@ -249,16 +255,19 @@ public class SectionsPagerAdapter extends PagerAdapter {
             		if(testResult.getTv().getTimestamp() != 0){
             			result = testResult.getResult();
             			if(result == 0)
-            				calDateText.setBackgroundResource(R.drawable.bigbluedot);
+            				date_result.setImageResource(R.drawable.bigbluedot);
             			else if(result == 1){
-            				calDateText.setBackgroundResource(R.drawable.bigreddot);
+            				date_result.setImageResource(R.drawable.bigreddot);
             			}
             		}
             		else{
-            			calDateText.setBackgroundResource(R.drawable.biggraydot);
+            			date_result.setImageResource(R.drawable.biggraydot);
             		}
             		calDateText.setTextColor(context.getResources().getColor(R.color.white));
             	}
+            	else if(mCalendar.getTimeInMillis() < startDay.getTimeInMillis())
+            		calDateText.setTextColor(context.getResources().getColor(R.color.date_before_gray));
+            	
             	else{
             		calDateText.setTextColor(context.getResources().getColor(R.color.text_gray2));
             	}

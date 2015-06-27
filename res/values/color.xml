@@ -32,6 +32,7 @@
     <color name="blue">#FF7dcdff</color>
     <color name="text_gray3">#FF9E9E9F</color>
     <color name="text_bg_gray">#FFf7f7f7</color>
+    <color name="date_before_gray">#FFdcdada</color>
     
     <color name="background_color">#888888</color>
     <color name="text_color">#B3B3B4</color>

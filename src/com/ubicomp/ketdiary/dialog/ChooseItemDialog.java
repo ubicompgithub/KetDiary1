@@ -183,7 +183,6 @@ public class ChooseItemDialog implements OnClickListener{
 	public void show() {
 		MainActivity.getMainActivity().enableTabAndClick(false);
 		boxLayout.setVisibility(View.VISIBLE);
-
 	}
 	
 	/** remove the dialog and release the resources */
@@ -198,6 +197,7 @@ public class ChooseItemDialog implements OnClickListener{
 	public void close() {
 		if (boxLayout != null)
 			boxLayout.setVisibility(View.INVISIBLE);
+		MainActivity.getMainActivity().enableTabAndClick(true);
 		
 		caller.resetView(type, select);
 		Log.d(TAG, "Select:"+select);

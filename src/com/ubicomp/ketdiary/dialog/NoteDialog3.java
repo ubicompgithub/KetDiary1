@@ -256,7 +256,8 @@ public class NoteDialog3 implements ChooseItemCaller{
 			@Override
 			public void onClick(View v) {
 				//listView.setVisibility(View.VISIBLE);
-				listViewShowHide();
+				if(items!= -1)
+					listViewShowHide();
 			}
 								
 		});
