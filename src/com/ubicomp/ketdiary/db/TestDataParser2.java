@@ -182,6 +182,7 @@ public class TestDataParser2 {
 		int addScore  = db.insertNoteAdd(noteAdd);
 		CustomToast.generateToast(R.string.note_done, addScore);
 		
+		PreferenceControl.setPoint(addScore);
 
 	}
 	

@@ -39,7 +39,6 @@ import com.ubicomp.ketdiary.dialog.CheckResultDialog;
 import com.ubicomp.ketdiary.dialog.TestQuestionCaller2;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.QuestionFile;
-import com.ubicomp.ketdiary.mydaybook.Database;
 import com.ubicomp.ketdiary.mydaybook.SectionsPagerAdapter;
 import com.ubicomp.ketdiary.mydaybook.linechart.ChartCaller;
 import com.ubicomp.ketdiary.mydaybook.linechart.LineChartTitle;
@@ -105,6 +104,10 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private static final String[] timeslot = {"上午", "下午", "晚上"};
 	private static final String[] monthName = {"一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"};
 	
+	private int sustainMonth = PreferenceControl.getSustainMonth();
+	private Calendar startDay = PreferenceControl.getStartDate();
+	private int startMonth = startDay.get(Calendar.MONTH)+1;
+	
 	private final static int[] typeId = {0, R.drawable.book_type1,
 		R.drawable.book_type2, R.drawable.book_type3, R.drawable.book_type4, 
 		R.drawable.book_type5, 	R.drawable.book_type6, R.drawable.book_type7, 
@@ -163,10 +166,10 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		//calendarBar.setEnabled(false);
 
 		// Set up the ViewPager with the sections adapter.
-		View[] pageViewList = new View[Database.SUSTAINED_MONTHS];
-		for (int i = 0; i < Database.SUSTAINED_MONTHS; i++) {
+		View[] pageViewList = new View[sustainMonth];
+		for (int i = 0; i < sustainMonth; i++) {
 			pageViewList[i] = (View) inflater.inflate(R.layout.fragment_calendar, null);
-			pageViewList[i].setTag(i + Database.START_MONTH - 1);
+			pageViewList[i].setTag(i + startMonth - 1);
 		}
 		mSectionsPagerAdapter = new SectionsPagerAdapter(pageViewList);
 
@@ -215,7 +218,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 				
 		drawer.toggle();
 		
-		setCurrentCalendarPage(THIS_MONTH + 1 - Database.START_MONTH);
+		setCurrentCalendarPage(THIS_MONTH + 1 - startMonth);
 		titleText.setText( (THIS_MONTH + 1)  + "月");
 		
 		
@@ -323,7 +326,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			@Override
 			public void onPageSelected(int arg0) {
 				fragmentIdx = arg0;
-				titleText.setText( (Database.START_MONTH + fragmentIdx) + "月");
+				titleText.setText( (startMonth + fragmentIdx) + "月");
 			}
 			
 		});
@@ -358,7 +361,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
                     newSelectedDayTextView.setTextColor(context.getResources().getColor(R.color.black));
                 }
 
-                mViewPager.setCurrentItem(Calendar.getInstance().get(Calendar.MONTH) + 1 - Database.START_MONTH);
+                mViewPager.setCurrentItem(Calendar.getInstance().get(Calendar.MONTH) + 1 - startMonth);
             }
         });
 
@@ -531,7 +534,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			filterButtonIsPressed[i] = false;
 		filterButtonIsPressed[0] = true;
 		//setCurrentCalendarPage(selectedMonth + 1 - Database.START_MONTH);
-		
+		Log.d(TAG, "StartMonth: "+startMonth + "SustainMonth: "+ sustainMonth);
 		sv.fullScroll(View.FOCUS_DOWN);
 		
 		msgBox = new CheckResultDialog(fragment_layout);
@@ -956,14 +959,14 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private void updateCalendarView(){
 		mViewPager.removeAllViews();
 		LayoutInflater inflater = LayoutInflater.from(context);
-		View[] pageViewList = new View[Database.SUSTAINED_MONTHS];
-		for (int i = 0; i < Database.SUSTAINED_MONTHS; i++) {
+		View[] pageViewList = new View[sustainMonth];
+		for (int i = 0; i < sustainMonth; i++) {
 			pageViewList[i] = (View) inflater.inflate(R.layout.fragment_calendar, null);
-			pageViewList[i].setTag(i + Database.START_MONTH - 1);
+			pageViewList[i].setTag(i + startMonth - 1);
 		}
 		mSectionsPagerAdapter = new SectionsPagerAdapter(pageViewList);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
-		mViewPager.setCurrentItem(Calendar.getInstance().get(Calendar.MONTH) + 1 - Database.START_MONTH);
+		mViewPager.setCurrentItem(Calendar.getInstance().get(Calendar.MONTH) + 1 - startMonth);
 	}
 	
 	public static void scrolltoItem(int year, int month, int day){

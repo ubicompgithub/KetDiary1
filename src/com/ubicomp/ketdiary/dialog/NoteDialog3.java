@@ -11,6 +11,7 @@ import android.graphics.Typeface;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -989,6 +990,10 @@ public class NoteDialog3 implements ChooseItemCaller{
 		@Override
 		public void resetView(int type, int select) {
 			setEnabledAll(boxLayout, true);
+			edtext.setEnabled(true);
+			edtext.setInputType(InputType.TYPE_CLASS_TEXT);
+			edtext.setFocusable(true);
+			edtext.setFocusableInTouchMode(true);
 			if(select == -1) //什麼都沒選
 				return;
 			

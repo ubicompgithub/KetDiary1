@@ -11,6 +11,7 @@ import android.graphics.Typeface;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,7 +21,6 @@ import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -966,6 +966,10 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		@Override
 		public void resetView(int type, int select) {
 			setEnabledAll(boxLayout, true);
+			edtext.setEnabled(true);
+			edtext.setInputType(InputType.TYPE_CLASS_TEXT);
+			edtext.setFocusable(true);
+			edtext.setFocusableInTouchMode(true);
 			if(select == -1) //什麼都沒選
 				return;
 			
@@ -980,6 +984,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 				timeslot = select;
 				timeslot_txt.setText(Timeslot_str[select]);
 			}
+			
 			
 		}
 	

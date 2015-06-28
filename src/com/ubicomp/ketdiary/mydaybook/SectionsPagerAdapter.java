@@ -41,13 +41,18 @@ public class SectionsPagerAdapter extends PagerAdapter {
     public static final int TAG_CAL_CELL_MONTH = R.string.TAG_CAL_CELL_MONTH;
     public static final int TAG_CAL_CELL_PAGE_MONTH = R.string.TAG_CAL_CELL_PAGE_MONTH;
     public static final int TAG_CAL_CELL_YEAR = R.string.TAG_CAL_CELL_YEAR;
+    public static final int TAG_CAL_CELL_TS = R.string.TAG_CAL_CELL_TS;
+    
+    private static final Calendar startDay = PreferenceControl.getStartDate();
+    private static final Calendar today = Calendar.getInstance();
     
     private Context context;
 
     private LayoutInflater inflater;
     private DatabaseControl db;
+    private int sustainMonth;
 
-    private boolean[] isPageViewInitialized = new boolean[Database.SUSTAINED_MONTHS];
+    private boolean[] isPageViewInitialized ;//= new boolean[Database.SUSTAINED_MONTHS];
     
     private static final int[] dotId2 = { 0, R.drawable.dot_color1, R.drawable.dot_color2,
     	R.drawable.dot_color3, R.drawable.dot_color4, R.drawable.dot_color5,
@@ -65,11 +70,13 @@ public class SectionsPagerAdapter extends PagerAdapter {
         inflater = LayoutInflater.from(App.getContext());
         
         db = new DatabaseControl();
+        sustainMonth = PreferenceControl.getSustainMonth();
+        isPageViewInitialized = new boolean[sustainMonth];
     }
 	
 	@Override
 	public int getCount() {
-		return Database.SUSTAINED_MONTHS;
+		return sustainMonth;
 	}
 	
 	@Override
@@ -98,8 +105,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
         int pageViewMonth = Integer.valueOf((pageView.getTag()).toString());
         GridLayout glCalendar = (GridLayout) pageView.findViewById(R.id.gl_calendar);
         
-        Calendar startDay = PreferenceControl.getStartDate();
-        Calendar today = Calendar.getInstance();
+        
 
         // Initialize the calendar
         Calendar mCalendar = Calendar.getInstance();
@@ -139,11 +145,17 @@ public class SectionsPagerAdapter extends PagerAdapter {
             cellView.setTag(TAG_CAL_CELL_MONTH, mCalendar.get(Calendar.MONTH));
             cellView.setTag(TAG_CAL_CELL_PAGE_MONTH, pageViewMonth);
             cellView.setTag(TAG_CAL_CELL_YEAR, mCalendar.get(Calendar.YEAR));
+            cellView.setTag(TAG_CAL_CELL_TS, mCalendar.getTimeInMillis());
             cellView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    if(selectedView != v){//TODO: set future and before unclickable
+                    if(selectedView != v){
+                    	long selectedTs = Long.valueOf(v.getTag(TAG_CAL_CELL_TS).toString());
+                    	if(selectedTs < startDay.getTimeInMillis() || selectedTs > today.getTimeInMillis()+86400000){
+                    		return;
+                    	}
+                    	
                         int selectedPageMonth = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_PAGE_MONTH).toString());
                         int selectedMonth = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_MONTH).toString());
                         TextView selectedDayTextView = (TextView) selectedView.findViewById(R.id.tv_calendar_date);
@@ -185,7 +197,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
             if ( mCalendar.get(Calendar.MONTH) == pageViewMonth){
             	
             	
-            	if(mCalendar.getTimeInMillis()> startDay.getTimeInMillis() && mCalendar.getTimeInMillis() <= today.getTimeInMillis()){
+            	if(mCalendar.getTimeInMillis()> startDay.getTimeInMillis() && mCalendar.getTimeInMillis() <= today.getTimeInMillis()+86400000){
             	
             		noteAdds = db.getDayNoteAdd(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
             	            	
