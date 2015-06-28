@@ -15,7 +15,7 @@
 			android:layout_height="wrap_content" />
 		
 	    <LinearLayout
-	        android:id="@+id/toggle_layout"
+	        android:id="@+id/cal_toggle_layout"
 	        android:layout_width="wrap_content"
 	        android:layout_height="match_parent"
 	        android:layout_toLeftOf="@+id/back_to_today"

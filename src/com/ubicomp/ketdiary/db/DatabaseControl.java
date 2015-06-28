@@ -783,7 +783,7 @@ public class DatabaseControl {
 				int weeklyScore = cursor.getInt(16);
 				int score = cursor.getInt(17);
 				data[i] = new NoteAdd(isAfterTest, ts, year, month, day, 
-						timeslot, category, type, items, impact, reason, weeklyScore, score);
+						timeslot, category2, type, items, impact, reason, weeklyScore, score);
 			}
 
 			cursor.close();

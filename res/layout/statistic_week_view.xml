@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?><RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id = "@+id/statistic_week_layout" 
+    >
+
+    <TextView
+        android:id="@+id/statistic_week_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/week_test"
+        android:textSize="@dimen/small_title_size"
+        android:layout_marginTop="36dp"
+        android:layout_marginLeft="60dp"
+        android:textColor="@color/black" />
+    
+    <LinearLayout
+        android:id="@+id/statistic_week_timeblock_label_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="13dp"
+        android:layout_below="@+id/statistic_week_title"
+        />
+    
+	<GridLayout 
+	    android:id = "@+id/statistic_week_block_layout"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:rowCount="4"
+	    android:columnCount="7"
+	    android:layout_marginTop="13dp"
+	    android:layout_below="@+id/statistic_week_title"
+	    android:layout_toRightOf="@+id/statistic_week_timeblock_label_layout"
+		 />
+	
+	
+    <LinearLayout
+        android:id="@+id/statistic_week_date_label_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_toRightOf="@+id/statistic_week_timeblock_label_layout"
+        android:layout_below="@+id/statistic_week_block_layout"
+        />
+    
+    	<LinearLayout
+        android:id="@+id/statistic_week_label_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_toRightOf="@+id/statistic_week_timeblock_label_layout"
+        android:layout_below="@+id/statistic_week_date_label_layout"
+        />
+    
+</RelativeLayout>

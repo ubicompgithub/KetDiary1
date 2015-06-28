@@ -652,11 +652,18 @@ public class MainActivity extends FragmentActivity {
 				return true;
 			} else {
 				if (clickable) {
-					
-					
-					
-					
-					return super.onKeyUp(keyCode, event);
+					if (tabHost.getCurrentTab() == 2 && fragments[2] != null
+							&& fragments[2].isAdded()) {
+						if(((DaybookFragment) fragments[2]).isNotePageShow){
+							((DaybookFragment) fragments[2]).notePage.close();
+							((DaybookFragment) fragments[2]).notePage.clear();
+						}
+						else
+							super.onKeyUp(keyCode, event);
+					}
+					else
+						super.onKeyUp(keyCode, event);
+					return true;
 				} else
 					return true;
 			}
@@ -824,25 +831,6 @@ public class MainActivity extends FragmentActivity {
 		msgBox.initialize();
 		msgBox.show();
 		
-		/*
-		new AlertDialog.Builder(this)
-	    .setTitle("檢測倒數結束")
-	    .setMessage("查看檢測結果?")
-	    .setNegativeButton("確定", new DialogInterface.OnClickListener() {
-	        @Override
-	        public void onClick(DialogInterface dialog, int which) {
-	            //Toast.makeText(getApplicationContext(),"走吧！一起吃", Toast.LENGTH_SHORT).show();
-	        	CustomToast.generateToast(R.string.after_test_pass, 2);
-	        	changeTab(1);
-	        }
-	    })
-	    .setPositiveButton("取消", new DialogInterface.OnClickListener() {
-	        @Override
-	        public void onClick(DialogInterface dialog, int which) {
-	           //Toast.makeText(getApplicationContext(),"可是我好餓耶", Toast.LENGTH_SHORT).show();
-	        }
-	    })
-	    .show();*/
 	}
 	
 	

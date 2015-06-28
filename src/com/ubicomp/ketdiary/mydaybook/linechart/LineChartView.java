@@ -63,6 +63,7 @@ public class LineChartView extends View {
     private int cursorLinePos = 5;
     private int initHeight;
     private int numOfDays = 0;
+    private int lastNoteAddNum = 0;
 
 	public LineChartView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -74,14 +75,14 @@ public class LineChartView extends View {
         //setChartData2();
         
         
-         Calendar currentDay = Calendar.getInstance(); 
+        Calendar currentDay = Calendar.getInstance(); 
     	currentDay.setTimeInMillis(startDay.getTimeInMillis());
     	
-    	numOfDays = daysOfTwo(startDay, Calendar.getInstance());
+    	numOfDays = daysOfTwo(startDay, Calendar.getInstance())+1;
         
         dataset = new LineChartData[numOfDays];
         
-        setChartData3();
+        //setChartData3();
 
     	
     	Log.d("drawDate", "numOfDays:"+numOfDays);
@@ -91,6 +92,12 @@ public class LineChartView extends View {
 	private void setChartData3(){
 		Calendar currentDay = Calendar.getInstance(); 
     	currentDay.setTimeInMillis(startDay.getTimeInMillis());
+    	
+    	NoteAdd[] noteAdds = db.getAllNoteAdd();
+    	if(noteAdds.length == this.lastNoteAddNum){ //check data update or not
+    		return;
+    	}
+    	lastNoteAddNum = noteAdds.length;
     	
     	TestResult testResult;
     	NoteAdd[] noteAdd = null;
@@ -115,6 +122,7 @@ public class LineChartView extends View {
     				count++;
     				self_score+= noteAdd[j].getImpact()-3; //要記得shift
     				self_type = noteAdd[j].getType();
+    				Log.d(TAG, "SelfType: "+ self_type);
     			}
     			if(count>0){
     				self_score/=count;
@@ -128,7 +136,8 @@ public class LineChartView extends View {
     				count++;
     				other_score+= noteAdd[j].getImpact()-3;
     				other_type = noteAdd[j].getType();
-    			}
+    				Log.d(TAG, "OtherType: "+ other_type);
+    			}    			
     			if(count>0){
     				other_score/=count;
     			}	
@@ -393,7 +402,9 @@ public class LineChartView extends View {
     protected void onDraw(Canvas canvas) {
     	super.onDraw(canvas);   	
     	canvas.save();
-
+    	
+    	setChartData3();
+    	
     	if  (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) { offsetY = 90; }
     	else { offsetY = 30; }
         drawBackground(canvas);
@@ -598,6 +609,7 @@ public class LineChartView extends View {
         	
         	 for (int i = 0; i < dataset.length; i++) {
         		int selfType = dataset[i].getSelfType();
+        		Log.d(TAG, "SelfType:" + selfType + " SelfScore:"+dataset[i].getSelfScore());
         		if (selfType > 5 || selfType < 1) continue;
  	        	if (drawTheDotOrNot(selfType)) {
 	 	        	Bitmap tmp = BitmapFactory.decodeResource(getResources(), dots[selfType]);
@@ -611,7 +623,7 @@ public class LineChartView extends View {
         }
         case 1: {
         	 
-        	
+        	 
         	 paint.setStyle(Style.STROKE);
  	         paint.setStrokeWidth(4);
  	         paint.setColor(getResources().getColor(R.color.path_normal));
@@ -622,8 +634,11 @@ public class LineChartView extends View {
         	
         	 for (int i = 0; i < dataset.length; i++) {
         		int otherType = dataset[i].getOtherType(); 
+        		Log.d(TAG, "OtherType:" + otherType + " OtherScore:"+dataset[i].getOtherScore());
+        		
         		if (otherType < 6) continue;
   	        	if (drawTheDotOrNot(otherType)) {
+  	     
   	        		Bitmap tmp =  BitmapFactory.decodeResource(getResources(), dots[otherType]);
   	 	            Bitmap resizedImg = getResizedBitmap(tmp, 25, 25);
   	 	            tmp.recycle();
@@ -773,35 +788,7 @@ public class LineChartView extends View {
     	if (DaybookFragment.filterButtonIsPressed[0]) return true;
     	else return DaybookFragment.filterButtonIsPressed[typeOfActivity]; 
     }
-    
-    private void drawRectBar(Canvas canvas) { 
-    	Paint p = new Paint();
-    	
-    	for (int i = 0; i < datapoints.size(); i++) {
-    		if (datapoints.get(i).passTest == 1) {
-    			Bitmap temp = getLocalBitmap(App.getContext(), R.drawable.pass_rect);
-    			Bitmap passBarBg = getResizedBitmap(temp, 28, 60);
-    			temp.recycle();
-    			System.gc();
-	            canvas.drawBitmap(passBarBg, getXPos(i)-25, getHeight()-offsetY, p);
-    		}
-    		else if (datapoints.get(i).passTest == 2){
-    			Bitmap temp = getLocalBitmap(App.getContext(), R.drawable.nopass_rect);
-    			Bitmap noPassBarBg = getResizedBitmap(temp, 28, 60);
-    			temp.recycle();
-    			System.gc();
-	            canvas.drawBitmap(noPassBarBg, getXPos(i)-25, getHeight()-offsetY, p);
-    		}
-    		else {
-    			Bitmap temp = getLocalBitmap(App.getContext(), R.drawable.skip_rect);
-    			Bitmap skipBarBg = getResizedBitmap(temp, 28, 60);
-    			temp.recycle();
-    			System.gc();
-	            canvas.drawBitmap(skipBarBg, getXPos(i)-25, getHeight()-offsetY, p);
-    		}
-        }    	
-    }
-    
+     
     private void drawRectBar2(Canvas canvas) { 
     	Paint p = new Paint();
     	

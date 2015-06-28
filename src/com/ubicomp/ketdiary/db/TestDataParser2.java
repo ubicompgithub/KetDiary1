@@ -159,9 +159,9 @@ public class TestDataParser2 {
 		int date = days - day;
 		int category;
 		if(type <=5 && type > 0)
-			category=1;
+			category=0;
 		else if(type > 5)
-			category=2;
+			category=1;
 		else
 			category=-1;
 		

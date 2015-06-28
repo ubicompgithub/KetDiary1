@@ -525,7 +525,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			//ble.bleWriteState((byte)3);
 			
 			//img_face.setVisibility(View.VISIBLE);
-			cameraCountDownTimer = new CameraCountDownTimer();
+			cameraCountDownTimer = new CameraCountDownTimer(CAMERATIMEOUT);
 			cameraCountDownTimer.start();
 			
 			
@@ -593,7 +593,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			label_subtitle.setText("口水量不足");
 			
 			
-			cameraCountDownTimer = new CameraCountDownTimer();
+			cameraCountDownTimer = new CameraCountDownTimer(10);
 			cameraCountDownTimer.start();
 			
 			/*if(	timeoutCountDownTimer==null	)
@@ -1042,8 +1042,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		
 			private int count = 0;
 			
-			public CameraCountDownTimer() {
-				super(CAMERATIMEOUT*1000, 500);
+			public CameraCountDownTimer(int timeout) {
+				super(timeout*1000, 500);
 			}
 
 			@Override

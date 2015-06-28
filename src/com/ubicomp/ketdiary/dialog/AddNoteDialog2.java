@@ -187,8 +187,8 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				ReadDummyData ddd = new ReadDummyData(activity);
-				ddd.execute();
+				//ReadDummyData ddd = new ReadDummyData(activity);
+				//ddd.execute();
 			}
 			
 		});
@@ -535,6 +535,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 	
 	/** close the dialog */
 	public void close() {
+		testQuestionCaller.resetView();
 		MainActivity.getMainActivity().enableTabAndClick(true);
 		if (boxLayout != null)
 			boxLayout.setVisibility(View.INVISIBLE);
@@ -619,7 +620,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 						close();
 						clear();
 						//copingSetting();
-						testQuestionCaller.resetView();
+						//testQuestionCaller.resetView();
 						
 					}
 				}
@@ -628,7 +629,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 			else if(state == STATE_COPE){
 				//knowingSetting();
 				//
-				testQuestionCaller.resetView();
+				//testQuestionCaller.resetView();
 				close();
 				clear();
 			}

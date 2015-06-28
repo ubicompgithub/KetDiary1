@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ubicomp.ketdiary.db.DatabaseDummyData;
+import com.ubicomp.ketdiary.file.ReadDummyData;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 
 /**
@@ -218,7 +218,9 @@ public class PreSettingActivity extends Activity {
 			DialogInterface.OnClickListener {
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
-			DatabaseDummyData ddd = new DatabaseDummyData(activity);
+			//DatabaseDummyData ddd = new DatabaseDummyData(activity);
+			//ddd.execute();
+			ReadDummyData ddd = new ReadDummyData(activity);
 			ddd.execute();
 		}
 	}

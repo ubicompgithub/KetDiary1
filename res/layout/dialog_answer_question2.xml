@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/shadow" >
+
+    <RelativeLayout
+        android:layout_width="272dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/rank_chart_bg"
+        android:splitMotionEvents="true"
+        android:translationX="5dp"
+        android:translationY="-5dp" >
+
+        <TextView
+            android:id="@+id/detail_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="32dp"
+            android:textColor="@color/black_gray"
+            android:textSize="@dimen/large_text_size" />
+
+        <RelativeLayout
+            android:id="@+id/detail_item_0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/detail_title"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="32dp"
+            android:visibility="invisible" >
+
+            <TextView
+                android:id="@+id/detail_item_text_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black_gray"
+                android:textSize="@dimen/large_text_size" />
+
+            <ImageView
+                android:id="@+id/detail_progress_bg_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detail_item_text_0"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/rank_chart_bar_bg" />
+
+            <ImageView
+                android:id="@+id/detail_progress_start_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/detail_progress_bg_0"
+                android:layout_below="@+id/detail_item_text_0"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/progress_bar_start" />
+
+            <ImageView
+                android:id="@+id/detail_progress_inner_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detail_item_text_0"
+                android:layout_marginTop="6dp"
+                android:layout_toRightOf="@+id/detail_progress_start_0"
+                android:scaleType="fitXY"
+                android:src="@drawable/progress_bar_inner" />
+
+            <ImageView
+                android:id="@+id/detail_progress_end_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detail_item_text_0"
+                android:layout_marginTop="6dp"
+                android:layout_toRightOf="@+id/detail_progress_inner_0"
+                android:src="@drawable/progress_bar_end" />
+
+            <TextView
+                android:id="@+id/detail_comment_0"
+                android:layout_width="210dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detail_progress_bg_0"
+                android:layout_marginTop="6dp"
+                android:textColor="@color/black_gray" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/detail_item_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/detail_item_0"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="22dp"
+            android:visibility="invisible" >
+
+            <TextView
+                android:id="@+id/detail_item_text_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black_gray"
+                android:textSize="@dimen/large_text_size" />
+
+            <ImageView
+                android:id="@+id/detail_progress_bg_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detail_item_text_1"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/rank_chart_bar_bg" />
+
+            <ImageView
+                android:id="@+id/detail_progress_start_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/detail_progress_bg_1"
+                android:layout_below="@+id/detail_item_text_1"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/progress_bar_start" />
+
+            <ImageView
+                android:id="@+id/detail_progress_inner_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detail_item_text_1"
+                android:layout_marginTop="6dp"
+                android:layout_toRightOf="@+id/detail_progress_start_1"
+                android:scaleType="fitXY"
+                android:src="@drawable/progress_bar_inner" />
+
+            <ImageView
+                android:id="@+id/detail_progress_end_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detail_item_text_1"
+                android:layout_marginTop="6dp"
+                android:layout_toRightOf="@+id/detail_progress_inner_1"
+                android:src="@drawable/progress_bar_end" />
+
+            <TextView
+                android:id="@+id/detail_comment_1"
+                android:layout_width="210dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detail_progress_bg_1"
+                android:layout_marginTop="6dp"
+                android:textColor="@color/black_gray" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/detail_item_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/detail_item_1"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="22dp"
+            android:visibility="invisible" >
+
+            <TextView
+                android:id="@+id/detail_item_text_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black_gray"
+                android:textSize="@dimen/large_text_size" />
+
+            <ImageView
+                android:id="@+id/detail_progress_bg_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detail_item_text_2"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/rank_chart_bar_bg" />
+
+            <ImageView
+                android:id="@+id/detail_progress_start_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/detail_progress_bg_2"
+                android:layout_below="@+id/detail_item_text_2"
+                android:layout_marginTop="6dp"
+                android:src="@drawable/progress_bar_start" />
+
+            <ImageView
+                android:id="@+id/detail_progress_inner_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detail_item_text_2"
+                android:layout_marginTop="6dp"
+                android:layout_toRightOf="@+id/detail_progress_start_2"
+                android:scaleType="fitXY"
+                android:src="@drawable/progress_bar_inner" />
+
+            <ImageView
+                android:id="@+id/detail_progress_end_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detail_item_text_2"
+                android:layout_marginTop="6dp"
+                android:layout_toRightOf="@+id/detail_progress_inner_2"
+                android:src="@drawable/progress_bar_end" />
+
+            <TextView
+                android:id="@+id/detail_comment_2"
+                android:layout_width="210dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detail_progress_bg_2"
+                android:layout_marginTop="6dp"
+                android:textColor="@color/black_gray" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</FrameLayout>
