@@ -4,18 +4,18 @@ public class QuestionTest {
 
 	private TimeValue tv;
 	private int questionType;
-	private boolean isCorrect;
+	private int isCorrect;
 	private String selection;
-	private int select;
+	private int choose;
 	private int score;
 
-	public QuestionTest(long ts, int questionType, boolean isCorrect,
-			String selection, int select, int score) {
+	public QuestionTest(long ts, int questionType, int isCorrect,
+			String selection, int choose, int score) {
 		this.tv = TimeValue.generate(ts);
 		this.questionType = questionType;
 		this.isCorrect = isCorrect;
 		this.selection = selection == null ? "" : selection;
-		this.select = select;
+		this.choose = choose;
 		this.score = score;
 	}
 
@@ -27,7 +27,7 @@ public class QuestionTest {
 		return questionType;
 	}
 
-	public boolean isCorrect() {
+	public int getisCorrect() {
 		return isCorrect;
 	}
 
@@ -35,8 +35,8 @@ public class QuestionTest {
 		return selection;
 	}
 
-	public int getSelect() {
-		return select;
+	public int getChoose() {
+		return choose;
 	}
 
 	public int getScore() {

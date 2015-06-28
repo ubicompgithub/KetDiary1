@@ -3,6 +3,7 @@ package com.ubicomp.ketdiary.statistic;
 import java.util.ArrayList;
 
 import android.graphics.Typeface;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.data.structure.Rank;
 import com.ubicomp.ketdiary.db.DatabaseControl;
+import com.ubicomp.ketdiary.dialog.QuestionDialog;
+import com.ubicomp.ketdiary.fragment.StatisticFragment;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
@@ -19,10 +22,11 @@ public class AnalysisCounterView extends StatisticPageView {
 	private TextView levelHelp;
 	private TextView levelValue, levelText, couponValue, couponText;
 	private RelativeLayout titleLayout;
-	private ImageView levelCircle;
+	private ImageView levelCircle, QuestionButton;
 	
 	private DatabaseControl db;
 	private Typeface wordTypeface, digitTypefaceBold;
+	private QuestionDialog msgBox;
 	//private ShowRadarChart showRadarChart;
 	
 	private final static int[] levelId = {R.drawable.level0,
@@ -61,6 +65,19 @@ public class AnalysisCounterView extends StatisticPageView {
 		couponValue = (TextView) view
 				.findViewById(R.id.analysis_counter_coupon_value);
 		couponValue.setTypeface(digitTypefaceBold);
+		
+		QuestionButton = (ImageView) view
+				.findViewById(R.id.analysis_question);
+		
+		QuestionButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				StatisticFragment.showQuestionTest();
+			}
+		});
+			
+		
 	}
 
 	@Override
@@ -75,6 +92,8 @@ public class AnalysisCounterView extends StatisticPageView {
 				showRadarChart.showRadarChart(calculateRank());
 			}
 		});*/
+		//msgBox = new QuestionDialog();
+		
 		updateCounter();
 	}
 

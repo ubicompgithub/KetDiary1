@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white_shadow" >
@@ -7,41 +7,70 @@
     <LinearLayout
         android:layout_width="272dp"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:background="@drawable/quesion_bg2"
+        android:orientation="vertical"
         android:splitMotionEvents="true"
         android:translationX="5dp"
-        android:translationY="-5dp" 
-        android:orientation="vertical">
-		
+        android:translationY="-5dp" >
+
         <LinearLayout
-            android:layout_width="wrap_content"
-        	android:layout_height="match_parent"
-        	android:orientation="horizontal">
-        	<TextView
-            	android:id="@+id/detail_title"
-            	android:layout_width="wrap_content"
-            	android:layout_height="wrap_content"
-            	android:layout_marginLeft="32dp"
-            	android:layout_marginTop="32dp"
-            	android:textColor="@color/black_gray"
-            	android:textSize="@dimen/large_text_size" />
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation="horizontal"
+            android:padding="20dp" >
+
+            <TextView
+                android:id="@+id/question_q"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Q"
+                android:textColor="@color/red"
+                android:textSize="@dimen/large_text_size" />
+            
+            <TextView
+                android:id="@+id/detail_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Q"
+                android:textColor="@color/red"
+                android:textSize="@dimen/large_text_size" />
 
         </LinearLayout>
+
         <LinearLayout
-            android:layout_width="wrap_content"
-        	android:layout_height="match_parent"
-        	android:orientation="horizontal">
-
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:orientation="horizontal" >
         </LinearLayout>
+
         <LinearLayout
-            android:layout_width="wrap_content"
-        	android:layout_height="match_parent"
-        	android:orientation="horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:gravity="bottom"
+            android:orientation="horizontal" >
 
+            <TextView
+                android:id="@+id/question_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="取消"
+                android:gravity="center"
+                android:textColor="@color/black_gray"
+                android:textSize="@dimen/large_text_size" />
 
+            <TextView
+                android:id="@+id/question_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="確定"
+                 android:gravity="center"
+                android:textColor="@color/black_gray"
+                android:textSize="@dimen/large_text_size" />
         </LinearLayout>
-              
     </LinearLayout>
 
-</FrameLayout>
+</RelativeLayout>
