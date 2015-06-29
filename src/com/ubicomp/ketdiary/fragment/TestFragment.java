@@ -774,7 +774,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		if( TDP!= null ){
 			//TDP.startAddNote();
 			//TDP.getQuestionResult2(textFile)
-			TDP.startAddNote2(1, day, timeslot, type, items, impact, description);
+			TDP.startAddNote3(1, day, timeslot, type, items, impact, description);
 		}
 	}
 

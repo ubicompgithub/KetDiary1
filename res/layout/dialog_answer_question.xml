@@ -30,11 +30,11 @@
                 android:textSize="@dimen/large_text_size" />
             
             <TextView
-                android:id="@+id/detail_title"
+                android:id="@+id/question_question"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Q"
-                android:textColor="@color/red"
+                android:text="請問下列哪一項不是?"
+                android:textColor="@color/black_gray"
                 android:textSize="@dimen/large_text_size" />
 
         </LinearLayout>
@@ -42,7 +42,141 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="220dp"
-            android:orientation="horizontal" >
+            android:orientation="vertical"
+            android:paddingTop="50dp"
+            android:paddingBottom = "50dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp" >
+            
+            <LinearLayout
+            	android:layout_width="match_parent"
+            	android:layout_height="wrap_content"
+            	android:orientation="horizontal"
+            	android:layout_marginTop="10dp" >
+
+                <ImageView
+                    android:id="@+id/question_radio1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/radio_node" />
+                
+                <TextView
+                	android:id="@+id/question_a"
+               	 	android:layout_width="wrap_content"
+                	android:layout_height="wrap_content"
+                	android:text="A"
+                	android:textColor="@color/red"
+                	android:textSize="@dimen/large_text_size"
+                	android:layout_marginLeft="10dp" />
+            
+            	<TextView
+                	android:id="@+id/question_answer1"
+                	android:layout_width="wrap_content"
+                	android:layout_height="wrap_content"
+                	android:text="這是選項"
+                	android:textColor="@color/black_gray"
+                	android:textSize="@dimen/large_text_size"
+                	android:layout_marginLeft="10dp" />
+            
+        	</LinearLayout>
+        	<LinearLayout
+            	android:layout_width="match_parent"
+            	android:layout_height="wrap_content"
+            	android:orientation="horizontal"
+            	android:layout_marginTop="10dp" >
+
+                <ImageView
+                    android:id="@+id/question_radio2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/radio_node" />
+                
+                <TextView
+                	android:id="@+id/question_b"
+               	 	android:layout_width="wrap_content"
+                	android:layout_height="wrap_content"
+                	android:text="B"
+                	android:textColor="@color/red"
+                	android:textSize="@dimen/large_text_size"
+                	android:layout_marginLeft="10dp" />
+            
+            	<TextView
+                	android:id="@+id/question_answer2"
+                	android:layout_width="wrap_content"
+                	android:layout_height="wrap_content"
+                	android:text="這是選項"
+                	android:textColor="@color/black_gray"
+                	android:textSize="@dimen/large_text_size"
+                	android:layout_marginLeft="10dp" />
+            
+        	</LinearLayout>
+        	<LinearLayout
+            	android:layout_width="match_parent"
+            	android:layout_height="wrap_content"
+            	android:orientation="horizontal"
+            	android:layout_marginTop="10dp" >
+
+                <ImageView
+                    android:id="@+id/question_radio3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/radio_node" />
+                
+                <TextView
+                	android:id="@+id/question_c"
+               	 	android:layout_width="wrap_content"
+                	android:layout_height="wrap_content"
+                	android:text="C"
+                	android:textColor="@color/red"
+                	android:textSize="@dimen/large_text_size"
+                	android:layout_marginLeft="10dp" />
+            
+            	<TextView
+                	android:id="@+id/question_answer3"
+                	android:layout_width="wrap_content"
+                	android:layout_height="wrap_content"
+                	android:text="這是選項"
+                	android:textColor="@color/black_gray"
+                	android:textSize="@dimen/large_text_size"
+                	android:layout_marginLeft="10dp" />
+            
+        	</LinearLayout>
+        	<LinearLayout
+            	android:layout_width="match_parent"
+            	android:layout_height="wrap_content"
+            	android:orientation="horizontal"
+            	android:layout_marginTop="10dp" >
+
+                <ImageView
+                    android:id="@+id/question_radio4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/radio_node" />
+                
+                <TextView
+                	android:id="@+id/question_d"
+               	 	android:layout_width="wrap_content"
+                	android:layout_height="wrap_content"
+                	android:text="D"
+                	android:textColor="@color/red"
+                	android:textSize="@dimen/large_text_size"
+                	android:layout_marginLeft="10dp" />
+            
+            	<TextView
+                	android:id="@+id/question_answer4"
+                	android:layout_width="wrap_content"
+                	android:layout_height="wrap_content"
+                	android:text="這是選項"
+                	android:textColor="@color/black_gray"
+                	android:textSize="@dimen/large_text_size"
+                	android:layout_marginLeft="10dp" />
+            
+        	</LinearLayout>
+            
+            
+            
+            
+            
         </LinearLayout>
 
         <LinearLayout

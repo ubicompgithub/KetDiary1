@@ -1,7 +1,10 @@
 package com.ubicomp.ketdiary.dialog;
 
+import java.util.Random;
+
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +37,10 @@ public class QuestionDialog{
 	private LayoutInflater inflater;
 	private RelativeLayout boxLayout = null;
 	private LinearLayout questionLayout;
+	
+	private String question = "";
+	private String answer = "";
+	private String selectedAnswer = "";
 	
 	private RelativeLayout mainLayout;
 	
@@ -105,6 +112,41 @@ public class QuestionDialog{
 			boxLayout.setVisibility(View.INVISIBLE);
 	}
 	
+	private String[] settingQuestion() {
+		String[] questions = null;
+		String[] answers = null;
+		Resources r = App.getContext().getResources();
+		questions = r.getStringArray(R.array.question_1);
+		answers = r.getStringArray(R.array.question_answer_1);
+		
+		Random rand = new Random();
+		int qid = rand.nextInt(3);
+		question = questions[qid];
+		answer = new String(answers[qid * 5]);
+
+		String[] tempSelection = new String[4];
+		for (int i = 0; i < tempSelection.length; ++i)
+			tempSelection[i] = answers[qid * 5 + i + 1];
+		shuffleArray(tempSelection);
+		String[] selectAns = new String[3];
+		for (int i = 0; i < selectAns.length; ++i)
+			selectAns[i] = tempSelection[i];
+
+		int ans_id = rand.nextInt(selectAns.length);
+		selectAns[ans_id] = answer;
+
+		return selectAns;
+	}
+
+	private static void shuffleArray(String[] ar) {
+		Random rnd = new Random();
+		for (int i = ar.length - 1; i > 0; --i) {
+			int index = rnd.nextInt(i + 1);
+			String a = ar[index];
+			ar[index] = ar[i];
+			ar[i] = a;
+		}
+	}
 
 	/** OnClickListener for canceling and dismiss the check check dialog */
 	private class ConfirmOnClickListener implements View.OnClickListener {
