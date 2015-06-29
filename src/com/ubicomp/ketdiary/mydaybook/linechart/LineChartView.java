@@ -127,7 +127,7 @@ public class LineChartView extends View {
     				count++;
     				self_score+= noteAdd[j].getImpact()-3; //要記得shift
     				int type = noteAdd[j].getType();
-    				if(drawTheDotOrNot(type));
+    				//if(drawTheDotOrNot(type)); // 假如一天記多種, 沒顯示的要不要可以filter
     					self_type = type;
     				Log.d(TAG, "SelfType: "+ self_type);
     			}
@@ -144,8 +144,8 @@ public class LineChartView extends View {
     				count++;
     				other_score+= noteAdd[j].getImpact()-3;
     				int type = noteAdd[j].getType();
-    				if(drawTheDotOrNot(type));
-    					other_type = noteAdd[j].getType();
+    				//if(drawTheDotOrNot(type));
+    					other_type = type;
     				Log.d(TAG, "OtherType: "+ other_type);
     			}    			
     			if(count>0){

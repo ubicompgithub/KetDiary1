@@ -73,6 +73,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private TextView titleText, backToTodayText;
 	private View diaryItem;
 	private static ScrollView sv;
+	private int filter_count = 0;
 	
 
 	@SuppressWarnings("deprecation")
@@ -1013,6 +1014,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 
     	@Override
     	public void onClick(View v) {
+    		
     		switch (v.getId()) {
     		case (R.id.filter_all): { 
     			setAllFilter(false);
@@ -1024,8 +1026,8 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
     			break;
     		}
     		case (R.id.filter_1): {
-    			if (filterButtonIsPressed[1]) { filterButtonIsPressed[1] = false; filter1.setImageResource(R.drawable.filter_color1); }
-    			else {filterButtonIsPressed[1] = true; filter1.setImageResource(R.drawable.filter_color1_selected); filterButtonIsPressed[0] = false;}
+    			if (filterButtonIsPressed[1]) { filterButtonIsPressed[1] = false; filter1.setImageResource(R.drawable.filter_color1); filter_count--;}
+    			else {filterButtonIsPressed[1] = true; filter1.setImageResource(R.drawable.filter_color1_selected); filterButtonIsPressed[0] = false; filter_count++;}
     			setAllButtonImage();
     			if(lineChart!=null)
     				lineChart.invalidate();
@@ -1033,8 +1035,8 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
     		}
     		
     		case (R.id.filter_2): {
-    			if (filterButtonIsPressed[2]) { filterButtonIsPressed[2] = false; filter2.setImageResource(R.drawable.filter_color2); }
-    			else {filterButtonIsPressed[2] = true; filter2.setImageResource(R.drawable.filter_color2_selected); filterButtonIsPressed[0] = false;}
+    			if (filterButtonIsPressed[2]) { filterButtonIsPressed[2] = false; filter2.setImageResource(R.drawable.filter_color2); filter_count--;}
+    			else {filterButtonIsPressed[2] = true; filter2.setImageResource(R.drawable.filter_color2_selected); filterButtonIsPressed[0] = false; filter_count++;}
     			setAllButtonImage();
     			if(lineChart!=null)
     				lineChart.invalidate();
@@ -1043,8 +1045,8 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
     		}
     		
     		case (R.id.filter_3): {
-    			if (filterButtonIsPressed[3]) { filterButtonIsPressed[3] = false; filter3.setImageResource(R.drawable.filter_color3);}
-    			else {filterButtonIsPressed[3] = true; filter3.setImageResource(R.drawable.filter_color3_selected); filterButtonIsPressed[0] = false; }
+    			if (filterButtonIsPressed[3]) { filterButtonIsPressed[3] = false; filter3.setImageResource(R.drawable.filter_color3); filter_count--;}
+    			else {filterButtonIsPressed[3] = true; filter3.setImageResource(R.drawable.filter_color3_selected); filterButtonIsPressed[0] = false; filter_count++;}
     			setAllButtonImage();
     			if(lineChart!=null)
     				lineChart.invalidate();
@@ -1053,8 +1055,8 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
     		}
     		
     		case (R.id.filter_4): {
-    			if (filterButtonIsPressed[4]) { filterButtonIsPressed[4] = false; filter4.setImageResource(R.drawable.filter_color4);}
-    			else {filterButtonIsPressed[4] = true; filter4.setImageResource(R.drawable.filter_color4_selected); filterButtonIsPressed[0] = false;}
+    			if (filterButtonIsPressed[4]) { filterButtonIsPressed[4] = false; filter4.setImageResource(R.drawable.filter_color4); filter_count--;}
+    			else {filterButtonIsPressed[4] = true; filter4.setImageResource(R.drawable.filter_color4_selected); filterButtonIsPressed[0] = false; filter_count++;}
     			setAllButtonImage();
     			if(lineChart!=null)
     				lineChart.invalidate();
@@ -1062,37 +1064,42 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
     			
     		}
     		case (R.id.filter_5): {
-    			if (filterButtonIsPressed[5]) { filterButtonIsPressed[5] = false; filter5.setImageResource(R.drawable.filter_color5);}
-    			else {filterButtonIsPressed[5] = true; filter5.setImageResource(R.drawable.filter_color5_selected); filterButtonIsPressed[0] = false;}
+    			if (filterButtonIsPressed[5]) { filterButtonIsPressed[5] = false; filter5.setImageResource(R.drawable.filter_color5); filter_count--;}
+    			else {filterButtonIsPressed[5] = true; filter5.setImageResource(R.drawable.filter_color5_selected); filterButtonIsPressed[0] = false; filter_count++;}
     			setAllButtonImage();
     			if(lineChart!=null)
     				lineChart.invalidate();
     			break;    			
     		}
     		case (R.id.filter_6): {
-    			if (filterButtonIsPressed[6]) { filterButtonIsPressed[6] = false; filter6.setImageResource(R.drawable.filter_color6);}
-    			else {filterButtonIsPressed[6] = true; filter6.setImageResource(R.drawable.filter_color6_selected); filterButtonIsPressed[0] = false;}
+    			if (filterButtonIsPressed[6]) { filterButtonIsPressed[6] = false; filter6.setImageResource(R.drawable.filter_color6); filter_count--;}
+    			else {filterButtonIsPressed[6] = true; filter6.setImageResource(R.drawable.filter_color6_selected); filterButtonIsPressed[0] = false; filter_count++;}
     			setAllButtonImage();
     			if(lineChart!=null)
     				lineChart.invalidate();
     			break;
     		}
     		case (R.id.filter_7): {
-    			if (filterButtonIsPressed[7]) { filterButtonIsPressed[7] = false; filter7.setImageResource(R.drawable.filter_color7);}
-    			else {filterButtonIsPressed[7] = true; filter7.setImageResource(R.drawable.filter_color7_selected); filterButtonIsPressed[0] = false;}
+    			if (filterButtonIsPressed[7]) { filterButtonIsPressed[7] = false; filter7.setImageResource(R.drawable.filter_color7); filter_count--;}
+    			else {filterButtonIsPressed[7] = true; filter7.setImageResource(R.drawable.filter_color7_selected); filterButtonIsPressed[0] = false; filter_count++;}
     			setAllButtonImage();
     			if(lineChart!=null)
     				lineChart.invalidate();
     			break;
     		}
     		case (R.id.filter_8): {
-    			if (filterButtonIsPressed[8]) { filterButtonIsPressed[8] = false; filter8.setImageResource(R.drawable.filter_color8);}
-    			else {filterButtonIsPressed[8] = true; filter8.setImageResource(R.drawable.filter_color8_selected); filterButtonIsPressed[0] = false;}
+    			if (filterButtonIsPressed[8]) { filterButtonIsPressed[8] = false; filter8.setImageResource(R.drawable.filter_color8); filter_count--;}
+    			else {filterButtonIsPressed[8] = true; filter8.setImageResource(R.drawable.filter_color8_selected); filterButtonIsPressed[0] = false; filter_count++;}
     			setAllButtonImage();
     			if(lineChart!=null)
     				lineChart.invalidate();
     			break;
     		}	
+    		}
+    		Log.d(TAG, "filter_count: "+ filter_count);
+    		if(filter_count == 0){
+    			filterButtonIsPressed[0]=true;
+    			filterAll.setImageResource(R.drawable.filter_all_selected);
     		}
     		updateCalendarView();
     		showDiary();
