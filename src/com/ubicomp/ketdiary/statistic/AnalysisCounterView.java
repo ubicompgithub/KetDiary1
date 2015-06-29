@@ -19,7 +19,7 @@ import com.ubicomp.ketdiary.ui.Typefaces;
 public class AnalysisCounterView extends StatisticPageView {
 
 	private TextView title;
-	private TextView levelHelp;
+	private TextView levelHelp, levelHelp_value;
 	private TextView levelValue, levelText, couponValue, couponText;
 	private RelativeLayout titleLayout;
 	private ImageView levelCircle, QuestionButton;
@@ -47,8 +47,9 @@ public class AnalysisCounterView extends StatisticPageView {
 		titleLayout = (RelativeLayout) view
 				.findViewById(R.id.analysis_counter_title_layout);
 		levelHelp = (TextView) view.findViewById(R.id.analysis_level_help);
-		levelHelp.setTypeface(wordTypeface);
-		
+		levelHelp.setTypeface(digitTypefaceBold);
+		levelHelp_value=(TextView) view.findViewById(R.id.analysis_level_help_value);
+		levelHelp_value.setTypeface(digitTypefaceBold);
 		levelValue = (TextView) view
 				.findViewById(R.id.analysis_level_value);
 		levelValue.setTypeface(digitTypefaceBold);
@@ -61,7 +62,7 @@ public class AnalysisCounterView extends StatisticPageView {
 
 		couponText = (TextView) view
 				.findViewById(R.id.analysis_counter_coupon_text);
-		couponText.setTypeface(wordTypeface);
+		couponText.setTypeface(digitTypefaceBold);
 		couponValue = (TextView) view
 				.findViewById(R.id.analysis_counter_coupon_value);
 		couponValue.setTypeface(digitTypefaceBold);
@@ -130,9 +131,10 @@ public class AnalysisCounterView extends StatisticPageView {
 		
 		levelValue.setText("Lv."+level);
 		levelValue.invalidate();
-		levelHelp.setText("目前等級:\n"+level+"級");
-		levelHelp.invalidate();
-		
+//		levelHelp.setText("目前等級:\n"+level+"級");
+//		levelHelp.invalidate();
+		levelHelp_value.setText(String.valueOf(level));
+		levelHelp_value.invalidate();
 		couponValue.setText(String.valueOf(level));
 		couponValue.invalidate();
 	}
