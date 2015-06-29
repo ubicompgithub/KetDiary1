@@ -7,7 +7,7 @@
         
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp" >
+        android:layout_height="45dp" >
 
         <TextView
             android:id="@+id/text_self"
@@ -16,10 +16,11 @@
             android:layout_alignBaseline="@+id/text_other"
             android:layout_alignBottom="@+id/text_other"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="40dp"
+            android:layout_marginLeft="45dp"
             android:gravity="center"
             android:text="自我狀態"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="16sp"
+            android:textStyle="bold"
             android:textColor="@color/text_gray2" />
 
         <TextView
@@ -28,13 +29,22 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="44dp"
+            android:layout_marginRight="48dp"
             android:gravity="center"
             android:text="人際互動"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="16sp"
+            android:textStyle="bold"
             android:textColor="@color/text_gray2" />
 
     </RelativeLayout>
+    
+    <ImageView
+        android:id="@+id/self_others_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/note_slide_line1"
+         />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"

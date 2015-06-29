@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:layout_weight="6"
+        android:layout_weight="5"
         android:gravity="center"
         android:id="@+id/note_date_layout">
         
@@ -28,16 +28,17 @@
     	    android:layout_width="match_parent"
     	    android:layout_height="match_parent"
     	    android:layout_weight="1"
-    	    android:gravity="center"
+    	    android:gravity="center|right"
     	    android:text="今天"
+    	    android:textSize="20sp"
     	    android:textColor="@color/dark_gray" />
 
     	<ImageView
         	android:id="@+id/note_im_date"
         	android:layout_width="match_parent"
         	android:layout_height="match_parent"
-        	android:gravity="center"
-        	android:layout_weight="3"
+        	android:gravity="left"
+        	android:layout_weight="5"
         	android:src="@drawable/down_arrow_change"
         	android:paddingEnd="5dp" />
     </LinearLayout>
@@ -46,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:layout_weight="6"
+        android:layout_weight="5"
         android:gravity="center"
         android:id="@+id/note_timeslot_layout">
         
@@ -55,16 +56,17 @@
     	    android:layout_width="match_parent"
     	    android:layout_height="match_parent"
     	    android:layout_weight="1"
-    	    android:gravity="center"
+    	    android:gravity="center|right"
     	    android:text="今天"
+    	    android:textSize="20sp"
     	    android:textColor="@color/dark_gray" />
 
     	<ImageView
         	android:id="@+id/note_im_timeslot"
         	android:layout_width="match_parent"
         	android:layout_height="match_parent"
-        	android:gravity="center"
-        	android:layout_weight="3"
+        	android:gravity="left"
+        	android:layout_weight="5"
         	android:src="@drawable/down_arrow_change"
         	android:paddingEnd="5dp" />
     </LinearLayout>
