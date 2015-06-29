@@ -245,125 +245,6 @@ public class LineChartView extends View {
 		Log.d(TAG, datapoints.size()+" "+datapoints2.size());
     }
 
-	
-	public void dummyDataGenerator() {
-		for (int i = 0; i < 30 ; i++) {
-			Random r1 = new Random();
-			Random r2 = new Random();
-			int activityType;
-			int who = r1.nextInt(3 - 1) + 1;
-			
-			if (who == 1) {
-				activityType = r2.nextInt(6 - 1) + 1;
-				
-			}
-			else {
-				activityType = r2.nextInt(9 - 6) + 6;
-			}
-			
-			
-			Random r3 = new Random();
-			float score = r3.nextInt(4 - (-3)) + (-3);
-			Random r4 = new Random();
-			boolean passTest;
-			int pass = r4.nextInt(4 - 1) + 1;
-			
-			
-			DummyData singleData = new DummyData(who, score, score, activityType, 6, i+1, pass);
-			datapoints.add(singleData);	
-		}
-		/*Log.i("OMG", "type:" + MainActivity.getChartType());
-		datapoints = new ArrayList<DummyData>();
-		if (MainActivity.getChartType() == 1) {
-			// Test 1
-			for (int i = 0; i < 15 ; i++) {
-				DummyData singleData;
-				if ( i == 4 || i == 5 || i == 7) {
-					singleData = new DummyData(2, -2, 7, d7 , 6, i+1, false);
-				}
-				else if ( i < 4 || i ==9 || i==10  ) {
-					singleData = new DummyData(1, 3, 3, d3 , 6, i+1, true);
-				}
-				else {
-					singleData = new DummyData(1, 0, 1, d1 , 6, i+1, true);
-					
-				}
-				
-				datapoints.add(singleData);
-			}
-		}
-		else {
-			// Test 2
-			for (int i = 0; i < 15 ; i++) {
-				DummyData singleData;
-				if ( i < 7) {
-					Random r1 = new Random();
-					Random r2 = new Random();
-					int activityType;
-					int who = 1;
-					
-					if (who == 1) {
-						activityType = r2.nextInt(6 - 3) + 3;
-						
-					}
-					else {
-						activityType = r2.nextInt(7 - 6) + 6;
-					}
-					
-					Bitmap bmp = dotArray[activityType-1];
-					
-					Random r3 = new Random();
-					int score = r3.nextInt(4 - 1) + 1;
-					Random r4 = new Random();
-					boolean passTest;
-					int pass = r4.nextInt(3 - 1) + 1;
-					
-					passTest = true;
-					
-					
-					singleData = new DummyData(who, score, activityType, bmp , 6, i+1, passTest);
-				}
-				else if ( i == 7) {
-					singleData = new DummyData(1, -3, 2, d2 , 6, i+1, true);
-				}
-				else if ( i == 8) {
-					singleData = new DummyData(1, -3, 2, d2 , 6, i+1, false);
-				}
-				else  {
-					Random r1 = new Random();
-					Random r2 = new Random();
-					int activityType;
-					int who = r1.nextInt(2 - 1) + 1;
-					
-					if (who == 1) {
-						activityType = r2.nextInt(3 - 1) + 1;
-						
-					}
-					else {
-						activityType = r2.nextInt(9 - 6) + 6;
-					}
-					
-					Bitmap bmp = dotArray[activityType-1];
-					
-					Random r3 = new Random();
-					int score = r3.nextInt((-1) - (-3)) + (-3);
-					Random r4 = new Random();
-					boolean passTest;
-					int pass = r4.nextInt(3 - 1) + 1;
-					
-					passTest = false;
-					
-					singleData = new DummyData(who, score, activityType, bmp , 6, i+1, passTest);
-				}
-				
-				
-				datapoints.add(singleData);
-			}
-		}*/
-		
-
-	}
-
     
  // override onSizeChanged
  	@Override
@@ -889,7 +770,21 @@ public class LineChartView extends View {
             touchX = x;
             
             cursorLinePos = getCursorPos2(x);
-            if (cursorLinePos < 1) { return false;}
+            if (cursorLinePos < 0) {
+            	cursorLinePos = 0;
+            }
+            else if(cursorLinePos >= numOfDays){
+            	cursorLinePos = numOfDays - 1;
+            }
+            else{
+            	int year = Calendar.getInstance().get(Calendar.YEAR);
+            	int month = dataset[cursorLinePos].getMonth();
+            	int day = dataset[cursorLinePos].getDay();
+            	
+            	DaybookFragment.scrolltoItem(year, month, day);
+            	
+            }
+            
             
             invalidate();
             return true;

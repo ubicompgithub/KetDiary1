@@ -56,28 +56,34 @@
 	            android:orientation="vertical"
 	            android:layout_weight="2"
 	            android:layout_marginLeft="20dp" >
+
 			    <TextView
-			        android:id="@+id/diary_items"	      
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:gravity="center"
-		            android:text="和朋友們去唱歌"
-		            android:textAppearance="?android:attr/textAppearanceMedium"
-		            android:layout_weight="2" 
-		            android:textColor="@color/text_color"/>
+			        android:id="@+id/diary_items"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_weight="2"
+			        android:gravity="center"
+			        android:text="和朋友們去唱歌"
+			        android:textAppearance="?android:attr/textAppearanceMedium"
+			        android:textColor="@color/text_color"
+			        android:textSize="16sp" />
+
 			    <LinearLayout
 		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
 		            android:orientation="horizontal"
 		            android:layout_weight="1"
 		            android:layout_marginTop="20dp" >
-				    <TextView	      
-			            android:layout_width="wrap_content"
-			            android:layout_height="wrap_content"
-			            android:gravity="center"
-			            android:text="影響"
-			            android:textAppearance="?android:attr/textAppearanceMedium"
-			            android:textColor="@color/text_color"/>
+
+				    <TextView
+				        android:id="@+id/diary_impact_word"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:gravity="center"
+				        android:text="影響"
+				        android:textAppearance="?android:attr/textAppearanceMedium"
+				        android:textColor="@color/text_color"
+				        android:textSize="16sp" />
 				    
 				    <TextView
 				        android:id="@+id/diary_impact"	      

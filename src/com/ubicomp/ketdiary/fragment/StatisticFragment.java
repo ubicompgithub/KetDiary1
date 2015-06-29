@@ -42,6 +42,7 @@ import com.ubicomp.ketdiary.statistic.ShowRadarChart;
 import com.ubicomp.ketdiary.statistic.StatisticPageView;
 import com.ubicomp.ketdiary.statistic.StatisticPagerAdapter;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.ui.LoadingDialogControl;
 import com.ubicomp.ketdiary.ui.ScaleOnTouchListener;
 
 public class StatisticFragment extends Fragment implements ShowRadarChart{
@@ -291,7 +292,7 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 			//setQuestionAnimation();
 
 			MainActivity.getMainActivity().enableTabAndClick(true);
-			//LoadingDialogControl.dismiss();
+			LoadingDialogControl.dismiss();
 
 			if (notify_action == MainActivity.ACTION_QUESTIONNAIRE) {
 				//openQuestionnaire();

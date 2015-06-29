@@ -3,11 +3,15 @@ package com.ubicomp.ketdiary.fragment;
 import java.io.File;
 import java.util.Calendar;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
@@ -44,14 +48,18 @@ import com.ubicomp.ketdiary.mydaybook.linechart.ChartCaller;
 import com.ubicomp.ketdiary.mydaybook.linechart.LineChartTitle;
 import com.ubicomp.ketdiary.mydaybook.linechart.LineChartView;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.ui.LoadingDialogControl;
 import com.ubicomp.ketdiary.ui.ScaleOnTouchListener;
 //import android.view.ViewGroup.LayoutParams;
+import com.ubicomp.ketdiary.ui.Typefaces;
 
 public class DaybookFragment extends Fragment implements ChartCaller, TestQuestionCaller2 {
 	
 	public Activity activity = null;
 	private DaybookFragment daybookFragment;
 	private View view;
+	
+	private LoadingHandler loadHandler;
 	
 	private CheckResultDialog msgBox;
 	private RelativeLayout fragment_layout;
@@ -73,13 +81,18 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private static Context context;
 		
 	private static int sv_item_height;
-	
+	private static Typeface wordTypefaceBold = Typefaces.getWordTypefaceBold();
+	private static Typeface wordTypeface = Typefaces.getWordTypeface();
+	private static Typeface digitTypefaceBold = Typefaces.getDigitTypefaceBold();
+	private static Typeface digitTypeface = Typefaces.getDigitTypeface();
+
 	//file
 	private QuestionFile questionFile;
 	private File mainDirectory = null;
 	private TestDataParser2 TDP;
 	
 	private int fragmentIdx;
+	private View[] pageViewList = null;
 	
 	private static final int THIS_MONTH = Calendar.getInstance().get(Calendar.MONTH);
 	
@@ -165,12 +178,13 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		drawerContent.addView(calendarView);
 		upperBarContent.addView(calendarBar);
 		
+		loadHandler = new LoadingHandler();
 		//MainActivity.getMainActivity().setClickable(false);
 		
 		//calendarBar.setEnabled(false);
 
 		// Set up the ViewPager with the sections adapter.
-		View[] pageViewList = new View[sustainMonth];
+		pageViewList = new View[sustainMonth];
 		for (int i = 0; i < sustainMonth; i++) {
 			pageViewList[i] = (View) inflater.inflate(R.layout.fragment_calendar, null);
 			pageViewList[i].setTag(i + startMonth - 1);
@@ -224,7 +238,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		
 		setCurrentCalendarPage(THIS_MONTH + 1 - startMonth);
 		titleText.setText( (THIS_MONTH + 1)  + "月");
-		
+;		//titleText.setTypeface(wordTypefaceBold);
 		
 		charttoggleLayout.setOnClickListener(new ToggleListener() );
 		caltoggleLayout.setOnClickListener(new ToggleListener() );
@@ -508,6 +522,16 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		return view;		
 	}
 	
+	@SuppressLint("HandlerLeak")
+	private class LoadingHandler extends Handler {
+		public void handleMessage(Message msg) {
+			MainActivity.getMainActivity().enableTabAndClick(false);
+
+			MainActivity.getMainActivity().enableTabAndClick(true);
+			LoadingDialogControl.dismiss();
+		}
+	}
+	
 
 	public void setChartType(int type) {
 		chart_type = type;
@@ -629,6 +653,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		else{
 			
 		}
+		loadHandler.sendEmptyMessage(0);
 	}
 	
 	private void setFilterSize() {
@@ -685,8 +710,16 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 				ImageView type_img = (ImageView) diaryItem.findViewById(R.id.diary_image_type);
 				TextView items_txt = (TextView) diaryItem.findViewById(R.id.diary_items);
 				//TextView description_txt = (TextView) diaryItem.findViewById(R.id.diary_description);
+				TextView impact_word = (TextView) diaryItem.findViewById(R.id.diary_impact_word);
 				TextView impact_txt = (TextView) diaryItem.findViewById(R.id.diary_impact);
 				
+				
+				date_num.setTypeface(wordTypefaceBold);
+				week_num.setTypeface(wordTypefaceBold);
+				timeslot_num.setTypeface(wordTypefaceBold);
+				items_txt.setTypeface(wordTypefaceBold);
+				impact_word.setTypeface(wordTypefaceBold);
+				impact_txt.setTypeface(wordTypefaceBold);
 				
 				int result = last_result;
 				if(date != last_day){
@@ -745,7 +778,10 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			}*/
 			items_txt.setText( dict.getItems(items) );
 			//description_txt.setText(descripton);
-			impact_txt.setText(String.valueOf(impact -3));
+			if(impact-3 <=0)
+				impact_txt.setText(String.valueOf(impact -3));
+			else
+				impact_txt.setText("+" + String.valueOf(impact -3));
 			
 			last_result = result;
 			last_day = date;
@@ -1124,21 +1160,22 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		fragment_layout.setEnabled(true);
 		showDiary();
 		
-		//lineChart.invalidate();
+
 		if(lineChart!=null)
 			lineChart.invalidate();
+		
 		//update Calendar View
 		updateCalendarView();
 		
-		//sv.smoothScrollTo(0 , (int)convertDpToPixel(125)*diaryList.getChildCount());
 		//sv.fullScroll(View.FOCUS_DOWN);
 		Log.d(TAG, "DiaryCount:"+diaryList.getChildCount());
 	}
 	
 	private void updateCalendarView(){
 		mViewPager.removeAllViews();
+		
 		LayoutInflater inflater = LayoutInflater.from(context);
-		View[] pageViewList = new View[sustainMonth];
+		pageViewList = new View[sustainMonth];
 		for (int i = 0; i < sustainMonth; i++) {
 			pageViewList[i] = (View) inflater.inflate(R.layout.fragment_calendar, null);
 			pageViewList[i].setTag(i + startMonth - 1);
