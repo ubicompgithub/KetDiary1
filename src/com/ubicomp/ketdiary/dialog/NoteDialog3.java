@@ -11,7 +11,6 @@ import android.graphics.Typeface;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -66,6 +65,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 	private View view;
 	
 	private ViewPager vPager;
+	private ImageView iv_self_others_bar;
 	private ImageView iv_try, iv_smile, iv_urge,
 					  iv_cry, iv_not_good;
 	private ImageView iv_conflict, iv_social, iv_playing;
@@ -217,7 +217,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 				R.layout.note_main2, null);
 		text_self = (TextView)center_layout.findViewById(R.id.text_self);
 	    text_other = (TextView)center_layout.findViewById(R.id.text_other);
-	    
+	    iv_self_others_bar = (ImageView)center_layout.findViewById(R.id.self_others_bar);
 		text_self.setTypeface(Typefaces.getWordTypeface());
 	    text_other.setTypeface(Typefaces.getWordTypeface());
 	    
@@ -257,8 +257,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 			@Override
 			public void onClick(View v) {
 				//listView.setVisibility(View.VISIBLE);
-				if(items!= -1)
-					listViewShowHide();
+				listViewShowHide();
 			}
 								
 		});
@@ -891,10 +890,12 @@ public class NoteDialog3 implements ChooseItemCaller{
 			case 0:
 				text_self.setTextColor(context.getResources().getColor(R.color.blue));
 				text_other.setTextColor(context.getResources().getColor(R.color.text_gray3));
+				iv_self_others_bar.setImageResource(R.drawable.note_slide_line1);
 				break;
 			case 1:
 				text_self.setTextColor(context.getResources().getColor(R.color.text_gray3));
 				text_other.setTextColor(context.getResources().getColor(R.color.blue));
+				iv_self_others_bar.setImageResource(R.drawable.note_slide_line2);
 				break;
 
 			}
@@ -914,10 +915,12 @@ public class NoteDialog3 implements ChooseItemCaller{
 				case 0:
 					text_self.setTextColor(context.getResources().getColor(R.color.blue));
 					text_other.setTextColor(context.getResources().getColor(R.color.text_gray3));
+					iv_self_others_bar.setImageResource(R.drawable.note_slide_line1);
 					break;
 				case 1:
 					text_self.setTextColor(context.getResources().getColor(R.color.text_gray3));
 					text_other.setTextColor(context.getResources().getColor(R.color.blue));
+					iv_self_others_bar.setImageResource(R.drawable.note_slide_line2);
 					break;
 				}
 
@@ -990,10 +993,6 @@ public class NoteDialog3 implements ChooseItemCaller{
 		@Override
 		public void resetView(int type, int select) {
 			setEnabledAll(boxLayout, true);
-			edtext.setEnabled(true);
-			edtext.setInputType(InputType.TYPE_CLASS_TEXT);
-			edtext.setFocusable(true);
-			edtext.setFocusableInTouchMode(true);
 			if(select == -1) //什麼都沒選
 				return;
 			
