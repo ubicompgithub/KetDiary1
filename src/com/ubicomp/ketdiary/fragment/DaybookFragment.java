@@ -40,6 +40,7 @@ import com.ubicomp.ketdiary.db.NoteCategory2;
 import com.ubicomp.ketdiary.db.TestDataParser2;
 import com.ubicomp.ketdiary.dialog.AddNoteDialog2;
 import com.ubicomp.ketdiary.dialog.CheckResultDialog;
+import com.ubicomp.ketdiary.dialog.MyDialog;
 import com.ubicomp.ketdiary.dialog.TestQuestionCaller2;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.QuestionFile;
@@ -50,8 +51,8 @@ import com.ubicomp.ketdiary.mydaybook.linechart.LineChartView;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.LoadingDialogControl;
 import com.ubicomp.ketdiary.ui.ScaleOnTouchListener;
-//import android.view.ViewGroup.LayoutParams;
 import com.ubicomp.ketdiary.ui.Typefaces;
+//import android.view.ViewGroup.LayoutParams;
 
 public class DaybookFragment extends Fragment implements ChartCaller, TestQuestionCaller2 {
 	
@@ -233,6 +234,16 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	    filter7.setOnClickListener(new FilterListener());
 	    filter8.setOnClickListener(new FilterListener());	
 		
+	    filterAll.setOnLongClickListener(new FilterLongClickListener());
+	    filter1.setOnLongClickListener(new FilterLongClickListener());
+	    filter2.setOnLongClickListener(new FilterLongClickListener());
+	    filter3.setOnLongClickListener(new FilterLongClickListener());
+	    filter4.setOnLongClickListener(new FilterLongClickListener());
+	    filter5.setOnLongClickListener(new FilterLongClickListener());
+	    filter6.setOnLongClickListener(new FilterLongClickListener());
+	    filter7.setOnLongClickListener(new FilterLongClickListener());
+	    filter8.setOnLongClickListener(new FilterLongClickListener());
+	    
 		showDiary();
 				
 		drawer.toggle();
@@ -630,6 +641,8 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	public void onResume() {
 		super.onResume();
 		
+		filter_count = 0;
+				
 		for(int i=0; i<filterButtonIsPressed.length; i++)
 			filterButtonIsPressed[i] = false;
 		filterButtonIsPressed[0] = true;
@@ -713,6 +726,29 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 				//TextView description_txt = (TextView) diaryItem.findViewById(R.id.diary_description);
 				TextView impact_word = (TextView) diaryItem.findViewById(R.id.diary_impact_word);
 				TextView impact_txt = (TextView) diaryItem.findViewById(R.id.diary_impact);
+				
+				
+				type_img.setOnLongClickListener(new View.OnLongClickListener() {
+					
+					@Override
+					public boolean onLongClick(View v) {
+						/*
+						LayoutInflater inflater = LayoutInflater.from(context);
+						View dialoglayout = inflater.inflate(R.layout.dialog_answer_question, null);
+						AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.getMainActivity());
+						builder.setView(dialoglayout);
+						builder.show();*/
+						
+						/*final Dialog dialog = new Dialog(MainActivity.getMainActivity());
+						dialog.setContentView(R.layout.dialog_answer_question);
+						//dialog.setTitle("Title...");
+						dialog.show();*/
+						
+						
+						//new MyDialog(MainActivity.getMainActivity()).show();
+						return false;
+					}
+				});
 				
 				
 				date_num.setTypeface(wordTypefaceBold);
@@ -906,6 +942,21 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		}
     }
     
+    private class FilterLongClickListener implements View.OnLongClickListener{
+
+		@Override
+		public boolean onLongClick(View v) {
+			
+			new MyDialog(MainActivity.getMainActivity()).show();
+			
+			return false;
+		}
+    	
+    }
+    
+    
+    
+    
 	private class FilterButtonListener implements View.OnClickListener {
     	
     	@Override
@@ -1017,6 +1068,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
     		
     		switch (v.getId()) {
     		case (R.id.filter_all): { 
+    			filter_count = 0;
     			setAllFilter(false);
     		    filterButtonIsPressed[0] = true; 
     		    filterAll.setImageResource(R.drawable.filter_all_selected);

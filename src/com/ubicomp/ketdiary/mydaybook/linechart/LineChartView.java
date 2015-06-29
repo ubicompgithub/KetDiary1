@@ -461,6 +461,9 @@ public class LineChartView extends View {
         Paint p = new Paint();
         
         //DrawLine
+        if(dataset == null)
+        	return;
+        
     	int startPoint = 0;
         for (int i = 0; i < dataset.length; i++) {
         	int selfType = dataset[i].getSelfType();

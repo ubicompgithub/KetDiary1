@@ -93,7 +93,7 @@ public class DBHelper extends SQLiteOpenHelper {
 				+ " questionType INTEGER NOT NULL,"
 				+ " isCorrect INTEGER NOT NULL DEFAULT 0,"
 				+ " selection CHAR[255] NOT NULL,"
-				+ " select INTEGER NOT NULL DEFAULT 0,"
+				+ " choose INTEGER NOT NULL DEFAULT 0,"
 				+ " score INTEGER NOT NULL,"
 				+ " upload INTEGER NOT NULL DEFAULT 0" + ")");
 

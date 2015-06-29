@@ -107,7 +107,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
 	
 	public float convertDpToPixel(float dp){
 	    float px = dp * getDensity();
-	    Log.d(TAG, "density:" + getDensity());
+	    //Log.d(TAG, "density:" + getDensity());
 	    return px;
 	}
 	

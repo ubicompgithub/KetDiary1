@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/shadow" >
+
+    <LinearLayout
+        android:layout_width="272dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/rank_chart_bg"
+        android:splitMotionEvents="true"
+        android:translationX="5dp"
+        android:translationY="-5dp"
+        android:orientation="vertical"
+        android:padding="20dp" >
+        
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:gravity="center"
+            android:padding="5dp">
+            
+            <ImageView
+	            android:id="@+id/diary_detail_image1"
+	            android:layout_width="30dp"
+	            android:layout_height="30dp"
+	            android:src="@drawable/filter_color1" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/diary_detail_image1"
+                android:text="負面情緒"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/text_gray3" />
+            
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:gravity="center"
+            android:padding="5dp">
+            
+            <ImageView
+	            android:id="@+id/diary_detail_image2"
+	            android:layout_width="30dp"
+	            android:layout_height="30dp"
+	            android:src="@drawable/filter_color2" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/diary_detail_image2"
+                android:text="生理因素"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/text_gray3" />
+            
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:gravity="center"
+            android:padding="5dp">
+            
+            <ImageView
+	            android:id="@+id/diary_detail_image3"
+	            android:layout_width="30dp"
+	            android:layout_height="30dp"
+	            android:src="@drawable/filter_color3" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/diary_detail_image3"
+                android:text="正面情緒"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/text_gray3" />
+            
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:gravity="center"
+            android:padding="5dp">
+            
+            <ImageView
+	            android:id="@+id/diary_detail_image4"
+	            android:layout_width="30dp"
+	            android:layout_height="30dp"
+	            android:src="@drawable/filter_color4" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/diary_detail_image4"
+                android:text="測試自己控制力"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/text_gray3" />
+            
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:gravity="center"
+            android:padding="5dp">
+            
+            <ImageView
+	            android:id="@+id/diary_detail_image5"
+	            android:layout_width="30dp"
+	            android:layout_height="30dp"
+	            android:src="@drawable/filter_color5" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/diary_detail_image5"
+                android:text="衝動和誘惑"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/text_gray3" />
+            
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:gravity="center"
+            android:padding="5dp">
+            
+            <ImageView
+	            android:id="@+id/diary_detail_image6"
+	            android:layout_width="30dp"
+	            android:layout_height="30dp"
+	            android:src="@drawable/filter_color6" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/diary_detail_image6"
+                android:text="與他人相處產生摩擦"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/text_gray3" />
+            
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:gravity="center"
+            android:padding="5dp">
+            
+            <ImageView
+	            android:id="@+id/diary_detail_image7"
+	            android:layout_width="30dp"
+	            android:layout_height="30dp"
+	            android:src="@drawable/filter_color7" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/diary_detail_image7"
+                android:text="社交壓力"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/text_gray3" />
+            
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:gravity="center"
+            android:padding="5dp">
+            
+            <ImageView
+	            android:id="@+id/diary_detail_image8"
+	            android:layout_width="30dp"
+	            android:layout_height="30dp"
+	            android:src="@drawable/filter_color8" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/diary_detail_image8"
+                android:text="與他人玩樂"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/text_gray3" />
+            
+        </RelativeLayout>
+
+        
+        
+    </LinearLayout>
+
+</FrameLayout>
