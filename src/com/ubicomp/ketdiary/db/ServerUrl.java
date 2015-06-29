@@ -37,6 +37,14 @@ public class ServerUrl {
 		return SERVER_URL + "test/NoteAdd.php";
 	}
 	
+	public static String getQuestionTestUrl(){
+		return SERVER_URL + "test/QuestionTest.php";
+	}
+	
+	public static String getCopingSkillUrl(){
+		return SERVER_URL + "test/CopingSkill.php";
+	}
+	
 	/**
 	 * URL for querying the long-term ranking
 	 * 

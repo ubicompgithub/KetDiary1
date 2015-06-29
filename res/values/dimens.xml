@@ -42,9 +42,9 @@
     <dimen name="chart_title_0">23dp</dimen>
     <dimen name="chart_title_1">125dp</dimen>
     <dimen name="chart_title_2">230dp</dimen>
-    <dimen name="chart_title_0_r">82dp</dimen>
-    <dimen name="chart_title_1_r">298dp</dimen>
-    <dimen name="chart_title_2_r">491dp</dimen>
+    <dimen name="chart_title_0_r">60dp</dimen>
+    <dimen name="chart_title_1_r">250dp</dimen>
+    <dimen name="chart_title_2_r">440dp</dimen>
     <dimen name="chart_label_base">13dp</dimen>
     <dimen name="chart_label_gap">3dp</dimen>
     <dimen name="chart_label_top">6dp</dimen>

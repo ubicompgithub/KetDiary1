@@ -12,6 +12,7 @@ import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.check.StartDateCheck;
 import com.ubicomp.ketdiary.check.WeekNumCheck;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
+import com.ubicomp.ketdiary.data.structure.QuestionTest;
 import com.ubicomp.ketdiary.data.structure.Rank;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
 import com.ubicomp.ketdiary.data.structure.TestResult;
@@ -1271,6 +1272,137 @@ public class DatabaseControl {
 			synchronized (sqlLock) {
 				db = dbHelper.getWritableDatabase();
 				String sql = "UPDATE TestDetail SET upload = 1 WHERE ts = " + ts;
+				db.execSQL(sql);
+				db.close();
+			}
+		}
+		
+		// QuestionTest
+
+		/**
+		 * Get the latest StorytellingTest result
+		 * 
+		 * @return StorytellingTest. If there are no StorytellingTest, return a
+		 *         dummy data.
+		 * @see ubicomp.soberdiary.data.structure.StorytellingTest
+		 */
+		public QuestionTest getLatestQuestionTest() {
+			synchronized (sqlLock) {
+				db = dbHelper.getReadableDatabase();
+				String sql;
+				Cursor cursor;
+				sql = "SELECT * FROM QuestionTest WHERE isCorrect = 1 ORDER BY ts DESC LIMIT 1";
+				cursor = db.rawQuery(sql, null);
+				if (!cursor.moveToFirst()) {
+					cursor.close();
+					db.close();
+					return new QuestionTest(0, 0, 0, "", 0, 0);
+				}
+				long ts = cursor.getLong(4);
+				int type = cursor.getInt(7);
+				int isCorrect = cursor.getInt(8);
+				String selection = cursor.getString(9);
+				int choose = cursor.getInt(10);
+				int score = cursor.getInt(11);
+				return new QuestionTest(ts, type, isCorrect, selection,
+						choose, score);
+			}
+		}
+
+		/**
+		 * Insert a QuestionTest result
+		 * 
+		 * @return # of credits got by the user
+		 * @param data
+		 *            inserted StorytellingTest
+		 * @see ubicomp.soberdiary.data.structure.StorytellingTest
+		 */
+		public int insertStorytellingTest(QuestionTest data) {
+			synchronized (sqlLock) {
+				QuestionTest prev_data = getLatestQuestionTest();
+				int addScore = 0;
+				if (!prev_data.getTv().isSameTimeBlock(data.getTv())
+						&& (data.getisCorrect()==1) )
+					addScore = 1;
+				if (!StartDateCheck.afterStartDate())
+					addScore = 0;
+
+				db = dbHelper.getWritableDatabase();
+				ContentValues content = new ContentValues();
+				content.put("year", data.getTv().getYear());
+				content.put("month", data.getTv().getMonth());
+				content.put("day", data.getTv().getDay());
+				content.put("ts", data.getTv().getTimestamp());
+				content.put("week", data.getTv().getWeek());
+				content.put("timeslot", data.getTv().getTimeslot());
+				content.put("questionType", data.getQuestionType());
+				content.put("isCorrect", data.getisCorrect());
+				content.put("selection", data.getSelection());
+				content.put("choose", data.getChoose());
+				content.put("score", prev_data.getScore() + addScore);
+				db.insert("QuestionTest", null, content);
+				db.close();
+				return addScore;
+			}
+		}
+
+		/**
+		 * Get all StorytellingTest results which are not uploaded to the server
+		 * 
+		 * @return An array of StorytellingTest. If there are no StorytellingTest,
+		 *         return null.
+		 * @see ubicomp.soberdiary.data.structure.StorytellingTest
+		 */
+		public QuestionTest[] getNotUploadedQuestionTest() {
+			synchronized (sqlLock) {
+				QuestionTest[] data = null;
+
+				db = dbHelper.getReadableDatabase();
+				String sql;
+				Cursor cursor;
+
+				sql = "SELECT * FROM QuestionTest WHERE upload = 0";
+				cursor = db.rawQuery(sql, null);
+				int count = cursor.getCount();
+				if (count == 0) {
+					cursor.close();
+					db.close();
+					return null;
+				}
+
+				data = new QuestionTest[count];
+
+				for (int i = 0; i < count; ++i) {
+					cursor.moveToPosition(i);
+					long ts = cursor.getLong(4);
+					int type = cursor.getInt(7);
+					int isCorrect = cursor.getInt(8);
+					String selection = cursor.getString(9);
+					int choose = cursor.getInt(10);
+					int score = cursor.getInt(11);
+					data[i] = new QuestionTest(ts, type, isCorrect, selection,
+							choose, score);
+				}
+
+				cursor.close();
+				db.close();
+
+				return data;
+			}
+		}
+
+		/**
+		 * Label the QuestionTest result uploaded
+		 * 
+		 * @param ts
+		 *            Timestamp of the uploaded StorytellingTest
+		 * @see ubicomp.soberdiary.data.structure.StorytellingTest
+		 */
+		public void setQuestionTestUploaded(long ts) {
+			synchronized (sqlLock) {
+				db = dbHelper.getWritableDatabase();
+				String sql = "UPDATE QuestionTest SET upload = 1 WHERE ts = "
+						+ ts;
 				db.execSQL(sql);
 				db.close();
 			}
