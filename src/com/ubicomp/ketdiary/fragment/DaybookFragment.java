@@ -40,7 +40,7 @@ import com.ubicomp.ketdiary.db.NoteCategory2;
 import com.ubicomp.ketdiary.db.TestDataParser2;
 import com.ubicomp.ketdiary.dialog.AddNoteDialog2;
 import com.ubicomp.ketdiary.dialog.CheckResultDialog;
-import com.ubicomp.ketdiary.dialog.MyDialog;
+import com.ubicomp.ketdiary.dialog.FilterDetailDialog;
 import com.ubicomp.ketdiary.dialog.TestQuestionCaller2;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.QuestionFile;
@@ -947,7 +947,14 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		@Override
 		public boolean onLongClick(View v) {
 			
-			new MyDialog(MainActivity.getMainActivity()).show();
+			new FilterDetailDialog(MainActivity.getMainActivity()).show();
+			
+			/*
+			Dialog dialog = new Dialog(MainActivity.getMainActivity(), R.style.selectorDialog);
+			dialog.setContentView(R.layout.dialog_diary_detail);
+			WindowManager.LayoutParams lp=dialog.getWindow().getAttributes();
+			
+			dialog.show();*/
 			
 			return false;
 		}
