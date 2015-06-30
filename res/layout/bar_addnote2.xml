@@ -3,7 +3,10 @@
     android:id="@+id/title_addnote"
     android:layout_width="match_parent"
     android:layout_height="70dp"
-    android:gravity="center" >
+    android:gravity="center" 
+    android:layout_gravity="center|top"
+    android:paddingRight="10dp"
+    android:paddingLeft="10dp">
 
     <TextView
         android:id="@+id/note_title"
@@ -31,14 +34,15 @@
     	    android:gravity="center|right"
     	    android:text="今天"
     	    android:textSize="20sp"
-    	    android:textColor="@color/dark_gray" />
+    	    android:textColor="@color/dark_gray" 
+    	    android:paddingRight="10dp"/>
 
     	<ImageView
         	android:id="@+id/note_im_date"
         	android:layout_width="match_parent"
         	android:layout_height="match_parent"
-        	android:gravity="left"
-        	android:layout_weight="5"
+        	
+        	android:layout_weight="7"
         	android:src="@drawable/down_arrow_change"
         	android:paddingEnd="5dp" />
     </LinearLayout>
@@ -58,6 +62,7 @@
     	    android:layout_weight="1"
     	    android:gravity="center|right"
     	    android:text="今天"
+    	    android:paddingRight="10dp"
     	    android:textSize="20sp"
     	    android:textColor="@color/dark_gray" />
 
@@ -65,8 +70,8 @@
         	android:id="@+id/note_im_timeslot"
         	android:layout_width="match_parent"
         	android:layout_height="match_parent"
-        	android:gravity="left"
-        	android:layout_weight="5"
+        	
+        	android:layout_weight="7"
         	android:src="@drawable/down_arrow_change"
         	android:paddingEnd="5dp" />
     </LinearLayout>

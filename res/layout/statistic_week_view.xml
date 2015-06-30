@@ -11,16 +11,16 @@
         android:text="@string/week_test"
         android:textSize="@dimen/small_title_size"
         android:layout_marginTop="36dp"
-        android:layout_marginLeft="60dp"
-        android:textColor="@color/black" />
+        android:layout_marginLeft="30dp"
+        android:layout_marginBottom="15dp"
+        android:textColor="@color/text_gray2" />
     
     <LinearLayout
         android:id="@+id/statistic_week_timeblock_label_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="13dp"
+        android:orientation="horizontal"
+        
         android:layout_below="@+id/statistic_week_title"
         />
     
@@ -41,7 +41,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_toRightOf="@+id/statistic_week_timeblock_label_layout"
         android:layout_below="@+id/statistic_week_block_layout"
         />
     
@@ -50,7 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_toRightOf="@+id/statistic_week_timeblock_label_layout"
+        android:layout_marginLeft="20dp"
         android:layout_below="@+id/statistic_week_date_label_layout"
         />
     

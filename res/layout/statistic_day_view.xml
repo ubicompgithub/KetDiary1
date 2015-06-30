@@ -21,7 +21,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/statistic_day_title"
         android:layout_marginLeft="26.7dp"
-        android:layout_marginTop="15.3dp"
+        android:layout_marginTop="5dp"
+        android:text="dagg"
         android:textColor="@color/text_gray2"
         android:textSize="19.3dp" />
     
@@ -50,7 +51,7 @@
         android:id = "@+id/statistic_day_value_layout"
         android:layout_width="134.7dp"
         android:layout_height="134.7dp"
-        android:layout_marginRight="28.7dp"
+        android:layout_marginRight="35dp"
         android:layout_marginTop="36dp"
         android:layout_alignParentRight="true">
     

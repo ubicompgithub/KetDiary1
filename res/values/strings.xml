@@ -20,6 +20,13 @@
     <string name="morning_short">早</string>
     <string name="noon_short">午</string>
     <string name="night_short">晚</string>
+    <string name="monday">一</string>
+    <string name="tuesday">二</string>
+    <string name="wednesday">三</string>
+    <string name="thursday">四</string>
+    <string name="friday">五</string>
+    <string name="saturday">六</string>
+    <string name="sunday">日</string>
     <string name="test_pass">通過</string>
     <string name="test_fail">不通過</string>
     <string name="test_none">未測試</string>

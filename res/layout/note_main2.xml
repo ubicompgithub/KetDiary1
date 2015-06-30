@@ -17,6 +17,7 @@
             android:layout_alignBottom="@+id/text_other"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="45dp"
+            
             android:gravity="center"
             android:text="自我狀態"
             android:textSize="16sp"

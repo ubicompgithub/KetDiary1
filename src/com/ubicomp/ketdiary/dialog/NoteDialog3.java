@@ -218,8 +218,8 @@ public class NoteDialog3 implements ChooseItemCaller{
 		text_self = (TextView)center_layout.findViewById(R.id.text_self);
 	    text_other = (TextView)center_layout.findViewById(R.id.text_other);
 	    iv_self_others_bar = (ImageView)center_layout.findViewById(R.id.self_others_bar);
-		text_self.setTypeface(Typefaces.getWordTypeface());
-	    text_other.setTypeface(Typefaces.getWordTypeface());
+		text_self.setTypeface(Typefaces.getWordTypefaceBold());
+	    text_other.setTypeface(Typefaces.getWordTypefaceBold());
 	    
 		text_self.setTextColor(context.getResources().getColor(R.color.blue));    
 	    text_self.setOnClickListener(new MyClickListener(0));

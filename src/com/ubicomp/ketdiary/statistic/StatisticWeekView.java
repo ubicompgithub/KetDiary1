@@ -40,8 +40,8 @@ public class StatisticWeekView extends StatisticPageView {
 	private static final int nBlocks = 3;
 	private static final int nDays = 7;
 
-	private static final int[] blockHint = { R.string.morning_short,
-			R.string.noon_short, R.string.night_short };
+	private static final int[] blockHint = { R.string.sunday, R.string.monday, R.string.tuesday, R.string.wednesday, 
+			R.string.thursday, R.string.friday, R.string.saturday };
 	private static final int[] labelHint = { R.string.test_pass,
 			R.string.test_fail, R.string.test_none };
 
@@ -52,6 +52,8 @@ public class StatisticWeekView extends StatisticPageView {
 
 	private static final int text_color = App.getContext().getResources()
 			.getColor(R.color.text_gray);
+	private static final int text_color2 = App.getContext().getResources()
+			.getColor(R.color.text_gray2);
 	private static final float ALPHA = 0.4F;
 
 	public StatisticWeekView() {
@@ -92,12 +94,12 @@ public class StatisticWeekView extends StatisticPageView {
 
 		int textSize = (int) App.getContext().getResources()
 				.getDimensionPixelSize(R.dimen.normal_text_size);
-		time_labels = new TextView[nBlocks];
-		for (int i = 0; i < nBlocks; ++i) {
+		time_labels = new TextView[nDays];
+		for (int i = 0; i < nDays; ++i) {
 			time_labels[i] = new TextView(context);
 			time_labels[i].setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
-			time_labels[i].setTextColor(text_color);
-			time_labels[i].setText(blockHint[i]);
+			time_labels[i].setTextColor(text_color2);
+			//time_labels[i].setText(blockHint[i]);
 			time_labels[i].setTypeface(wordTypefaceBold);
 			time_labels[i].setGravity(Gravity.CENTER);
 			timeLayout.addView(time_labels[i]);
@@ -107,17 +109,17 @@ public class StatisticWeekView extends StatisticPageView {
 		for (int i = 0; i < nDays; ++i) {
 			date_labels[i] = new TextView(context);
 			date_labels[i].setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
-			date_labels[i].setTextColor(text_color);
+			date_labels[i].setTextColor(text_color2);
 			date_labels[i].setGravity(Gravity.CENTER);
 			date_labels[i].setTypeface(digitTypefaceBold);
 			dateLayout.addView(date_labels[i]);
 		}
 
-		circles = new ImageView[nBlocks * nDays];
+		circles = new ImageView[ nDays];
 
-		for (int i = 0; i < nBlocks * nDays; ++i) {
+		for (int i = 0; i <  nDays; ++i) {
 			circles[i] = new ImageView(context);
-			blockLayout.addView(circles[i]);
+			//blockLayout.addView(circles[i]);
 			circles[i].setScaleType(ScaleType.CENTER);
 		}
 
@@ -141,26 +143,31 @@ public class StatisticWeekView extends StatisticPageView {
 		int c_height = context.getResources().getDimensionPixelSize(
 				R.dimen.week_circle_height);
 
-		for (int i = 0; i < nBlocks; ++i) {
-			LinearLayout.LayoutParams param = (LinearLayout.LayoutParams) time_labels[i]
-					.getLayoutParams();
-			param.width = c_width;
-			param.height = c_height;
-		}
+//		for (int i = 0; i < nBlocks; ++i) {
+//			LinearLayout.LayoutParams param = (LinearLayout.LayoutParams) time_labels[i]
+//					.getLayoutParams();
+//			param.width = c_width;
+//			param.height = c_height;
+//		}
 
 		for (int i = 0; i < nDays; ++i) {
+			
 			LinearLayout.LayoutParams param = (LinearLayout.LayoutParams) date_labels[i]
+					.getLayoutParams();
+			LinearLayout.LayoutParams param2 = (LinearLayout.LayoutParams) time_labels[i]
 					.getLayoutParams();
 			param.width = c_width;
 			param.height = c_height;
+			param2.width = c_width;
+			param2.height = c_height;
 		}
 
-		for (int i = 0; i < nBlocks * nDays; ++i) {
-			GridLayout.LayoutParams cParam = (GridLayout.LayoutParams) circles[i]
-					.getLayoutParams();
-			cParam.width = c_width;
-			cParam.height = c_height;
-		}
+//		for (int i = 0; i < nBlocks * nDays; ++i) {
+//			GridLayout.LayoutParams cParam = (GridLayout.LayoutParams) circles[i]
+//					.getLayoutParams();
+//			cParam.width = c_width;
+//			cParam.height = c_height;
+//		}
 
 		for (int i = 0; i < 3; ++i) {
 			LinearLayout.LayoutParams param = (LinearLayout.LayoutParams) labels[i]
@@ -190,29 +197,54 @@ public class StatisticWeekView extends StatisticPageView {
 		}*/
 
 		Calendar cal = Calendar.getInstance();
+		Calendar cal2 = Calendar.getInstance();
 		for (int i = 6; i > 0; --i) {
 			int date = cal.get(Calendar.DAY_OF_MONTH);
+			int dayofweek = cal2.get(Calendar.DAY_OF_WEEK);
 			String label = String.valueOf(date);
 			date_labels[i].setText(label);
-			if (cal.before(startDate)) {
-				int max = i + 21;
-				for (int j = i; j < max; j += 7) {
-					circles[j].setAlpha(ALPHA);
-				}
-			}
+//			if (cal.before(startDate)) {
+//				int max = i + 21;
+//				for (int j = i; j < max; j += 7) {
+//					circles[j].setAlpha(ALPHA);
+//				}
+//			}
+			switch(dayofweek){
+		    case Calendar.SUNDAY:
+		    	time_labels[i].setText("日");
+		    	break;
+		    case Calendar.MONDAY:
+		    	time_labels[i].setText("一");
+		    	break;
+		    case Calendar.TUESDAY:
+		    	time_labels[i].setText("二");
+		    	break;
+		    case Calendar.WEDNESDAY:
+		    	time_labels[i].setText("三");
+		    	break;
+		    case Calendar.THURSDAY:
+		    	time_labels[i].setText("四");
+		    	break;
+		    case Calendar.FRIDAY:
+		    	time_labels[i].setText("五");
+		    	break;
+		    case Calendar.SATURDAY:
+		    	time_labels[i].setText("六");
+		    }
 			cal.add(Calendar.DAY_OF_MONTH, -1);
+			cal2.add(Calendar.DAY_OF_WEEK, -1);
 		}
 
-		if (cal.before(startDate)) {
-			for (int j = 0; j < 21; j += 7) {
-				circles[j].setAlpha(ALPHA);
-			}
-		}
+//		if (cal.before(startDate)) {
+//			for (int j = 0; j < 21; j += 7) {
+//				circles[j].setAlpha(ALPHA);
+//			}
+//		}
 
-		int month = cal.get(Calendar.MONTH) + 1;
-		int date = cal.get(Calendar.DAY_OF_MONTH);
-		String month_label = month + "/" + date;
-		date_labels[0].setText(month_label);
+//		int month = cal.get(Calendar.MONTH) + 1;
+//		int date = cal.get(Calendar.DAY_OF_MONTH);
+//		String month_label = month + "/" + date;
+//		date_labels[0].setText(month_label);
 
 		labelImgs[0].setImageDrawable(circleDrawables[2]);
 		labelImgs[1].setImageDrawable(circleDrawables[1]);

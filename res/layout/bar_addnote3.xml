@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/title_addnote"
-    android:layout_width="match_parent"
+    android:layout_width="270dp"
     android:layout_height="70dp"
-    android:gravity="center" >
+    android:gravity="center"
+    android:layout_gravity="center|top" 
+    >
 
     <TextView
         android:id="@+id/note_title"

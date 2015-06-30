@@ -88,9 +88,9 @@ public class StatisticDayView extends StatisticPageView {
 		bracTitle.setTypeface(wordTypefaceBold);
 
 		bracValue = (TextView) view.findViewById(R.id.statistic_day_brac_value);
-		bracValue.setTypeface(digitTypefaceBold);
+		bracValue.setTypeface(wordTypefaceBold);
 		bracTime = (TextView) view.findViewById(R.id.statistic_day_brac_time);
-		bracTime.setTypeface(wordTypeface);
+		bracTime.setTypeface(wordTypefaceBold);
 	}
 
 	@Override
@@ -254,6 +254,7 @@ public class StatisticDayView extends StatisticPageView {
 			s.setSpan(new CustomTypefaceSpan("c1", digitTypeface, text_color),
 					start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
 			bracTime.setText(s);
+			bracTime.setTypeface(wordTypefaceBold);
 		}
 		//type_idx = 1;
 		if (type_idx > 0)
