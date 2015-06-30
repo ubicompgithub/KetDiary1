@@ -40,7 +40,7 @@ public class LineChartData {
 		return month;
 	}
 	
-	public float getDay() {
+	public int getDay() {
 		return day;
 	}
 	

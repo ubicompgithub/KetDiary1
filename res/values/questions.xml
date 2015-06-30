@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="question_title">延伸學習</string>
+    <string name="question_blank">○</string>
+    
+    <string-array name="question_1">
+        <item>請問下列哪一項藥物不是毒品</item>
+        <item>請問下列哪一項不是吸食毒品的副作用</item>
+        <item>下列何者可能是使用毒品的特徵</item>
+        <item>吸食愷他命可能造成以下哪種症狀</item>
+    </string-array>
+    <string-array name="question_answer_1">
+        <item>維他命B群</item>
+        <item>愷他命</item>
+        <item>安非他命</item>
+        <item>海洛因</item>
+        <item>改善心肺功能</item>
+        <item>噁心、嘔吐</item>
+        <item>產生幻覺</item>
+        <item>智力衰退</item>
+        <item>目光呆滯</item>
+        <item>目光炯炯有神</item>
+        <item>精神狀況良好</item>
+        <item>情緒穩定</item>
+        <item>以上皆是</item>
+        <item>震顫</item>
+        <item>影響感覺、協調及判斷力</item>
+        <item>作惡夢</item>
+    </string-array>
+</resources>

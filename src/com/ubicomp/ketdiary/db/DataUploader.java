@@ -17,6 +17,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
+import com.ubicomp.ketdiary.data.structure.QuestionTest;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 
@@ -68,38 +69,11 @@ public class DataUploader {
 
 
 			
-			// TestDetail
-			Vector<Datatype.TestDetail> ttds = DBControl.inst.getNotUploadedTestDetail();
-			if(ttds != null){
-				for(int i = 0;i < ttds.size();i++){
-					if(connectToServer(ttds.get(i)) == ERROR)
-						Log.d(TAG, "FAIL TO UPLOAD - TestDetail");
-				}
-			}
-			
 			// Patient
 			// UserInfo
 			if(connectToServer() == ERROR)
 				Log.d(TAG, "FAIL TO UPLOAD - Patient");
 			
-			/*
-			// TestResult
-			Vector<TestResult> tr = DBControl.inst.getNotUploadedTestResult();
-			if(tr != null){
-				for(int i = 0;i < tr.size();i++){
-					if(connectToServer(tr.get(i)) == ERROR)
-						Log.d(TAG, "FAIL TO UPLOAD - TestResult");
-				}
-			}*/
-			/*
-			// NoteAdd
-			Vector<NoteAdd> na = DBControl.inst.getNotUploadedNoteAdd();
-			if(na != null){
-				for(int i = 0;i < na.size();i++){
-					if(connectToServer(na.get(i)) == ERROR)
-						Log.d(TAG, "FAIL TO UPLOAD - NoteAdd");
-				}
-			}*/			
 			
 			// TestResult		
 			TestResult testResults[] = db.getAllNotUploadedTestResult();
@@ -127,6 +101,14 @@ public class DataUploader {
 				}
 			}			
 			
+			// QuestionTest
+			QuestionTest questionTests[] = db.getNotUploadedQuestionTest();
+			if (questionTests != null) {
+				for (int i = 0; i < questionTests.length; ++i) {
+					if (connectToServer(questionTests[i]) == ERROR)
+					Log.d(TAG, "FAIL TO UPLOAD - QuestionTest");
+				}
+			}				
 			
 			return null;
 		}
@@ -216,6 +198,24 @@ public class DataUploader {
 				if (upload(httpClient, httpPost)){
 					db.setTestDetailUploaded(data.getTv().getTimestamp());
 					Log.d(TAG, "Upload TestDetail Success.");
+				}
+				else
+					return ERROR;
+			} catch (Exception e) {
+				Log.d(TAG, "EXCEPTION:" + e.toString());
+				return ERROR;
+			}
+			return SUCCESS;
+		}
+		
+		private int connectToServer(QuestionTest data) {
+			try {
+				DefaultHttpClient httpClient = HttpSecureClientGenerator
+						.getSecureHttpClient();
+				HttpPost httpPost = HttpPostGenerator.genPost(data);
+				if (upload(httpClient, httpPost)){
+					db.setQuestionTestUploaded(data.getTv().getTimestamp());
+					Log.d(TAG, "Upload QuestionTest Success.");
 				}
 				else
 					return ERROR;

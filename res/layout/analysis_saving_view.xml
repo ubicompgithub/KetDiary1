@@ -32,33 +32,39 @@
 
         <RelativeLayout
             android:id="@+id/analysis_position_layout"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true" >
-
+			
+            <ImageView
+                android:id="@+id/analysis_pros_backward"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/analysis_pros_position"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/anaylse_backward" />
+            
             <ImageView
                 android:id="@+id/analysis_pros_position"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
                 android:src="@drawable/analyse_node" />
-            
-             <ImageView
-                android:id="@+id/analysis_pros_backward"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/anaylse_backward"
-                />
 
             <ImageView
                 android:id="@+id/analysis_pros_forward"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/analysis_pros_position"
                 android:layout_marginLeft="10dp"
                 android:src="@drawable/anaylse_forward" />
+
+            
+
         </RelativeLayout>
 
     </RelativeLayout>

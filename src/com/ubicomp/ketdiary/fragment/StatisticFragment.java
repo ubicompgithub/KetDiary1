@@ -14,7 +14,6 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,6 +32,7 @@ import com.ubicomp.ketdiary.EmotionActivity;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.db.DatabaseControl;
+import com.ubicomp.ketdiary.dialog.QuestionDialog;
 import com.ubicomp.ketdiary.statistic.AnalysisCounterView;
 import com.ubicomp.ketdiary.statistic.AnalysisProsConsView;
 import com.ubicomp.ketdiary.statistic.AnalysisRankView;
@@ -42,7 +42,7 @@ import com.ubicomp.ketdiary.statistic.ShowRadarChart;
 import com.ubicomp.ketdiary.statistic.StatisticPageView;
 import com.ubicomp.ketdiary.statistic.StatisticPagerAdapter;
 import com.ubicomp.ketdiary.system.PreferenceControl;
-import com.ubicomp.ketdiary.ui.CustomToast;
+import com.ubicomp.ketdiary.ui.LoadingDialogControl;
 import com.ubicomp.ketdiary.ui.ScaleOnTouchListener;
 
 public class StatisticFragment extends Fragment implements ShowRadarChart{
@@ -85,9 +85,10 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 
 	private AlphaAnimation questionAnimation;
 
-	//private QuestionnaireDialog msgBox;
+	private static QuestionDialog msgBox;
 	private RadarChart radarChart;
 	private DetailChart detailChart;
+	
 
 	private DatabaseControl db;
 
@@ -183,7 +184,7 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 		analysisViews[2] = new AnalysisRankView(statisticFragment);
 		
 		statisticViewAdapter = new StatisticPagerAdapter();
-		//msgBox = new QuestionnaireDialog(this, (RelativeLayout) view);
+		msgBox = new QuestionDialog((RelativeLayout) view);
 
 		Bundle data = getArguments();
 		if (data != null) {
@@ -216,8 +217,8 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 			if (analysisViews[i] != null)
 				analysisViews[i].clear();
 		}
-		//if (msgBox != null)
-		//	msgBox.clear();
+		if (msgBox != null)
+			msgBox.clear();
 	}
 
 	private class StatisticOnPageChangeListener implements OnPageChangeListener {
@@ -280,8 +281,8 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 				dots[i].setImageDrawable(dot_off);
 			dots[0].setImageDrawable(dot_on);
 
-			//if (msgBox != null)
-			//	msgBox.initialize();
+			if (msgBox != null)
+				msgBox.initialize();
 
 			questionAnimation = new AlphaAnimation(1.0F, 0.0F);
 			questionAnimation.setDuration(200);
@@ -291,7 +292,7 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 			//setQuestionAnimation();
 
 			MainActivity.getMainActivity().enableTabAndClick(true);
-			//LoadingDialogControl.dismiss();
+			LoadingDialogControl.dismiss();
 
 			if (notify_action == MainActivity.ACTION_QUESTIONNAIRE) {
 				//openQuestionnaire();
@@ -339,6 +340,27 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 	public Context getContext() {
 		return this.getActivity();
 	}
+	
+	private View qv;
+	public static void showQuestionTest() {
+		//removeRadarChart();
+		//removeDetailChart();
+		msgBox.show();
+		/*
+		qv = QuestionDialog.getView();
+
+		allLayout.addView(rv);
+		RelativeLayout.LayoutParams rvParam = (RelativeLayout.LayoutParams) rv
+				.getLayoutParams();
+		rvParam.width = rvParam.height = LayoutParams.MATCH_PARENT;
+		allLayout.invalidate();
+		rv.invalidate();
+		rv.setOnClickListener(new RadarOnClickListener(-1));
+		//ClickLog.Log(ClickLogId.STATISTIC_RADAR_CHART_OPEN);*/
+		//enablePage(false);
+	}
+	
+	
 	
 	private View rv;
 	private View dv;

@@ -1,7 +1,6 @@
 package com.ubicomp.ketdiary.fragment;
 
 import java.io.File;
-import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.util.Random;
 
@@ -50,6 +49,7 @@ import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.QuestionFile;
 import com.ubicomp.ketdiary.file.VoltageFileHandler;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.ui.LoadingDialogControl;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
 public class TestFragment extends Fragment implements BluetoothListener, CameraCaller, TestQuestionCaller2{
@@ -774,7 +774,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		if( TDP!= null ){
 			//TDP.startAddNote();
 			//TDP.getQuestionResult2(textFile)
-			TDP.startAddNote2(1, day, timeslot, type, items, impact, description);
+			TDP.startAddNote3(1, day, timeslot, type, items, impact, description);
 		}
 	}
 
@@ -955,6 +955,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			setState(new IdleState());
 		}
 		
+		LoadingDialogControl.dismiss();
 	}
 	
 	

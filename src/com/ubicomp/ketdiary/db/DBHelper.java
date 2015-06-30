@@ -7,13 +7,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Database Helper for initializing the database or update the database
  * 
- * @author Stanley Wang
+ * @author Andy Chen
  */
 public class DBHelper extends SQLiteOpenHelper {
 
 	/* SQLiteOpenHelper. need to migrate with */
 	private static final String DATABASE_NAME = "rehabdiary";
-	private static final int DB_VERSION = 5;
+	private static final int DB_VERSION = 6;
 
 	/**
 	 * Constructor
@@ -84,6 +84,18 @@ public class DBHelper extends SQLiteOpenHelper {
 		db.execSQL("CREATE TABLE RankingShort ("
 				+ " user_id CHAR[255] PRIMERY KEY,"
 				+ " total_score INTEGER NOT NULL DEFAULT 0" + ")");
+		
+		db.execSQL("CREATE TABLE QuestionTest ("
+				+ " id INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ " year INTEGER NOT NULL," + " month INTEGER NOT NULL,"
+				+ " day INTEGER NOT NULL," + " ts INTEGER NOT NULL,"
+				+ " week INTEGER NOT NULL," + " timeSlot INTEGER NOT NULL,"
+				+ " questionType INTEGER NOT NULL,"
+				+ " isCorrect INTEGER NOT NULL DEFAULT 0,"
+				+ " selection CHAR[255] NOT NULL,"
+				+ " choose INTEGER NOT NULL DEFAULT 0,"
+				+ " score INTEGER NOT NULL,"
+				+ " upload INTEGER NOT NULL DEFAULT 0" + ")");
 
 
 	}
@@ -102,6 +114,18 @@ public class DBHelper extends SQLiteOpenHelper {
 				+ " secondVoltage INTEGER NOT NULL," + " devicePower INTEGER NOT NULL, "
 				+ " colorReading INTEGER NOT NULL, "+ " connectionFailRate FLOAT, " 
 				+ " failedReason CHAR[255], " 
+				+ " upload INTEGER NOT NULL DEFAULT 0" + ")");
+		
+		db.execSQL("CREATE TABLE QuestionTest ("
+				+ " id INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ " year INTEGER NOT NULL," + " month INTEGER NOT NULL,"
+				+ " day INTEGER NOT NULL," + " ts INTEGER NOT NULL,"
+				+ " week INTEGER NOT NULL," + " timeSlot INTEGER NOT NULL,"
+				+ " questionType INTEGER NOT NULL,"
+				+ " isCorrect INTEGER NOT NULL DEFAULT 0,"
+				+ " selection CHAR[255] NOT NULL,"
+				+ " choose INTEGER NOT NULL DEFAULT 0,"
+				+ " score INTEGER NOT NULL,"
 				+ " upload INTEGER NOT NULL DEFAULT 0" + ")");
 			
 	}

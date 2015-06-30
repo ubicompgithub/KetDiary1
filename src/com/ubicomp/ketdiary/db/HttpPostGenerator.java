@@ -3,7 +3,6 @@ package com.ubicomp.ketdiary.db;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -20,6 +19,7 @@ import android.util.Log;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
+import com.ubicomp.ketdiary.data.structure.QuestionTest;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.file.MainStorage;
@@ -127,7 +127,7 @@ public class HttpPostGenerator {
 		builder.addTextBody("data[]", String.valueOf(data.cassette_id));
 		builder.addTextBody("data[]", String.valueOf(data.isPrime));
 		builder.addTextBody("data[]", String.valueOf(data.isFilled));
-		//builder.addTextBody("data[]", String.valueOf(data.getScore()));
+		builder.addTextBody("data[]", String.valueOf(data.getScore()));
 
 		String _ts = String.valueOf(data.tv.getTimestamp());
 		File[] imageFiles;
@@ -181,6 +181,7 @@ public class HttpPostGenerator {
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getItems())));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getImpact())));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getDescription())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getScore())));
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 		} catch (UnsupportedEncodingException e) {}
@@ -209,6 +210,56 @@ public class HttpPostGenerator {
 		} catch (UnsupportedEncodingException e) {}
 		return httpPost;
 	}
+	
+	/**
+	 * Generate POST of test results of QuestionTest
+	 * 
+	 * @param data
+	 *            QuestionTest
+	 * @return HttpPost contains QuestionTest
+	 * @see ubicomp.soberdiary.data.structure.QuestionTest
+	 */
+	public static HttpPost genPost(QuestionTest data) {
+		HttpPost httpPost = new HttpPost(ServerUrl.getQuestionTestUrl());
+		String uid = PreferenceControl.getUID();
+		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+		nvps.add(new BasicNameValuePair("uid", uid));
+
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getTv().getTimestamp())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getQuestionType())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getisCorrect())));
+		nvps.add(new BasicNameValuePair("data[]", data.getSelection()));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getChoose())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getScore())));
+		try {
+			httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
+		} catch (UnsupportedEncodingException e) {
+		}
+		return httpPost;
+	}
+	
+	/**
+	 * Generate POST of ClickLog
+	 * 
+	 * @param logFile
+	 *            file of the click log
+	 * @return HttpPost contains click log file
+	 */
+	/*
+	public static HttpPost genPost(File logFile) {
+		SERVER_URL_CLICKLOG = ServerUrl.SERVER_URL_CLICKLOG();
+		HttpPost httpPost = new HttpPost(SERVER_URL_CLICKLOG);
+		String uid = PreferenceControl.getUID();
+
+		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+		builder.addTextBody("uid", uid);
+		if (logFile.exists()) {
+			builder.addPart("file[]", new FileBody(logFile));
+		}
+		httpPost.setEntity(builder.build());
+
+		return httpPost;
+	}*/
 	
 	
 }

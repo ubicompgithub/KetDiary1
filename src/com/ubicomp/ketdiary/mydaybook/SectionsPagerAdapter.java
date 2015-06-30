@@ -5,6 +5,7 @@ import java.util.Calendar;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -99,7 +100,17 @@ public class SectionsPagerAdapter extends PagerAdapter {
 		return v == o;
 	}
 	
-
+	public float getDensity(){
+		 DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+		 return metrics.density;
+		}
+	
+	public float convertDpToPixel(float dp){
+	    float px = dp * getDensity();
+	    //Log.d(TAG, "density:" + getDensity());
+	    return px;
+	}
+	
     private void initPageView(View pageView){
 
         int pageViewMonth = Integer.valueOf((pageView.getTag()).toString());
@@ -288,56 +299,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
             	//calDateText.setTextColor(context.getResources().getColor(R.color.dark_gray));
             	calDateText.setVisibility(View.INVISIBLE);
             }
-            
-            /*
-            // Set cells that belong to current month 
-            if ( mCalendar.get(Calendar.MONTH) == pageViewMonth ){
-                calDateText.setBackgroundResource(R.drawable.bigbluedot);
-                Random r = new Random();
-                
-                if(mCalendar.get(Calendar.MONTH) == 5){
-                    if ( mCalendar.get(Calendar.DAY_OF_WEEK) == 1 || mCalendar.get(Calendar.DAY_OF_WEEK) == 7){
-                        calDateText.setBackgroundResource(R.drawable.bigreddot);
-                    }
-                
-                
-                    int ran_num = r.nextInt(4 - 1) + 1;
-                
-                    if (ran_num == 1) {}
-                    else if (ran_num == 2) {}//calDateText.setBackgroundResource(R.drawable.bigreddot);}
-                    else {calDateText.setBackgroundResource(R.drawable.biggraydot);}
-                    
-                }               
-                else{
-
-                    int ran_num = r.nextInt(4 - 1) + 1;
-                
-                    if (ran_num == 1) {
-                        calDot1.setImageResource(dotId[2]);
-                        calDot1.setVisibility(View.VISIBLE);
-                        calDot2.setImageResource(dotId[6]);
-                        calDot2.setVisibility(View.VISIBLE);
-                    }
-                    else if (ran_num == 2) {
-                        calDateText.setBackgroundResource(R.drawable.bigreddot);
-                        calDot1.setImageResource(dotId[2]);
-                        calDot1.setVisibility(View.VISIBLE);
-                    }
-                    
-                    else {
-                        calDateText.setBackgroundResource(R.drawable.biggraydot);
                         
-                    }
-                    
-                }
-                
-            }
-            else {
-            	calDateText.setTextColor(context.getResources().getColor(R.color.text_gray2));
-            	calDateText.setVisibility(View.INVISIBLE);
-            }*/
-            
-            
             // Initialize the selected view on current day
             if (mCalendar.get(Calendar.DAY_OF_MONTH) == THIS_DAY && mCalendar.get(Calendar.MONTH) == THIS_MONTH) {
                 thisDayView = cellView;
@@ -362,8 +324,10 @@ public class SectionsPagerAdapter extends PagerAdapter {
             mCalendar.add(Calendar.DAY_OF_MONTH, 1);
             
             LayoutParams params=cellView.getLayoutParams();
-            params.width=118;
-            params.height=130;
+            params.width = (int)convertDpToPixel((float)39.33);
+            params.height =(int)convertDpToPixel((float)43.33);
+            //params.width=118;
+            //params.height=130;
             cellView.setLayoutParams(params);
         }
 

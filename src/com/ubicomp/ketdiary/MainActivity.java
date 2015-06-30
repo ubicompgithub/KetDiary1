@@ -1,7 +1,5 @@
 package com.ubicomp.ketdiary;
 
-import java.util.Random;
-
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -32,7 +30,6 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
-import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.dialog.CheckResultDialog;
@@ -46,6 +43,7 @@ import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.CustomMenu;
 import com.ubicomp.ketdiary.ui.CustomTab;
 import com.ubicomp.ketdiary.ui.CustomToast;
+import com.ubicomp.ketdiary.ui.LoadingDialogControl;
 import com.ubicomp.ketdiary.ui.ScreenSize;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
@@ -413,9 +411,9 @@ public class MainActivity extends FragmentActivity {
 					ft.setCustomAnimations(R.anim.animation_left_enter,
 							R.anim.animation_right_exit);
 			
-			/*
+			
 			LoadingDialogControl.show(MainActivity.this);
-			setTimers();
+			/*setTimers();
 			if (tabId.equals(tabName[0])) {
 				
 				customTabs[1]
