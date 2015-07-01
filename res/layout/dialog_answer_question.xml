@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="請問下列哪一項不是?"
-                android:textColor="@color/black_gray"
+                android:textColor="@color/text_gray3"
                 android:textSize="@dimen/large_text_size" />
 
         </LinearLayout>
@@ -43,16 +43,18 @@
             android:layout_width="match_parent"
             android:layout_height="220dp"
             android:orientation="vertical"
-            android:paddingTop="50dp"
-            android:paddingBottom = "50dp"
+            android:paddingTop="30dp"
+            android:paddingBottom = "30dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp" >
             
             <LinearLayout
+                android:id="@+id/question_answer1_layout"
             	android:layout_width="match_parent"
             	android:layout_height="wrap_content"
             	android:orientation="horizontal"
-            	android:layout_marginTop="10dp" >
+            	android:layout_marginTop="10dp"
+            	android:layout_weight="1" >
 
                 <ImageView
                     android:id="@+id/question_radio1"
@@ -70,20 +72,22 @@
                 	android:layout_marginLeft="10dp" />
             
             	<TextView
-                	android:id="@+id/question_answer1"
-                	android:layout_width="wrap_content"
-                	android:layout_height="wrap_content"
-                	android:text="這是選項"
-                	android:textColor="@color/black_gray"
-                	android:textSize="@dimen/large_text_size"
-                	android:layout_marginLeft="10dp" />
+            	    android:id="@+id/question_answer1"
+            	    android:layout_width="wrap_content"
+            	    android:layout_height="wrap_content"
+            	    android:layout_marginLeft="10dp"
+            	    android:text="這是選項"
+            	    android:textColor="@color/text_gray3"
+            	    android:textSize="@dimen/large_text_size" />
             
         	</LinearLayout>
         	<LinearLayout
+        	    android:id="@+id/question_answer2_layout"
             	android:layout_width="match_parent"
             	android:layout_height="wrap_content"
             	android:orientation="horizontal"
-            	android:layout_marginTop="10dp" >
+            	android:layout_marginTop="10dp"
+            	android:layout_weight="1" >
 
                 <ImageView
                     android:id="@+id/question_radio2"
@@ -101,20 +105,22 @@
                 	android:layout_marginLeft="10dp" />
             
             	<TextView
-                	android:id="@+id/question_answer2"
-                	android:layout_width="wrap_content"
-                	android:layout_height="wrap_content"
-                	android:text="這是選項"
-                	android:textColor="@color/black_gray"
-                	android:textSize="@dimen/large_text_size"
-                	android:layout_marginLeft="10dp" />
+            	    android:id="@+id/question_answer2"
+            	    android:layout_width="wrap_content"
+            	    android:layout_height="wrap_content"
+            	    android:layout_marginLeft="10dp"
+            	    android:text="這是選項"
+            	    android:textColor="@color/text_gray3"
+            	    android:textSize="@dimen/large_text_size" />
             
         	</LinearLayout>
         	<LinearLayout
+        	    android:id="@+id/question_answer3_layout"
             	android:layout_width="match_parent"
             	android:layout_height="wrap_content"
             	android:orientation="horizontal"
-            	android:layout_marginTop="10dp" >
+            	android:layout_marginTop="10dp"
+            	android:layout_weight="1" >
 
                 <ImageView
                     android:id="@+id/question_radio3"
@@ -132,20 +138,22 @@
                 	android:layout_marginLeft="10dp" />
             
             	<TextView
-                	android:id="@+id/question_answer3"
-                	android:layout_width="wrap_content"
-                	android:layout_height="wrap_content"
-                	android:text="這是選項"
-                	android:textColor="@color/black_gray"
-                	android:textSize="@dimen/large_text_size"
-                	android:layout_marginLeft="10dp" />
+            	    android:id="@+id/question_answer3"
+            	    android:layout_width="wrap_content"
+            	    android:layout_height="wrap_content"
+            	    android:layout_marginLeft="10dp"
+            	    android:text="這是選項"
+            	    android:textColor="@color/text_gray3"
+            	    android:textSize="@dimen/large_text_size" />
             
         	</LinearLayout>
         	<LinearLayout
+        	    android:id="@+id/question_answer4_layout"
             	android:layout_width="match_parent"
             	android:layout_height="wrap_content"
             	android:orientation="horizontal"
-            	android:layout_marginTop="10dp" >
+            	android:layout_marginTop="10dp"
+            	android:layout_weight="1" >
 
                 <ImageView
                     android:id="@+id/question_radio4"
@@ -163,13 +171,13 @@
                 	android:layout_marginLeft="10dp" />
             
             	<TextView
-                	android:id="@+id/question_answer4"
-                	android:layout_width="wrap_content"
-                	android:layout_height="wrap_content"
-                	android:text="這是選項"
-                	android:textColor="@color/black_gray"
-                	android:textSize="@dimen/large_text_size"
-                	android:layout_marginLeft="10dp" />
+            	    android:id="@+id/question_answer4"
+            	    android:layout_width="wrap_content"
+            	    android:layout_height="wrap_content"
+            	    android:layout_marginLeft="10dp"
+            	    android:text="這是選項"
+            	    android:textColor="@color/text_gray3"
+            	    android:textSize="@dimen/large_text_size" />
             
         	</LinearLayout>
             
@@ -190,9 +198,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="取消"
                 android:gravity="center"
-                android:textColor="@color/black_gray"
+                android:text="取消"
+                android:textColor="@drawable/text_color"
                 android:textSize="@dimen/large_text_size" />
 
             <TextView
@@ -200,10 +208,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="確定"
-                 android:gravity="center"
-                android:textColor="@color/black_gray"
+                android:textColor="@drawable/text_color"
                 android:textSize="@dimen/large_text_size" />
+
         </LinearLayout>
     </LinearLayout>
 

@@ -5,6 +5,7 @@ import java.util.Calendar;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -99,7 +100,17 @@ public class SectionsPagerAdapter extends PagerAdapter {
 		return v == o;
 	}
 	
-
+	public float getDensity(){
+		 DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+		 return metrics.density;
+		}
+	
+	public float convertDpToPixel(float dp){
+	    float px = dp * getDensity();
+	    //Log.d(TAG, "density:" + getDensity());
+	    return px;
+	}
+	
     private void initPageView(View pageView){
 
         int pageViewMonth = Integer.valueOf((pageView.getTag()).toString());
@@ -313,8 +324,10 @@ public class SectionsPagerAdapter extends PagerAdapter {
             mCalendar.add(Calendar.DAY_OF_MONTH, 1);
             
             LayoutParams params=cellView.getLayoutParams();
-            params.width=118;
-            params.height=130;
+            params.width = (int)convertDpToPixel((float)39.33);
+            params.height =(int)convertDpToPixel((float)43.33);
+            //params.width=118;
+            //params.height=130;
             cellView.setLayoutParams(params);
         }
 
