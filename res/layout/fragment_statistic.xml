@@ -14,7 +14,7 @@
         <RelativeLayout
             android:id="@+id/brac_statistics_layout"
             android:layout_width="match_parent"
-            android:layout_height="253.3dp"
+            android:layout_height="223.3dp"
             android:background="@drawable/statistic_bg" >
 
             <android.support.v4.view.ViewPager
@@ -26,7 +26,7 @@
                 android:id="@+id/brac_statistics_dots"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" 
-                android:layout_marginTop="233.3dp"
+                android:layout_marginTop="195dp"
                 >
                 <ImageView 
                     android:id="@+id/brac_statistic_dot1"
