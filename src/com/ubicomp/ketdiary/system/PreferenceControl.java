@@ -628,4 +628,22 @@ public class PreferenceControl {
 
 	}
 
+	public static String[] getSponsors() {
+		String[] sponsor = new String[5];
+		sponsor[0] = sp.getString("sponsor0", "");
+		sponsor[1] = sp.getString("sponsor1", "");
+		sponsor[2] = sp.getString("sponsor2", "");
+		sponsor[3] = sp.getString("sponsor3", "");
+		sponsor[4] = sp.getString("sponsor4", "");
+		return sponsor;
+	}
+
+	// public static void setSponsor(String sponsor, int id) {
+	// 	String key = "recreation" + id;
+	// 	SharedPreferences.Editor edit = sp.edit();
+	// 	edit.putString(key, recreation);
+	// 	edit.commit();
+
+	// }
+
 }
