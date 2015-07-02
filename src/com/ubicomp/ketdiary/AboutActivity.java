@@ -172,8 +172,7 @@ public class AboutActivity extends Activity {
 				+ dot + intel_ntu + dot + taipei_city_hospital + message[1]
 				+ "\n\n" + message[2] + "\n" + message[3] + "\n" + curVersion
 				+ versionName + "\n\n" + message[4] + happ_design + "\n"
-				+ message[5] + rickie_wu + "\n" + message[6] + yuga_huang
-				+ "\n");
+				);
 		int start = 0;
 		int end = message[0].length() + 1;
 		helpSpannable.setSpan(new CustomTypefaceSpan("custom1", wordTypeface,
@@ -203,24 +202,24 @@ public class AboutActivity extends Activity {
 		helpSpannable.setSpan(new CustomTypefaceSpan("custom3",
 				digitTypefaceBold, 0xFF727171), start, end,
 				Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-		start = end;
-		end = start + message[5].length();
-		helpSpannable.setSpan(new CustomTypefaceSpan("custom1", wordTypeface,
-				0xFF727171), start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-		start = end;
-		end = start + rickie_wu.length() + 1;
-		helpSpannable.setSpan(new CustomTypefaceSpan("custom3",
-				digitTypefaceBold, 0xFF727171), start, end,
-				Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-		start = end;
-		end = start + message[6].length();
-		helpSpannable.setSpan(new CustomTypefaceSpan("custom1", wordTypeface,
-				0xFF727171), start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-		start = end;
-		end = start + yuga_huang.length() + 1;
-		helpSpannable.setSpan(new CustomTypefaceSpan("custom3",
-				digitTypefaceBold, 0xFF727171), start, end,
-				Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+//		start = end;
+//		end = start + message[5].length();
+//		helpSpannable.setSpan(new CustomTypefaceSpan("custom1", wordTypeface,
+//				0xFF727171), start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+//		start = end;
+//		end = start + rickie_wu.length() + 1;
+//		helpSpannable.setSpan(new CustomTypefaceSpan("custom3",
+//				digitTypefaceBold, 0xFF727171), start, end,
+//				Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+//		start = end;
+//		end = start + message[6].length();
+//		helpSpannable.setSpan(new CustomTypefaceSpan("custom1", wordTypeface,
+//				0xFF727171), start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+//		start = end;
+//		end = start + yuga_huang.length() + 1;
+//		helpSpannable.setSpan(new CustomTypefaceSpan("custom3",
+//				digitTypefaceBold, 0xFF727171), start, end,
+//				Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
 
 		aboutText.setText(helpSpannable);
 

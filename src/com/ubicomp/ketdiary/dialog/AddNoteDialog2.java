@@ -71,6 +71,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 	private ImageView iv_try, iv_smile, iv_urge,
 					  iv_cry, iv_not_good;
 	private ImageView iv_conflict, iv_social, iv_playing;
+	private ImageView iv_self_others_bar;
 	private Spinner sp_date, sp_timeslot;// sp_item;
 	private Button bt_confirm, bt_cancel;
 	private SeekBar impactSeekBar;
@@ -738,7 +739,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 				iv_urge = (ImageView) center_layout.findViewById(R.id.vts_iv_urge);
 				iv_cry = (ImageView) center_layout.findViewById(R.id.vts_iv_cry);
 				iv_try = (ImageView) center_layout.findViewById(R.id.vts_iv_try);
-				
+				iv_self_others_bar = (ImageView) center_layout.findViewById(R.id.self_others_bar);
 				iv_smile.setOnClickListener(SelectItem);
 				iv_not_good.setOnClickListener(SelectItem);
 				iv_urge.setOnClickListener(SelectItem);
@@ -748,7 +749,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 				iv_social = (ImageView) center_layout.findViewById(R.id.vts_iv_social);
 				iv_playing = (ImageView) center_layout.findViewById(R.id.vts_iv_playing);
 				iv_conflict = (ImageView) center_layout.findViewById(R.id.vts_iv_conflict);
-			
+				iv_self_others_bar = (ImageView) center_layout.findViewById(R.id.self_others_bar);
 				iv_social.setOnClickListener(SelectItem);
 				iv_playing.setOnClickListener(SelectItem);
 				iv_conflict.setOnClickListener(SelectItem);
@@ -876,10 +877,12 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 			case 0:
 				text_self.setTextColor(context.getResources().getColor(R.color.blue));
 				text_other.setTextColor(context.getResources().getColor(R.color.text_gray3));
+				iv_self_others_bar.setImageResource(R.drawable.note_slide_line1);
 				break;
 			case 1:
 				text_self.setTextColor(context.getResources().getColor(R.color.text_gray3));
 				text_other.setTextColor(context.getResources().getColor(R.color.blue));
+				iv_self_others_bar.setImageResource(R.drawable.note_slide_line2);
 				break;
 
 			}
@@ -899,10 +902,12 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 				case 0:
 					text_self.setTextColor(context.getResources().getColor(R.color.blue));
 					text_other.setTextColor(context.getResources().getColor(R.color.text_gray3));
+					iv_self_others_bar.setImageResource(R.drawable.note_slide_line1);
 					break;
 				case 1:
 					text_self.setTextColor(context.getResources().getColor(R.color.text_gray3));
 					text_other.setTextColor(context.getResources().getColor(R.color.blue));
+					iv_self_others_bar.setImageResource(R.drawable.note_slide_line2);
 					break;
 				}
 
