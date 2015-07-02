@@ -25,11 +25,14 @@ public class StatisticWeekView extends StatisticPageView {
 	private TextView[] time_labels;
 	private TextView[] date_labels;
 	private Drawable[] circleDrawables;
+	private Drawable[] linkerDrawables;
 	private ImageView[] circles;
+	private ImageView[] linkers;
 
 	private LinearLayout dateLayout;
 	private LinearLayout timeLayout;
 	private GridLayout blockLayout;
+	private GridLayout linkLayout;
 	private LinearLayout labelLayout;
 
 	private TextView[] labels;
@@ -40,8 +43,8 @@ public class StatisticWeekView extends StatisticPageView {
 	private static final int nBlocks = 3;
 	private static final int nDays = 7;
 
-	private static final int[] blockHint = { R.string.sunday, R.string.monday, R.string.tuesday, R.string.wednesday, 
-			R.string.thursday, R.string.friday, R.string.saturday };
+	//private static final int[] blockHint = { R.string.sunday, R.string.monday, R.string.tuesday, R.string.wednesday, 
+	//		R.string.thursday, R.string.friday, R.string.saturday };
 	private static final int[] labelHint = { R.string.test_pass,
 			R.string.test_fail, R.string.test_none };
 
@@ -69,7 +72,8 @@ public class StatisticWeekView extends StatisticPageView {
 				.findViewById(R.id.statistic_week_timeblock_label_layout);
 		blockLayout = (GridLayout) view
 				.findViewById(R.id.statistic_week_block_layout);
-
+		linkLayout = (GridLayout) view
+				.findViewById(R.id.statistic_week_link_layout);
 		title = (TextView) view.findViewById(R.id.statistic_week_title);
 		title.setTypeface(wordTypefaceBold);
 
@@ -83,6 +87,13 @@ public class StatisticWeekView extends StatisticPageView {
 				R.drawable.statistic_week_fail);
 		circleDrawables[2] = context.getResources().getDrawable(
 				R.drawable.statistic_week_pass);
+		linkerDrawables = new Drawable[3];
+		linkerDrawables[0] = context.getResources().getDrawable(
+				R.drawable.statistic_week_linker_none);
+		linkerDrawables[1] = context.getResources().getDrawable(
+				R.drawable.statistic_week_linker_fail);
+		linkerDrawables[2] = context.getResources().getDrawable(
+				R.drawable.statistic_week_linker_pass);
 	}
 
 	@Override
@@ -116,13 +127,18 @@ public class StatisticWeekView extends StatisticPageView {
 		}
 
 		circles = new ImageView[ nDays];
-
+		linkers = new ImageView[ nDays];
 		for (int i = 0; i <  nDays; ++i) {
 			circles[i] = new ImageView(context);
-			//blockLayout.addView(circles[i]);
+			blockLayout.addView(circles[i]);
 			circles[i].setScaleType(ScaleType.CENTER);
 		}
-
+		for (int i = 0; i <  nDays-1; ++i) {
+			linkers[i] = new ImageView(context);
+			linkLayout.addView(linkers[i]);
+			linkers[i].setScaleType(ScaleType.CENTER);
+		}
+		
 		labels = new TextView[3];
 		labelImgs = new ImageView[3];
 		for (int i = 0; i < 3; ++i) {
@@ -131,7 +147,7 @@ public class StatisticWeekView extends StatisticPageView {
 			labelLayout.addView(labelImgs[i]);
 			labels[i] = new TextView(context);
 			labels[i].setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
-			labels[i].setTextColor(text_color);
+			labels[i].setTextColor(text_color2);
 			labels[i].setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
 			labels[i].setTypeface(wordTypefaceBold);
 			labels[i].setText(labelHint[i]);
@@ -143,12 +159,6 @@ public class StatisticWeekView extends StatisticPageView {
 		int c_height = context.getResources().getDimensionPixelSize(
 				R.dimen.week_circle_height);
 
-//		for (int i = 0; i < nBlocks; ++i) {
-//			LinearLayout.LayoutParams param = (LinearLayout.LayoutParams) time_labels[i]
-//					.getLayoutParams();
-//			param.width = c_width;
-//			param.height = c_height;
-//		}
 
 		for (int i = 0; i < nDays; ++i) {
 			
@@ -156,18 +166,24 @@ public class StatisticWeekView extends StatisticPageView {
 					.getLayoutParams();
 			LinearLayout.LayoutParams param2 = (LinearLayout.LayoutParams) time_labels[i]
 					.getLayoutParams();
-			param.width = c_width;
-			param.height = c_height;
-			param2.width = c_width;
-			param2.height = c_height;
+			param.width = c_width* 14/13;
+			param.height = c_height* 2/3;
+			param2.width = c_width* 14/13;
+			param2.height = c_height* 2/3;
 		}
 
-//		for (int i = 0; i < nBlocks * nDays; ++i) {
-//			GridLayout.LayoutParams cParam = (GridLayout.LayoutParams) circles[i]
-//					.getLayoutParams();
-//			cParam.width = c_width;
-//			cParam.height = c_height;
-//		}
+		for (int i = 0; i < nDays; ++i) {
+			GridLayout.LayoutParams cParam = (GridLayout.LayoutParams) circles[i]
+					.getLayoutParams();
+			cParam.width = c_width* 14/13;
+			cParam.height = c_height* 2/3;
+		}
+		for (int i = 0; i < nDays-1; ++i) {
+			GridLayout.LayoutParams lParam = (GridLayout.LayoutParams) linkers[i]
+					.getLayoutParams();
+			lParam.width = c_width* 14/13;
+			lParam.height = c_height* 2/3;
+		}
 
 		for (int i = 0; i < 3; ++i) {
 			LinearLayout.LayoutParams param = (LinearLayout.LayoutParams) labels[i]
@@ -195,10 +211,33 @@ public class StatisticWeekView extends StatisticPageView {
 			else
 				circles[idx].setImageDrawable(circleDrawables[1]);
 		}*/
-
+		Integer[] brave={1,1,-1,0,-1,1,99}; // 1:pass 0:none -1:fail
+		for(int i=0;i<brave.length;++i){
+			if(brave[i]==-1){
+				circles[i].setImageDrawable(circleDrawables[1]);
+				
+			}
+			else if(brave[i]==0){
+				circles[i].setImageDrawable(circleDrawables[0]);
+			}
+			else if(brave[i]==1){
+				circles[i].setImageDrawable(circleDrawables[2]);
+				if(i>=1 && brave[i-1]==1){
+					linkers[i-1].setImageDrawable(linkerDrawables[2]);
+				}
+				else if(i>=1 && brave[i-1]!=1){
+					linkers[i-1].setImageDrawable(linkerDrawables[0]);
+				}
+			}
+			else{}
+			
+			
+		}
+		
+		
 		Calendar cal = Calendar.getInstance();
 		Calendar cal2 = Calendar.getInstance();
-		for (int i = 6; i > 0; --i) {
+		for (int i = 6; i >= 0; --i) {
 			int date = cal.get(Calendar.DAY_OF_MONTH);
 			int dayofweek = cal2.get(Calendar.DAY_OF_WEEK);
 			String label = String.valueOf(date);

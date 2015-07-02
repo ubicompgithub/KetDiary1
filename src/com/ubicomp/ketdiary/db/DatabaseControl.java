@@ -1317,7 +1317,7 @@ public class DatabaseControl {
 		 *            inserted StorytellingTest
 		 * @see ubicomp.soberdiary.data.structure.StorytellingTest
 		 */
-		public int insertStorytellingTest(QuestionTest data) {
+		public int insertQuestionTest(QuestionTest data) {
 			synchronized (sqlLock) {
 				QuestionTest prev_data = getLatestQuestionTest();
 				int addScore = 0;

@@ -6,13 +6,15 @@
 	     android:background="@drawable/upper_bar_bg"
 	     android:paddingTop="10dp"
 	     android:paddingStart="10dp"
-	     android:paddingEnd="10dp">
+	     android:paddingEnd="10dp"
+	     android:paddingBottom="5dp">
            
 	    <ImageView
 			android:id="@+id/linechart_icon"
 			android:src="@drawable/titleicon"
-			android:layout_width="60dip"
-			android:layout_height="wrap_content" />
+			android:layout_width="60dp"
+			android:layout_height="match_parent"
+			android:layout_marginBottom="10dp" />
 		
 	    <LinearLayout
 	        android:id="@+id/cal_toggle_layout"
