@@ -107,7 +107,7 @@ public class AnalysisProsConsView extends StatisticPageView {
 		@Override
 		public void handleMessage(Message msg) {
 			
-			int today_situation=19; //pass or fail
+			int today_situation=-19; //pass or fail
 			
 //			int curDrink = db.getPrimeDetectionPassTimes();
 //			currentMoney = curDrink * drinkCost;
@@ -118,13 +118,13 @@ public class AnalysisProsConsView extends StatisticPageView {
 			int rightWidth = barEnd.getRight() - barEnd.getLeft();
 			int curWidth = bar_followed.getRight()- bar_followed.getLeft();
 			int maxWidth = barWidth - positionWidth;
-			int width_per_block=maxWidth/25;
+			int width_per_block=maxWidth/21;
 			int nextWidth;
 			nextWidth=curWidth+width_per_block*today_situation;
 			System.out.println(nextWidth);
 			if(nextWidth>curWidth){
 				if(nextWidth>=maxWidth){
-					nextWidth=maxWidth-width_per_block;
+					nextWidth=maxWidth;
 					barEnd.setVisibility(View.INVISIBLE);
 					barStart.setVisibility(View.INVISIBLE);
 					}
