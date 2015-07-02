@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,7 +23,7 @@ public class AnalysisProsConsView extends StatisticPageView {
 	private DatabaseControl db;
 
 	private ImageView currentBar;
-	private ImageView barStart, barEnd;
+	private ImageView barStart, barEnd, bar_followed;
 	private ImageView bar;
 
 	private String targetGood;
@@ -53,7 +54,7 @@ public class AnalysisProsConsView extends StatisticPageView {
 		dollor_sign = context.getResources().getString(R.string.dollor_sign);
 		//title = (TextView) view.findViewById(R.id.analysis_saving_title);
 		
-
+		//bar.setVisibility(View.INVISIBLE);
 		help = (TextView) view.findViewById(R.id.analysis_saving_help);
 		help.setTypeface(wordTypefaceBold);
 		targetMoney = (TextView) view.findViewById(R.id.analysis_target_money);
@@ -61,6 +62,8 @@ public class AnalysisProsConsView extends StatisticPageView {
 
 		currentBar = (ImageView) view
 				.findViewById(R.id.analysis_pros_position);
+		bar_followed=(ImageView) view
+				.findViewById(R.id.analysis_pros_position_followed);
 		barStart = (ImageView) view
 				.findViewById(R.id.analysis_pros_backward);
 		barEnd = (ImageView) view
@@ -68,7 +71,7 @@ public class AnalysisProsConsView extends StatisticPageView {
 		bar = (ImageView) view.findViewById(R.id.analysis_saving_bar);
 
 		layout = (RelativeLayout) view
-				.findViewById(R.id.analysis_saving_content_layout);
+				.findViewById(R.id.analysis_position_followed_layout);
 	}
 
 	@Override
@@ -86,8 +89,8 @@ public class AnalysisProsConsView extends StatisticPageView {
 		//int curDrink = db.getPrimeDetectionPassTimes();
 		//currentMoney = curDrink * drinkCost;
 
-		String cur_money = dollor_sign + currentMoney;
-		String goal_money = dollor_sign + goal;
+		//String cur_money = dollor_sign + currentMoney;
+		//String goal_money = dollor_sign + goal;
 
 		//curMoney.setText(cur_money);
 		//targetMoney.setText(goal_money);
@@ -103,27 +106,59 @@ public class AnalysisProsConsView extends StatisticPageView {
 	private class BarHandler extends Handler {
 		@Override
 		public void handleMessage(Message msg) {
-			/*
-			int curDrink = db.getPrimeDetectionPassTimes();
-			currentMoney = curDrink * drinkCost;
+			
+			int today_situation=19; //pass or fail
+			
+//			int curDrink = db.getPrimeDetectionPassTimes();
+//			currentMoney = curDrink * drinkCost;
 
 			int barWidth = bar.getRight() - bar.getLeft();
+			int positionWidth =currentBar.getRight() - currentBar.getLeft();
 			int leftWidth = barStart.getRight() - barStart.getLeft();
 			int rightWidth = barEnd.getRight() - barEnd.getLeft();
-
-			int maxWidth = barWidth - leftWidth - rightWidth;
-			int width;
-			if (currentMoney > goal)
-				width = maxWidth;
-			else {
-				width = maxWidth * currentMoney / goal;
+			int curWidth = bar_followed.getRight()- bar_followed.getLeft();
+			int maxWidth = barWidth - positionWidth;
+			int width_per_block=maxWidth/25;
+			int nextWidth;
+			nextWidth=curWidth+width_per_block*today_situation;
+			System.out.println(nextWidth);
+			if(nextWidth>curWidth){
+				if(nextWidth>=maxWidth){
+					nextWidth=maxWidth-width_per_block;
+					barEnd.setVisibility(View.INVISIBLE);
+					barStart.setVisibility(View.INVISIBLE);
+					}
+				else{
+					barStart.setVisibility(View.INVISIBLE);
+					barEnd.setVisibility(View.VISIBLE);
+				}
 			}
-
-			RelativeLayout.LayoutParams currentBarParam = (RelativeLayout.LayoutParams) currentBar
-					.getLayoutParams();
-			currentBarParam.width = width;
-
-			layout.updateViewLayout(currentBar, currentBarParam);*/
+			else{
+				if(nextWidth<=0){
+					nextWidth=0;
+					barStart.setVisibility(View.INVISIBLE);
+					barEnd.setVisibility(View.INVISIBLE);
+				}
+				else{
+					barStart.setVisibility(View.VISIBLE);
+					barEnd.setVisibility(View.INVISIBLE);
+					
+				}
+			}
+			RelativeLayout.LayoutParams currentBarParam = (RelativeLayout.LayoutParams) bar_followed.getLayoutParams();
+			currentBarParam.width = nextWidth;
+			layout.updateViewLayout(bar_followed, currentBarParam);
+//			if (currentMoney > goal)
+//				width = maxWidth;
+//			else {
+//				width = maxWidth * currentMoney / goal;
+//			}
+//
+//			RelativeLayout.LayoutParams currentBarParam1 = (RelativeLayout.LayoutParams) currentBar
+//					.getLayoutParams();
+//			currentBarParam1.width = width;
+//
+//			layout.updateViewLayout(currentBar, currentBarParam1);
 		}
 	}
 

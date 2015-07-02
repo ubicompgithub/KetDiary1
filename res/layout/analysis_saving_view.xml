@@ -31,7 +31,7 @@
             android:src="@drawable/energy_bar" />
 		
         <RelativeLayout
-        
+        android:id="@+id/analysis_position_followed_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
          
@@ -39,9 +39,9 @@
         
 	        <ImageView
 	            android:id="@+id/analysis_pros_position_followed"
-	            android:layout_width="94dp"
+	            android:layout_width="120dp"
 	            android:layout_height="wrap_content"
-	            android:layout_marginLeft="26dp"
+	            
 	            android:visibility="invisible"
 	            android:src="@drawable/analyse_line" />
 	
@@ -50,6 +50,8 @@
 	            android:layout_width="80dp"
 	            android:layout_height="wrap_content"
 	            android:layout_toRightOf="@+id/analysis_pros_position_followed"
+	            android:layout_marginTop="50dp"
+	            android:layout_gravity="center"
 	            android:layout_centerHorizontal="true"
 	            android:layout_centerVertical="true" >
 				
@@ -66,6 +68,7 @@
 	                android:id="@+id/analysis_pros_position"
 	                android:layout_width="20dp"
 	                android:layout_height="20dp"
+	                
 	                android:layout_centerVertical="true"
 	                android:layout_centerHorizontal="true"
 	                android:src="@drawable/analyse_node" />
