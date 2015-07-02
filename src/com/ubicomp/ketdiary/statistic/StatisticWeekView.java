@@ -40,8 +40,8 @@ public class StatisticWeekView extends StatisticPageView {
 	private static final int nBlocks = 3;
 	private static final int nDays = 7;
 
-	private static final int[] blockHint = { R.string.sunday, R.string.monday, R.string.tuesday, R.string.wednesday, 
-			R.string.thursday, R.string.friday, R.string.saturday };
+	//private static final int[] blockHint = { R.string.sunday, R.string.monday, R.string.tuesday, R.string.wednesday, 
+	//		R.string.thursday, R.string.friday, R.string.saturday };
 	private static final int[] labelHint = { R.string.test_pass,
 			R.string.test_fail, R.string.test_none };
 

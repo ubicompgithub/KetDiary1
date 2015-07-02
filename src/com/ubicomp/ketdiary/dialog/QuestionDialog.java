@@ -17,6 +17,9 @@ import android.widget.TextView;
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.data.structure.QuestionTest;
+import com.ubicomp.ketdiary.db.DatabaseControl;
+import com.ubicomp.ketdiary.ui.CustomToast;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
 
@@ -50,7 +53,9 @@ public class QuestionDialog{
 	private Typeface wordTypeface, wordTypefaceBold, digitTypeface,
 			digitTypefaceBold;
 	
-
+	private int select = -1;
+	private String[] selection;
+	private DatabaseControl db;
 	
 	public QuestionDialog(RelativeLayout mainLayout){
 		
@@ -58,6 +63,8 @@ public class QuestionDialog{
 		this.inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.mainLayout = mainLayout;
+		
+		db = new DatabaseControl();
 		
 		wordTypeface = Typefaces.getWordTypeface();
 		wordTypefaceBold = Typefaces.getWordTypefaceBold();
@@ -114,23 +121,23 @@ public class QuestionDialog{
 	/** Initialize the dialog */
 	public void initialize() {
 		//RelativeLayout.LayoutParams boxParam = (RelativeLayout.LayoutParams) boxLayout.getLayoutParams();
-		
-		
 		RelativeLayout.LayoutParams boxParam = (LayoutParams) boxLayout
 				.getLayoutParams();
 		boxParam.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
 		boxParam.width = LayoutParams.MATCH_PARENT;
 		boxParam.height = LayoutParams.MATCH_PARENT;
+		
+		
 	}
 	
 	/** show the dialog */
 	public void show() {
 		
-		String answer[] = settingQuestion();
-		tv_answer1.setText(answer[0]);
-		tv_answer2.setText(answer[1]);
-		tv_answer3.setText(answer[2]);
-		tv_answer4.setText(answer[3]);
+		selection = settingQuestion();
+		tv_answer1.setText(selection[0]);
+		tv_answer2.setText(selection[1]);
+		tv_answer3.setText(selection[2]);
+		tv_answer4.setText(selection[3]);
 		
 		tv_question.setText(question);
 		
@@ -195,6 +202,32 @@ public class QuestionDialog{
 		@Override
 		/**Cancel and dismiss the check check dialog*/
 		public void onClick(View v) {
+			long ts = System.currentTimeMillis();
+			int questionType = 0;
+			int isCorrect = 0;
+			String selection = selectedAnswer;
+			int choose = select;
+			if(selectedAnswer.equals(answer)){
+				isCorrect = 1;
+			}
+			else{
+				
+			}
+
+			QuestionTest questionTest = new QuestionTest(ts, questionType, isCorrect, selection, choose, 0);
+			int addScore = db.insertQuestionTest(questionTest);
+			
+			if(isCorrect == 0){
+				CustomToast.generateToast(R.string.question_wrong, -1);
+			}
+			else{
+				CustomToast.generateToast(R.string.question_correct, addScore);
+			}
+			
+			
+			
+			
+			
 			MainActivity.getMainActivity().enableTabAndClick(true);
 			close();
 			//clear();	
@@ -221,19 +254,29 @@ public class QuestionDialog{
 			switch (v.getId()){
 			case R.id.question_answer1_layout:
 				radio1.setImageResource(R.drawable.radio_node_select);
+				selectedAnswer = selection[0];
+				select = 0;
 				break;
 			case R.id.question_answer2_layout:
 				radio2.setImageResource(R.drawable.radio_node_select);
+				selectedAnswer = selection[1];
+				select = 1;
 				break;
 			case R.id.question_answer3_layout:
 				radio3.setImageResource(R.drawable.radio_node_select);
+				selectedAnswer = selection[2];
+				select = 2;
 				break;
 			case R.id.question_answer4_layout:
 				radio4.setImageResource(R.drawable.radio_node_select);
+				selectedAnswer = selection[3];
+				select = 3;
 				break;
+			/*
 			default:				
 				((ImageView)v).setImageResource(R.drawable.radio_node_select);
-				break;				
+				break;
+				*/				
 			}
 	
 		}

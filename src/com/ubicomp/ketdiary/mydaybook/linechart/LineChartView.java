@@ -17,6 +17,7 @@ import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -47,7 +48,7 @@ public class LineChartView extends View {
     public  List<DummyData> datapoints = new ArrayList<DummyData>();
     public  List<DummyData> datapoints2 = new ArrayList<DummyData>();
     
-    private LineChartData[] dataset = null;
+    private static LineChartData[] dataset = null;
     		
     private Paint paint = new Paint();
 
@@ -62,7 +63,7 @@ public class LineChartView extends View {
     private static int ZOOM2 = 2;
     
     private int mode = 0;  
-    private int cursorLinePos = 5;
+    private int cursorLinePos = 0;
     private int initHeight;
     private int numOfDays = 0;
     private int lastNoteAddNum = 0;
@@ -83,12 +84,34 @@ public class LineChartView extends View {
     	numOfDays = daysOfTwo(startDay, Calendar.getInstance())+1;
         
         dataset = new LineChartData[numOfDays];
-        
+        initDataset();
         //setChartData3();
 
     	
     	Log.d("drawDate", "numOfDays:"+numOfDays);
     }
+	
+
+	private void initDataset(){ //to make sure dataset with not null object
+		Calendar currentDay = Calendar.getInstance(); 
+    	currentDay.setTimeInMillis(startDay.getTimeInMillis());
+    	
+    	for (int i = 0; i < numOfDays ; i ++) {
+    		int self_type=0;
+    		float self_score=0;
+    		int other_type=0;
+    		float other_score=0;
+    		int year = currentDay.get(Calendar.YEAR);
+    		int month = currentDay.get(Calendar.MONTH);
+    		int day = currentDay.get(Calendar.DAY_OF_MONTH);;
+    		
+    		dataset[i] = new LineChartData(self_type, self_score, other_type, other_score, month, day, -1);
+    		//dataset[0] = new DummyData(category, cum_impact, type, month, date, 1);
+	
+    		currentDay.add(Calendar.DAY_OF_MONTH, 1);
+    	}
+    	
+	}
 	
 	
 	private void setChartData3(){
@@ -116,6 +139,8 @@ public class LineChartView extends View {
     		int year = currentDay.get(Calendar.YEAR);
     		int month = currentDay.get(Calendar.MONTH);
     		int day = currentDay.get(Calendar.DAY_OF_MONTH);;
+    		
+    		Log.d(TAG, "Day: " + day);
     		int result = -1;
     		
     		testResult = db.getDayTestResult(year, month, day);    		
@@ -134,8 +159,8 @@ public class LineChartView extends View {
     			if(count>0){
     				self_score/=count;
     			}
-    			if(self_type == 0)
-    				self_type = noteAdd[0].getType();
+    			//if(self_type == 0)
+    			//	self_type = noteAdd[0].getType();
     		}
     		count = 0;
     		noteAdd = db.getDayNoteAddbyCategory(year, month, day, 1);
@@ -151,8 +176,8 @@ public class LineChartView extends View {
     			if(count>0){
     				other_score/=count;
     			}
-    			if(other_type == 0)
-    				other_type = noteAdd[0].getType();
+    			//if(other_type == 0)
+    			//	other_type = noteAdd[0].getType();
     		}
     		
     		dataset[i] = new LineChartData(self_type, self_score, other_type, other_score, month, day, result);
@@ -244,6 +269,17 @@ public class LineChartView extends View {
 		//data.toArray( datapoints );
 		Log.d(TAG, datapoints.size()+" "+datapoints2.size());
     }
+	
+	public float getDensity(){
+		 DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+		 return metrics.density;
+		}
+	
+	public float convertDpToPixel(float dp){
+	    float px = dp * getDensity();
+	    //Log.d(TAG, "density:" + getDensity());
+	    return px;
+	}
 
     
  // override onSizeChanged
@@ -376,74 +412,6 @@ public class LineChartView extends View {
     		
     }
 
-    
-    private void drawDate(Canvas canvas) {
-    	int currentMonth = Calendar.getInstance().get(Calendar.MONTH);
-    	//int currentDate = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);//TODO: change to start day
-    	int currentDate=1;
-    	
-    	switch (checkLineChartType()) {
-    	case 0:
-    	int numOfDays = datapoints.size();
-    	if(numOfDays > 0){
-    		currentDate = datapoints.get(0).day;
-    	}
-    		
-    	for (int i = 0; i < numOfDays ; i ++) {
-    		if (mode == ZOOM2) {
-    			if (i%5 != 0) continue;
-    		}
-		
-    		paint.setStyle(Style.FILL);
-    	    paint.setColor(getResources().getColor(R.color.linechart_date_color));
-    	    paint.setTextAlign(Align.CENTER);
-    		paint.setTextSize(35);
-            canvas.drawText(String.valueOf(currentDate+i), getXPos(i), getHeight() - 120, paint);
-    	}
-    	break;
-    	case 1:
-        	numOfDays = datapoints2.size();
-        	if(numOfDays > 0){
-        		currentDate = datapoints2.get(0).day;
-        	}
-        	
-        	for (int i = 0; i < numOfDays ; i ++) {
-        		if (mode == ZOOM2) {
-        			if (i%5 != 0) continue;
-        		}
-    		
-        		paint.setStyle(Style.FILL);
-        	    paint.setColor(getResources().getColor(R.color.linechart_date_color));
-        	    paint.setTextAlign(Align.CENTER);
-        		paint.setTextSize(35);
-                canvas.drawText(String.valueOf(currentDate+i), getXPos(i), getHeight() - 120, paint);
-        	}
-        	break; 
-    	case 2:
-    		numOfDays = datapoints2.size() >=  datapoints.size()? datapoints2.size() : datapoints.size();
-    		
-    		if(numOfDays > 0){
-        		currentDate = datapoints2.size() >=  datapoints.size()? datapoints2.get(0).day : datapoints.get(0).day;
-        	}
-    		
-        	for (int i = 0; i < numOfDays ; i ++) {
-        		if (mode == ZOOM2) {
-        			if (i%5 != 0) continue;
-        		}
-    		
-        		paint.setStyle(Style.FILL);
-        	    paint.setColor(getResources().getColor(R.color.linechart_date_color));
-        	    paint.setTextAlign(Align.CENTER);
-        		paint.setTextSize(35);
-                canvas.drawText(String.valueOf(currentDate+i), getXPos(i), getHeight() - 120, paint);
-        	}    		
-    		break;
-    	}
-    	
-    		
-    		
-    		
-    }
 
 	private int getLineDistance() {
         int distance;
@@ -466,6 +434,7 @@ public class LineChartView extends View {
         
     	int startPoint = 0;
         for (int i = 0; i < dataset.length; i++) {
+        	Log.d(TAG, "length: " + dataset.length);
         	int selfType = dataset[i].getSelfType();
         	if (selfType < 6 && selfType > 0) {
         		path_self.moveTo(getXPos2(i), getYPos(dataset[i].getSelfScore()));
