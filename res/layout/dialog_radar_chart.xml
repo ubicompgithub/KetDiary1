@@ -17,8 +17,9 @@
             android:id="@+id/rank_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginLeft="82dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
             android:text="@string/radar_title"
             android:textColor="@color/black_gray"
             android:textSize="@dimen/large_text_size" />

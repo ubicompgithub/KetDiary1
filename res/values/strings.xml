@@ -237,7 +237,7 @@
     <string name="lock_about">完成訊息：</string>
     <string name="radar_title">我的表現分析</string>
     <string name="radar_label0">酒測\n表現</string>
-    <string name="radar_label0_full">酒測功能　完成度</string>
+    <string name="radar_label0_full">\t\t\酒測功能　完成度</string>
     <string name="radar_label0_0">酒測表現</string>
     <string name="radar_label1">自我\n調適</string>
     <string name="radar_label1_full">自我調適功能　完成度</string>
