@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.check.StartDateCheck;
 import com.ubicomp.ketdiary.check.WeekNumCheck;
+import com.ubicomp.ketdiary.data.structure.CopingSkill;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.QuestionTest;
 import com.ubicomp.ketdiary.data.structure.Rank;
@@ -1403,6 +1404,125 @@ public class DatabaseControl {
 				db = dbHelper.getWritableDatabase();
 				String sql = "UPDATE QuestionTest SET upload = 1 WHERE ts = "
 						+ ts;
+				db.execSQL(sql);
+				db.close();
+			}
+		}
+		
+		// CopingSkill
+
+		/**
+		 * Get the latest CopingSkill result
+		 * 
+		 * @return CopingSkill. If there are no CopingSkill, return a dummy data.
+		 * @see ubicomp.soberdiary.data.structure.EmotionDIY
+		 */
+		public CopingSkill getLatestCopingSkill() {
+			synchronized (sqlLock) {
+				db = dbHelper.getReadableDatabase();
+				String sql;
+				Cursor cursor;
+				sql = "SELECT * FROM CopingSkill ORDER BY ts DESC LIMIT 1";
+				cursor = db.rawQuery(sql, null);
+				if (!cursor.moveToFirst()) {
+					cursor.close();
+					db.close();
+					return new CopingSkill(0, 0, 0, null, 0);
+				}
+				long ts = cursor.getLong(4);
+				int skillType = cursor.getInt(7);
+				int skillSelect = cursor.getInt(8);
+				String recreation = cursor.getString(9);
+				int score = cursor.getInt(10);
+				return new CopingSkill(ts, skillType, skillSelect, recreation, score);
+			}
+		}
+
+		/**
+		 * Insert an CopingSkill result
+		 * 
+		 * @return # credits got by the user
+		 * @see ubicomp.soberdiary.data.structure.CopingSkill
+		 */
+		public int insertCopingSkill(CopingSkill data) {
+			synchronized (sqlLock) {
+				CopingSkill prev_data = getLatestCopingSkill();
+				int addScore = 0;
+				if (!prev_data.getTv().isSameTimeBlock(data.getTv()))
+					addScore = 1;
+				if (!StartDateCheck.afterStartDate())
+					addScore = 0;
+				db = dbHelper.getWritableDatabase();
+				ContentValues content = new ContentValues();
+				content.put("year", data.getTv().getYear());
+				content.put("month", data.getTv().getMonth());
+				content.put("day", data.getTv().getDay());
+				content.put("ts", data.getTv().getTimestamp());
+				content.put("week", data.getTv().getWeek());
+				content.put("timeslot", data.getTv().getTimeslot());
+				content.put("skillType", data.getSkillType());
+				content.put("skillSelect", data.getSkillSelect());
+				content.put("recreation", data.getRecreation());
+				content.put("score", prev_data.getScore() + addScore);
+				db.insert("CopingSkill", null, content);
+				db.close();
+				return addScore;
+			}
+		}
+
+		/**
+		 * Get all CopingSkill results which are not uploaded to the server
+		 * 
+		 * @return An array of EmotionDIY. If there are no EmotionDIY, return null.
+		 * @see ubicomp.soberdiary.data.structure.EmotionDIY
+		 */
+		public CopingSkill[] getNotUploadedCopingSkill() {
+			synchronized (sqlLock) {
+				CopingSkill[] data = null;
+
+				db = dbHelper.getReadableDatabase();
+				String sql;
+				Cursor cursor;
+
+				sql = "SELECT * FROM CopingSkill WHERE upload = 0";
+				cursor = db.rawQuery(sql, null);
+				int count = cursor.getCount();
+				if (count == 0) {
+					cursor.close();
+					db.close();
+					return null;
+				}
+
+				data = new CopingSkill[count];
+
+				for (int i = 0; i < count; ++i) {
+					cursor.moveToPosition(i);
+					long ts = cursor.getLong(4);
+					int skillType = cursor.getInt(7);
+					int skillSelect = cursor.getInt(8);
+					String recreation = cursor.getString(9);
+					int score = cursor.getInt(10);
+					data[i] = new CopingSkill(ts, skillType, skillSelect, recreation, score);
+				}
+
+				cursor.close();
+				db.close();
+
+				return data;
+			}
+		}
+
+		/**
+		 * Label the CopingSkill result uploaded
+		 * 
+		 * @param ts
+		 *            Timestamp of the Emotion DIY result
+		 * @see ubicomp.soberdiary.data.structure.EmotionDIY
+		 */
+		public void setCopingSkillUploaded(long ts) {
+			synchronized (sqlLock) {
+				db = dbHelper.getWritableDatabase();
+				String sql = "UPDATE CopingSkill SET upload = 1 WHERE ts = " + ts;
 				db.execSQL(sql);
 				db.close();
 			}

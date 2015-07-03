@@ -57,9 +57,6 @@ public class LineChartView extends View {
     private static float range;
     
     private static float touchX;
-    public  List<DummyData> datapoints = new ArrayList<DummyData>();
-    public  List<DummyData> datapoints2 = new ArrayList<DummyData>();
-    
     private static LineChartData[] dataset = null;
     		
     private Paint paint = new Paint();
@@ -79,6 +76,7 @@ public class LineChartView extends View {
     private int initHeight;
     private int numOfDays = 0;
     private int lastNoteAddNum = 0;
+    private boolean drawBackground = true;
 
 	public LineChartView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -272,11 +270,15 @@ public class LineChartView extends View {
     	else {
     		//offsetY = 90; 
     	}
-        drawBackground(canvas);
-        drawDate2(canvas);
+    	//if(drawBackground){
+	        drawBackground(canvas);
+	        drawRectBar2(canvas);
+	        drawDate2(canvas);
+    	
+        //看能不能獨立update
         drawCursor3(canvas);
         drawLineChart2(canvas);
-        drawRectBar2(canvas);
+        
         
         canvas.restore();
     }
@@ -553,24 +555,9 @@ public class LineChartView extends View {
       return range*(-1*value+4) + offsetY;
     }
 
-    private float getXPos(float value) {
-        float width = getWidth() - getPaddingLeft() - getPaddingRight();
-        float maxValue = datapoints.size() - 1;
-
-        // scale it to the view size
-        value = (value / maxValue) * width;
-
-        // offset it to adjust for padding
-        value += getPaddingLeft();
-
-        return value + offsetX;
-    }
     
     private float getXPos2(float value) {
         float width = getWidth() - getPaddingLeft() - getPaddingRight();
-        float maxValue = datapoints.size() - 1;
-
-
         return unit_scale*value+getPaddingLeft()+offsetX;
     }
     

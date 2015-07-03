@@ -1,7 +1,6 @@
 package com.ubicomp.ketdiary.db;
 
 import java.io.IOException;
-import java.util.Vector;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -16,6 +15,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.ubicomp.ketdiary.data.structure.CopingSkill;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.QuestionTest;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
@@ -108,7 +108,16 @@ public class DataUploader {
 					if (connectToServer(questionTests[i]) == ERROR)
 					Log.d(TAG, "FAIL TO UPLOAD - QuestionTest");
 				}
-			}				
+			}
+			
+			// CopingSkill
+			CopingSkill copingSkills[] = db.getNotUploadedCopingSkill();
+			if (copingSkills != null) {
+				for (int i = 0; i < copingSkills.length; ++i) {
+					if (connectToServer(copingSkills[i]) == ERROR)
+					Log.d(TAG, "FAIL TO UPLOAD - CopingSkill");
+				}
+			}
 			
 			return null;
 		}
@@ -216,6 +225,24 @@ public class DataUploader {
 				if (upload(httpClient, httpPost)){
 					db.setQuestionTestUploaded(data.getTv().getTimestamp());
 					Log.d(TAG, "Upload QuestionTest Success.");
+				}
+				else
+					return ERROR;
+			} catch (Exception e) {
+				Log.d(TAG, "EXCEPTION:" + e.toString());
+				return ERROR;
+			}
+			return SUCCESS;
+		}
+		
+		private int connectToServer(CopingSkill data) {
+			try {
+				DefaultHttpClient httpClient = HttpSecureClientGenerator
+						.getSecureHttpClient();
+				HttpPost httpPost = HttpPostGenerator.genPost(data);
+				if (upload(httpClient, httpPost)){
+					db.setCopingSkillUploaded(data.getTv().getTimestamp());
+					Log.d(TAG, "Upload CopingSkill Success.");
 				}
 				else
 					return ERROR;

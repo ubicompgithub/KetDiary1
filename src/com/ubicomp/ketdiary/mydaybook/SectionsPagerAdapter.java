@@ -184,9 +184,9 @@ public class SectionsPagerAdapter extends PagerAdapter {
                         newSelectedDayTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                
                     }
-                    int selectedYear = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_YEAR).toString());
-                    int selectedMonth = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_MONTH).toString());
-                    int selectedDay = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_DAY).toString());
+                    int selectedYear = Integer.valueOf(v.getTag(TAG_CAL_CELL_YEAR).toString());
+                    int selectedMonth = Integer.valueOf(v.getTag(TAG_CAL_CELL_MONTH).toString());
+                    int selectedDay = Integer.valueOf(v.getTag(TAG_CAL_CELL_DAY).toString());
                     DaybookFragment.scrolltoItem(selectedYear, selectedMonth, selectedDay);
                     
                     
@@ -316,6 +316,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
                 if (mCalendar.get(Calendar.DAY_OF_MONTH) == selectedDay && mCalendar.get(Calendar.MONTH) == selectedMonth) {
                     selectedView = cellView;
                     calDateText.setTextColor(context.getResources().getColor(R.color.black));
+                    calDateText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                 }
             }
             

@@ -59,6 +59,9 @@ public class AnalysisProsConsView extends StatisticPageView {
 		help.setTypeface(wordTypefaceBold);
 		targetMoney = (TextView) view.findViewById(R.id.analysis_target_money);
 		targetMoney.setTypeface(wordTypefaceBold);
+		
+		help.setText(PreferenceControl.getNegativeGoal());
+		targetMoney.setText(PreferenceControl.getPostiveGoal());
 
 		currentBar = (ImageView) view
 				.findViewById(R.id.analysis_pros_position);

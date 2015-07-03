@@ -286,10 +286,24 @@ public class PreferenceControl {
 
 		cal.set(data[0], data[1], data[2], 0, 0, 0);
 		cal.set(Calendar.MILLISECOND, 0);
-		cal.set(Calendar.DATE, -2);
+		cal.add(Calendar.DATE, -2);
 		return cal;
 	}
+	
+	public static void setGoal2(String positive, String negative) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putString("targetGood", positive);
+		edit.putString("targetBad", negative);
+		edit.commit();
+	}
 
+	public static String getPostiveGoal() {
+		return sp.getString("targetGood", "家人認同");	
+	}
+	
+	public static String getNegativeGoal() {
+		return sp.getString("targetBad", "尿失禁");	
+	}
 	
 	// haven't use
 	/**

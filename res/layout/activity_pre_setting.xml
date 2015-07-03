@@ -410,12 +410,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Target:"
+                        android:text="Positive:"
                         android:textColor="@color/white"
                         android:textSize="@dimen/small_title_size" />
 
                     <EditText
-                        android:id="@+id/target_good_edit"
+                        android:id="@+id/target_positive_edit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
@@ -438,12 +438,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Total $:"
+                        android:text="Negative:"
                         android:textColor="@color/white"
                         android:textSize="@dimen/small_title_size" />
 
                     <EditText
-                        android:id="@+id/target_money_edit"
+                        android:id="@+id/target_negative_edit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"

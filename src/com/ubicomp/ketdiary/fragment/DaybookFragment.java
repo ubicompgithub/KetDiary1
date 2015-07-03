@@ -110,10 +110,11 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	
 	public ImageView addButton;
 	
-	private boolean isFilterIsOpen = false;
 	public AddNoteDialog2 notePage = null;
 	public boolean isNotePageShow = false;
 	private boolean isContentAdd = true;
+	private boolean isFilterOpen = false;
+	private boolean isRotated = false;
 	
 	private static NoteAdd[] noteAdds = null;
 	private DatabaseControl db;
@@ -138,9 +139,6 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	
 	public static boolean[] filterButtonIsPressed = {true, false, false, false, false, false, false, false, false};
 	private ImageView[] filterButtonArray = {filterAll, filter1, filter2, filter3, filter4, filter5, filter6, filter7, filter8};
-	
-	private boolean isFilterOpen = false;
-	private boolean isRotated = false;
 	
 	private int drawerHeight = context.getResources().getDimensionPixelSize(R.dimen.drawer_normal_height);
 	private int drawerHeightWithFilter = context.getResources().getDimensionPixelSize(R.dimen.drawer_with_filter_height);
@@ -271,7 +269,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			@Override
 			public void onClick(View v) {
 
-				if (isFilterIsOpen == false) {				
+				if (isFilterOpen == false) {				
 					drawerContent.removeAllViews();
 					upperBarContent.removeAllViews();
 					drawerContent.addView(lineChartView);
@@ -409,7 +407,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 //		        float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
 //		        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
 //				lineChart.setCanvasHeight( (int) (325*dpHeight) );
-				if (isFilterIsOpen == false) {				
+				if (isFilterOpen == false) {				
 					LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
 					//Log.i("OMG", "H: "+lp.height);
 					lp.height = 1200;
@@ -420,7 +418,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 					
 					drawerContent.addView(lineChartFilter);
 					drawerContent.addView(lineChartView);
-					isFilterIsOpen = true;
+					isFilterOpen = true;
 				}
 				else {
 					LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
@@ -431,7 +429,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 					drawerContent.removeAllViews();
 					
 					drawerContent.addView(lineChartView);
-					isFilterIsOpen = false;
+					isFilterOpen = false;
 				}
 				
 			}
@@ -518,6 +516,14 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private class LoadingHandler extends Handler {
 		public void handleMessage(Message msg) {
 			MainActivity.getMainActivity().enableTabAndClick(false);
+			
+			
+			showDiary();
+			updateCalendarView();
+			
+			
+			
+			
 
 			MainActivity.getMainActivity().enableTabAndClick(true);
 			LoadingDialogControl.dismiss();
@@ -622,10 +628,11 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		super.onResume();
 		
 		filter_count = 0;
-				
+
 		for(int i=0; i<filterButtonIsPressed.length; i++)
 			filterButtonIsPressed[i] = false;
 		filterButtonIsPressed[0] = true;
+		
 		//setCurrentCalendarPage(selectedMonth + 1 - Database.START_MONTH);
 		Log.d(TAG, "StartMonth: "+startMonth + "SustainMonth: "+ sustainMonth);
 		sv.fullScroll(View.FOCUS_DOWN);

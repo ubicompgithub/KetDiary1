@@ -43,7 +43,7 @@ public class AboutActivity extends Activity {
 	// Link & COPYRIGHT
 	private static final String EMAIL = "ubicomplab.ntu@gmail.com";
 	//private static final String WEBSITE = "http://mll.csie.ntu.edu.tw/soberdiary/mobile/knowledge.php";
-	private static final String COPYRIGHT = "\u00a9 2014 National Taiwan University,Intel-NTU Connected Context Computing Center, and Taipei City Hospital";
+	private static final String COPYRIGHT = "\u00a9 2015 National Taiwan University,Intel-NTU Connected Context Computing Center, and Taipei City Hospital";
 
 	/** Hidden state machine for entering developer page */
 	private int hiddenState;

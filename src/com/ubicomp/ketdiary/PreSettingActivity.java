@@ -27,7 +27,7 @@ import com.ubicomp.ketdiary.system.PreferenceControl;
  */
 public class PreSettingActivity extends Activity {
 
-	private EditText uid, did, target_good, target, drink;
+	private EditText uid, did, target_good, target_bad, drink;
 	private EditText voltage1, voltage2, ACountDown, VCountDown;
 
 	private Button saveButton, exchangeButton, restoreButton, debugButton,
@@ -49,7 +49,7 @@ public class PreSettingActivity extends Activity {
 
 	private TextView versionText;
 
-	private String target_g;
+	private String target_g, target_b;
 	private int target_t, drink_t;
 
 	private CheckBox developer_switch;
@@ -76,11 +76,11 @@ public class PreSettingActivity extends Activity {
 		developer_switch = (CheckBox) this.findViewById(R.id.developer_switch);
 		developer_switch.setChecked(PreferenceControl.isDeveloper());
 
-		target_good = (EditText) this.findViewById(R.id.target_good_edit);
-		target_good.setText(PreferenceControl.getSavingGoal());
+		target_good = (EditText) this.findViewById(R.id.target_positive_edit);
+		target_good.setText(PreferenceControl.getPostiveGoal());
 
-		target = (EditText) this.findViewById(R.id.target_money_edit);
-		target.setText(String.valueOf(PreferenceControl.getSavingGoalMoney()));
+		target_bad = (EditText) this.findViewById(R.id.target_negative_edit);
+		target_bad.setText(PreferenceControl.getNegativeGoal());
 
 		drink = (EditText) this.findViewById(R.id.target_drink_edit);
 		drink.setText(String.valueOf(PreferenceControl.getSavingDrinkCost()));
@@ -249,18 +249,15 @@ public class PreSettingActivity extends Activity {
 				check = false;
 			if (!text.startsWith("rehab"))
 				check = false;
-
+			
 			target_g = target_good.getText().toString();
 			if (target_g.length() == 0)
 				check = false;
-
-			if (target.getText().toString().length() == 0)
+			
+			target_b = target_bad.getText().toString();
+			if (target_bad.getText().toString().length() == 0)
 				check = false;
-			else {
-				target_t = Integer.valueOf(target.getText().toString());
-				if (target_t <= 0)
-					check = false;
-			}
+
 
 			if (drink.getText().toString().length() == 0)
 				check = false;
@@ -310,7 +307,8 @@ public class PreSettingActivity extends Activity {
 				
 				PreferenceControl.setIsDeveloper(developer_switch.isChecked());
 				PreferenceControl.setCollectData(collectdata_switch.isChecked());
-				PreferenceControl.setGoal(target_g, target_t, drink_t);
+				PreferenceControl.setGoal2(target_g, target_b);
+				//PreferenceControl.setGoal(target_g, target_t, drink_t);
 				
 				PreferenceControl.setVoltage1(v1);
 				PreferenceControl.setVoltage2(v2);

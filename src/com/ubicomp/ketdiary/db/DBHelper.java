@@ -13,7 +13,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 	/* SQLiteOpenHelper. need to migrate with */
 	private static final String DATABASE_NAME = "rehabdiary";
-	private static final int DB_VERSION = 6;
+	private static final int DB_VERSION = 8;
 
 	/**
 	 * Constructor
@@ -69,17 +69,9 @@ public class DBHelper extends SQLiteOpenHelper {
 		db.execSQL("CREATE TABLE Ranking (" + " user_id CHAR[255] PRIMERY KEY,"
 				+ " total_score INTEGER NOT NULL,"
 				+ " test_score INTEGER NOT NULL  DEFAULT 0,"
-				+ " advice_score INTEGER NOT NULL  DEFAULT 0,"
-				+ " manage_score INTEGER NOT NULL  DEFAULT 0,"
-				+ " story_score INTEGER NOT NULL DEFAULT 0,"
-				+ " advice_questionnaire INTEGER NOT NULL DEFAULT 0,"
-				+ " advice_emotion_diy INTEGER NOT NULL DEFAULT 0,"
-				+ " manage_voice INTEGER NOT NULL DEFAULT 0,"
-				+ " manage_emotion INTEGER NOT NULL DEFAULT 0,"
-				+ " manage_additional INTEGER NOT NULL DEFAULT 0,"
-				+ " story_read INTEGER NOT NULL DEFAULT 0,"
-				+ " story_test INTEGER NOT NULL DEFAULT 0,"
-				+ " story_fb INTEGER NOT NULL DEFAULT 0" + ")");
+				+ " note_score INTEGER NOT NULL  DEFAULT 0,"
+				+ " question_score INTEGER NOT NULL  DEFAULT 0,"
+				+ " coping_score INTEGER NOT NULL  DEFAULT 0"+")");
 
 		db.execSQL("CREATE TABLE RankingShort ("
 				+ " user_id CHAR[255] PRIMERY KEY,"
@@ -96,6 +88,17 @@ public class DBHelper extends SQLiteOpenHelper {
 				+ " choose INTEGER NOT NULL DEFAULT 0,"
 				+ " score INTEGER NOT NULL,"
 				+ " upload INTEGER NOT NULL DEFAULT 0" + ")");
+		
+		db.execSQL("CREATE TABLE CopingSkill ("
+				+ " id INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ " year INTEGER NOT NULL," + " month INTEGER NOT NULL,"
+				+ " day INTEGER NOT NULL," + " ts INTEGER NOT NULL,"
+				+ " week INTEGER NOT NULL," + " timeSlot INTEGER NOT NULL,"
+				+ " skillType INTEGER NOT NULL,"
+				+ " skillSelect INTEGER NOT NULL DEFAULT 0,"
+				+ " recreation CHAR[255] NOT NULL,"
+				+ " score INTEGER NOT NULL,"
+				+ " upload INTEGER NOT NULL DEFAULT 0" + ")");
 
 
 	}
@@ -104,6 +107,8 @@ public class DBHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int old_ver, int new_ver) {
 		
 		db.execSQL("DROP TABLE IF EXISTS TestDetail");
+		db.execSQL("DROP TABLE IF EXISTS CopingSkill");
+		db.execSQL("DROP TABLE IF EXISTS Ranking");
 		
 		db.execSQL("CREATE TABLE TestDetail ("
 				+ " id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -115,19 +120,25 @@ public class DBHelper extends SQLiteOpenHelper {
 				+ " colorReading INTEGER NOT NULL, "+ " connectionFailRate FLOAT, " 
 				+ " failedReason CHAR[255], " 
 				+ " upload INTEGER NOT NULL DEFAULT 0" + ")");
-		
-		db.execSQL("CREATE TABLE QuestionTest ("
+				
+		db.execSQL("CREATE TABLE CopingSkill ("
 				+ " id INTEGER PRIMARY KEY AUTOINCREMENT,"
 				+ " year INTEGER NOT NULL," + " month INTEGER NOT NULL,"
 				+ " day INTEGER NOT NULL," + " ts INTEGER NOT NULL,"
 				+ " week INTEGER NOT NULL," + " timeSlot INTEGER NOT NULL,"
-				+ " questionType INTEGER NOT NULL,"
-				+ " isCorrect INTEGER NOT NULL DEFAULT 0,"
-				+ " selection CHAR[255] NOT NULL,"
-				+ " choose INTEGER NOT NULL DEFAULT 0,"
+				+ " skillType INTEGER NOT NULL,"
+				+ " skillSelect INTEGER NOT NULL DEFAULT 0,"
+				+ " recreation CHAR[255] NOT NULL,"
 				+ " score INTEGER NOT NULL,"
 				+ " upload INTEGER NOT NULL DEFAULT 0" + ")");
-			
+		
+		db.execSQL("CREATE TABLE Ranking (" + " user_id CHAR[255] PRIMERY KEY,"
+				+ " total_score INTEGER NOT NULL,"
+				+ " test_score INTEGER NOT NULL  DEFAULT 0,"
+				+ " note_score INTEGER NOT NULL  DEFAULT 0,"
+				+ " question_score INTEGER NOT NULL  DEFAULT 0,"
+				+ " coping_score INTEGER NOT NULL  DEFAULT 0"+")");
+		
 	}
 
 	@Override

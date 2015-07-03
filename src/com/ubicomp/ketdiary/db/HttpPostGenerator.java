@@ -18,6 +18,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 
 import com.ubicomp.ketdiary.App;
+import com.ubicomp.ketdiary.data.structure.CopingSkill;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.QuestionTest;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
@@ -230,6 +231,32 @@ public class HttpPostGenerator {
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getisCorrect())));
 		nvps.add(new BasicNameValuePair("data[]", data.getSelection()));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getChoose())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getScore())));
+		try {
+			httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
+		} catch (UnsupportedEncodingException e) {
+		}
+		return httpPost;
+	}
+	
+	/**
+	 * Generate POST of test results of CopingSkill
+	 * 
+	 * @param data
+	 *            CopingSkill
+	 * @return HttpPost contains QuestionTest
+	 * @see ubicomp.soberdiary.data.structure.QuestionTest
+	 */
+	public static HttpPost genPost(CopingSkill data) {
+		HttpPost httpPost = new HttpPost(ServerUrl.getQuestionTestUrl());
+		String uid = PreferenceControl.getUID();
+		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+		nvps.add(new BasicNameValuePair("uid", uid));
+
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getTv().getTimestamp())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getSkillSelect())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getSkillType())));
+		nvps.add(new BasicNameValuePair("data[]", data.getRecreation()));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getScore())));
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
