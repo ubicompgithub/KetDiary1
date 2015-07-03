@@ -30,6 +30,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ubicomp.ketdiary.CopingActivity;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.ResultService2;
@@ -68,7 +69,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private RelativeLayout main_layout;
 	private LinearLayout water_layout;
 	private TextView label_btn, label_subtitle, label_title, debug_msg, test_msg;
-	private ImageView img_bg, img_ac, img_btn, img_info, img_water1, img_water2, img_water3, img_face;
+	private ImageView img_bg, img_ac, img_btn, img_info, img_water1, img_water2, img_water3, img_face, img_help;
 	
 	private boolean isDeveloper = PreferenceControl.isDeveloper();
 	private boolean debug = PreferenceControl.isDebugMode();
@@ -260,6 +261,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		label_subtitle = (TextView) view.findViewById(R.id.tv_subtitle);
 		label_title = (TextView) view.findViewById(R.id.tv_title);
 		test_msg = (TextView) view.findViewById(R.id.test_message);
+
+		img_help = (ImageView) view.findViewById(R.id.iv_help);
 		
 		img_bg = (ImageView)view.findViewById(R.id.iv_bar_bg);
 		img_ac = (ImageView)view.findViewById(R.id.iv_bar_ac);
@@ -308,6 +311,17 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		
 		msgBox = new NoteDialog3(testFragment, main_layout);
 		
+
+		img_help.setOnClickListener(new View.OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent();
+				intent.setClass(activity, CopingActivity.class);
+				startActivity(intent);
+			}
+		});
+
+
 		//For Testing Function
 		
 		/*

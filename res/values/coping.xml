@@ -7,17 +7,32 @@
     <string name="coping_music">聆聽舒緩音樂</string>
     <string name="coping_stretch">伸展</string>
     <string name="coping_meditation">冥想</string>
-    <string name="coping_casual">休閒活動</string>
+    <string name="coping_recreation">休閒活動</string>
+    <string name="coping_default_recreation0">聽音樂</string>
+    <string name="coping_default_recreation1">慢跑</string>
+    <string name="coping_default_recreation2">打球</string>
+    <string name="coping_recreation_dialog">選擇運動記得注意自己的狀況</string>
     <string name="coping_interperson">與他人相處建議</string>
     <string name="coping_away">遠離現場</string>
-    <string name="coping_told">讓朋友知道你正在戒酒</string>
-    <string name="coping_drink">以飲料或茶代酒</string>
+    <string name="coping_away_dialog">立即遠離現場避免繼續受到誘惑</string>
+    <string name="coping_told">讓朋友知道你正在戒毒</string>
+    <string name="coping_told_dialog">立刻告訴朋友知道你正在戒毒</string>
+    <string name="coping_repeat">破唱片法</string>
+    <string name="coping_repeat_dialog">不斷重複告訴朋友自己現在正在戒毒</string>
     <string name="coping_telephone">撥電話</string>
     <string name="coping_mms">傳簡訊</string>
+    <string name="coping_sponsor">親密他人</string>
+    <string name="coping_default_sponsor">聯絡人</string>
     <string name="coping_information">資訊站</string>
-    <string name="coping_harm">飲酒造成的危害</string>
+    <string name="coping_encouragement">正面鼓勵</string>
+    <string name="coping_encouragement_dialog">你已經在戒毒的路上了，繼續加油</string>
+    <string name="coping_harm">吸毒造成的危害</string>
+    <string name="coping_harm_dialog">研究顯示濫用愷他命，會罹患慢性間質性膀胱炎</string>
     <string name="coping_lifestyle">生活習慣建議</string>
-    <string name="coping_lapse">又開始飲酒了怎麼辦?</string>
+    <string name="coping_lifestyle_dialog">放鬆身心，停整作息</string>
+    <string name="coping_lapse">又開始吸毒了怎麼辦?</string>
+    <string name="coping_lapse_dialog">現在放棄就前功盡棄了</string>
+
 	
     
     

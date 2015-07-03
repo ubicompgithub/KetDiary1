@@ -1,11 +1,17 @@
 package com.ubicomp.ketdiary;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,13 +44,16 @@ public class CopingActivity extends EmotionActivity {
 
 	private View fbView;
 	private View uvView;
-	private RelativeLayout[] recreationViews;
+	private View[] recreationViews;
 	private RelativeLayout[] contactViews;
 	//private MultiRadioGroup socialGroup;
 	private View socialGroupView;
 	//private SingleRadioGroup notificationGroup;
 	private View notificationGroupView;
 	private View breathView, musleView, stretchView, peacefulView, musicView, meditationView;
+	private View awayView, toldView, repeatView;
+	private View[] sponsorViews;
+	private View encouragementView, harmView, lifestyleView, lapseView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +79,15 @@ public class CopingActivity extends EmotionActivity {
 
 	private void setting() {
 
+		setRelaxedView();
+		setRecreationView();
+		setInterpersonView();
+		setSponsorView();
+		setInfoView();
+
+	}
+
+	private void setRelaxedView(){
 		RelativeLayout relaxedView = createListView(R.string.coping_relaxed,
 				new OnClickListener() {
 					private boolean visible = false;
@@ -161,12 +179,11 @@ public class CopingActivity extends EmotionActivity {
 		
 		meditationView.setVisibility(View.GONE);
 		mainLayout.addView(meditationView);
-		
-		
+	}
 
-		//-------------
+	private void setRecreationView(){
 		RelativeLayout recreationView = createListView(
-				R.string.setting_recreation, new OnClickListener() {
+				R.string.coping_recreation, new OnClickListener() {
 
 					private boolean visible = false;
 
@@ -176,11 +193,11 @@ public class CopingActivity extends EmotionActivity {
 						ImageView list = (ImageView) v
 								.findViewById(R.id.question_list);
 						if (visible) {
-							for (int i = 0; i < recreationViews.length; ++i)
+							for (int i = 0; i < recreationViews.length-2; ++i)
 								recreationViews[i].setVisibility(View.GONE);
 							list.setVisibility(View.INVISIBLE);
 						} else {
-							for (int i = 0; i < recreationViews.length; ++i)
+							for (int i = 0; i < recreationViews.length-2; ++i)
 								recreationViews[i].setVisibility(View.VISIBLE);
 							list.setVisibility(View.VISIBLE);
 						}
@@ -192,14 +209,282 @@ public class CopingActivity extends EmotionActivity {
 
 		String[] recreations = PreferenceControl.getRecreations();
 		recreationViews = new RelativeLayout[recreations.length];
-		for (int i = 0; i < recreations.length; ++i) {
-			recreationViews[i] = createEditRecreationView(recreations[i], i);
-			recreationViews[i].setVisibility(View.GONE);
-			mainLayout.addView(recreationViews[i]);
+		
+
+		recreationViews[0] = BarButtonGenerator.createSettingButtonView(
+			R.string.coping_default_recreation0, new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					generateDialog(R.string.coping_recreation_dialog);
+				}
+
+			});
+
+		recreationViews[0].setVisibility(View.GONE);
+		mainLayout.addView(recreationViews[0]);
+		
+		recreationViews[1] = BarButtonGenerator.createSettingButtonView(
+			R.string.coping_default_recreation1, new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					generateDialog(R.string.coping_recreation_dialog);
+				}
+
+			});
+
+		recreationViews[1].setVisibility(View.GONE);
+		mainLayout.addView(recreationViews[1]);
+
+		recreationViews[2] = BarButtonGenerator.createSettingButtonView(
+			R.string.coping_default_recreation2, new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					generateDialog(R.string.coping_recreation_dialog);
+				}
+
+			});
+
+		recreationViews[2].setVisibility(View.GONE);
+		mainLayout.addView(recreationViews[2]);
+
+		// for (int i = 0; i < recreations.length; ++i) {
+		// 	recreationViews[i] = BarButtonGenerator.createSettingButtonView(
+		// 		R.string.coping_default_recreation, new OnClickListener() {
+
+		// 			@Override
+		// 			public void onClick(View v) {
+						
+		// 			}
+
+		// 		});
+
+		// 	recreationViews[i].setVisibility(View.GONE);
+		// 	mainLayout.addView(recreationViews[i]);
+		// }
+
+
+	}
+
+	private void setInterpersonView(){
+		RelativeLayout interpersonView = createListView(R.string.coping_interperson,
+				new OnClickListener() {
+					private boolean visible = false;
+
+					@Override
+					public void onClick(View v) {
+						
+						ImageView list = (ImageView) v.findViewById(R.id.question_list);
+						if (visible) {
+							awayView.setVisibility(View.GONE);
+							toldView.setVisibility(View.GONE);
+							repeatView.setVisibility(View.GONE);
+							
+							list.setVisibility(View.INVISIBLE);
+						} else {
+							awayView.setVisibility(View.VISIBLE);
+							toldView.setVisibility(View.VISIBLE);
+							repeatView.setVisibility(View.VISIBLE);
+							
+							list.setVisibility(View.VISIBLE);
+						}
+						visible = !visible;
+					}
+				});
+		mainLayout.addView(interpersonView);
+		
+		awayView = BarButtonGenerator.createSettingButtonView(
+				R.string.coping_away, new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						generateDialog(R.string.coping_away_dialog);
+					}
+
+				});
+		awayView.setVisibility(View.GONE);
+		mainLayout.addView(awayView);
+		
+		toldView = BarButtonGenerator.createSettingButtonView(
+				R.string.coping_told, new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						generateDialog(R.string.coping_told_dialog);
+					}
+
+				});
+		toldView.setVisibility(View.GONE);
+		mainLayout.addView(toldView);
+
+		repeatView = BarButtonGenerator.createSettingButtonView(
+				R.string.coping_repeat, new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						generateDialog(R.string.coping_repeat_dialog);
+					}
+
+				});
+		repeatView.setVisibility(View.GONE);
+		mainLayout.addView(repeatView);
+
+	}
+
+
+	private void setSponsorView(){
+		RelativeLayout sponsorView = createListView(
+				R.string.coping_sponsor, new OnClickListener() {
+
+					private boolean visible = false;
+
+					@Override
+					public void onClick(View v) {
+				
+						ImageView list = (ImageView) v
+								.findViewById(R.id.question_list);
+						if (visible) {
+							for (int i = 0; i < sponsorViews.length; ++i)
+								sponsorViews[i].setVisibility(View.GONE);
+							list.setVisibility(View.INVISIBLE);
+						} else {
+							for (int i = 0; i < sponsorViews.length; ++i)
+								sponsorViews[i].setVisibility(View.VISIBLE);
+							list.setVisibility(View.VISIBLE);
+						}
+						visible = !visible;
+					}
+				});
+		mainLayout.addView(sponsorView);
+		
+
+		String[] sponsors = PreferenceControl.getSponsors();
+		sponsorViews = new RelativeLayout[sponsors.length];
+		for (int i = 0; i < sponsors.length; ++i) {
+			sponsorViews[i] = BarButtonGenerator.createSettingButtonView(
+				R.string.coping_default_sponsor, new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						
+					}
+
+				});
+
+			sponsorViews[i].setVisibility(View.GONE);
+			mainLayout.addView(sponsorViews[i]);
 		}
 
 
 	}
+
+
+	private void setInfoView(){
+		RelativeLayout infoView = createListView(R.string.coping_information,
+				new OnClickListener() {
+					private boolean visible = false;
+
+					@Override
+					public void onClick(View v) {
+						
+						ImageView list = (ImageView) v.findViewById(R.id.question_list);
+						if (visible) {
+							encouragementView.setVisibility(View.GONE);
+							harmView.setVisibility(View.GONE);
+							lifestyleView.setVisibility(View.GONE);
+							lapseView.setVisibility(View.GONE);
+							
+							list.setVisibility(View.INVISIBLE);
+						} else {
+							encouragementView.setVisibility(View.VISIBLE);
+							harmView.setVisibility(View.VISIBLE);
+							lifestyleView.setVisibility(View.VISIBLE);
+							lapseView.setVisibility(View.VISIBLE);
+							
+							list.setVisibility(View.VISIBLE);
+						}
+						visible = !visible;
+					}
+				});
+		mainLayout.addView(infoView);
+		
+		encouragementView = BarButtonGenerator.createSettingButtonView(
+				R.string.coping_encouragement, new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						generateDialog(R.string.coping_encouragement_dialog);
+					}
+
+				});
+		encouragementView.setVisibility(View.GONE);
+		mainLayout.addView(encouragementView);
+		
+		harmView = BarButtonGenerator.createSettingButtonView(
+				R.string.coping_harm, new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						generateDialog(R.string.coping_harm_dialog);
+					}
+
+				});
+		harmView.setVisibility(View.GONE);
+		mainLayout.addView(harmView);
+
+		lifestyleView = BarButtonGenerator.createSettingButtonView(
+				R.string.coping_lifestyle, new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						generateDialog(R.string.coping_lifestyle_dialog);
+					}
+
+				});
+		lifestyleView.setVisibility(View.GONE);
+		mainLayout.addView(lifestyleView);
+
+		lapseView = BarButtonGenerator.createSettingButtonView(
+				R.string.coping_lapse, new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						generateDialog(R.string.coping_lapse_dialog);
+					}
+
+				});
+		lapseView.setVisibility(View.GONE);
+		mainLayout.addView(lapseView);
+
+	}
+
+	private void generateDialog(int textResource){
+		// Create custom dialog object
+        final Dialog dialog = new Dialog(activity);
+        
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        
+        dialog.setContentView(R.layout.dialog);
+        TextView dialogText = (TextView) dialog.findViewById(R.id.dialog_text);
+        dialogText.setText(textResource);
+        
+        dialog.show();
+         
+        TextView dialogOKButton = (TextView) dialog.findViewById(R.id.ok_button);
+        dialogOKButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                dialog.dismiss();
+            }
+        });
+	}
+	
+	
 
 	@Override
 	protected void onResume() {
