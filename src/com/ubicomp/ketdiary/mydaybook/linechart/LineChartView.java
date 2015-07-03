@@ -37,11 +37,23 @@ public class LineChartView extends View {
 	
 	private static final String TAG = "LineChartView";
 	
-	private Context context = App.getContext();
+	private static Context context = App.getContext();
 	
     private static final int LINES = 7;
-    private static float offsetY = 90;
-    private static float offsetX = 60;
+    private static float offsetY = context.getResources().getDimensionPixelSize(R.dimen.offsetY);
+    private static float offsetX = context.getResources().getDimensionPixelSize(R.dimen.offsetX);
+    private static int unit_scale = context.getResources().getDimensionPixelSize(R.dimen.unit_scale);//50;
+    private static float date_Y_offset = context.getResources().getDimensionPixelSize(R.dimen.date_Y_offset);//120;
+    private static int dot_scale = context.getResources().getDimensionPixelSize(R.dimen.dot_scale);//25;
+    private static int dot_X_offset = context.getResources().getDimensionPixelSize(R.dimen.dot_X_offset);//12;
+    private static int dot_Y_offset = context.getResources().getDimensionPixelSize(R.dimen.dot_Y_offset);//10;
+    private static int rec_height = context.getResources().getDimensionPixelSize(R.dimen.rec_height);//28;
+    private static int rec_width = context.getResources().getDimensionPixelSize(R.dimen.rec_width);//60;
+    private static int rec_X_offset = context.getResources().getDimensionPixelSize(R.dimen.rec_X_offset);//25;
+    private static int cur_X_offset = context.getResources().getDimensionPixelSize(R.dimen.cur_X_offset);//12;
+    private static int legend_height = context.getResources().getDimensionPixelSize(R.dimen.legend_height);//40;
+    private static int legend_width = context.getResources().getDimensionPixelSize(R.dimen.legend_width);//350;
+    
     private static float range;
     
     private static float touchX;
@@ -73,7 +85,7 @@ public class LineChartView extends View {
         
         gestureDetector = new GestureDetector(context, new GestureListener());
         db = new DatabaseControl();
-        startDay = PreferenceControl.getStartDate();
+        startDay = PreferenceControl.getStartDateMinus();
     	//dummyDataGenerator();
         //setChartData2();
         
@@ -189,87 +201,7 @@ public class LineChartView extends View {
 		
     	Log.d(TAG, "data_length1: "+dataset.length);
 	}
-	
-	
-	public void setChartData2() {
-    	NoteAdd[] noteAdds = db.getAllNoteAdd();
-    	int previous_date = 0;
-    	int data_num=-1;
-    	int count = 1;
-    	float cum_impact = 0;
-    	DummyData singleData;
-    	
-    	if(noteAdds == null)
-    		return;
-    	
-    	Log.d(TAG, String.valueOf(noteAdds.length));
-    	
-    	
-		for(int i=0; i < noteAdds.length; i++){
-						
-			int category =noteAdds[i].getCategory();
-			int month = noteAdds[i].getRecordTv().getMonth();
-			int date = noteAdds[i].getRecordTv().getDay();
-			int type = noteAdds[i].getType();
-			int impact = noteAdds[i].getImpact()-3;
-			
-			if(category == 1){
-				if(date!= previous_date){
-					if(count!= 0){
-						cum_impact/=(float)count;
-						
-						singleData = new DummyData(category, cum_impact, cum_impact, type, month, date, 1);
-						datapoints.add(singleData);	
-						count = 1;
-					}
-					cum_impact = impact;
-				}
-				else{
-					cum_impact+=impact;
-					count++;
-				}
-				previous_date = date;
-			}
-			else
-				continue;
-		}
-		for(int i=0; i < noteAdds.length; i++){
-			
-			int category =noteAdds[i].getCategory();
-			int month = noteAdds[i].getRecordTv().getMonth();
-			int date = noteAdds[i].getRecordTv().getDay();
-			int type = noteAdds[i].getType();
-			int impact = noteAdds[i].getImpact()-3;
-			
-			if(category == 2){
-				if(date!= previous_date){
-					if(count!= 0){
-						cum_impact/=(float)count;
-						
-						singleData = new DummyData(category, cum_impact, cum_impact, type, month, date, 1);
-						datapoints2.add(singleData);	
-						count = 1;
-					}
-					cum_impact = impact;
-				}
-				else{
-					cum_impact+=impact;
-					count++;
-				}
-				previous_date = date;
-			}
-			else
-				continue;
-		}
-		
-		
-		
-		
-		//datapoints = ArrayUtils.toPrimitive(list.toArray(new Float[0]), 0.0F);
-		//data.toArray( datapoints );
-		Log.d(TAG, datapoints.size()+" "+datapoints2.size());
-    }
-	
+
 	public float getDensity(){
 		 DisplayMetrics metrics = context.getResources().getDisplayMetrics();
 		 return metrics.density;
@@ -335,10 +267,10 @@ public class LineChartView extends View {
     	setChartData3();
     	
     	if  (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-    		offsetY = 90; 
+    		//offsetY = 90; 
     	}
     	else {
-    		offsetY = 90; 
+    		//offsetY = 90; 
     	}
         drawBackground(canvas);
         drawDate2(canvas);
@@ -355,7 +287,7 @@ public class LineChartView extends View {
         paint.setStyle(Style.FILL);
         paint.setColor(getResources().getColor(R.color.linechart_bgline_color));
         paint.setTextAlign(Align.LEFT);
-        paint.setTextSize(35);
+        paint.setTextSize(convertDpToPixel((float)11.33));
         paint.setStrokeWidth(1);
         Paint line_paint = paint;
         line_paint.setColor(getResources().getColor(R.color.linechart_score_color));
@@ -385,8 +317,7 @@ public class LineChartView extends View {
     	currentDay.setTimeInMillis(startDay.getTimeInMillis());
     	
     	//numOfDays = daysOfTwo(startDay, Calendar.getInstance());
-    	
-    	
+    		
     	for (int i = 0; i < numOfDays ; i ++) {
     		int currentMonth = currentDay.get(Calendar.MONTH)+1;
         	int currentDate= currentDay.get(Calendar.DAY_OF_MONTH);
@@ -395,15 +326,15 @@ public class LineChartView extends View {
     			paint.setStyle(Style.FILL);
     			paint.setColor(getResources().getColor(R.color.linechart_date_color));
     			paint.setTextAlign(Align.CENTER);
-    			paint.setTextSize(35);
-    			canvas.drawText(currentMonth+"/"+currentDate, getXPos2(i), getHeight() - 120, paint);
+    			paint.setTextSize(convertDpToPixel((float)11.33));
+    			canvas.drawText(currentMonth+"/"+currentDate, getXPos2(i), getHeight() - date_Y_offset, paint);
     		}
     		else if(i % 5 == 0){
     			paint.setStyle(Style.FILL);
     			paint.setColor(getResources().getColor(R.color.linechart_date_color));
     			paint.setTextAlign(Align.CENTER);
-    			paint.setTextSize(35);
-    			canvas.drawText(""+currentDate, getXPos2(i), getHeight() - 120, paint);
+    			paint.setTextSize(convertDpToPixel((float)11.33));
+    			canvas.drawText(""+currentDate, getXPos2(i), getHeight() - date_Y_offset, paint);
     		}
     		
     		currentDay.add(Calendar.DAY_OF_MONTH, 1);
@@ -483,10 +414,10 @@ public class LineChartView extends View {
         		if (selfType > 5 || selfType < 1) continue;
  	        	if (drawTheDotOrNot(selfType)) {
 	 	        	Bitmap tmp = BitmapFactory.decodeResource(getResources(), dots[selfType]);
-	 	            Bitmap resizedImg = getResizedBitmap(tmp, 25, 25);
+	 	            Bitmap resizedImg = getResizedBitmap(tmp, dot_scale, dot_scale);
 	 	            tmp.recycle();
 	 	            System.gc();
-	 	            canvas.drawBitmap(resizedImg, getXPos2(i)-12, getYPos(dataset[i].getSelfScore())-10, p);
+	 	            canvas.drawBitmap(resizedImg, getXPos2(i)-dot_X_offset, getYPos(dataset[i].getSelfScore())-dot_Y_offset, p);
  	        	}
  	        }
         	break;
@@ -510,10 +441,10 @@ public class LineChartView extends View {
   	        	if (drawTheDotOrNot(otherType)) {
   	     
   	        		Bitmap tmp =  BitmapFactory.decodeResource(getResources(), dots[otherType]);
-  	 	            Bitmap resizedImg = getResizedBitmap(tmp, 25, 25);
+  	 	            Bitmap resizedImg = getResizedBitmap(tmp, dot_scale, dot_scale);
   	 	            tmp.recycle();
   	 	            System.gc();
-  	 	            canvas.drawBitmap(resizedImg, getXPos2(i)-12, getYPos(dataset[i].getOtherScore())-10, p);
+  	 	            canvas.drawBitmap(resizedImg, getXPos2(i)-dot_X_offset, getYPos(dataset[i].getOtherScore())-dot_Y_offset, p);
   	        	}
   	        }
         	break;
@@ -534,7 +465,7 @@ public class LineChartView extends View {
 	        paint.setShadowLayer(0, 0, 0, 0);
 	        paint_self.setShadowLayer(0, 0, 0, 0);
 	        Bitmap tmp = BitmapFactory.decodeResource(getResources(), R.drawable.linechart_legend);
-        	Bitmap legend = getResizedBitmap(tmp, 40, 350);
+        	Bitmap legend = getResizedBitmap(tmp, legend_height, legend_width);
         	tmp.recycle();
         	System.gc();
         	canvas.drawBitmap(legend, getPaddingLeft(), getPaddingTop(), p);
@@ -553,6 +484,8 @@ public class LineChartView extends View {
     	if (DaybookFragment.filterButtonIsPressed[0]) return true;
     	else return DaybookFragment.filterButtonIsPressed[typeOfActivity]; 
     }
+    
+    
      
     private void drawRectBar2(Canvas canvas) { 
     	Paint p = new Paint();
@@ -561,24 +494,24 @@ public class LineChartView extends View {
     	for (int i = 0; i < dataset.length; i++) {
     		if (dataset[i].getResult() == 0) {
     			Bitmap temp = getLocalBitmap(context, R.drawable.pass_rect);
-    			Bitmap passBarBg = getResizedBitmap(temp, 28, 60);
+    			Bitmap passBarBg = getResizedBitmap(temp, rec_height, rec_width);
     			temp.recycle();
     			System.gc();
-	            canvas.drawBitmap(passBarBg, getXPos2(i)-25, getHeight()-offsetY, p);
+	            canvas.drawBitmap(passBarBg, getXPos2(i)-rec_X_offset, getHeight()-offsetY, p);
     		}
     		else if (dataset[i].getResult() == 1){
     			Bitmap temp = getLocalBitmap(context, R.drawable.nopass_rect);
-    			Bitmap noPassBarBg = getResizedBitmap(temp, 28, 60);
+    			Bitmap noPassBarBg = getResizedBitmap(temp, rec_height, rec_width);
     			temp.recycle();
     			System.gc();
-	            canvas.drawBitmap(noPassBarBg, getXPos2(i)-25, getHeight()-offsetY, p);
+	            canvas.drawBitmap(noPassBarBg, getXPos2(i)-rec_X_offset, getHeight()-offsetY, p);
     		}
     		else {
     			Bitmap temp = getLocalBitmap(context, R.drawable.skip_rect);
-    			Bitmap skipBarBg = getResizedBitmap(temp, 28, 60);
+    			Bitmap skipBarBg = getResizedBitmap(temp, rec_height, rec_width);
     			temp.recycle();
     			System.gc();
-	            canvas.drawBitmap(skipBarBg, getXPos2(i)-25, getHeight()-offsetY, p);
+	            canvas.drawBitmap(skipBarBg, getXPos2(i)-rec_X_offset, getHeight()-offsetY, p);
     		}
         }    	
     }
@@ -593,7 +526,7 @@ public class LineChartView extends View {
     	//p.setStrokeWidth(5);
     	//p.setPathEffect(new DashPathEffect(new float[] {10,20}, 0));
     	Bitmap tmp = getLocalBitmap(App.getContext(), R.drawable.linechart_cursor);
-    	Bitmap cursor = getResizedBitmap(tmp, getHeight() - 2*getPaddingTop() - 2*getPaddingBottom() , 25);
+    	Bitmap cursor = getResizedBitmap(tmp, getHeight() - 2*getPaddingTop() - 2*getPaddingBottom() , dot_scale);
     	tmp.recycle();
     	System.gc();
     	canvas.drawBitmap(cursor, touchX, 0, p);
@@ -609,10 +542,10 @@ public class LineChartView extends View {
     	//p.setStrokeWidth(5);
     	//p.setPathEffect(new DashPathEffect(new float[] {10,20}, 0));
     	Bitmap tmp = getLocalBitmap(App.getContext(), R.drawable.linechart_cursor);
-    	Bitmap cursor = getResizedBitmap(tmp, getHeight() - 2*getPaddingTop() - 2*getPaddingBottom() , 25);
+    	Bitmap cursor = getResizedBitmap(tmp, getHeight() - 2*getPaddingTop() - 2*getPaddingBottom() , dot_scale);
     	tmp.recycle();
     	System.gc();
-    	canvas.drawBitmap(cursor, getXPos2(cursorLinePos)-12, 0, p);
+    	canvas.drawBitmap(cursor, getXPos2(cursorLinePos)-cur_X_offset, 0, p);
     	
     }
 
@@ -638,7 +571,7 @@ public class LineChartView extends View {
         float maxValue = datapoints.size() - 1;
 
 
-        return 50*value+getPaddingLeft()+offsetX;
+        return unit_scale*value+getPaddingLeft()+offsetX;
     }
     
     
@@ -671,47 +604,13 @@ public class LineChartView extends View {
         Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
         return resizedBitmap;
     }
-    
-    public Bitmap sizeDownBitmap(String path){
-    	 //Only decode image size. Not whole image
-
-        BitmapFactory.Options option = new BitmapFactory.Options();
-        option.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(path, option);
-
-        //The new size to decode to 
-        final int NEW_SIZE=100;
-        
-        //Now we have image width and height. We should find the correct scale value. (power of 2)
-        int width=option.outWidth;
-        int height=option.outHeight;
-        int scale=1;
-        while(true){
-
-            if(width/2<NEW_SIZE || height/2<NEW_SIZE)
-                break;
-            width/=2;
-            height/=2;
-            scale++;
-        }
-        //Decode again with inSampleSize
-        option = new BitmapFactory.Options();
-        option.inSampleSize=scale;
-        return BitmapFactory.decodeFile(path, option);
-    }
-    
-    public int getCursorPos(float x) {
-    	float xWidth = (getWidth() - getPaddingLeft() - getPaddingRight()) / datapoints.size();
-    	int temp = (int) Math.round(x/xWidth); 
-    	return temp;
-    }
-    
+      
     public int getCursorPos2(float x) {
     	/*
     	float xWidth = (getWidth() - getPaddingLeft() - getPaddingRight()) / numOfDays;
     	int temp = (int) Math.round(x/xWidth); 
     	return temp;*/
-    	int posX = (int) ((x - offsetX - getPaddingLeft())/50);
+    	int posX = (int) ((x - offsetX - getPaddingLeft())/unit_scale);
     	return posX;
     }
     

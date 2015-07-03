@@ -182,14 +182,13 @@ public class SectionsPagerAdapter extends PagerAdapter {
                         TextView newSelectedDayTextView = (TextView) selectedView.findViewById(R.id.tv_calendar_date);
                         newSelectedDayTextView.setTextColor(context.getResources().getColor(R.color.black));                       
                         newSelectedDayTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                        
-                        int selectedYear = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_YEAR).toString());
-                        selectedMonth = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_MONTH).toString());
-                        int selectedDay = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_DAY).toString());
-                        DaybookFragment.scrolltoItem(selectedYear, selectedMonth, selectedDay);
-                        
-                       
+               
                     }
+                    int selectedYear = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_YEAR).toString());
+                    int selectedMonth = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_MONTH).toString());
+                    int selectedDay = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_DAY).toString());
+                    DaybookFragment.scrolltoItem(selectedYear, selectedMonth, selectedDay);
+                    
                     
                     // sv.smoothScrollTo(0 , 270*(Integer.parseInt(parsed_date[0])+4)-1350-900);
                     

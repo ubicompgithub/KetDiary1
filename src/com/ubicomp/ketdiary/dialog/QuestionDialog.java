@@ -19,6 +19,7 @@ import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.data.structure.QuestionTest;
 import com.ubicomp.ketdiary.db.DatabaseControl;
+import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.CustomToast;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
@@ -224,8 +225,7 @@ public class QuestionDialog{
 				CustomToast.generateToast(R.string.question_correct, addScore);
 			}
 			
-			
-			
+			PreferenceControl.setPoint(addScore);			
 			
 			
 			MainActivity.getMainActivity().enableTabAndClick(true);

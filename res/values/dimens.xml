@@ -73,4 +73,18 @@
     <dimen name="impact_text_margin">30dp</dimen>
     <dimen name="note_bottom_bar_height">70dp</dimen>
     
+    <dimen name="offsetX">20dp</dimen>
+    <dimen name="offsetY">30dp</dimen>
+    
+    <dimen name="unit_scale">16.67dp</dimen>
+    <dimen name="date_Y_offset">40dp</dimen>
+    <dimen name="dot_scale">8.33dp</dimen>
+    <dimen name="dot_X_offset">4dp</dimen>
+    <dimen name="dot_Y_offset">3.33dp</dimen>
+    <dimen name="rec_height">9.33dp</dimen>
+    <dimen name="rec_width">20dp</dimen>
+    <dimen name="rec_X_offset">8.33dp</dimen>
+    <dimen name="cur_X_offset">4dp</dimen>
+    <dimen name="legend_height">13.33dp</dimen>
+    <dimen name="legend_width">116.67dp</dimen>
 </resources>

@@ -16,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -79,7 +80,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	@SuppressWarnings("deprecation")
 	private SlidingDrawer drawer;
 	private ImageView toggle, toggle_linechart, linechartIcon, calendarIcon;
-	private static Context context;
+	private static Context context = App.getContext();
 		
 	private static int sv_item_height;
 	private static Typeface wordTypefaceBold = Typefaces.getWordTypefaceBold();
@@ -141,10 +142,10 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private boolean isFilterOpen = false;
 	private boolean isRotated = false;
 	
-	private int drawerHeight = App.getContext().getResources().getDimensionPixelSize(R.dimen.drawer_normal_height);
-	private int drawerHeightWithFilter = App.getContext().getResources().getDimensionPixelSize(R.dimen.drawer_with_filter_height);
-	private int filterHeight = App.getContext().getResources().getDimensionPixelSize(R.dimen.filter_normal_height);
-	private int filterHeightLandscape = App.getContext().getResources().getDimensionPixelSize(R.dimen.filter_landscape_height);
+	private int drawerHeight = context.getResources().getDimensionPixelSize(R.dimen.drawer_normal_height);
+	private int drawerHeightWithFilter = context.getResources().getDimensionPixelSize(R.dimen.drawer_with_filter_height);
+	private int filterHeight = context.getResources().getDimensionPixelSize(R.dimen.filter_normal_height);
+	private int filterHeightLandscape = context.getResources().getDimensionPixelSize(R.dimen.filter_landscape_height);
 	
 	
 	@SuppressWarnings("deprecation")
@@ -152,7 +153,6 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		context = App.getContext();
 		db = new DatabaseControl();
 		dict = new NoteCategory2();
 		caller = this;
@@ -204,14 +204,19 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		
 		drawer = (SlidingDrawer) view.findViewById(R.id.slidingDrawer1);
 		toggle = (ImageView) view.findViewById(R.id.toggle);
+		
+		
 		linechartIcon = (ImageView) view.findViewById(R.id.linechart_icon);
+		
 		lineChartBar = (View) inflater.inflate(R.layout.linechart_upperbar, null, false);
 		lineChartView = (View) inflater.inflate(R.layout.linechart_main, null, false);
 		lineChartFilter = (View) inflater.inflate(R.layout.linechart_filter, null, false);
+		
 		rotateLineChart = (ImageView) lineChartBar.findViewById(R.id.rotate_button);
 	    calendarIcon = (ImageView) lineChartBar.findViewById(R.id.back_to_calendar);
 	    toggle_linechart = (ImageView) lineChartBar.findViewById(R.id.toggle_linechart);
 	    charttoggleLayout = (LinearLayout) lineChartBar.findViewById(R.id.toggle_layout);
+	    
 	    
 	    addButton = (ImageView) view.findViewById(R.id.add_button);
 		filterAll = (ImageView) lineChartFilter.findViewById(R.id.filter_all);
@@ -374,12 +379,13 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
                     int selectedPageMonth = Integer.valueOf(selectedView.getTag(SectionsPagerAdapter.TAG_CAL_CELL_PAGE_MONTH).toString());
                     int selectedMonth = Integer.valueOf(selectedView.getTag(SectionsPagerAdapter.TAG_CAL_CELL_MONTH).toString());
                     TextView selectedDayTextView = (TextView) selectedView.findViewById(R.id.tv_calendar_date);
+                    selectedDayTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
 
                     if(selectedPageMonth == selectedMonth)  // If selected month is exactly current page month
                     	selectedDayTextView.setTextColor(context.getResources().getColor(R.color.white));
                     else
                     	selectedDayTextView.setTextColor(Color.BLACK);
-
+                    
                     // Set the new selected day
                     selectedView = thisDayView;
                     // This MUST be called. It modifies selectedView instance in mSectionPagerAdapter.
@@ -387,6 +393,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 
                     TextView newSelectedDayTextView = (TextView) selectedView.findViewById(R.id.tv_calendar_date);
                     newSelectedDayTextView.setTextColor(context.getResources().getColor(R.color.black));
+                    newSelectedDayTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                 }
 
                 mViewPager.setCurrentItem(Calendar.getInstance().get(Calendar.MONTH) + 1 - startMonth);

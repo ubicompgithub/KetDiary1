@@ -28,7 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
-import com.ubicomp.ketdiary.EmotionActivity;
+import com.ubicomp.ketdiary.CopingActivity;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.db.DatabaseControl;
@@ -310,7 +310,7 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 			//ClickLog.Log(ClickLogId.STATISTIC_QUESTION_BUTTON);
 			//openQuestionnaire();
 			Intent intent = new Intent();
-			intent.setClass(activity, EmotionActivity.class);
+			intent.setClass(activity, CopingActivity.class);
 			activity.startActivity(intent);
 		}
 	}

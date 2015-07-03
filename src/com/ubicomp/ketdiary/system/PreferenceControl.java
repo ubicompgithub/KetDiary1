@@ -277,7 +277,19 @@ public class PreferenceControl {
 		edit.commit();
 	}
 	
-	
+	public static Calendar getStartDateMinus() {
+		int[] data = new int[3];
+		Calendar cal = Calendar.getInstance();
+		data[0] = sp.getInt("sYear", cal.get(Calendar.YEAR));
+		data[1] = sp.getInt("sMonth", cal.get(Calendar.MONTH));
+		data[2] = sp.getInt("sDay", cal.get(Calendar.DATE));
+
+		cal.set(data[0], data[1], data[2], 0, 0, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		cal.set(Calendar.DATE, -2);
+		return cal;
+	}
+
 	
 	// haven't use
 	/**
