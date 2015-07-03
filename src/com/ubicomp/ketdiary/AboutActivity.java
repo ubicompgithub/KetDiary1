@@ -184,7 +184,7 @@ public class AboutActivity extends Activity {
 		helpSpannable.setSpan(new CustomTypefaceSpan("custom2",
 				wordTypefaceBold, 0xFF727171), start, end,
 				Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-		start = end;
+		start = end + 1;
 		end = start + message[1].length() + 2 + message[2].length() + 1
 				+ message[3].length() + 1 + message[4].length() + 1 + curVersion.length();
 		helpSpannable.setSpan(new CustomTypefaceSpan("custom1", wordTypeface,
