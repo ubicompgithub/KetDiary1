@@ -149,7 +149,7 @@ public class TestDataParser2 {
 	/** start to handle the noteAdd data */
 	public void startAddNote2(int isAfterTest, int day, int timeslot, int type, int items, int impact, String descripiton) {
 
-		Log.i(TAG, "TDP AddNote3 Start");
+		Log.i(TAG, "TDP AddNote2 Start");
 		Calendar cal = Calendar.getInstance();
 		//cal.setTimeInMillis(0);
 		int year = cal.get(Calendar.YEAR);

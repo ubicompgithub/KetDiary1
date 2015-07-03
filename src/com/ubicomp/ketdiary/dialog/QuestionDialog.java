@@ -98,10 +98,10 @@ public class QuestionDialog{
 		radio3 = (ImageView) boxLayout.findViewById(R.id.question_radio3);
 		radio4 = (ImageView) boxLayout.findViewById(R.id.question_radio4);
 		
-		radio1.setOnClickListener(new RadioOnClickListener());
-		radio2.setOnClickListener(new RadioOnClickListener());
-		radio3.setOnClickListener(new RadioOnClickListener());
-		radio4.setOnClickListener(new RadioOnClickListener());
+		//radio1.setOnClickListener(new RadioOnClickListener());
+		//radio2.setOnClickListener(new RadioOnClickListener());
+		//radio3.setOnClickListener(new RadioOnClickListener());
+		//radio4.setOnClickListener(new RadioOnClickListener());
 		
 		layout1 = (LinearLayout) boxLayout.findViewById(R.id.question_answer1_layout);
 		layout2 = (LinearLayout) boxLayout.findViewById(R.id.question_answer2_layout);

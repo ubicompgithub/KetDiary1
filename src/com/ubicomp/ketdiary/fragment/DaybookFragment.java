@@ -26,8 +26,6 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.SlidingDrawer;
-import android.widget.SlidingDrawer.OnDrawerCloseListener;
-import android.widget.SlidingDrawer.OnDrawerOpenListener;
 import android.widget.TextView;
 
 import com.ubicomp.ketdiary.App;
@@ -41,6 +39,7 @@ import com.ubicomp.ketdiary.db.TestDataParser2;
 import com.ubicomp.ketdiary.dialog.AddNoteDialog2;
 import com.ubicomp.ketdiary.dialog.CheckResultDialog;
 import com.ubicomp.ketdiary.dialog.FilterDetailDialog;
+import com.ubicomp.ketdiary.dialog.MyDialog;
 import com.ubicomp.ketdiary.dialog.TestQuestionCaller2;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.QuestionFile;
@@ -95,6 +94,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	
 	private int fragmentIdx;
 	private View[] pageViewList = null;
+	private MyDialog dialog;
 	
 	private static final int THIS_MONTH = Calendar.getInstance().get(Calendar.MONTH);
 	
@@ -701,27 +701,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 				TextView impact_txt = (TextView) diaryItem.findViewById(R.id.diary_impact);
 				
 				
-				type_img.setOnLongClickListener(new View.OnLongClickListener() {
-					
-					@Override
-					public boolean onLongClick(View v) {
-						/*
-						LayoutInflater inflater = LayoutInflater.from(context);
-						View dialoglayout = inflater.inflate(R.layout.dialog_answer_question, null);
-						AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.getMainActivity());
-						builder.setView(dialoglayout);
-						builder.show();*/
-						
-						/*final Dialog dialog = new Dialog(MainActivity.getMainActivity());
-						dialog.setContentView(R.layout.dialog_answer_question);
-						//dialog.setTitle("Title...");
-						dialog.show();*/
-						
-						
-						//new MyDialog(MainActivity.getMainActivity()).show();
-						return false;
-					}
-				});
+				
 				
 				
 				date_num.setTypeface(wordTypefaceBold);
@@ -759,6 +739,12 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			int items = noteAdds[i].getItems();
 			String descripton = noteAdds[i].getDescription();
 			int impact = noteAdds[i].getImpact();
+			
+
+			
+			type_img.setOnLongClickListener(new TypeLongClickListener(date, dayOfweek, slot, type, items, 
+					impact, descripton));
+			
 			
 			if(type > 0 && type <=8)
 				type_img.setImageResource(typeId[type]);
@@ -823,6 +809,10 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		sv.fullScroll(View.FOCUS_DOWN);
 		//sv.smoothScrollTo(0 , (int)convertDpToPixel(125)*(noteAdds.length) +1000000);
 	}
+	
+	
+	
+	
 	
 	public static float getDensity(){
 		 DisplayMetrics metrics = context.getResources().getDisplayMetrics();
@@ -955,7 +945,48 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
     	
     }
     
-    
+    private class TypeLongClickListener implements View.OnLongClickListener{
+    	
+    	int date;
+    	int dayOfweek;
+		int slot;
+		int type;
+		int items;
+		int impact;
+		String descripton;
+		   	
+    	public TypeLongClickListener(int date, int dayOfweek, int slot, int type, int items, int impact, String descripton){
+    		this.date = date;
+    		this.dayOfweek = dayOfweek;
+    		this.type = type;
+    		this.items = items;
+    		this.impact = impact;
+    		this.descripton = descripton;		
+    	}
+
+		@Override
+		public boolean onLongClick(View v) {
+			
+			MyDialog dialog = new MyDialog(MainActivity.getMainActivity());
+			ImageView type_icon = (ImageView) dialog.findViewById(R.id.type_icon);
+	    	type_icon.setImageResource(typeId[type]);
+	    	TextView detail_time = (TextView) dialog.findViewById(R.id.detail_time);
+			detail_time.setText("7月"+date+"號\n"+dayOfWeek[dayOfweek]+"\n"+timeslot[slot]);
+			TextView detail_type = (TextView) dialog.findViewById(R.id.detail_type_content);
+			detail_type.setText("負面情緒");
+			TextView detail_item = (TextView) dialog.findViewById(R.id.detail_item_content);
+			detail_item.setText(dict.getItems(items));
+			TextView detail_impact = (TextView) dialog.findViewById(R.id.detail_impact_content);
+			detail_impact.setText(""+impact);
+			TextView detail_description = (TextView) dialog.findViewById(R.id.detail_description_content);
+			detail_description.setText(descripton);
+			
+			
+			dialog.show();
+			return false;
+		}
+    	
+    }
     
     
 	private class FilterButtonListener implements View.OnClickListener {

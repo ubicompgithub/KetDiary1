@@ -45,6 +45,10 @@
     <dimen name="chart_title_0_r">60dp</dimen>
     <dimen name="chart_title_1_r">250dp</dimen>
     <dimen name="chart_title_2_r">440dp</dimen>
+    
+    <dimen name="chart_gap">15dp</dimen>
+    <dimen name="chart_gap_r">70dp</dimen>
+    
     <dimen name="chart_label_base">13dp</dimen>
     <dimen name="chart_label_gap">3dp</dimen>
     <dimen name="chart_label_top">6dp</dimen>

@@ -19,7 +19,7 @@
             android:layout_height="wrap_content" >
 
             <ImageView
-            android:id="@+id/category_icon"
+            android:id="@+id/type_icon"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginLeft="20dp"
@@ -34,7 +34,7 @@
 	            android:layout_marginTop="32dp"
 	            android:textColor="@color/black_gray"
 	            android:textSize="@dimen/large_text_size"
-	            android:layout_toRightOf="@+id/category_icon"
+	            android:layout_toRightOf="@+id/type_icon"
 	            android:text="時間們" />
         </RelativeLayout>
         
@@ -52,7 +52,7 @@
 	            android:textSize="@dimen/large_text_size"
 	            android:text="類別" />
             <TextView
-	            android:id="@+id/detail_category_content"
+	            android:id="@+id/detail_type_content"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:layout_marginLeft="32dp"

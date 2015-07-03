@@ -7,34 +7,37 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.ubicomp.ketdiary.App;
-import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.fragment.DaybookFragment;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
 public class LineChartTitle extends View {
-
+	
+	private Context context = App.getContext();
 	private ChartCaller caller;
 	private boolean chartTouchable = true;
 	
 	private int chartType;
-	private int title_0 = App.getContext().getResources().getDimensionPixelSize(R.dimen.chart_title_0);
-	private int title_1 = App.getContext().getResources().getDimensionPixelSize(R.dimen.chart_title_1);
-	private int title_2 = App.getContext().getResources().getDimensionPixelSize(R.dimen.chart_title_2);
+	private int title_0 = context.getResources().getDimensionPixelSize(R.dimen.chart_title_0);
+	private int title_1 = context.getResources().getDimensionPixelSize(R.dimen.chart_title_1);
+	private int title_2 = context.getResources().getDimensionPixelSize(R.dimen.chart_title_2);
 	
-	private int title_0_r = App.getContext().getResources().getDimensionPixelSize(R.dimen.chart_title_0_r);
-	private int title_1_r = App.getContext().getResources().getDimensionPixelSize(R.dimen.chart_title_1_r);
-	private int title_2_r = App.getContext().getResources().getDimensionPixelSize(R.dimen.chart_title_2_r);
+	private int title_0_r = context.getResources().getDimensionPixelSize(R.dimen.chart_title_0_r);
+	private int title_1_r = context.getResources().getDimensionPixelSize(R.dimen.chart_title_1_r);
+	private int title_2_r = context.getResources().getDimensionPixelSize(R.dimen.chart_title_2_r);
 	
-	private int t1, t2, t3;
+	private int gap = context.getResources().getDimensionPixelSize(R.dimen.chart_gap);
+	private int gap_r = context.getResources().getDimensionPixelSize(R.dimen.chart_gap_r);
 	
-	private int titleTop = App.getContext().getResources().getDimensionPixelSize(R.dimen.chart_title_top);
+	private int t1, t2, t3, t_gap;
 	
-	private int textSize = App.getContext().getResources().getDimensionPixelSize(R.dimen.large_text_size);
+	private int titleTop = context.getResources().getDimensionPixelSize(R.dimen.chart_title_top);
+	private int textSize = context.getResources().getDimensionPixelSize(R.dimen.large_text_size);
 	
 	private String[] title_str = { "自我狀態", "人際互動" ,"綜合分析" };
 	private Paint text_paint_large = new Paint();
@@ -73,15 +76,16 @@ public class LineChartTitle extends View {
 		//Log.i("OMG", "TYPEAA: " +checkLineChartType());
         chartType = checkLineChartType();
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
-			if (x < t2) {
+			if (x < t2 - t_gap) {
 				chartType = 0;
-			} else if (x < t3) {
+			} else if (x < t3 - t_gap) {
 				chartType = 1;
 			} else {
 				chartType = 2;
 			}
 			caller.setChartType(chartType);
 			//Log.i("OMG", "TYPEBB: " +checkLineChartType());
+			//Log.i("OMG", "TYPEBB: " +t1);
 			invalidate();
 		}
 		return true;
@@ -99,11 +103,13 @@ public class LineChartTitle extends View {
 			t1 = title_0;
 			t2 = title_1;
 			t3 = title_2;
+			t_gap = gap;
 		}
 		else {
 			t1 = title_0_r;
 			t2 = title_1_r;
 			t3 = title_2_r;
+			t_gap = gap_r;
 		}
 		
 		canvas.drawText(title_str[0], t1, titleTop, text_paint_large);
