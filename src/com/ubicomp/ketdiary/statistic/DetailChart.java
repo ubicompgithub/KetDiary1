@@ -27,13 +27,13 @@ public class DetailChart {
 
 	private FrameLayout layout;
 	private TextView title;
-	private RelativeLayout[] items = new RelativeLayout[3];
-	private TextView[] subtitles = new TextView[3];
-	private TextView[] comments = new TextView[3];
-	private ImageView[] bars = new ImageView[3];
-	private ImageView[] bar_starts = new ImageView[3];
-	private ImageView[] bar_ends = new ImageView[3];
-	private ImageView[] bar_progress = new ImageView[3];
+	private RelativeLayout[] items = new RelativeLayout[2];
+	private TextView[] subtitles = new TextView[2];
+	private TextView[] comments = new TextView[2];
+	private ImageView[] bars = new ImageView[2];
+	private ImageView[] bar_starts = new ImageView[2];
+	private ImageView[] bar_ends = new ImageView[2];
+	private ImageView[] bar_progress = new ImageView[2];
 
 	private String[] detectionComment = App.getContext().getResources()
 			.getStringArray(R.array.radar_0);
@@ -84,45 +84,45 @@ public class DetailChart {
 
 		items[0] = (RelativeLayout) layout.findViewById(R.id.detail_item_0);
 		items[1] = (RelativeLayout) layout.findViewById(R.id.detail_item_1);
-		items[2] = (RelativeLayout) layout.findViewById(R.id.detail_item_2);
+		//items[2] = (RelativeLayout) layout.findViewById(R.id.detail_item_2);
 
 		subtitles[0] = (TextView) layout.findViewById(R.id.detail_item_text_0);
 		subtitles[1] = (TextView) layout.findViewById(R.id.detail_item_text_1);
-		subtitles[2] = (TextView) layout.findViewById(R.id.detail_item_text_2);
+		//subtitles[2] = (TextView) layout.findViewById(R.id.detail_item_text_2);
 
 		comments[0] = (TextView) layout.findViewById(R.id.detail_comment_0);
 		comments[1] = (TextView) layout.findViewById(R.id.detail_comment_1);
-		comments[2] = (TextView) layout.findViewById(R.id.detail_comment_2);
+		//comments[2] = (TextView) layout.findViewById(R.id.detail_comment_2);
 
-		for (int i = 0; i < 3; ++i) {
+		for (int i = 0; i < 2; ++i) {
 			subtitles[i].setTypeface(wordTypefaceBold);
 			comments[i].setTypeface(wordTypeface);
 		}
 
 		bars[0] = (ImageView) layout.findViewById(R.id.detail_progress_bg_0);
 		bars[1] = (ImageView) layout.findViewById(R.id.detail_progress_bg_1);
-		bars[2] = (ImageView) layout.findViewById(R.id.detail_progress_bg_2);
+		//bars[2] = (ImageView) layout.findViewById(R.id.detail_progress_bg_2);
 
 		bar_starts[0] = (ImageView) layout
 				.findViewById(R.id.detail_progress_start_0);
 		bar_starts[1] = (ImageView) layout
 				.findViewById(R.id.detail_progress_start_1);
-		bar_starts[2] = (ImageView) layout
-				.findViewById(R.id.detail_progress_start_2);
+//		bar_starts[2] = (ImageView) layout
+//				.findViewById(R.id.detail_progress_start_2);
 
 		bar_ends[0] = (ImageView) layout
 				.findViewById(R.id.detail_progress_end_0);
 		bar_ends[1] = (ImageView) layout
 				.findViewById(R.id.detail_progress_end_1);
-		bar_ends[2] = (ImageView) layout
-				.findViewById(R.id.detail_progress_end_2);
+//		bar_ends[2] = (ImageView) layout
+//				.findViewById(R.id.detail_progress_end_2);
 
 		bar_progress[0] = (ImageView) layout
 				.findViewById(R.id.detail_progress_inner_0);
 		bar_progress[1] = (ImageView) layout
 				.findViewById(R.id.detail_progress_inner_1);
-		bar_progress[2] = (ImageView) layout
-				.findViewById(R.id.detail_progress_inner_2);
+//		bar_progress[2] = (ImageView) layout
+//				.findViewById(R.id.detail_progress_inner_2);
 
 	}
 
@@ -144,7 +144,7 @@ public class DetailChart {
 	public void hide() {
 		items[0].setVisibility(View.INVISIBLE);
 		items[1].setVisibility(View.INVISIBLE);
-		items[2].setVisibility(View.INVISIBLE);
+		//items[2].setVisibility(View.INVISIBLE);
 	}
 
 	/**
@@ -165,7 +165,7 @@ public class DetailChart {
 			int total_len = bars[0].getWidth() - bar_starts[0].getWidth()
 					- bar_ends[0].getWidth();
 			RelativeLayout.LayoutParams[] params = new RelativeLayout.LayoutParams[3];
-			for (int i = 0; i < 3; ++i)
+			for (int i = 0; i < 2; ++i)
 				params[i] = (LayoutParams) bar_progress[i].getLayoutParams();
 
 			int len = 0;
@@ -185,7 +185,7 @@ public class DetailChart {
 
 				items[0].setVisibility(View.VISIBLE);
 				items[1].setVisibility(View.INVISIBLE);
-				items[2].setVisibility(View.INVISIBLE);
+				//items[2].setVisibility(View.INVISIBLE);
 				break;
 
 			case TYPE_ADVICE:
@@ -210,7 +210,7 @@ public class DetailChart {
 				comments[1].setText(adviceEmotionDIYComment[idx]);
 				items[0].setVisibility(View.VISIBLE);
 				items[1].setVisibility(View.VISIBLE);
-				items[2].setVisibility(View.INVISIBLE);
+				//items[2].setVisibility(View.INVISIBLE);
 				break;
 
 			case TYPE_MANAGE:
@@ -238,14 +238,14 @@ public class DetailChart {
 						total_len);
 				idx = Math.min(rank.getManageEmotion() * 2 / 100,
 						manageAdditionalComment.length - 1);
-				params[2].width = len;
-				subtitles[2].setText(R.string.radar_label2_2);
-				items[2].updateViewLayout(bar_progress[2], params[2]);
-				comments[2].setText(manageAdditionalComment[idx]);
+//				params[2].width = len;
+//				subtitles[2].setText(R.string.radar_label2_2);
+//				items[2].updateViewLayout(bar_progress[2], params[2]);
+//				comments[2].setText(manageAdditionalComment[idx]);
 
 				items[0].setVisibility(View.VISIBLE);
 				items[1].setVisibility(View.VISIBLE);
-				items[2].setVisibility(View.VISIBLE);
+				//items[2].setVisibility(View.VISIBLE);
 				break;
 
 			case TYPE_STORY:
@@ -273,19 +273,19 @@ public class DetailChart {
 						total_len);
 				idx = Math.min(rank.getStoryFb() * 2 / 100 * 7,
 						storyFbComment.length - 1);
-				params[2].width = len;
-				subtitles[2].setText(R.string.radar_label3_2);
-				items[2].updateViewLayout(bar_progress[2], params[2]);
-				comments[2].setText(storyFbComment[idx]);
+//				params[2].width = len;
+//				subtitles[2].setText(R.string.radar_label3_2);
+//				items[2].updateViewLayout(bar_progress[2], params[2]);
+//				comments[2].setText(storyFbComment[idx]);
 
 				items[0].setVisibility(View.VISIBLE);
 				items[1].setVisibility(View.VISIBLE);
-				items[2].setVisibility(View.VISIBLE);
+				//items[2].setVisibility(View.VISIBLE);
 				break;
 			default:
 				items[0].setVisibility(View.INVISIBLE);
 				items[1].setVisibility(View.INVISIBLE);
-				items[2].setVisibility(View.INVISIBLE);
+				//items[2].setVisibility(View.INVISIBLE);
 			}
 		}
 

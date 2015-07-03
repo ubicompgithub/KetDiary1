@@ -107,7 +107,7 @@ public class AnalysisProsConsView extends StatisticPageView {
 		@Override
 		public void handleMessage(Message msg) {
 			
-			int today_situation=-19; //pass or fail
+			int today_situation=19; //pass or fail
 			
 //			int curDrink = db.getPrimeDetectionPassTimes();
 //			currentMoney = curDrink * drinkCost;

@@ -42,7 +42,7 @@ public class AboutActivity extends Activity {
 
 	// Link & COPYRIGHT
 	private static final String EMAIL = "ubicomplab.ntu@gmail.com";
-	private static final String WEBSITE = "http://mll.csie.ntu.edu.tw/soberdiary/mobile/knowledge.php";
+	//private static final String WEBSITE = "http://mll.csie.ntu.edu.tw/soberdiary/mobile/knowledge.php";
 	private static final String COPYRIGHT = "\u00a9 2014 National Taiwan University,Intel-NTU Connected Context Computing Center, and Taipei City Hospital";
 
 	/** Hidden state machine for entering developer page */
@@ -77,7 +77,7 @@ public class AboutActivity extends Activity {
 		phone = (TextView) this.findViewById(R.id.about_phone);
 		phone_number = (TextView) this.findViewById(R.id.about_phone_number);
 		email = (TextView) this.findViewById(R.id.about_email);
-		website = (TextView) this.findViewById(R.id.about_website);
+		//website = (TextView) this.findViewById(R.id.about_website);
 		about = (TextView) this.findViewById(R.id.about_about);
 		aboutText = (TextView) this.findViewById(R.id.about_content);
 		logo = (ImageView) this.findViewById(R.id.about_logo);
@@ -169,9 +169,10 @@ public class AboutActivity extends Activity {
 		}
 
 		Spannable helpSpannable = new SpannableString(message[0] + "\n" + ntu
-				+ dot + intel_ntu + dot + taipei_city_hospital + message[1]
-				+ "\n\n" + message[2] + "\n" + message[3] + "\n" + curVersion
-				+ versionName + "\n\n" + message[4] + happ_design + "\n"
+				+ dot + intel_ntu + dot + "\n" + taipei_city_hospital + message[1]
+				+ "\n\n" + message[2] + "\n" + message[3] + "\n" + message[4] 
+				+ "\n" +curVersion + versionName + "\n\n" + message[5] 
+				+ happ_design + "\n"
 				);
 		int start = 0;
 		int end = message[0].length() + 1;
@@ -183,9 +184,9 @@ public class AboutActivity extends Activity {
 		helpSpannable.setSpan(new CustomTypefaceSpan("custom2",
 				wordTypefaceBold, 0xFF727171), start, end,
 				Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-		start = end;
+		start = end + 1;
 		end = start + message[1].length() + 2 + message[2].length() + 1
-				+ message[3].length() + 1 + curVersion.length();
+				+ message[3].length() + 1 + message[4].length() + 1 + curVersion.length();
 		helpSpannable.setSpan(new CustomTypefaceSpan("custom1", wordTypeface,
 				0xFF727171), start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
 		start = end;
@@ -194,7 +195,7 @@ public class AboutActivity extends Activity {
 				digitTypefaceBold, 0xFF727171), start, end,
 				Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
 		start = end;
-		end = start + message[4].length();
+		end = start + message[5].length();
 		helpSpannable.setSpan(new CustomTypefaceSpan("custom1", wordTypeface,
 				0xFF727171), start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
 		start = end;
@@ -229,7 +230,7 @@ public class AboutActivity extends Activity {
 
 		phone_number.setOnClickListener(new CallCheckOnClickListener());
 		email.setOnClickListener(new EmailOnClickListener());
-		website.setOnClickListener(new WebsiteOnClickListener());
+		//website.setOnClickListener(new WebsiteOnClickListener());
 	}
 
 	/** Initialize the dialog to check if the user call out to the developer */
@@ -262,7 +263,7 @@ public class AboutActivity extends Activity {
 			callCancel.setOnClickListener(new CallCancelOnClickListener());
 			phone_number.setOnClickListener(null);
 			email.setOnClickListener(null);
-			website.setOnClickListener(null);
+			//website.setOnClickListener(null);
 			//ClickLog.Log(ClickLogId.ABOUT_CALL);
 		}
 	}
@@ -276,7 +277,7 @@ public class AboutActivity extends Activity {
 			bgLayout.removeView(callLayout);
 			phone_number.setOnClickListener(new CallCheckOnClickListener());
 			email.setOnClickListener(new EmailOnClickListener());
-			website.setOnClickListener(new WebsiteOnClickListener());
+			//website.setOnClickListener(new WebsiteOnClickListener());
 			//ClickLog.Log(ClickLogId.ABOUT_CALL_CANCEL);
 		}
 
@@ -323,17 +324,17 @@ public class AboutActivity extends Activity {
 	}
 
 	/** OnClickListener for going to our mobile website */
-	private class WebsiteOnClickListener implements View.OnClickListener {
-
-		@Override
-		/**Call app to browse the website*/
-		public void onClick(View v) {
-			Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-					Uri.parse(WEBSITE));
-			startActivity(browserIntent);
-			//ClickLog.Log(ClickLogId.ABOUT_WEBSITE);
-		}
-	}
+//	private class WebsiteOnClickListener implements View.OnClickListener {
+//
+//		@Override
+//		/**Call app to browse the website*/
+//		public void onClick(View v) {
+//			Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+//					Uri.parse(WEBSITE));
+//			startActivity(browserIntent);
+//			//ClickLog.Log(ClickLogId.ABOUT_WEBSITE);
+//		}
+//	}
 
 
 	/**Override for hijacking BACK key*/

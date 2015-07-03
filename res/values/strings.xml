@@ -180,7 +180,7 @@
     <string name="call_check_help">確定要撥給 </string>
     <string name="question_sign">？</string>
     <string name="about_title">關於</string>
-    <string name="about_help">社區諮商</string>
+    <string name="about_help">詳細資料:</string>
     <string name="about_setting">設定：</string>
     <string name="about_time_gap">提醒時間間隔為：</string>
 
@@ -193,8 +193,9 @@
     <string-array name="about_message">
         <item>此應用程式由</item>
         <item>合作開發。</item>
-        <item>開發目為協助酗酒患者戒酒並自我控制使用。</item>
-        <item>此應用程式需搭配專用酒測器方可使用。</item>
+        <item>開發目的為協助愷他命依賴患者在日常</item>
+        <item>生活中能持續戒毒。此應用程式需要搭</item>
+        <item>配專用口水檢測器方可使用。</item>
         <item>應用介面視覺設計：</item>
         <item>插畫：</item>
         <item>著色：</item>
@@ -236,7 +237,7 @@
     <string name="lock_about">完成訊息：</string>
     <string name="radar_title">我的表現分析</string>
     <string name="radar_label0">酒測\n表現</string>
-    <string name="radar_label0_full">酒測功能　完成度</string>
+    <string name="radar_label0_full">\t\t\酒測功能　完成度</string>
     <string name="radar_label0_0">酒測表現</string>
     <string name="radar_label1">自我\n調適</string>
     <string name="radar_label1_full">自我調適功能　完成度</string>
