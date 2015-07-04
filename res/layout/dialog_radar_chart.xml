@@ -5,12 +5,11 @@
     android:background="@color/shadow" >
 
     <RelativeLayout
-        android:layout_width="272dp"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@drawable/rank_chart_bg"
         android:splitMotionEvents="true"
-        android:translationX="5dp"
         android:translationY="-5dp" >
 
         <TextView
@@ -31,7 +30,8 @@
             android:layout_below="@+id/rank_title"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:translationX="3dp" >
+            android:translationX="10dp" 
+            android:layout_marginLeft="8dp">
 
             <TextView
                 android:id="@+id/radar_score_0"
@@ -76,13 +76,13 @@
 
         <ImageView
             android:id="@+id/radar_bg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:layout_below="@+id/radar_item_0"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="3dp"
             android:background="@drawable/rank_chart_radar"
-            android:translationX="-6dp"
+            
             android:visibility="invisible" />
 
         <com.ubicomp.ketdiary.statistic.RadarChartView
@@ -93,7 +93,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="3dp"
             android:background="@drawable/rank_chart_radar"
-            android:translationX="-6dp" />
+             />
 
         <RelativeLayout
             android:id="@+id/radar_item_1"
@@ -101,7 +101,8 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/radar_bg"
             android:layout_alignTop="@+id/radar_bg"
-            android:layout_marginRight="3dp"
+            android:layout_marginRight="24dp"
+           	android:translationX="8dp" 
             android:layout_marginTop="52dp" >
 
             <TextView
@@ -151,7 +152,7 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/radar_bg"
             android:layout_toRightOf="@+id/radar_bg"
-            android:layout_marginLeft="3dp"
+            android:layout_marginLeft="26dp"
             android:layout_marginTop="52dp" >
 
             <TextView
@@ -201,8 +202,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/radar_bg"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="3dp"
-            android:translationX="3dp" >
+            android:layout_marginTop="33dp"
+            android:translationX="10dp" 
+            android:layout_marginLeft="22dp">
 
             <TextView
                 android:id="@+id/radar_score_2"
