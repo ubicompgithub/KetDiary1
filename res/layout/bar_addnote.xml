@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/title_addnote"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/upperbarbg" >
+
+    <TextView
+        android:id="@+id/note_title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="新增記事"
+        android:textAppearance="?android:attr/textAppearanceLarge" 
+        android:layout_weight="1"
+        android:gravity="center"/>
+
+    <Spinner
+        android:id="@+id/note_sp_date"
+        style="android:spinnerStyle"
+       android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:spinnerMode="dropdown" />
+
+     <Spinner
+         android:id="@+id/note_sp_timeslot"
+         style="android:spinnerStyle"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:layout_weight="1"
+         android:spinnerMode="dropdown" />
+
+</LinearLayout>

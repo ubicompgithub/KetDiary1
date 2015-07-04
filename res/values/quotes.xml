@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="quote_title">延伸學習</string>
+    <string-array name="quote_message">
+        <item>酒精是一位可畏的敵人，但您相信不會被\n敵人擺布，也決不低頭認輸。</item>
+        <item>想踏上戒酒這條路已經很久了，您正在這\n路上。珍惜每一天，會感覺愈來愈好。</item>
+        <item>您發現不能空等您的船來到，而是您得自\n己游向它。</item>
+        <item>您清楚您可以從過去的失敗中，要如何讓\n自己現在更好，更珍惜戒酒的日子。</item>
+        <item>您開始懂得好好善待自己，並且”自愛”\n是一生最重要的一場戀愛。</item>
+        <item>對過去憤怒，或對未來恐懼，只是讓您的\n生活變得更無力，更容易錯過現在。</item>
+        <item>我們的價值是由我們是怎樣的人來決定，\n而不是有了什麼來決定。</item>
+        <item>你正勇於面對戒酒在生活的挑戰，接受自\n己的不足，但也珍惜自己的任何改變。</item>
+        <item>您發現當您越認真努力戒酒，生活變得更\n順利，運氣也會跟著變好。</item>
+        <item>您相信自己一步一步在走您自己所創造的\n不一樣中。</item>
+        <item>就像一次一次的身體訓練，每一次都讓我\n們變得更強壯或更堅定。</item>
+        <item>您發現別人的鼓勵讓我們更堅持下去，但\n若可以鼓勵他人，更能讓生活更有意義。</item>
+    </string-array>
+    <string-array name="quote_learning">
+        <item>面對問題及相信自我！</item>
+        <item>確定決心及抱持希望！</item>
+        <item>下定決心並主動出擊！</item>
+        <item>自我接納及了解！</item>
+        <item>自愛並善待自身！</item>
+        <item>保持平靜並活在當下！</item>
+        <item>對自己負責且致力改變！</item>
+        <item>勇於面對、接納自我並改變！</item>
+        <item>感受自身的進步！</item>
+        <item>持續努力並了解自身！</item>
+        <item>努力不懈並堅定決心！</item>
+        <item>感謝他人並回饋大眾！</item>
+    </string-array>
+    
+    <string-array name="quote_learning_extend">
+        <item>隨著不斷地喝酒，酒精所造成的影響也就越嚴重。</item>
+        <item>酒精所造成的影響：自制力降低、口齒不清、行動遲緩等</item>
+		<item>酒精所造成的影響：思緒混亂、記憶衰退、注意力渙散等</item>
+		<item>酒精所造成的影響：陷入昏迷、呼吸困難、死亡等</item>
+		<item>酒精依賴會渴求飲酒、無法控制飲酒量、對酒精的依賴性及耐受性增加</item>
+		<item>喝酒的風險：車禍等事故、危險、暴力行為、自殺或殺害他人</item>
+		<item>長時間飲酒過量的影響：酒精依賴、健康問題、癌症的風險</item>
+		<item>有酒癮者長時間在喝酒，因此無力正常生活也無法屢行責任義務</item>
+		<item>有酒癮者可能因喝酒而無法完成生活中責任義務。</item>
+		<item>濫用酒精可能使自己陷於危險，或有法律上或社交上的問題</item>
+		<item>肝硬化為第12高的致死原因</item>
+		<item>在肝硬化死亡案例中，48.2%與酒精相關</item>
+		<item>酒精相關的肝臟疾病為肝臟移植的主因，佔近3分之1的病例</item>
+		<item>15至49歲的族群中, 酒精使用為全球造成夭折及殘疾最主要的因素</item>
+		<item >2012中的研究顯示，>10%的孩童跟有酒精問題的父母生活在一起</item>
+    </string-array>
+    <string-array name="quote_question_0">
+        <item>酒精是一位可畏的○○，但您相信不會被敵人擺布，也決不低頭認輸。</item>
+        <item>酒精是一位○○的敵人，但您相信不會被敵人擺布，也決不低頭認輸。</item>
+        <item>酒精是一位可畏的敵人，但您相信不會被敵人擺布，也決不低頭○○。</item>
+    </string-array>
+    <string-array name="quote_answer_0">
+        <item>敵人</item>
+        <item>親人</item>
+        <item>愛人</item>
+        <item>朋友</item>
+        <item>老師</item>
+        <item>可畏</item>
+        <item>可敬</item>
+        <item>可愛</item>
+        <item>可憐</item>
+        <item>友善</item>
+        <item>認輸</item>
+        <item>聽話</item>
+        <item>否認</item>
+        <item>反抗</item>
+        <item>猜疑</item>
+    </string-array>
+    <string-array name="quote_question_1">
+        <item>想踏上○○這條路已經很久了，您正在這路上。珍惜每一天，會感覺愈來愈好。</item>
+        <item>想踏上戒酒這條路已經很久了，您正在這路上。珍惜每一天，會感覺○○○○。</item>
+        <item>想踏上戒酒這條路已經很久了，您正在○○上。珍惜每一天，會感覺愈來愈好。</item>
+    </string-array>
+    <string-array name="quote_answer_1">
+        <item>戒酒</item>
+        <item>運動</item>
+        <item>回家</item>
+        <item>賭博</item>
+        <item>喝酒</item>
+        <item>愈來愈好</item>
+        <item>愈來愈差</item>
+        <item>不太舒服</item>
+        <item>內心感受</item>
+        <item>忐忑不安</item>
+        <item>這路</item>
+        <item>馬路</item>
+        <item>飛機</item>
+        <item>捷運</item>
+        <item>氣頭</item>
+    </string-array>
+    <string-array name="quote_question_2">
+        <item>您發現不能空等您的○來到，而是您得自己游向它。</item>
+        <item>您發現○○空等您的船來到，而是您得自己游向它。</item>
+        <item>您發現不能空等您的船來到，而是您得自己○○它。</item>
+    </string-array>
+    <string-array name="quote_answer_2">
+        <item>船</item>
+        <item>車</item>
+        <item>馬</item>
+        <item>雲</item>
+        <item>狗</item>
+        <item>不能</item>
+        <item>可以</item>
+        <item>想要</item>
+        <item>迫切</item>
+        <item>你想</item>
+        <item>游向</item>
+        <item>背離</item>
+        <item>厭惡</item>
+        <item>飛向</item>
+        <item>面向</item>
+    </string-array>
+    <string-array name="quote_question_3">
+        <item>您○○您可以從過去的失敗中，要如何讓自己現在更好，更珍惜戒酒的日子。</item>
+        <item>您清楚您可以從過去的○○中，要如何讓自己現在更好，更珍惜戒酒的日子。</item>
+        <item>您清楚您可以從過去的失敗中，要如何讓自己現在更好，更○○戒酒的日子。</item>
+    </string-array>
+    <string-array name="quote_answer_3">
+        <item>清楚</item>
+        <item>反對</item>
+        <item>疑惑</item>
+        <item>厭煩</item>
+        <item>憤怒</item>
+        <item>失敗</item>
+        <item>成功</item>
+        <item>空想</item>
+        <item>幻想</item>
+        <item>過去</item>
+        <item>珍惜</item>
+        <item>厭煩</item>
+        <item>悔恨</item>
+        <item>看輕</item>
+        <item>不想</item>
+    </string-array>
+    <string-array name="quote_question_4">
+        <item>您開始懂得好好善待自己，並且”○○”是一生最重要的一場戀愛。</item>
+        <item>您開始懂得好好○○自己，並且”自愛”是一生最重要的一場戀愛。</item>
+        <item>您開始懂得好好善待自己，並且”自愛”是一生最重要的一場○○。</item>
+    </string-array>
+    <string-array name="quote_answer_4">
+        <item>自愛</item>
+        <item>自我</item>
+        <item>自己</item>
+        <item>自私</item>
+        <item>自卑</item>
+        <item>善待</item>
+        <item>虧待</item>
+        <item>挑戰</item>
+        <item>等待</item>
+        <item>破壞</item>
+        <item>戀愛</item>
+        <item>遊戲</item>
+        <item>夢境</item>
+        <item>棋局</item>
+        <item>鬧劇</item>
+    </string-array>
+    <string-array name="quote_question_5">
+        <item>對過去○○，或對未來恐懼，只是讓您的生活變得更無力，更容易錯過現在。</item>
+        <item>對過去憤怒，或對未來○○，只是讓您的生活變得更無力，更容易錯過現在。</item>
+        <item>對過去憤怒，或對未來恐懼，只是讓您的生活變得更○○，更容易錯過現在。</item>
+    </string-array>
+    <string-array name="quote_answer_5">
+        <item>憤怒</item>
+        <item>滿意</item>
+        <item>高興</item>
+        <item>大喜</item>
+        <item>歡喜</item>
+        <item>恐懼</item>
+        <item>憧憬</item>
+        <item>期待</item>
+        <item>期望</item>
+        <item>規劃</item>
+        <item>無力</item>
+        <item>快樂</item>
+        <item>開心</item>
+        <item>期待</item>
+        <item>奇幻</item>
+    </string-array>
+    <string-array name="quote_question_6">
+        <item>我們的○○是由我們是怎樣的人來決定，而不是有了什麼來決定。</item>
+        <item>我們的價值是由我們是○○○○來決定，而不是有了什麼來決定。</item>
+        <item>我們的價值是由我們是怎樣的人來決定，而不是○○○○來決定。</item>
+    </string-array>
+    <string-array name="quote_answer_6">
+        <item>價值</item>
+        <item>我們</item>
+        <item>父母</item>
+        <item>家庭</item>
+        <item>手腳</item>
+        <item>怎樣的人</item>
+        <item>有了什麼</item>
+        <item>自暴自棄</item>
+        <item>自私自利</item>
+        <item>有錢有勢</item>
+        <item>有了什麼</item>
+        <item>怎樣的人</item>
+        <item>自私自利</item>
+        <item>自暴自棄</item>
+        <item>有錢有勢</item>
+    </string-array>
+    <string-array name="quote_question_7">
+        <item>你正勇於○○戒酒在生活的挑戰，接受自己的不足，但也珍惜自己的任何改變。</item>
+        <item>你正勇於面對戒酒在生活的挑戰，接受自己的○○，但也珍惜自己的任何改變。</item>
+        <item>你正勇於面對戒酒在生活的挑戰，接受自己的不足，但也○○自己的任何改變。</item>
+    </string-array>
+    <string-array name="quote_answer_7">
+        <item>面對</item>
+        <item>逃避</item>
+        <item>躲開</item>
+        <item>抗拒</item>
+        <item>放棄</item>
+        <item>不足</item>
+        <item>天真</item>
+        <item>好奇</item>
+        <item>疑惑</item>
+        <item>不想</item>
+        <item>珍惜</item>
+        <item>放棄</item>
+        <item>後悔</item>
+        <item>厭惡</item>
+        <item>逃避</item>
+    </string-array>
+    <string-array name="quote_question_8">
+        <item>您發現當您越認真努力戒酒，生活變得更順利，○○也會跟著變好。</item>
+        <item>您發現當您越認真努力戒酒，生活變得更○○，運氣也會跟著變好。</item>
+        <item>您發現當您越○○○○戒酒，生活變得更順利，運氣也會跟著變好。</item>
+    </string-array>
+    <string-array name="quote_answer_8">
+        <item>運氣</item>
+        <item>食慾</item>
+        <item>財富</item>
+        <item>天氣</item>
+        <item>成績</item>
+        <item>順利</item>
+        <item>煩躁</item>
+        <item>緊湊</item>
+        <item>悠閒</item>
+        <item>混亂</item>
+        <item>認真努力</item>
+        <item>好逸惡勞</item>
+        <item>積少成多</item>
+        <item>風調雨順</item>
+        <item>守株待兔</item>
+    </string-array>
+    <string-array name="quote_question_9">
+        <item>您相信自己一步一步在走您自己所○○的不一樣中。</item>
+        <item>您○○自己一步一步在走您自己所創造的不一樣中。</item>
+        <item>您相信自己○○○○在走您自己所創造的不一樣中。</item>
+    </string-array>
+    <string-array name="quote_answer_9">
+        <item>創造</item>
+        <item>抗拒</item>
+        <item>懷疑</item>
+        <item>幻想</item>
+        <item>厭煩</item>
+        <item>相信</item>
+        <item>懷疑</item>
+        <item>反對</item>
+        <item>悔恨</item>
+        <item>放縱</item>
+        <item>一步一步</item>
+        <item>極度不願</item>
+        <item>七零八落</item>
+        <item>七上八下</item>
+        <item>一五一十</item>
+    </string-array>
+    <string-array name="quote_question_10">
+        <item>就像一次一次的身體訓練，每一次都讓我們變得更強壯或更○○。</item>
+        <item>就像一次一次的身體訓練，每一次都讓我們變得更○○或更堅定。</item>
+        <item>就像一次一次的○○○○，每一次都讓我們變得更強壯或更堅定。</item>
+    </string-array>
+    <string-array name="quote_answer_10">
+        <item>堅定</item>
+        <item>疑惑</item>
+        <item>衰弱</item>
+        <item>可怕</item>
+        <item>肥胖</item>
+        <item>強壯</item>
+        <item>聰明</item>
+        <item>可怕</item>
+        <item>煩人</item>
+        <item>小氣</item>
+        <item>身體訓練</item>
+        <item>智力測驗</item>
+        <item>晴天霹靂</item>
+        <item>打擊練習</item>
+        <item>消防演習</item>
+    </string-array>
+    <string-array name="quote_question_11">
+        <item>您發現別人的鼓勵讓我們更堅持下去，但若可以鼓勵他人，更能讓○○更有意義。</item>
+        <item>您發現別人的○○讓我們更堅持下去，但若可以鼓勵他人，更能讓生活更有意義。</item>
+        <item>您發現別人的鼓勵讓我們更○○○○，但若可以鼓勵他人，更能讓生活更有意義。</item>
+    </string-array>
+    <string-array name="quote_answer_11">
+        <item>生活</item>
+        <item>學習</item>
+        <item>文字</item>
+        <item>運動</item>
+        <item>天氣</item>
+        <item>鼓勵</item>
+        <item>貶抑</item>
+        <item>阿諛</item>
+        <item>諷刺</item>
+        <item>嘲笑</item>
+        <item>堅持下去</item>
+        <item>心情煩躁</item>
+        <item>天氣晴朗</item>
+        <item>緊張害怕</item>
+        <item>羞於見人</item>
+    </string-array>
+
+    <string name="quote_blank">○</string>
+</resources>

@@ -120,10 +120,17 @@ public class HttpPostGenerator {
 		imageFiles = new File[3];
 
 		testFile = new File(mainStorageDir.getPath() + File.separator + _ts
+<<<<<<< HEAD
 				+ File.separator +"color_raw.txt");
 
 		detectionFile = new File(mainStorageDir.getPath() + File.separator
 				+ _ts + File.separator + "voltage.txt");
+=======
+				+ File.separator + "voltage.txt");
+
+		detectionFile = new File(mainStorageDir.getPath() + File.separator
+				+ _ts + File.separator + "color_raw.txt");
+>>>>>>> 4837f48c0688552d629b8f994e1361087bff705e
 
 		for (int i = 0; i < imageFiles.length; ++i)
 			imageFiles[i] = new File(mainStorageDir.getPath() + File.separator
@@ -151,19 +158,18 @@ public class HttpPostGenerator {
 	public static HttpPost genPost(NoteAdd data){
 		HttpPost httpPost = new HttpPost(ServerUrl.getNoteAddUrl());
 		String uid = PreferenceControl.getUID();
-		String deviceId=PreferenceControl.getDeviceId();
+		String deviceId = PreferenceControl.getDeviceId();
 		
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("uid", uid));
-		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.isAfterTest)));
-		
-		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.tv.getTimestamp())));
-		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.recordTv)));
-		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.category)));
-		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.type)));
-		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.items)));
-		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.impact)));
-		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.description)));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getIsAfterTest())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getTv().getTimestamp())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getRecordTv().getTimestamp())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getCategory())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getType())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getItems())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getImpact())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getDescription())));
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 		} catch (UnsupportedEncodingException e) {}

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="coping_page">應對技巧</string>
+    <string name="coping_page">應對方法</string>
     <string name="coping_relaxed">放鬆技巧</string>
     <string name="coping_breath">閉眼專注觀察呼吸</string>
     <string name="coping_musle">閉眼讓肌肉放鬆</string>
     <string name="coping_music">聆聽舒緩音樂</string>
-     <string name="coping_stretch">伸展</string>
+    <string name="coping_stretch">伸展</string>
     <string name="coping_meditation">冥想</string>
     <string name="coping_casual">休閒活動</string>
     <string name="coping_interperson">與他人相處建議</string>
@@ -18,6 +18,12 @@
     <string name="coping_harm">飲酒造成的危害</string>
     <string name="coping_lifestyle">生活習慣建議</string>
     <string name="coping_lapse">又開始飲酒了怎麼辦?</string>
-
+	
+    
+    
+    <string-array name="coping_list">
+        <item>社交壓力的應對方法：\n當朋友邀約吸毒時，您可以委婉拒絕</item>
+        <item>負面情緒的應對方法：\n可以使用放鬆技巧來緩和情緒</item>
+    </string-array>
     
 </resources>

@@ -5,8 +5,10 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.ubicomp.ketdiary.App;
+import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.system.PreferenceControl;
@@ -57,7 +59,8 @@ public class TestDataParser {
 		questionFile = new File(mainStorageDir.getPath() + File.separator + "0"
 				+ File.separator + "question.txt");
 		
-
+		Log.i(TAG, "TDP Start");
+		
 		int q_result = getQuestionResult(questionFile);
 		int type = q_result / 1000;
 		int item = (q_result % 1000)/10;
@@ -75,7 +78,7 @@ public class TestDataParser {
 		int is_filled = 1;
 
 		//Detection detection = new Detection(brac, timestamp, emotion, craving,				false, 0, 0);
-		TestResult testResult = new TestResult(test_result, timestamp, "tmp_id", is_prime, is_filled );
+		TestResult testResult = new TestResult(test_result, timestamp, "tmp_id", is_prime, is_filled, 0, 0);
 		boolean update = false;
 		if (timestamp == PreferenceControl.getUpdateDetectionTimestamp())
 			update = true;
@@ -113,6 +116,48 @@ public class TestDataParser {
 		else
 			PreferenceControl.setTestResult(3);
 		 */
+	}
+	
+	/** start to handle the noteAdd data */
+	public void startAddNote() {
+
+		File mainStorageDir = MainStorage.getMainStorageDirectory();
+		File questionFile;
+
+
+		questionFile = new File(mainStorageDir.getPath() + File.separator + ts
+			+ File.separator + "question.txt");
+
+		Log.i(TAG, "TDP Start");
+		
+		int q_result = getQuestionResult(questionFile);
+		int type = q_result / 1000;
+		int item = (q_result % 1000)/10;
+		int impact = q_result % 10;
+		
+		
+		int category = 1;
+		
+		if (q_result == -1) {
+			type = -1;
+			item = -1;
+			impact = -1;
+		}
+
+		int test_result = 0; 
+		long timestamp = ts;
+		int is_prime = 1;
+		int is_filled = 1;
+
+		//NoteAdd noteAdd = new NoteAdd(1, ts, ts, category, type, item, impact, "test", 0);
+		boolean update = false;
+		if (timestamp == PreferenceControl.getUpdateDetectionTimestamp())
+			update = true;
+		PreferenceControl.setUpdateDetection(false);
+		PreferenceControl.setUpdateDetectionTimestamp(0);
+		
+		//db.addTestResult(testResult);
+		//DBControl.inst.addNoteAdd(noteAdd);
 	}
 
 	/**
@@ -185,7 +230,7 @@ public class TestDataParser {
 			if (s.hasNextInt())
 				impact = s.nextInt();
 
-			if (type == -1 || item == -1)
+			if (type == 0 || item == 0)
 				return -1;
 			
 			result = item * 10 + impact;

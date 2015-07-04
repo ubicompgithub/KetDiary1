@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/analysis_counter_title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/analysis_title_bar" >
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/analysis_counter_help"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7.3dp"
+        android:layout_marginLeft="26.7dp"
+        android:layout_marginTop="7.3dp"
+        android:gravity="left"
+        android:text="@string/analysis_counter_help"
+        android:textColor="@color/black"
+        android:textSize="@dimen/normal_text_size" />
+
+    <RelativeLayout
+        android:id="@+id/analysis_counter_content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7.3dp" >
+
+        <ImageView
+            android:id="@+id/analysis_counter_counter_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="26.7dp"
+            android:layout_centerVertical="true"
+             />
+        <TextView 
+            android:id="@+id/analysis_counter_counter_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:textSize="@dimen/normal_text_size"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf= "@+id/analysis_counter_counter_img"
+            android:textColor="#FFF39700"
+            />
+        <TextView 
+            android:id="@+id/analysis_counter_counter_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:textSize="@dimen/normal_text_size"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/analysis_counter_counter_value"
+            android:text="@string/analysis_counter_counter"
+            android:textColor="@color/black"
+            />
+        
+        <ImageView
+            android:id="@+id/analysis_counter_coupon_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/analysis_counter_counter_text"
+            android:layout_marginLeft="21dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/analysis_coupon" />
+        <TextView 
+            android:id="@+id/analysis_counter_coupon_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:textSize="@dimen/normal_text_size"
+             android:layout_centerVertical="true"
+            android:layout_toRightOf= "@+id/analysis_counter_coupon_img"
+            android:textColor="@color/lite_orange"
+            />
+        <TextView 
+            android:id="@+id/analysis_counter_coupon_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:textSize="@dimen/normal_text_size"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/analysis_counter_coupon_value"
+            android:text="@string/analysis_counter_coupon"
+            android:textColor="@color/black"
+            />
+        
+    </RelativeLayout>
+
+</LinearLayout>

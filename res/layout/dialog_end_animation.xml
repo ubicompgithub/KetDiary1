@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/shadow" >
+    
+    <RelativeLayout 
+        android:layout_width="232.7dp"
+    	android:layout_height="126dp"
+    	android:background="@drawable/dialog_callout_bg"
+    	android:splitMotionEvents="false"
+    	android:layout_centerInParent="true"
+        >
+
+    <TextView
+        android:id="@+id/anim_help"
+        android:layout_width="232.7dp"
+        android:layout_height="76dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="@string/check_result"
+        android:textColor="@color/dark_gray"
+        android:textSize="@dimen/normal_text_size" />
+    
+    <TextView
+        android:id="@+id/anim_cancel_button"
+        android:layout_width="102.7dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="3.3dp"
+        android:layout_marginLeft="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/anim_help"
+        android:gravity="center"
+        android:text="@string/cancel"
+        android:textSize="@dimen/normal_text_size"
+        android:textColor="@color/dark_gray" />
+    
+    <TextView
+        android:id="@+id/anim_ok_button"
+        android:layout_width="102.7dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="3.3dp"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/anim_help"
+        android:gravity="center"
+        android:text="@string/ok"
+        android:textSize="@dimen/normal_text_size"
+        android:textColor="@color/dark_gray" />
+</RelativeLayout>
+</RelativeLayout>

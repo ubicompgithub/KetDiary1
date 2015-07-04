@@ -29,5 +29,7 @@
     <color name="red">#FFf2a6a3</color>
     <color name="text_gray2">#FFb3b3b4</color>
     <color name="blue">#FF7dcdff</color>
-    
+    <color name="text_gray3">#FF9E9E9F</color>
+    <color name="text_bg_gray">#FFf7f7f7</color>
+
 </resources>

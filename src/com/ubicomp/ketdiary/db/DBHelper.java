@@ -13,7 +13,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 	/* SQLiteOpenHelper. need to migrate with */
 	private static final String DATABASE_NAME = "drugfreediary";
-	private static final int DB_VERSION = 1;
+	private static final int DB_VERSION = 2;
 
 	/**
 	 * Constructor
@@ -40,11 +40,15 @@ public class DBHelper extends SQLiteOpenHelper {
 		
 		
 		//  NoteAdd Table
+		
 		db.execSQL("CREATE TABLE NoteAdd ("
 				+ " id INTEGER PRIMARY KEY AUTOINCREMENT, "
 				+ " isAfterTest INT NOT NULL," + " year INTEGER NOT NULL,"
 				+ " month INTEGER NOT NULL," + " day INTEGER NOT NULL,"
 				+ " ts INTEGER NOT NULL," + " week INTEGER NOT NULL,"
+				+ " recordYear INTEGER NOT NULL,"
+				+ " recordMonth INTEGER NOT NULL,"
+				+ " recordDay INTEGER NOT NULL," 
 				+ " timeSlot INTEGER NOT NULL," + " category INTEGER NOT NULL,"
 				+ " type INTEGER NOT NULL," + " items INTEGER NOT NULL, "
 				+ " impact INTEGER NOT NULL, "+ " description CHAR[255], "
@@ -66,6 +70,21 @@ public class DBHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int old_ver, int new_ver) {
+		
+		db.execSQL("DROP TABLE IF EXISTS NoteAdd");
+		db.execSQL("CREATE TABLE NoteAdd ("
+				+ " id INTEGER PRIMARY KEY AUTOINCREMENT, "
+				+ " isAfterTest INT NOT NULL," + " year INTEGER NOT NULL,"
+				+ " month INTEGER NOT NULL," + " day INTEGER NOT NULL,"
+				+ " ts INTEGER NOT NULL," + " week INTEGER NOT NULL,"
+				+ " recordYear INTEGER NOT NULL,"
+				+ " recordMonth INTEGER NOT NULL,"
+				+ " recordDay INTEGER NOT NULL," 
+				+ " timeSlot INTEGER NOT NULL," + " category INTEGER NOT NULL,"
+				+ " type INTEGER NOT NULL," + " items INTEGER NOT NULL, "
+				+ " impact INTEGER NOT NULL, "+ " description CHAR[255], "
+				+ " weeklyScore INTEGER NOT NULL," + " score INTEGER NOT NULL,"
+				+ " upload INTEGER NOT NULL DEFAULT 0" + ")");
 
 	}
 

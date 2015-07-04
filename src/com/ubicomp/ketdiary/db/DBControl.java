@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.ubicomp.ketdiary.App;
+import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 
 
@@ -204,6 +205,34 @@ public class DBControl {
 	}
 	
 	
+	
+	//NoteAdd
+	
+	Vector<NoteAdd> notUploadedNoteAdd = new Vector<NoteAdd>();
+
+	/**
+	 * Add NoteAdd and upload
+	 * @param data
+	 */
+	public void addNoteAdd(NoteAdd data){ //insertTestResult
+		notUploadedNoteAdd.add(data);
+		DataUploader.upload();
+	}
+	
+	/**
+	 * Get not upload NoteAdd
+	 * @return
+	 * @see DataUploader
+	 */
+	public Vector<NoteAdd> getNotUploadedNoteAdd(){
+		Vector<NoteAdd> ret = new Vector<NoteAdd>();
+		for(int lx = 0;lx < notUploadedNoteAdd.size();lx++)
+			ret.add(notUploadedNoteAdd.get(lx));
+		notUploadedNoteAdd.clear();
+		return ret;
+	}
+		
+		
 	/**
 	 * Add Patient and upload
 	 * @param ttd

@@ -39,7 +39,7 @@ public class CustomTab {
 		icon.setImageDrawable(iconDrawable);
 		highlight = (ImageView) view.findViewById(R.id.tab_highlight);
 		onDrawable = context.getResources()
-				.getDrawable(R.drawable.tab_selected);
+				.getDrawable(R.drawable.bottom_bar_pressed2);
 		offDrawable = context.getResources().getDrawable(
 				R.drawable.tab_bg_selector);
 	}

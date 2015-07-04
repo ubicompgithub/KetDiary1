@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	
-        <string name="app_name">戒K小幫手</string>
+    <string name="app_name">戒K小幫手</string>
+    
     <string name="loading">載入中</string>
     <string name="brac">酒精濃度</string>
     <string name="start">開始</string>
@@ -28,8 +29,6 @@
     <string name="emotion_short">心情</string>
     <string name="craving">渴求指數</string>
     <string name="craving_short">渴求</string>
-    <string name="brac_result">酒測結果</string>
-    <string name="brac_result_short">酒測值</string>
     <string name="total_result">綜合資料</string>
     <string name="analysis_counter">已獲得點數</string>
     <string name="analysis_saving">已節省金錢</string>
@@ -39,6 +38,7 @@
     <string name="after_test_pass">做得很好！</string>
     <string name="after_test_fail">好好加油！</string>
     <string name="after_questionnaire">繼續加油！</string>
+    <string name="result">檢測結果</string>
 
     <string-array name="emotion_state">
         <item>　沮喪　</item>
@@ -70,29 +70,47 @@
     <string name="send">寄送</string>
     <string name="cancel">取消</string>
     <string name="ok">確定</string>
+    <string name="Iknow">我知道了</string>
+    <string name="last">上一則</string>
+    <string name="next">下一則</string>
+    <string name="go_result">看測試結果</string>
     <string name="msg_box_toast_cancel">確定放棄填寫？</string>
     <string name="msg_box_toast_send">確定完成自我了解？</string>
     <string name="notification_msg_1">該檢測了！</string>
+    
+    
     <string name="test_guide_start_top">請點選\'開始\'進行測試</string>
     <string name="test_guide_start_bottom">測試尚未開始</string>
-    <string name="test_guide_reset_top">請按酒測裝置右下角按鈕</string>
-    <string name="test_guide_reset_bottom">請啟用酒測裝置</string>
-    <string name="test_guide_init_top">請稍待，酒測器準備中</string>
-    <string name="test_guide_init_bottom">酒測器已啟用</string>
-    <string name="test_guide_testing_top">請將臉對於螢幕中央，並開始吹氣</string>
-    <string name="test_guide_testing_bottom">酒測器已可進行測試</string>
-    <string name="test_guide_pair_top">請至藍牙設定頁面進行設定</string>
-    <string name="test_guide_pair_bottom">酒測器藍牙配對設定錯誤</string>
+    <string name="test_guide_fivesecond_bottom">請蓄積口水</string>
+    <string name="test_guide_testing_top">請將臉對於螢幕中央，並吐口水於管中</string>
+    <string name="test_guide_testing_bottom">檢測器已可進行測試</string>
+    <string name="test_guide_notenough_top">口水量不足</string>
+    <string name="test_guide_notenough_bottom">請在10秒內再吐一口水</string>
+    <string name="test_guide_confirm_top">請稍後</string>
+    <string name="test_guide_confirm_bottom">口水確認中</string>
+    <string name="test_guide_reset_bottom">請開啟檢測器</string>
+    <string name="test_guide_done_bottom">測試完成！</string>
+    <string name="test_guide_test_timeout">測試超時</string>
+    <string name="test_guide_fail_retry">測試失敗，請更換試紙匣後重試</string>
+    <string name="test_guide_retry">請更換試紙匣後重試</string>
+    <string name="test_guide_device_notsupport">裝置不支援</string>
+    <string name="test_guide_connect_timeout">連接逾時</string>
+    <string name="test_guide_connect_fail">連接中斷</string>
+    <string name="test_guide_no_testplug">請將試紙匣插入裝置</string> 
+     
+     
+    <string name="test_guide_init_top">請稍待，檢測器準備中</string>
+    <string name="test_guide_init_bottom">請稍待，檢測器準備中</string>
+    
+
     <string name="test_guide_update_top">請於倒數結束前重新進行酒測</string>
     <string name="test_guide_update_bottom">重新測試倒數中</string>
     <string name="test_guide_recovery_top">請稍待</string>
-    <string name="test_guide_recovery_bottom">酒測器回復中</string>
-    <string name="test_guide_recovery_update_top">請於酒測器回復後盡快重新測試</string>
-    <string name="test_guide_recovery_update_bottom">酒測器回復中</string>
+
     <string name="test_guide_not_turn_on">未啟動酒測裝置</string>
     <string name="test_guide_test_fail">酒測器沒電了</string>
-    <string name="test_guide_test_timeout">測試超時</string>
-    <string name="test_guide_connect_fail">酒測器連接錯誤</string>
+    
+   
     <string name="test_guide_multi_blow">吹氣不穩以致測試失敗</string>
     <string name="test_guide_zero_duration">連線錯誤，請重啟酒測器及手機藍牙功能</string>
     <string name="test_guide_pressure_error">酒測器有損壞，請聯絡戒酒小幫手團隊予以更換</string>
@@ -147,7 +165,6 @@
 
     <string name="quote_next_message">請按此看延伸學習‧‧‧</string>
     <string name="call_to">要聯絡誰？</string>
-    <string name="next">下一步</string>
     <string name="connect_to_family">跟親友聊天</string>
     <string name="connect_for_social_help">尋求社區心理諮商</string>
     <string name="connect_to_emotion_hot_line">聯絡心情專線</string>
@@ -158,6 +175,7 @@
     <string name="about_title">關於</string>
     <string name="about_help">詳細資料：</string>
     <string name="about_setting">設定：</string>
+    <string name="setting_title">設定</string>
     <string name="about_time_gap">提醒時間間隔為：</string>
 
     <string-array name="setting_time_gap">
@@ -354,7 +372,7 @@
     <string name="title_activity_cal">CalActivity</string>
     
     
-    
+
     
     
     <string name="title_activity_timer">TImerActivity</string>
@@ -366,6 +384,8 @@
     <string name="title_activity_event_cope_skill">EventCopeSkillActivity</string>
     <string name="dubug">debug</string>
     
-   
-
+    <string name="negative_consequence">負面後果</string>
+	<string name="positive_goal">正向目標</string>
+	<string name="check_result">看測試結果?</string>
+	
 </resources>

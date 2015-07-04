@@ -17,7 +17,29 @@ import com.ubicomp.ketdiary.R;
 public class PreferenceControl {
 
 	private static final SharedPreferences sp = App.getSp();
-
+	
+	/* UID
+	 * DeviceId
+	 * sensorId
+	 * family_name
+	 * family_phone
+	 * TestResult
+	 * LatestDetectionTimstamp
+	 * LatestDoneDetectionTimstamp
+	 * latestTestFail
+	 * TestSuccess
+	 * LatestTestTime
+	 * debug
+	 * debugType
+	 * firstTime
+	 * showedCoupon
+	 * targetGood
+	 * targetMoney
+	 * perDrinkCost
+	 * startdate
+	 * systemLock
+	 */
+	
 	/** Default setting at the first time of launching SoberDiary */
 	public static void defaultSetting() {
 		setUID("sober_default_test");
@@ -91,13 +113,57 @@ public class PreferenceControl {
 	}
 	
 	
+	/**
+	 * set Test state
+	 * 
+	 */
+	public static void setAfterTestState(int state) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putInt("after_test_state", state);
+		edit.commit();
+	}
+	
+	public static int getAfterTestState() {
+		return sp.getInt("after_test_state", 0);
+	}
+	
+	public static void setLatestTestCompleteTime(long timestamp) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putLong("testCompleteTime", timestamp);
+		edit.commit();
+	}
+
+	public static long getLatestTestCompleteTime() {
+		return sp.getLong("testCompleteTime", 0);
+	}
+
+	public static boolean getCheckResult() {
+		return sp.getBoolean("checkResult", false);
+	}
+
+	public static void setCheckResult(boolean checkResult) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putBoolean("checkResult", checkResult);
+		edit.commit();
+	}
+	
+	
+	public static boolean getInApp() {
+		return sp.getBoolean("inApp", true);
+	}
+
+	public static void setInApp(boolean inApp) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putBoolean("inApp", inApp);
+		edit.commit();
+	}
 	
 	
 	
 	
 	
 	
-	
+
 	// haven't use
 	/**
 	 * Check if it is the first time launching SoberDiary
@@ -172,6 +238,11 @@ public class PreferenceControl {
 	public static long getDetectionTimestamp() {
 		return sp.getLong("latestDetectionTimestamp", 0);
 	}
+	
+	public static long getLastTestTime() {
+		return sp.getLong("latestDetectionDoneTimestamp", 0);
+	}
+
 
 	public static void setTestFail() {
 		SharedPreferences.Editor edit = sp.edit();
@@ -187,10 +258,7 @@ public class PreferenceControl {
 		edit.commit();
 	}
 
-	public static long getLastTestTime() {
-		return sp.getLong("latestDetectionDoneTimestamp", 0);
-	}
-
+	
 	public static boolean isTestFail() {
 		return sp.getBoolean("latestTestFail", false);
 	}
@@ -336,28 +404,6 @@ public class PreferenceControl {
 	}
 
 
-	public static int getStorytellingReadTimes() {
-		return sp.getInt("readTimes", 0);
-	}
-
-	public static void addStorytellingReadTimes() {
-		int time = sp.getInt("readTimes", 0);
-		if (time < Config.STORYTELLING_READ_LIMIT) {
-			SharedPreferences.Editor edit = sp.edit();
-			edit.putInt("readTimes", (time + 1));
-			edit.commit();
-		}
-	}
-
-	public static void resetStorytellingReadTimes() {
-		SharedPreferences.Editor edit = sp.edit();
-		edit.putInt("readTimes", 0);
-		edit.commit();
-	}
-
-
-
-
 	public static int getUsedCounter() {
 		return sp.getInt("usedCounter", 0);
 	}
@@ -368,16 +414,7 @@ public class PreferenceControl {
 		edit.commit();
 	}
 
-	public static void setLatestTestCompleteTime(long timestamp) {
-		SharedPreferences.Editor edit = sp.edit();
-		edit.putLong("testCompleteTime", timestamp);
-		edit.commit();
-	}
-
-	public static long getLatestTestCompleteTime() {
-		return sp.getLong("testCompleteTime", 0);
-	}
-
+	
 
 
 	public static void setUpdateDetection(boolean update) {
@@ -477,17 +514,6 @@ public class PreferenceControl {
 		edit.commit();
 	}
 
-	public static void setStorytellingImageSize(int width, int height) {
-		SharedPreferences.Editor edit = sp.edit();
-		edit.putInt("storytellingImageWidth", width);
-		edit.putInt("storytellingImageHeight", height);
-		edit.commit();
-	}
-
-	public static Point getStorytellingImageSize() {
-		int width = sp.getInt("storytellingImageWidth", 1);
-		int height = sp.getInt("storytellingImageHeight", 1);
-		return new Point(width, height);
-	}
+	
 
 }
