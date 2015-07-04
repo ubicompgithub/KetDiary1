@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="7.3dp" 
-        android:layout_marginTop="7.3dp">
+        android:layout_marginTop="15dp">
 
         <ImageView
             android:id="@+id/analysis_saving_bar"
@@ -31,11 +31,11 @@
             android:src="@drawable/energy_bar" />
 		
         <RelativeLayout
-        android:id="@+id/analysis_position_followed_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-         
-        >
+            android:id="@+id/analysis_position_followed_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/analysis_saving_bar"
+            android:layout_alignTop="@+id/analysis_saving_bar" >
         
 	        <ImageView
 	            android:id="@+id/analysis_pros_position_followed"

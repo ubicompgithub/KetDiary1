@@ -46,6 +46,9 @@ public class StatisticDayView extends StatisticPageView {
 
 	private static final int text_color = App.getContext().getResources()
 			.getColor(R.color.text_gray);
+	private static final int text_color2 = App.getContext().getResources()
+			.getColor(R.color.text_gray2);
+	
 	private static final int value_color = App.getContext().getResources()
 			.getColor(R.color.white);
 
@@ -235,23 +238,23 @@ public class StatisticDayView extends StatisticPageView {
 					+ d_text + "\n" + time_str);
 			int start = 0;
 			int end = month_str.length();
-			s.setSpan(new CustomTypefaceSpan("c1", digitTypeface, text_color),
+			s.setSpan(new CustomTypefaceSpan("c1", digitTypefaceBold, text_color2),
 					start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
 			start = end;
 			end = start + m_text.length();
-			s.setSpan(new CustomTypefaceSpan("c2", wordTypeface, text_color),
+			s.setSpan(new CustomTypefaceSpan("c2", wordTypefaceBold, text_color2),
 					start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
 			start = end;
 			end = start + day_str.length();
-			s.setSpan(new CustomTypefaceSpan("c1", digitTypeface, text_color),
+			s.setSpan(new CustomTypefaceSpan("c1", digitTypefaceBold, text_color2),
 					start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
 			start = end;
 			end = start + d_text.length() + 1;
-			s.setSpan(new CustomTypefaceSpan("c2", wordTypeface, text_color),
+			s.setSpan(new CustomTypefaceSpan("c2", wordTypefaceBold, text_color2),
 					start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
 			start = end;
 			end = start + time_str.length();
-			s.setSpan(new CustomTypefaceSpan("c1", digitTypeface, text_color),
+			s.setSpan(new CustomTypefaceSpan("c1", digitTypefaceBold, text_color2),
 					start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
 			bracTime.setText(s);
 			bracTime.setTypeface(wordTypefaceBold);
