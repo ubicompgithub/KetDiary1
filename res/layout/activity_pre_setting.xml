@@ -449,7 +449,6 @@
                         android:layout_marginLeft="5dp"
                         android:background="@drawable/setting_edit_bg"
                         android:ems="8"
-                        android:inputType="number"
                         android:paddingBottom="3dp"
                         android:paddingLeft="16dp"
                         android:paddingRight="16dp"

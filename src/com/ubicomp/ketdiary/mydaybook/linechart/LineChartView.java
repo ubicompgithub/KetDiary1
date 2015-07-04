@@ -62,7 +62,23 @@ public class LineChartView extends View {
     private Paint paint = new Paint();
 
     private int[] dots = {0, R.drawable.dot_color1, R.drawable.dot_color2, R.drawable.dot_color3, R.drawable.dot_color4, R.drawable.dot_color5, R.drawable.dot_color6, R.drawable.dot_color7, R.drawable.dot_color8};
-
+    
+    Bitmap dot1 ;//= BitmapFactory.decodeResource(getResources(), R.drawable.dot_color1);
+    Bitmap dot2 ;//= BitmapFactory.decodeResource(getResources(), R.drawable.dot_color2);
+    Bitmap dot3 ;//= BitmapFactory.decodeResource(getResources(), R.drawable.dot_color3);
+    Bitmap dot4 ;//= BitmapFactory.decodeResource(getResources(), R.drawable.dot_color4);
+    Bitmap dot5 ;//= BitmapFactory.decodeResource(getResources(), R.drawable.dot_color5);
+    Bitmap dot6 ;//= BitmapFactory.decodeResource(getResources(), R.drawable.dot_color6);
+    Bitmap dot7 ;//= BitmapFactory.decodeResource(getResources(), R.drawable.dot_color7);
+    Bitmap dot8 ;//= BitmapFactory.decodeResource(getResources(), R.drawable.dot_color8);
+    
+    Bitmap[] dot_array ;//= {null, dot1, dot2, dot3, dot4, dot5, dot6, dot7, dot8};
+    Bitmap passBarBg;
+    Bitmap noPassBarBg;
+    Bitmap skipBarBg;
+    Bitmap cursor;
+    Bitmap legend;
+    
     private GestureDetector gestureDetector; 
     private DatabaseControl db;
     private Calendar startDay;
@@ -96,10 +112,37 @@ public class LineChartView extends View {
         dataset = new LineChartData[numOfDays];
         initDataset();
         //setChartData3();
-
+        initBitmap();
     	
     	Log.d("drawDate", "numOfDays:"+numOfDays);
     }
+	
+	private void initBitmap(){
+		dot_array = new Bitmap[9];
+		dot_array[0] = null;
+		for(int i=1; i<=8;i++){
+			Bitmap tmp = BitmapFactory.decodeResource(getResources(), dots[i]);		
+			Bitmap resizedImg = getResizedBitmap(tmp, dot_scale, dot_scale);
+			dot_array[i] = resizedImg;
+		}
+		
+		Bitmap tmp = getLocalBitmap(context, R.drawable.pass_rect);
+		passBarBg = getResizedBitmap(tmp, rec_height, rec_width);
+		
+		tmp = getLocalBitmap(context, R.drawable.nopass_rect);
+		noPassBarBg = getResizedBitmap(tmp, rec_height, rec_width);
+		
+		tmp = getLocalBitmap(context, R.drawable.skip_rect);
+		skipBarBg = getResizedBitmap(tmp, rec_height, rec_width);
+	
+		/*tmp = getLocalBitmap(context, R.drawable.linechart_cursor);
+    	cursor = getResizedBitmap(tmp, getHeight() - 2*getPaddingTop() - 2*getPaddingBottom() , dot_scale);*/
+    	
+    	tmp = BitmapFactory.decodeResource(getResources(), R.drawable.linechart_legend);
+    	legend = getResizedBitmap(tmp, legend_height, legend_width);
+    	
+    	tmp.recycle();
+	}
 	
 
 	private void initDataset(){ //to make sure dataset with not null object
@@ -415,11 +458,7 @@ public class LineChartView extends View {
         		Log.d(TAG, "SelfType:" + selfType + " SelfScore:"+dataset[i].getSelfScore());
         		if (selfType > 5 || selfType < 1) continue;
  	        	if (drawTheDotOrNot(selfType)) {
-	 	        	Bitmap tmp = BitmapFactory.decodeResource(getResources(), dots[selfType]);
-	 	            Bitmap resizedImg = getResizedBitmap(tmp, dot_scale, dot_scale);
-	 	            tmp.recycle();
-	 	            System.gc();
-	 	            canvas.drawBitmap(resizedImg, getXPos2(i)-dot_X_offset, getYPos(dataset[i].getSelfScore())-dot_Y_offset, p);
+	 	            canvas.drawBitmap(dot_array[selfType], getXPos2(i)-dot_X_offset, getYPos(dataset[i].getSelfScore())-dot_Y_offset, p);
  	        	}
  	        }
         	break;
@@ -441,12 +480,7 @@ public class LineChartView extends View {
         		
         		if (otherType < 6) continue;
   	        	if (drawTheDotOrNot(otherType)) {
-  	     
-  	        		Bitmap tmp =  BitmapFactory.decodeResource(getResources(), dots[otherType]);
-  	 	            Bitmap resizedImg = getResizedBitmap(tmp, dot_scale, dot_scale);
-  	 	            tmp.recycle();
-  	 	            System.gc();
-  	 	            canvas.drawBitmap(resizedImg, getXPos2(i)-dot_X_offset, getYPos(dataset[i].getOtherScore())-dot_Y_offset, p);
+  	 	            canvas.drawBitmap(dot_array[otherType], getXPos2(i)-dot_X_offset, getYPos(dataset[i].getOtherScore())-dot_Y_offset, p);
   	        	}
   	        }
         	break;
@@ -466,10 +500,7 @@ public class LineChartView extends View {
 	        
 	        paint.setShadowLayer(0, 0, 0, 0);
 	        paint_self.setShadowLayer(0, 0, 0, 0);
-	        Bitmap tmp = BitmapFactory.decodeResource(getResources(), R.drawable.linechart_legend);
-        	Bitmap legend = getResizedBitmap(tmp, legend_height, legend_width);
-        	tmp.recycle();
-        	System.gc();
+	        
         	canvas.drawBitmap(legend, getPaddingLeft(), getPaddingTop(), p);
         	break;
         }       
@@ -495,24 +526,12 @@ public class LineChartView extends View {
     	Log.d(TAG, "data_length: "+dataset.length);
     	for (int i = 0; i < dataset.length; i++) {
     		if (dataset[i].getResult() == 0) {
-    			Bitmap temp = getLocalBitmap(context, R.drawable.pass_rect);
-    			Bitmap passBarBg = getResizedBitmap(temp, rec_height, rec_width);
-    			temp.recycle();
-    			System.gc();
 	            canvas.drawBitmap(passBarBg, getXPos2(i)-rec_X_offset, getHeight()-offsetY, p);
     		}
     		else if (dataset[i].getResult() == 1){
-    			Bitmap temp = getLocalBitmap(context, R.drawable.nopass_rect);
-    			Bitmap noPassBarBg = getResizedBitmap(temp, rec_height, rec_width);
-    			temp.recycle();
-    			System.gc();
 	            canvas.drawBitmap(noPassBarBg, getXPos2(i)-rec_X_offset, getHeight()-offsetY, p);
     		}
     		else {
-    			Bitmap temp = getLocalBitmap(context, R.drawable.skip_rect);
-    			Bitmap skipBarBg = getResizedBitmap(temp, rec_height, rec_width);
-    			temp.recycle();
-    			System.gc();
 	            canvas.drawBitmap(skipBarBg, getXPos2(i)-rec_X_offset, getHeight()-offsetY, p);
     		}
         }    	
@@ -530,23 +549,17 @@ public class LineChartView extends View {
     	Bitmap tmp = getLocalBitmap(App.getContext(), R.drawable.linechart_cursor);
     	Bitmap cursor = getResizedBitmap(tmp, getHeight() - 2*getPaddingTop() - 2*getPaddingBottom() , dot_scale);
     	tmp.recycle();
-    	System.gc();
+    	//System.gc();
     	canvas.drawBitmap(cursor, touchX, 0, p);
     	
     }
     
     private void drawCursor3(Canvas canvas) {
     	// TODO : only draw above dates
-    	
     	Paint p = new Paint();
-    	//p.setColor(Color.RED);
-    	//p.setStyle(Style.STROKE);
-    	//p.setStrokeWidth(5);
-    	//p.setPathEffect(new DashPathEffect(new float[] {10,20}, 0));
     	Bitmap tmp = getLocalBitmap(App.getContext(), R.drawable.linechart_cursor);
     	Bitmap cursor = getResizedBitmap(tmp, getHeight() - 2*getPaddingTop() - 2*getPaddingBottom() , dot_scale);
     	tmp.recycle();
-    	System.gc();
     	canvas.drawBitmap(cursor, getXPos2(cursorLinePos)-cur_X_offset, 0, p);
     	
     }

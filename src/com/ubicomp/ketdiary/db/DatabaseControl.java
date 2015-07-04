@@ -283,8 +283,70 @@ public class DatabaseControl {
 			int count = cursor.getCount();
 
 			for (int i = 0; i < result.length; ++i) {
-				int _result;
+				int _result = -1;
 				long _ts;
+				result[i] = _result;
+				while (pointer < count) {
+					cursor.moveToPosition(pointer);
+					_result = cursor.getInt(0);
+					_ts = cursor.getLong(1);
+					if (_ts < ts_from) {
+						++pointer;
+						continue;
+					} else if (_ts >= ts_to) {
+						break;
+					}
+					result[i] = _result;
+					break;
+				}
+				ts_from += DAY;
+				ts_to += DAY;
+
+			}
+			cursor.close();
+			db.close();
+			return result;
+		}
+	}
+	
+	/**
+	 * This method is used for getting result of previous n-day prime
+	 * detections
+	 * 
+	 * @return 
+	 */
+	public int[] getWeeklyPrimeBrac() {
+		synchronized (sqlLock) {
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+			
+			int FIRST_DAY = Calendar.MONDAY;
+			int day=1;
+			while (cal.get(Calendar.DAY_OF_WEEK) != FIRST_DAY) {
+				cal.add(Calendar.DATE, -1);
+				day++;
+	        }
+			final long DAY = AlarmManager.INTERVAL_DAY;
+			long start_ts = cal.getTimeInMillis();
+
+			String sql = "SELECT result,ts FROM TestResult WHERE ts >="
+					+ start_ts + " AND isPrime = 1" + " ORDER BY ts ASC";
+			db = dbHelper.getReadableDatabase();
+			Cursor cursor = db.rawQuery(sql, null);
+
+			int[] result = new int[day];
+			long ts_from = start_ts;
+			long ts_to = start_ts + DAY;
+			int pointer = 0;
+			int count = cursor.getCount();
+
+			for (int i = 0; i < result.length; ++i) {
+				int _result = -1;
+				long _ts;
+				result[i] = _result;
 				while (pointer < count) {
 					cursor.moveToPosition(pointer);
 					_result = cursor.getInt(0);
