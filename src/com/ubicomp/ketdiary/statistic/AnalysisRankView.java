@@ -372,8 +372,8 @@ public class AnalysisRankView extends StatisticPageView {
 			}
 		});
 
-		//netTask = new NetworkTask();
-		//netTask.execute();
+		netTask = new NetworkTask();
+		netTask.execute();
 		pointerHandler.sendEmptyMessage(0);
 	}
 
