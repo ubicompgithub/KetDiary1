@@ -170,7 +170,7 @@ public class DetailChart {
 
 			int len = 0;
 			int idx = 0;
-
+			/*
 			switch (type) {
 			case TYPE_DETECTION:
 				title.setText(R.string.radar_label0_full);
@@ -286,7 +286,7 @@ public class DetailChart {
 				items[0].setVisibility(View.INVISIBLE);
 				items[1].setVisibility(View.INVISIBLE);
 				//items[2].setVisibility(View.INVISIBLE);
-			}
+			}*/
 		}
 
 	}

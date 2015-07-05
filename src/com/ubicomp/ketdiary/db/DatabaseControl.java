@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.check.StartDateCheck;
@@ -32,6 +33,7 @@ public class DatabaseControl {
 	 * 
 	 * @see ubicomp.soberdiary.data.database.DBHelper
 	 */
+	private final static String TAG = "db";
 	private SQLiteOpenHelper dbHelper = null;
 	/** SQLLiteDatabase */
 	private SQLiteDatabase db = null;
@@ -969,6 +971,49 @@ public class DatabaseControl {
 			return data;
 		}
 	}
+	
+	public int[] getNoteAddTypeRank(long start_ts, long end_ts) {
+		synchronized (sqlLock) {
+			NoteAdd[] data = null;
+			int[] rank = new int[8];
+
+			db = dbHelper.getReadableDatabase();
+			String sql;
+			Cursor cursor;
+			
+			
+			for(int i=1; i<=8; i++){
+				sql = "SELECT * FROM NoteAdd WHERE type= "+i+" ORDER BY id DESC";
+				cursor = db.rawQuery(sql, null);
+				int count = cursor.getCount();
+				rank[i-1] = count;
+			}
+			
+			int max=0;
+			int max_index=-1;
+			for(int i=0; i<8; i++){
+				Log.d(TAG,"type "+(i+1)+"count "+rank[i]);
+				if(rank[i] > max){
+					max = rank[i];
+					max_index = i;
+				}	
+			}
+			int[] result = new int[4];
+			result[0] = max_index;
+			int j=0;
+			for(int i=0; i<8; i++){
+				if(j<3){
+					if(rank[i] < max){
+						result[++j] = i;
+					}
+				}
+			}
+			for(int i=0; i<result.length;i++){
+				Log.d(TAG, "result:"+result[i]);
+			}
+			return result;
+		}
+	}
 
 	/**
 	 * Get the latest 4 reasons of EmotionManagement by reason type
@@ -1052,14 +1097,10 @@ public class DatabaseControl {
 			String uid = cursor.getString(0);
 			int score = cursor.getInt(1);
 			int test = cursor.getInt(2);
-			int advice = cursor.getInt(3);
-			int manage = cursor.getInt(4);
-			int story = cursor.getInt(5);
-			int[] additionals = new int[8];
-			for (int j = 0; j < additionals.length; ++j)
-				additionals[j] = cursor.getInt(6 + j);
-			Rank rank = new Rank(uid, score, test, advice, manage, story,
-					additionals);
+			int note = cursor.getInt(3);
+			int question = cursor.getInt(4);
+			int coping = cursor.getInt(5);
+			Rank rank = new Rank(uid, score, test, note, question, coping);
 			cursor.close();
 			db.close();
 			return rank;
@@ -1090,14 +1131,10 @@ public class DatabaseControl {
 				String uid = cursor.getString(0);
 				int score = cursor.getInt(1);
 				int test = cursor.getInt(2);
-				int advice = cursor.getInt(3);
-				int manage = cursor.getInt(4);
-				int story = cursor.getInt(5);
-				int[] additionals = new int[8];
-				for (int j = 0; j < additionals.length; ++j)
-					additionals[j] = cursor.getInt(6 + j);
-				ranks[i] = new Rank(uid, score, test, advice, manage, story,
-						additionals);
+				int note = cursor.getInt(3);
+				int question = cursor.getInt(4);
+				int coping = cursor.getInt(5);
+				ranks[i] = new Rank(uid, score, test, note, question, coping);
 			}
 			cursor.close();
 			db.close();
@@ -1168,34 +1205,16 @@ public class DatabaseControl {
 				content.put("user_id", data.getUid());
 				content.put("total_score", data.getScore());
 				content.put("test_score", data.getTest());
-				content.put("advice_score", data.getAdvice());
-				content.put("manage_score", data.getManage());
-				content.put("story_score", data.getStory());
-				content.put("advice_questionnaire",
-						data.getAdviceQuestionnaire());
-				content.put("advice_emotion_diy", data.getAdviceEmotionDiy());
-				content.put("manage_voice", data.getManageVoice());
-				content.put("manage_emotion", data.getManageEmotion());
-				content.put("manage_additional", data.getManageAdditional());
-				content.put("story_read", data.getStoryRead());
-				content.put("story_test", data.getStoryTest());
-				content.put("story_fb", data.getStoryFb());
+				content.put("note_score", data.getNote());
+				content.put("question_score", data.getQuestion());
+				content.put("coping_score", data.getCoping());
 				db.insert("Ranking", null, content);
 			} else {
 				sql = "UPDATE Ranking SET" + " total_score = "
 						+ data.getScore() + "," + " test_score = "
-						+ data.getTest() + "," + " advice_score = "
-						+ data.getAdvice() + "," + " manage_score="
-						+ data.getManage() + "," + " story_score = "
-						+ data.getStory() + "," + " advice_questionnaire="
-						+ data.getAdviceQuestionnaire() + ","
-						+ " advice_emotion_diy=" + data.getAdviceEmotionDiy()
-						+ "," + " manage_voice=" + data.getManageVoice() + ","
-						+ " manage_emotion=" + data.getManageEmotion() + ","
-						+ " manage_additional=" + data.getManageAdditional()
-						+ "," + " story_read=" + data.getStoryRead() + ","
-						+ " story_test=" + data.getStoryTest() + ","
-						+ " story_fb=" + data.getStoryFb()
+						+ data.getTest() + "," + " note_score = "
+						+ data.getQuestion() + "," + " question_score="
+						+ data.getCoping() + "," + " coping_score = "
 						+ " WHERE user_id = " + "'" + data.getUid() + "'";
 				db.execSQL(sql);
 			}

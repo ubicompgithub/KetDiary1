@@ -1,10 +1,21 @@
 package com.ubicomp.ketdiary.db;
 
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
+
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.util.Log;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.data.structure.CopingSkill;
@@ -262,8 +273,7 @@ public class HttpPostGenerator {
 	 * @return HttpPost contains click log file
 	 */
 	public static HttpPost genPost(File logFile) {
-		SERVER_URL_CLICKLOG = ServerUrl.SERVER_URL_CLICKLOG();
-		HttpPost httpPost = new HttpPost(SERVER_URL_CLICKLOG);
+		HttpPost httpPost = new HttpPost(ServerUrl.SERVER_URL_CLICKLOG());
 		String uid = PreferenceControl.getUID();
 
 		MultipartEntityBuilder builder = MultipartEntityBuilder.create();

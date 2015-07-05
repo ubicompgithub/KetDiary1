@@ -1,8 +1,10 @@
 package com.ubicomp.ketdiary.db;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -18,19 +20,18 @@ import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import ubicomp.soberdiary.system.uploader.HttpPostGenerator;
-import ubicomp.soberdiary.system.uploader.HttpSecureClientGenerator;
-import ubicomp.soberdiary.system.uploader.DataUploader.DataUploadTask.logFilter;
-
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.ubicomp.ketdiary.check.DefaultCheck;
+import com.ubicomp.ketdiary.check.NetworkCheck;
 import com.ubicomp.ketdiary.data.structure.CopingSkill;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.QuestionTest;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
 import com.ubicomp.ketdiary.data.structure.TestResult;
+import com.ubicomp.ketdiary.file.MainStorage;
 
 /**
  * Used for upload data to the server
@@ -40,11 +41,37 @@ import com.ubicomp.ketdiary.data.structure.TestResult;
 public class DataUploader {
 
 	private static DataUploadTask uploader = null;
+	private static Thread cleanThread = null;
 
 	private static final String TAG = "UPLOAD";
 
 	/** Upload the data & remove uploaded data */
 	public static void upload() {
+		
+		/*if (cleanThread != null && !cleanThread.isInterrupted()) { //May be used some day.
+			cleanThread.interrupt();
+			cleanThread = null;
+		}
+
+		cleanThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Cleaner.clean();
+				} catch (Exception e) {
+				}
+			}
+		});
+		cleanThread.start();
+		try {
+			cleanThread.join(500);
+		} catch (InterruptedException e) {
+		}*/
+		
+		
+		if (DefaultCheck.check() || !NetworkCheck.networkCheck())
+			return;
+		
 		if (SynchronizedLock.sharedLock.tryLock()) {
 			SynchronizedLock.sharedLock.lock();
 			uploader = new DataUploadTask();
@@ -62,10 +89,13 @@ public class DataUploader {
 		public static final int ERROR = -1;
 		/** ENUM UPLOAD SUCCESS */
 		public static final int SUCCESS = 1;
-
+		private File logDir;
+		
 		/** Constructor */
 		public DataUploadTask() {
 			db = new DatabaseControl();
+			logDir = new File(MainStorage.getMainStorageDirectory(),
+					"sequence_log");
 		}
 
 		@Override
@@ -190,6 +220,20 @@ public class DataUploader {
 							return true;
 					return false;
 				}
+			}
+		}
+		
+		private void set_uploaded_logfile(String name) {
+			File latestUploadFile = new File(logDir, "latest_uploaded");
+			BufferedWriter writer;
+			try {
+				writer = new BufferedWriter(new FileWriter(latestUploadFile));
+				writer.write(name);
+				writer.newLine();
+				writer.flush();
+				writer.close();
+			} catch (IOException e) {
+				writer = null;
 			}
 		}
 

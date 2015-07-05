@@ -1,6 +1,5 @@
 package com.ubicomp.ketdiary.db;
 
-import ubicomp.soberdiary.system.config.PreferenceControl;
 
 
 
