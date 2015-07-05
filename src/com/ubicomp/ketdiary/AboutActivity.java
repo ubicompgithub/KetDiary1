@@ -171,8 +171,8 @@ public class AboutActivity extends Activity {
 		Spannable helpSpannable = new SpannableString(message[0] + "\n" + ntu
 				+ dot + intel_ntu + dot + "\n" + taipei_city_hospital + message[1]
 				+ "\n\n" + message[2] + "\n" + message[3] + "\n" + message[4] 
-				+ "\n" +curVersion + versionName + "\n\n" + message[5] 
-				+ happ_design + "\n"
+				+ "\n\n" +curVersion + versionName + "\n" + message[5] 
+				+ happ_design 
 				);
 		int start = 0;
 		int end = message[0].length() + 1;
@@ -190,7 +190,7 @@ public class AboutActivity extends Activity {
 		helpSpannable.setSpan(new CustomTypefaceSpan("custom1", wordTypeface,
 				0xFF727171), start, end, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
 		start = end;
-		end = start + versionName.length() + 2;
+		end = start + versionName.length() + 1;
 		helpSpannable.setSpan(new CustomTypefaceSpan("custom3",
 				digitTypefaceBold, 0xFF727171), start, end,
 				Spannable.SPAN_INCLUSIVE_EXCLUSIVE);

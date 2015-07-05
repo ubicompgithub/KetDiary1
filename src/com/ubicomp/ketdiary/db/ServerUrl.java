@@ -1,5 +1,7 @@
 package com.ubicomp.ketdiary.db;
 
+import ubicomp.soberdiary.system.config.PreferenceControl;
+
 
 
 /** 
@@ -62,6 +64,15 @@ public class ServerUrl {
 	public static String SERVER_URL_RANK_WEEK() {
 		final String URL = "rank/rankWeek.php";
 		return SERVER_URL + URL;
+	}
+	/**
+	 * URL for uploading clicklog
+	 * 
+	 * @return url
+	 */
+	public static String SERVER_URL_CLICKLOG() {
+		final String URL = "upload/clickLog.php";
+			return SERVER_URL + URL;
 	}
 	
 	
