@@ -140,6 +140,15 @@ public class DatabaseControl {
 			db = dbHelper.getWritableDatabase();
 			if (!update) {
 				boolean isPrime = !(data.isSameDay(prev_data));
+				// add by Andy
+				int result = data.getResult();
+				if(isPrime){
+					if(result == 0)
+						PreferenceControl.setPosition(1);
+					else
+						PreferenceControl.setPosition(-1);
+				}
+				//
 				int isPrimeValue = isPrime ? 1 : 0;
 				int addScore = 0;
 				addScore += isPrimeValue;

@@ -810,10 +810,12 @@ public class MainActivity extends FragmentActivity {
 		
 		PreferenceControl.setPoint(addScore);
 		Log.d(TAG, "AddScore:"+addScore);		
-		if (addScore == 0 && result == 1) // TestFail & get no credit //TODO: check TestResult
+		if (addScore == 0 && result == 1){ // TestFail & get no credit 
 			CustomToast.generateToast(R.string.after_test_fail, -1);
-		else if(result == 1)
+		}
+		else if(result == 1){
 			CustomToast.generateToast(R.string.after_test_fail, addScore);
+		}
 		else
 			CustomToast.generateToast(R.string.after_test_pass, addScore);
 		

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -17,7 +18,7 @@ import com.ubicomp.ketdiary.ui.Typefaces;
 public class AnalysisProsConsView extends StatisticPageView {
 
 	private TextView title;
-
+	private static final String TAG = "ProsCons";
 	private TextView help;
 	private TextView target, curMoney, targetMoney;
 	private DatabaseControl db;
@@ -86,8 +87,14 @@ public class AnalysisProsConsView extends StatisticPageView {
 	@SuppressLint("CutPasteId")
 	@Override
 	public void load() {
-
+		
+	
+			
 		barHandler.sendEmptyMessage(0);
+			
+		
+
+		
 
 		//int curDrink = db.getPrimeDetectionPassTimes();
 		//currentMoney = curDrink * drinkCost;
@@ -110,8 +117,18 @@ public class AnalysisProsConsView extends StatisticPageView {
 		@Override
 		public void handleMessage(Message msg) {
 			
-			int today_situation=19; //pass or fail
+			//int today_situation=19; //pass or fail
+			int today_situation = PreferenceControl.getPosition();
+			/*
+			int result = db.getTodayPrimeResult();
+			int today_situation=0;
 			
+			if(result == 0)
+				today_situation = 1;
+			else 
+				today_situation = -1;
+			*/
+			//Log.d(TAG, today_situation+"");
 //			int curDrink = db.getPrimeDetectionPassTimes();
 //			currentMoney = curDrink * drinkCost;
 
@@ -123,8 +140,12 @@ public class AnalysisProsConsView extends StatisticPageView {
 			int maxWidth = barWidth - positionWidth;
 			int width_per_block=maxWidth/21;
 			int nextWidth;
-			nextWidth=curWidth+width_per_block*today_situation;
+			//nextWidth=curWidth+width_per_block*today_situation;
+			
+			nextWidth = width_per_block*today_situation;
 			System.out.println(nextWidth);
+			
+			
 			if(nextWidth>curWidth){
 				if(nextWidth>=maxWidth){
 					nextWidth=maxWidth;
@@ -136,7 +157,7 @@ public class AnalysisProsConsView extends StatisticPageView {
 					barEnd.setVisibility(View.VISIBLE);
 				}
 			}
-			else{
+			else if(nextWidth<curWidth){
 				if(nextWidth<=0){
 					nextWidth=0;
 					barStart.setVisibility(View.INVISIBLE);
@@ -147,6 +168,10 @@ public class AnalysisProsConsView extends StatisticPageView {
 					barEnd.setVisibility(View.INVISIBLE);
 					
 				}
+			}
+			else{
+				barStart.setVisibility(View.INVISIBLE);
+				barEnd.setVisibility(View.INVISIBLE);
 			}
 			RelativeLayout.LayoutParams currentBarParam = (RelativeLayout.LayoutParams) bar_followed.getLayoutParams();
 			currentBarParam.width = nextWidth;

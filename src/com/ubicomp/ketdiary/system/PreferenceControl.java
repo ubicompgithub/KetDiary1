@@ -178,6 +178,17 @@ public class PreferenceControl {
 		edit.commit();
 	}
 	
+	public static int getPosition() {
+		return sp.getInt("Postion", 11);
+	}
+	
+	public static void setPosition(int addPos) {
+		int last_position= getPosition();
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putInt("Postion", last_position + addPos);
+		edit.commit();
+	}
+	
 	public static int getTestAddScore() {
 		return sp.getInt("TestAddScore", 0);
 	}
@@ -304,6 +315,8 @@ public class PreferenceControl {
 	public static String getNegativeGoal() {
 		return sp.getString("targetBad", "尿失禁");	
 	}
+	
+
 	
 	// haven't use
 	/**

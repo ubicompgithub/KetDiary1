@@ -147,21 +147,6 @@ public class DataUploader {
 			return SUCCESS;
 		}
 		
-		private int connectToServer(Datatype.TestDetail ttd){
-			try {
-				Log.d("a", "1");
-				DefaultHttpClient httpClient = HttpSecureClientGenerator.getSecureHttpClient();
-				Log.d("a", "2");
-				HttpPost httpPost = HttpPostGenerator.genPost(ttd);
-				if (!upload(httpClient, httpPost))
-					return ERROR;
-			} catch (Exception e) {
-				Log.d(TAG, "EXCEPTION:" + e.toString());
-				return ERROR;
-			}
-			return SUCCESS;
-		}
-		
 		
 		private int connectToServer(TestResult data) {
 			try {
