@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.GridLayout;
@@ -14,13 +15,14 @@ import android.widget.TextView;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.R;
-import com.ubicomp.ketdiary.check.TimeBlock;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
 public class StatisticWeekView extends StatisticPageView {
-
+	
+	private static String TAG = "Week";
+	
 	private DatabaseControl db;
 	private TextView[] time_labels;
 	private TextView[] date_labels;
@@ -42,7 +44,13 @@ public class StatisticWeekView extends StatisticPageView {
 
 	private static final int nBlocks = 3;
 	private static final int nDays = 7;
+	
+	private static final int notest = -1;
+	private static final int pass = 0;
+	private static final int nopass = 1;
 
+	private static final int FIRST_DAY = Calendar.MONDAY;
+	
 	//private static final int[] blockHint = { R.string.sunday, R.string.monday, R.string.tuesday, R.string.wednesday, 
 	//		R.string.thursday, R.string.friday, R.string.saturday };
 	private static final int[] labelHint = { R.string.test_pass,
@@ -211,30 +219,75 @@ public class StatisticWeekView extends StatisticPageView {
 			else
 				circles[idx].setImageDrawable(circleDrawables[1]);
 		}*/
-		Integer[] brave={1,1,-1,0,-1,1,99}; // 1:pass 0:none -1:fail
+		//Integer[] brave={1,1,-1,0,-1,1,99}; // 1:pass 0:none -1:fail
+		
+		//Integer[] brave={0,0,0,0,0,0,0};
+		//int[] brave = db.getMultiDaysPrimeBrac(nDays);
+		
+		int[] brave = db.getWeeklyPrimeBrac(); 
+		
 		for(int i=0;i<brave.length;++i){
-			if(brave[i]==-1){
-				circles[i].setImageDrawable(circleDrawables[1]);
-				
+			Log.d(TAG, ""+brave[i]);
+			if(brave[i]==1){
+				circles[i].setImageDrawable(circleDrawables[1]);				
 			}
-			else if(brave[i]==0){
+			else if(brave[i]==-1){
 				circles[i].setImageDrawable(circleDrawables[0]);
 			}
-			else if(brave[i]==1){
+			else if(brave[i]==0){
 				circles[i].setImageDrawable(circleDrawables[2]);
-				if(i>=1 && brave[i-1]==1){
+				if(i>=1 && brave[i-1]==0){
 					linkers[i-1].setImageDrawable(linkerDrawables[2]);
 				}
-				else if(i>=1 && brave[i-1]!=1){
+				else if(i>=1 && brave[i-1]!=0){
 					linkers[i-1].setImageDrawable(linkerDrawables[0]);
 				}
 			}
-			else{}
+			else{}	
+		}
+		
+		int count = 0;
+		Calendar cal3 = Calendar.getInstance();
+		while (cal3.get(Calendar.DAY_OF_WEEK) != FIRST_DAY) {
+			cal3.add(Calendar.DATE, -1);
+			count++;
+        }
+		for (int i = 0; i < 7; ++i) {
+			int date = cal3.get(Calendar.DAY_OF_MONTH);
+			String label = String.valueOf(date);
+			date_labels[i].setText(label);
 			
+			if (cal3.before(startDate)) {
+				circles[i].setAlpha(ALPHA);
+			}
 			
+			switch(i){
+		    case 6:
+		    	time_labels[i].setText("日");
+		    	break;
+		    case 0:
+		    	time_labels[i].setText("一");
+		    	break;
+		    case 1:
+		    	time_labels[i].setText("二");
+		    	break;
+		    case 2:
+		    	time_labels[i].setText("三");
+		    	break;
+		    case 3:
+		    	time_labels[i].setText("四");
+		    	break;
+		    case 4:
+		    	time_labels[i].setText("五");
+		    	break;
+		    case 5:
+		    	time_labels[i].setText("六");
+		    }
+			cal3.add(Calendar.DAY_OF_MONTH, 1);
 		}
 		
 		
+		/*
 		Calendar cal = Calendar.getInstance();
 		Calendar cal2 = Calendar.getInstance();
 		for (int i = 6; i >= 0; --i) {
@@ -242,12 +295,11 @@ public class StatisticWeekView extends StatisticPageView {
 			int dayofweek = cal2.get(Calendar.DAY_OF_WEEK);
 			String label = String.valueOf(date);
 			date_labels[i].setText(label);
-//			if (cal.before(startDate)) {
-//				int max = i + 21;
-//				for (int j = i; j < max; j += 7) {
-//					circles[j].setAlpha(ALPHA);
-//				}
-//			}
+			
+			if (cal.before(startDate)) {
+				circles[i].setAlpha(ALPHA);
+			}
+			
 			switch(dayofweek){
 		    case Calendar.SUNDAY:
 		    	time_labels[i].setText("日");
@@ -272,7 +324,7 @@ public class StatisticWeekView extends StatisticPageView {
 		    }
 			cal.add(Calendar.DAY_OF_MONTH, -1);
 			cal2.add(Calendar.DAY_OF_WEEK, -1);
-		}
+		}*/
 
 //		if (cal.before(startDate)) {
 //			for (int j = 0; j < 21; j += 7) {

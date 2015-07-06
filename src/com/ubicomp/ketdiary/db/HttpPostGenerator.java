@@ -272,6 +272,26 @@ public class HttpPostGenerator {
 	 *            file of the click log
 	 * @return HttpPost contains click log file
 	 */
+	public static HttpPost genPost(File logFile) {
+		HttpPost httpPost = new HttpPost(ServerUrl.SERVER_URL_CLICKLOG());
+		String uid = PreferenceControl.getUID();
+
+		MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+		builder.addTextBody("uid", uid);
+		if (logFile.exists()) {
+			builder.addPart("file[]", new FileBody(logFile));
+		}
+		httpPost.setEntity(builder.build());
+		return httpPost;
+	}
+	
+	/**
+	 * Generate POST of ClickLog
+	 * 
+	 * @param logFile
+	 *            file of the click log
+	 * @return HttpPost contains click log file
+	 */
 	/*
 	public static HttpPost genPost(File logFile) {
 		SERVER_URL_CLICKLOG = ServerUrl.SERVER_URL_CLICKLOG();

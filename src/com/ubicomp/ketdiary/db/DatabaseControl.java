@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.check.StartDateCheck;
@@ -35,6 +36,7 @@ public class DatabaseControl {
 	 * 
 	 * @see ubicomp.soberdiary.data.database.DBHelper
 	 */
+	private final static String TAG = "db";
 	private SQLiteOpenHelper dbHelper = null;
 	/** SQLLiteDatabase */
 	private SQLiteDatabase db = null;
@@ -143,6 +145,15 @@ public class DatabaseControl {
 			db = dbHelper.getWritableDatabase();
 			if (!update) {
 				boolean isPrime = !(data.isSameDay(prev_data));
+				// add by Andy
+				int result = data.getResult();
+				if(isPrime){
+					if(result == 0)
+						PreferenceControl.setPosition(1);
+					else
+						PreferenceControl.setPosition(-1);
+				}
+				//
 				int isPrimeValue = isPrime ? 1 : 0;
 				int addScore = 0;
 				addScore += isPrimeValue;
@@ -286,8 +297,70 @@ public class DatabaseControl {
 			int count = cursor.getCount();
 
 			for (int i = 0; i < result.length; ++i) {
-				int _result;
+				int _result = -1;
 				long _ts;
+				result[i] = _result;
+				while (pointer < count) {
+					cursor.moveToPosition(pointer);
+					_result = cursor.getInt(0);
+					_ts = cursor.getLong(1);
+					if (_ts < ts_from) {
+						++pointer;
+						continue;
+					} else if (_ts >= ts_to) {
+						break;
+					}
+					result[i] = _result;
+					break;
+				}
+				ts_from += DAY;
+				ts_to += DAY;
+
+			}
+			cursor.close();
+			db.close();
+			return result;
+		}
+	}
+	
+	/**
+	 * This method is used for getting result of previous n-day prime
+	 * detections
+	 * 
+	 * @return 
+	 */
+	public int[] getWeeklyPrimeBrac() {
+		synchronized (sqlLock) {
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+			
+			int FIRST_DAY = Calendar.MONDAY;
+			int day=1;
+			while (cal.get(Calendar.DAY_OF_WEEK) != FIRST_DAY) {
+				cal.add(Calendar.DATE, -1);
+				day++;
+	        }
+			final long DAY = AlarmManager.INTERVAL_DAY;
+			long start_ts = cal.getTimeInMillis();
+
+			String sql = "SELECT result,ts FROM TestResult WHERE ts >="
+					+ start_ts + " AND isPrime = 1" + " ORDER BY ts ASC";
+			db = dbHelper.getReadableDatabase();
+			Cursor cursor = db.rawQuery(sql, null);
+
+			int[] result = new int[day];
+			long ts_from = start_ts;
+			long ts_to = start_ts + DAY;
+			int pointer = 0;
+			int count = cursor.getCount();
+
+			for (int i = 0; i < result.length; ++i) {
+				int _result = -1;
+				long _ts;
+				result[i] = _result;
 				while (pointer < count) {
 					cursor.moveToPosition(pointer);
 					_result = cursor.getInt(0);
@@ -901,6 +974,49 @@ public class DatabaseControl {
 			return data;
 		}
 	}
+	
+	public int[] getNoteAddTypeRank(long start_ts, long end_ts) {
+		synchronized (sqlLock) {
+			NoteAdd[] data = null;
+			int[] rank = new int[8];
+
+			db = dbHelper.getReadableDatabase();
+			String sql;
+			Cursor cursor;
+			
+			
+			for(int i=1; i<=8; i++){
+				sql = "SELECT * FROM NoteAdd WHERE type= "+i+" ORDER BY id DESC";
+				cursor = db.rawQuery(sql, null);
+				int count = cursor.getCount();
+				rank[i-1] = count;
+			}
+			
+			int max=0;
+			int max_index=-1;
+			for(int i=0; i<8; i++){
+				Log.d(TAG,"type "+(i+1)+"count "+rank[i]);
+				if(rank[i] > max){
+					max = rank[i];
+					max_index = i;
+				}	
+			}
+			int[] result = new int[4];
+			result[0] = max_index;
+			int j=0;
+			for(int i=0; i<8; i++){
+				if(j<3){
+					if(rank[i] < max){
+						result[++j] = i;
+					}
+				}
+			}
+			for(int i=0; i<result.length;i++){
+				Log.d(TAG, "result:"+result[i]);
+			}
+			return result;
+		}
+	}
 
 	/**
 	 * Get the latest 4 reasons of EmotionManagement by reason type
@@ -984,14 +1100,13 @@ public class DatabaseControl {
 			String uid = cursor.getString(0);
 			int score = cursor.getInt(1);
 			int test = cursor.getInt(2);
-			int advice = cursor.getInt(3);
-			int manage = cursor.getInt(4);
-			int story = cursor.getInt(5);
-			int[] additionals = new int[8];
+			int note = cursor.getInt(3);
+			int question = cursor.getInt(4);
+			int coping = cursor.getInt(5);
+			int[] additionals = new int[4];
 			for (int j = 0; j < additionals.length; ++j)
-				additionals[j] = cursor.getInt(6 + j);
-			Rank rank = new Rank(uid, score, test, advice, manage, story,
-					additionals);
+				additionals[j] = cursor.getInt(5 + j);
+			Rank rank = new Rank(uid, score, test, note, question, coping, additionals);
 			cursor.close();
 			db.close();
 			return rank;
@@ -1022,14 +1137,13 @@ public class DatabaseControl {
 				String uid = cursor.getString(0);
 				int score = cursor.getInt(1);
 				int test = cursor.getInt(2);
-				int advice = cursor.getInt(3);
-				int manage = cursor.getInt(4);
-				int story = cursor.getInt(5);
-				int[] additionals = new int[8];
+				int note = cursor.getInt(3);
+				int question = cursor.getInt(4);
+				int coping = cursor.getInt(5);
+				int[] additionals = new int[4];
 				for (int j = 0; j < additionals.length; ++j)
-					additionals[j] = cursor.getInt(6 + j);
-				ranks[i] = new Rank(uid, score, test, advice, manage, story,
-						additionals);
+					additionals[j] = cursor.getInt(5 + j);
+				ranks[i] = new Rank(uid, score, test, note, question, coping, additionals);
 			}
 			cursor.close();
 			db.close();
@@ -1100,34 +1214,26 @@ public class DatabaseControl {
 				content.put("user_id", data.getUid());
 				content.put("total_score", data.getScore());
 				content.put("test_score", data.getTest());
-				content.put("advice_score", data.getAdvice());
-				content.put("manage_score", data.getManage());
-				content.put("story_score", data.getStory());
-				content.put("advice_questionnaire",
-						data.getAdviceQuestionnaire());
-				content.put("advice_emotion_diy", data.getAdviceEmotionDiy());
-				content.put("manage_voice", data.getManageVoice());
-				content.put("manage_emotion", data.getManageEmotion());
-				content.put("manage_additional", data.getManageAdditional());
-				content.put("story_read", data.getStoryRead());
-				content.put("story_test", data.getStoryTest());
-				content.put("story_fb", data.getStoryFb());
+				content.put("note_score", data.getNote());
+				content.put("question_score", data.getQuestion());
+				content.put("coping_score", data.getCoping());
+				content.put("times_score", data.getTestTimes());
+				content.put("pass_score", data.getTestPass());
+				content.put("normalQ_score", data.getNormalQ());
+				content.put("randomQ_score", data.getRandomQ());
+				
 				db.insert("Ranking", null, content);
 			} else {
 				sql = "UPDATE Ranking SET" + " total_score = "
 						+ data.getScore() + "," + " test_score = "
-						+ data.getTest() + "," + " advice_score = "
-						+ data.getAdvice() + "," + " manage_score="
-						+ data.getManage() + "," + " story_score = "
-						+ data.getStory() + "," + " advice_questionnaire="
-						+ data.getAdviceQuestionnaire() + ","
-						+ " advice_emotion_diy=" + data.getAdviceEmotionDiy()
-						+ "," + " manage_voice=" + data.getManageVoice() + ","
-						+ " manage_emotion=" + data.getManageEmotion() + ","
-						+ " manage_additional=" + data.getManageAdditional()
-						+ "," + " story_read=" + data.getStoryRead() + ","
-						+ " story_test=" + data.getStoryTest() + ","
-						+ " story_fb=" + data.getStoryFb()
+						+ data.getTest() + "," + " note_score = "
+						+ data.getNote() + "," + " question_score="
+						+ data.getQuestion() + "," + " coping_score = "
+						+ data.getCoping() + "," + " times_score = "
+						+ data.getTestTimes() + "," + " pass_score = "
+						+ data.getTestPass() + "," + " normalQ_score = "
+						+ data.getNormalQ() + "," + " randomQ_score = "
+						+ data.getRandomQ()
 						+ " WHERE user_id = " + "'" + data.getUid() + "'";
 				db.execSQL(sql);
 			}

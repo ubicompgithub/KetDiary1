@@ -46,6 +46,7 @@ public class QuestionDialog{
 	private String selectedAnswer = "";
 	
 	private RelativeLayout mainLayout;
+	private String[] type_str;
 	
 	private TextView tv_question, tv_answer1, tv_answer2, tv_answer3, tv_answer4, tv_confirm, tv_cancel;
 	private ImageView radio1, radio2, radio3, radio4;
@@ -72,6 +73,7 @@ public class QuestionDialog{
 		digitTypeface = Typefaces.getDigitTypeface();
 		digitTypefaceBold = Typefaces.getDigitTypefaceBold();
 		
+		type_str = context.getResources().getStringArray(R.array.trigger_list);
 	    setting();
 	    mainLayout.addView(boxLayout);
 
@@ -166,13 +168,21 @@ public class QuestionDialog{
 		String[] questions = null;
 		String[] answers = null;
 		Resources r = App.getContext().getResources();
+		
+		Random rnd = new Random();
+		int qtype = rnd.nextInt(3);
+		if(qtype == 0){
+			int[] type_rank = db.getNoteAddTypeRank(0, 0);
+		}
+		
+		
 		questions = r.getStringArray(R.array.question_1);
 		answers = r.getStringArray(R.array.question_answer_1);
-		
 		Random rand = new Random();
-		int qid = rand.nextInt(3);
+		int qid = rand.nextInt(questions.length);
 		question = questions[qid];
 		answer = new String(answers[qid * 4]);
+		
 
 		String[] tempSelection = new String[4];
 		for (int i = 0; i < tempSelection.length; ++i)
@@ -181,7 +191,7 @@ public class QuestionDialog{
 		String[] selectAns = new String[4];
 		for (int i = 0; i < selectAns.length; ++i)
 			selectAns[i] = tempSelection[i];
-
+		
 		//int ans_id = rand.nextInt(selectAns.length); //把隨機一個選項換成答案
 		//selectAns[ans_id] = answer;
 

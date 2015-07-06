@@ -145,67 +145,21 @@
                 android:layout_marginTop="16dp"
                 android:textColor="@color/black_gray" />
         </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/detail_item_2"
+        
+        
+		     
+    </RelativeLayout>
+    
+    <TextView
+            android:id="@+id/detail_backtolast"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/detail_item_1"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="22dp"
-            android:visibility="invisible" >
-
-            <TextView
-                android:id="@+id/detail_item_text_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black_gray"
-                android:textSize="@dimen/large_text_size" />
-
-            <ImageView
-                android:id="@+id/detail_progress_bg_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/detail_item_text_2"
-                android:layout_marginTop="6dp"
-                android:src="@drawable/rank_chart_bar_bg" />
-
-            <ImageView
-                android:id="@+id/detail_progress_start_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/detail_progress_bg_2"
-                android:layout_below="@+id/detail_item_text_2"
-                android:layout_marginTop="6dp"
-                android:src="@drawable/progress_bar_start" />
-
-            <ImageView
-                android:id="@+id/detail_progress_inner_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/detail_item_text_2"
-                android:layout_marginTop="6dp"
-                android:layout_toRightOf="@+id/detail_progress_start_2"
-                android:scaleType="fitXY"
-                android:src="@drawable/progress_bar_inner" />
-
-            <ImageView
-                android:id="@+id/detail_progress_end_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/detail_item_text_2"
-                android:layout_marginTop="6dp"
-                android:layout_toRightOf="@+id/detail_progress_inner_2"
-                android:src="@drawable/progress_bar_end" />
-
-            <TextView
-                android:id="@+id/detail_comment_2"
-                android:layout_width="210dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/detail_progress_bg_2"
-                android:layout_marginTop="6dp"
-                android:textColor="@color/black_gray" />
-        </RelativeLayout>
-    </RelativeLayout>
-
+            android:layout_gravity="bottom|center"
+            android:layout_marginLeft="6dp"
+            android:layout_marginBottom="80dp"
+            android:text="點擊頁面回到雷達圖"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/large_text_size" 
+            />
+			
 </FrameLayout>

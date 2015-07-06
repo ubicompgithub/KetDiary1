@@ -87,10 +87,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/about_content"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginTop="2.6dp"
+                    android:layout_marginLeft="26dp"                    
                     android:gravity="left|center_vertical"
-                    android:lineSpacingMultiplier="1.2"
                     android:text="@string/phone"
                     android:textColor="@color/text_gray"
                     android:textSize="@dimen/normal_text_size"/>
@@ -102,8 +100,7 @@
                     android:layout_below="@+id/about_content"
                     android:layout_marginLeft="6.7dp"
                     android:layout_toRightOf="@+id/about_phone"
-                    android:gravity="left|center_vertical"
-                    android:lineSpacingMultiplier="1.2"
+                    android:gravity="left|center_vertical"                    
                     android:text="@string/phone_number"
                     android:textColor="@color/text_gray"
                     android:textSize="@dimen/normal_text_size"/>
@@ -116,7 +113,7 @@
                     android:layout_marginLeft="6.7dp"
                     android:layout_toRightOf="@+id/about_phone"
                     android:gravity="left|center_vertical"
-                    android:lineSpacingMultiplier="1.2"
+                    
                     android:text="@string/email"
                     android:textColor="@color/text_gray"
                     android:textSize="@dimen/normal_text_size"/>
@@ -130,7 +127,7 @@
                     android:layout_marginBottom="40dp"
                     android:layout_toRightOf="@+id/about_phone"
                     android:gravity="left|center_vertical"
-                    android:lineSpacingMultiplier="1.2"
+                    
                     
                     android:textColor="@color/text_gray"
                     android:textSize="@dimen/normal_text_size"/>

@@ -1,6 +1,14 @@
 package com.ubicomp.ketdiary.db;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -12,14 +20,18 @@ import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.ubicomp.ketdiary.check.DefaultCheck;
+import com.ubicomp.ketdiary.check.NetworkCheck;
 import com.ubicomp.ketdiary.data.structure.CopingSkill;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.QuestionTest;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
 import com.ubicomp.ketdiary.data.structure.TestResult;
+import com.ubicomp.ketdiary.file.MainStorage;
 
 /**
  * Used for upload data to the server
@@ -29,11 +41,37 @@ import com.ubicomp.ketdiary.data.structure.TestResult;
 public class DataUploader {
 
 	private static DataUploadTask uploader = null;
+	private static Thread cleanThread = null;
 
 	private static final String TAG = "UPLOAD";
 
 	/** Upload the data & remove uploaded data */
 	public static void upload() {
+		
+		/*if (cleanThread != null && !cleanThread.isInterrupted()) { //May be used some day.
+			cleanThread.interrupt();
+			cleanThread = null;
+		}
+
+		cleanThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Cleaner.clean();
+				} catch (Exception e) {
+				}
+			}
+		});
+		cleanThread.start();
+		try {
+			cleanThread.join(500);
+		} catch (InterruptedException e) {
+		}*/
+		
+		
+		if (DefaultCheck.check() || !NetworkCheck.networkCheck())
+			return;
+		
 		if (SynchronizedLock.sharedLock.tryLock()) {
 			SynchronizedLock.sharedLock.lock();
 			uploader = new DataUploadTask();
@@ -51,10 +89,13 @@ public class DataUploader {
 		public static final int ERROR = -1;
 		/** ENUM UPLOAD SUCCESS */
 		public static final int SUCCESS = 1;
-
+		private File logDir;
+		
 		/** Constructor */
 		public DataUploadTask() {
 			db = new DatabaseControl();
+			logDir = new File(MainStorage.getMainStorageDirectory(),
+					"sequence_log");
 		}
 
 		@Override
@@ -119,7 +160,84 @@ public class DataUploader {
 				}
 			}
 			
+			// ClickLog
+			String not_uploaded_files[] = getNotUploadedClickLog();
+			if (not_uploaded_files != null) {
+				for (int i = 0; i < not_uploaded_files.length; ++i) {
+					File logFile = new File(logDir.getPath(), not_uploaded_files[i]);
+						if (logFile.exists()) {
+							Log.d(TAG, "file = " + logFile.getPath());
+							if (connectToServer(logFile) == ERROR)
+								Log.d(TAG, "FAIL TO UPLOAD - Clicklog");
+						}
+					}
+			}
+			else{
+				Log.d(TAG,"no clicklog");
+			}
+			
 			return null;
+		}
+		
+		private String[] getNotUploadedClickLog() {
+			if (!logDir.exists()) {
+				Log.d(TAG, "Cannot find clicklog dir");
+				return null;
+			}
+
+			String[] all_logs = null;
+			String latestUpload = null;
+			File latestUploadFile = new File(logDir, "latest_uploaded");
+			if (latestUploadFile.exists()) {
+				try {
+					@SuppressWarnings("resource")
+					BufferedReader br = new BufferedReader(new FileReader(latestUploadFile));
+					latestUpload = br.readLine();
+				} catch (IOException e) {
+				}
+			}
+			all_logs = logDir.list(new logFilter(latestUpload));
+			return all_logs;
+		}
+
+		private class logFilter implements FilenameFilter {
+			String _latestUpload;
+			String today;
+
+			@SuppressLint("SimpleDateFormat")
+			public logFilter(String latestUpload) {
+				_latestUpload = latestUpload;
+				Calendar cal = Calendar.getInstance();
+				cal.setTimeInMillis(System.currentTimeMillis());
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd");
+				today = sdf.format(cal.getTime()) + ".txt";
+			}
+
+			@Override
+			public boolean accept(File arg0, String arg1) {
+				if (arg1.equals("latest_uploaded"))
+					return false;
+				else {
+					if (today.compareTo(arg1) > 0)
+						if (_latestUpload == null || (_latestUpload != null && (arg1.compareTo(_latestUpload)) > 0))
+							return true;
+					return false;
+				}
+			}
+		}
+		
+		private void set_uploaded_logfile(String name) {
+			File latestUploadFile = new File(logDir, "latest_uploaded");
+			BufferedWriter writer;
+			try {
+				writer = new BufferedWriter(new FileWriter(latestUploadFile));
+				writer.write(name);
+				writer.newLine();
+				writer.flush();
+				writer.close();
+			} catch (IOException e) {
+				writer = null;
+			}
 		}
 
 		@Override
@@ -138,21 +256,6 @@ public class DataUploader {
 			try {
 				DefaultHttpClient httpClient = HttpSecureClientGenerator.getSecureHttpClient();
 				HttpPost httpPost = HttpPostGenerator.genPost();
-				if (!upload(httpClient, httpPost))
-					return ERROR;
-			} catch (Exception e) {
-				Log.d(TAG, "EXCEPTION:" + e.toString());
-				return ERROR;
-			}
-			return SUCCESS;
-		}
-		
-		private int connectToServer(Datatype.TestDetail ttd){
-			try {
-				Log.d("a", "1");
-				DefaultHttpClient httpClient = HttpSecureClientGenerator.getSecureHttpClient();
-				Log.d("a", "2");
-				HttpPost httpPost = HttpPostGenerator.genPost(ttd);
 				if (!upload(httpClient, httpPost))
 					return ERROR;
 			} catch (Exception e) {
@@ -243,6 +346,23 @@ public class DataUploader {
 				if (upload(httpClient, httpPost)){
 					db.setCopingSkillUploaded(data.getTv().getTimestamp());
 					Log.d(TAG, "Upload CopingSkill Success.");
+				}
+				else
+					return ERROR;
+			} catch (Exception e) {
+				Log.d(TAG, "EXCEPTION:" + e.toString());
+				return ERROR;
+			}
+			return SUCCESS;
+		}
+		
+		private int connectToServer(File data) {// ClickLog
+			try {
+				DefaultHttpClient httpClient = HttpSecureClientGenerator.getSecureHttpClient();
+				HttpPost httpPost = HttpPostGenerator.genPost(data);
+				if (upload(httpClient, httpPost)){
+					set_uploaded_logfile(data.getName());
+					Log.d(TAG, "Upload ClickLog Success.");
 				}
 				else
 					return ERROR;

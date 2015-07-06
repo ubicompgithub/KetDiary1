@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/toast_background" 
+    android:orientation="vertical" 
+    android:id="@+id/toast_root">
+    
+    <ImageView
+            android:id="@+id/toast_congratulation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="70dp"
+            android:src="@drawable/toast_congratulation" />
+
+    <FrameLayout
+	    	        android:id="@+id/toast_frameLayout"
+	    	        android:layout_width="150dp"
+	    	        android:layout_height="150dp"
+	    	        android:layout_marginTop="45dp" 
+	    	        android:layout_gravity="center">
+	
+	    	        <ImageView
+	    	            android:id="@+id/toast_circle"
+	    	            android:layout_width="wrap_content"
+	    	            android:layout_height="wrap_content"
+	    	            android:src="@drawable/toast_circle_level10" />
+	
+	    	        <ImageView
+	    	            android:id="@+id/toast_circlecontent"
+	    	            android:layout_width="wrap_content"
+	    	            android:layout_height="wrap_content"
+	    	            
+	    	            android:src="@drawable/toast_goodjob" />
+	
+	</FrameLayout>
+	
+    <TextView
+	    	            android:id="@+id/toast_description"
+	    	            android:layout_width="wrap_content"
+	    	            android:layout_height="wrap_content"
+	    	            android:layout_gravity="center"
+	    	            android:layout_marginTop="50dp"
+	    	            android:text="Level Up"
+	    	            android:textColor="@color/red"
+	    	            android:textSize="22sp" />
+</LinearLayout>

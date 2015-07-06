@@ -16,6 +16,7 @@ import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpConnectionParams;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.data.structure.Rank;
@@ -25,6 +26,7 @@ public class UserLevelCollector {
 
 	private static String SERVER_URL_RANK_ALL;
 	private static String SERVER_URL_RANK_WEEK;
+	private static String TAG = "UserLevelCollect";
 
 	private Context context;
 	private ResponseHandler<String> responseHandler;
@@ -65,7 +67,9 @@ public class UserLevelCollector {
 			String responseString = responseHandler
 					.handleResponse(httpResponse);
 			int httpStatusCode = httpResponse.getStatusLine().getStatusCode();
-
+			
+			Log.d(TAG, responseString);
+			
 			if (responseString != null && httpStatusCode == HttpStatus.SC_OK) {
 				Rank[] ranks = parse(responseString);
 				return ranks;
@@ -140,14 +144,15 @@ public class UserLevelCollector {
 			else
 				level = Integer.valueOf(items[1]);
 			int test = Integer.valueOf(items[2]);
-			int advice = Integer.valueOf(items[3]);
-			int manage = Integer.valueOf(items[4]);
-			int story = Integer.valueOf(items[5]);
-			int[] additionals = new int[8];
+			int note = Integer.valueOf(items[3]);
+			int question = Integer.valueOf(items[4]);
+			int coping = Integer.valueOf(items[5]);
+			int[] additionals = new int[4];
 			for (int j = 0; j < additionals.length; ++j)
-				additionals[j] = Integer.valueOf(items[j + 6]);
-			ranks[i] = new Rank(uid, level, test, advice, manage, story,
-					additionals);
+				additionals[j] = Integer.valueOf(items[5+j]);
+
+			ranks[i] = new Rank(uid, level, test, note, question, coping, additionals);
+
 		}
 
 		return ranks;

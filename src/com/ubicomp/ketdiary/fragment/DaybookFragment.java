@@ -2,6 +2,7 @@ package com.ubicomp.ketdiary.fragment;
 
 import java.io.File;
 import java.util.Calendar;
+import java.util.Random;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -9,6 +10,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -75,7 +77,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private View diaryItem;
 	private static ScrollView sv;
 	private int filter_count = 0;
-	
+	private AnimationDrawable animation;
 
 	@SuppressWarnings("deprecation")
 	private SlidingDrawer drawer;
@@ -108,7 +110,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	
 	public View lineChartBar, lineChartView, lineChartFilter, calendarBar, calendarView, filterView;
 	
-	public ImageView addButton;
+	public ImageView addButton, randomButton;
 	
 	public AddNoteDialog2 notePage = null;
 	public boolean isNotePageShow = false;
@@ -122,6 +124,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private static final String[] dayOfWeek = {" ", "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
 	private static final String[] timeslot = {"上午", "下午", "晚上"};
 	private static final String[] monthName = {"一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"};
+	
 	
 	private int sustainMonth = PreferenceControl.getSustainMonth();
 	private Calendar startDay = PreferenceControl.getStartDate();
@@ -217,6 +220,10 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	    
 	    
 	    addButton = (ImageView) view.findViewById(R.id.add_button);
+	    
+	    randomButton = (ImageView) view.findViewById(R.id.random_question);
+	    animation = (AnimationDrawable) randomButton.getDrawable();
+	    
 		filterAll = (ImageView) lineChartFilter.findViewById(R.id.filter_all);
 	    filter1 = (ImageView) lineChartFilter.findViewById(R.id.filter_1);
 	    filter2 = (ImageView) lineChartFilter.findViewById(R.id.filter_2);
@@ -449,6 +456,24 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			}
 		});
 		addButton.setOnTouchListener(new ScaleOnTouchListener());
+		
+		Random rand = new Random();
+		int prob = rand.nextInt(100);
+		if(prob >= 50 ){
+			randomButton.setVisibility(View.VISIBLE);
+			randomButton.setImageResource(R.anim.animation_random_question);
+			animation = (AnimationDrawable) randomButton.getDrawable();
+			animation.start();
+		}
+		
+		randomButton.bringToFront();
+		randomButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				randomButton.setVisibility(View.GONE);
+			}
+		});
+		randomButton.setOnTouchListener(new ScaleOnTouchListener());
 		
 		
 		

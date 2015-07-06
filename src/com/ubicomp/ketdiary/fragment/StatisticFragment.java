@@ -31,6 +31,7 @@ import android.widget.ScrollView;
 import com.ubicomp.ketdiary.statistic.coping.CopingActivity;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.data.structure.Rank;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.dialog.QuestionDialog;
 import com.ubicomp.ketdiary.statistic.AnalysisCounterView;
@@ -180,7 +181,7 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 		analysisViews = new StatisticPageView[3];
 		//analysisViews[0] = new AnalysisCounterView();
 		analysisViews[0] = new AnalysisProsConsView();
-		analysisViews[1] = new AnalysisCounterView();
+		analysisViews[1] = new AnalysisCounterView(statisticFragment);
 		analysisViews[2] = new AnalysisRankView(statisticFragment);
 		
 		statisticViewAdapter = new StatisticPagerAdapter();
@@ -428,11 +429,48 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 			@Override
 			public void onClick(View v) {
 				//ClickLog.Log(ClickLogId.STATISTIC_DETAIL_CHART_CLOSE);
-				removeDetailChart();
+				//removeDetailChart();
+				showRadarChart(calculateRank());
 			}
 		});
 		dv.invalidate();
 		enablePage(false);
+	}
+	
+	private ArrayList<Double> calculateRank() {
+		ArrayList<Double> result = new ArrayList<Double>();
+		Rank[] ranks = db.getAllRanks();
+		if (ranks == null) {
+			result.add(0.1);
+			result.add(0.1);
+			result.add(0.1);
+			result.add(0.1);
+			return result;
+		}
+		String uid = PreferenceControl.getUID();
+		int test = 0, note = 0, question = 0, coping = 0;
+		for (int i = 0; i < ranks.length; ++i) {
+			if (ranks[i].getUid().equals(uid)) {
+				test = ranks[i].getTest();
+				note = ranks[i].getNote();
+				question = ranks[i].getQuestion();
+				coping = ranks[i].getCoping();
+				break;
+			}
+		}
+
+		double test_r, advice_r, manage_r, story_r;
+		test_r = (double) ((double) test) / 600.0;
+		advice_r = (double) ((double) note) / 600.0;
+		manage_r = (double) ((double) question) / 700.0;
+		story_r = (double) ((double) coping) / 600.0;
+
+		result.add(test_r);
+		result.add(advice_r);
+		result.add(manage_r);
+		result.add(story_r);
+
+		return result;
 	}
 
 	public void removeDetailChart() {

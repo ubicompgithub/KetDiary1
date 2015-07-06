@@ -170,74 +170,85 @@ public class DetailChart {
 
 			int len = 0;
 			int idx = 0;
-
+			
 			switch (type) {
 			case TYPE_DETECTION:
 				title.setText(R.string.radar_label0_full);
 
-				len = Math.min(rank.getTest() * total_len / 600, total_len);
-				idx = Math.min(rank.getTest() * 3 / 600,
+				len = Math.min(rank.getTestTimes() * total_len / 600, total_len);
+				idx = Math.min(rank.getTestTimes() * 3 / 600,
 						detectionComment.length - 1);
 				params[0].width = len;
 				subtitles[0].setText(R.string.radar_label0_0);
 				items[0].updateViewLayout(bar_progress[0], params[0]);
-				comments[0].setText(detectionComment[idx]);
+				comments[0].setText(detectionComment[0]);
 
-				items[0].setVisibility(View.VISIBLE);
-				items[1].setVisibility(View.INVISIBLE);
+				len = Math.min(rank.getTestPass() * total_len / 300,
+						total_len);
+				idx = Math.min(rank.getTestPass() * 3 / 300,
+						detectionComment.length - 1);
+				params[1].width = len;
+				subtitles[1].setText(R.string.radar_label0_1);
+				items[1].updateViewLayout(bar_progress[1], params[1]);
+				comments[1].setText(detectionComment[1]);
+				
+				items[0].setVisibility(View.VISIBLE);	
+				items[1].setVisibility(View.VISIBLE);
 				//items[2].setVisibility(View.INVISIBLE);
 				break;
 
 			case TYPE_ADVICE:
 				title.setText(R.string.radar_label1_full);
 
-				len = Math.min(rank.getAdviceQuestionnaire() * total_len / 300,
+				len = Math.min(rank.getCoping() * total_len / 300,
 						total_len);
-				idx = Math.min(rank.getAdviceQuestionnaire() * 3 / 300,
+				idx = Math.min(rank.getCoping() * 3 / 300,
 						adviceQuestionComment.length - 1);
 				params[0].width = len;
 				subtitles[0].setText(R.string.radar_label1_0);
 				items[0].updateViewLayout(bar_progress[0], params[0]);
 				comments[0].setText(adviceQuestionComment[idx]);
-
-				len = Math.min(rank.getAdviceEmotionDiy() * total_len / 300,
+				
+				/*
+				len = Math.min(rank.getCoping() * total_len / 300,
 						total_len);
-				idx = Math.min(rank.getAdviceEmotionDiy() * 3 / 300,
+				idx = Math.min(rank.getCoping() * 3 / 300,
 						adviceEmotionDIYComment.length - 1);
 				params[1].width = len;
 				subtitles[1].setText(R.string.radar_label1_1);
 				items[1].updateViewLayout(bar_progress[1], params[1]);
-				comments[1].setText(adviceEmotionDIYComment[idx]);
+				comments[1].setText(adviceEmotionDIYComment[idx]);*/
+				
 				items[0].setVisibility(View.VISIBLE);
-				items[1].setVisibility(View.VISIBLE);
+				items[1].setVisibility(View.INVISIBLE);
 				//items[2].setVisibility(View.INVISIBLE);
 				break;
 
 			case TYPE_MANAGE:
 				title.setText(R.string.radar_label2_full);
 
-				len = Math.min(rank.getManageVoice() * total_len / 300,
+				len = Math.min(rank.getNormalQ() * total_len / 300,
 						total_len);
-				idx = Math.min(rank.getManageVoice() * 3 / 300,
+				idx = Math.min(rank.getNormalQ() * 3 / 300,
 						manageVoiceComment.length - 1);
 				params[0].width = len;
 				subtitles[0].setText(R.string.radar_label2_0);
 				items[0].updateViewLayout(bar_progress[0], params[0]);
-				comments[0].setText(manageVoiceComment[idx]);
+				comments[0].setText(manageVoiceComment[0]);
 
-				len = Math.min(rank.getManageEmotion() * total_len / 300,
+				len = Math.min(rank.getNormalQ() * total_len / 300,
 						total_len);
-				idx = Math.min(rank.getManageEmotion() * 3 / 300,
+				idx = Math.min(rank.getNormalQ() * 3 / 300,
 						manageEmotionComment.length - 1);
 				params[1].width = len;
 				subtitles[1].setText(R.string.radar_label2_1);
 				items[1].updateViewLayout(bar_progress[1], params[1]);
-				comments[1].setText(manageEmotionComment[idx]);
+				comments[1].setText(manageEmotionComment[1]);
 
-				len = Math.min(rank.getManageAdditional() * total_len / 100,
-						total_len);
-				idx = Math.min(rank.getManageEmotion() * 2 / 100,
-						manageAdditionalComment.length - 1);
+//				len = Math.min(rank.getManageAdditional() * total_len / 100,
+//						total_len);
+//				idx = Math.min(rank.getManageEmotion() * 2 / 100,
+//						manageAdditionalComment.length - 1);
 //				params[2].width = len;
 //				subtitles[2].setText(R.string.radar_label2_2);
 //				items[2].updateViewLayout(bar_progress[2], params[2]);
@@ -252,34 +263,35 @@ public class DetailChart {
 				title.setText(R.string.radar_label3_full);
 
 				len = Math
-						.min(rank.getStoryRead() * total_len / 300, total_len);
-				idx = Math.min(rank.getStoryRead() * 3 / 300,
+						.min(rank.getNote() * total_len / 300, total_len);
+				idx = Math.min(rank.getNote() * 3 / 300,
 						storyReadComment.length - 1);
 				params[0].width = len;
 				subtitles[0].setText(R.string.radar_label3_0);
 				items[0].updateViewLayout(bar_progress[0], params[0]);
 				comments[0].setText(storyReadComment[idx]);
 
+				/*
 				len = Math
-						.min(rank.getStoryTest() * total_len / 300, total_len);
-				idx = Math.min(rank.getStoryTest() * 3 / 300,
+						.min(rank.getNote() * total_len / 300, total_len);
+				idx = Math.min(rank.getNote() * 3 / 300,
 						storyTestComment.length - 1);
 				params[1].width = len;
 				subtitles[1].setText(R.string.radar_label3_1);
 				items[1].updateViewLayout(bar_progress[1], params[1]);
-				comments[1].setText(storyTestComment[idx]);
+				comments[1].setText(storyTestComment[idx]);*/
 
-				len = Math.min(rank.getStoryFb() * total_len / 100 * 7,
-						total_len);
-				idx = Math.min(rank.getStoryFb() * 2 / 100 * 7,
-						storyFbComment.length - 1);
+//				len = Math.min(rank.getStoryFb() * total_len / 100 * 7,
+//						total_len);
+//				idx = Math.min(rank.getStoryFb() * 2 / 100 * 7,
+//						storyFbComment.length - 1);
 //				params[2].width = len;
 //				subtitles[2].setText(R.string.radar_label3_2);
 //				items[2].updateViewLayout(bar_progress[2], params[2]);
 //				comments[2].setText(storyFbComment[idx]);
 
 				items[0].setVisibility(View.VISIBLE);
-				items[1].setVisibility(View.VISIBLE);
+				items[1].setVisibility(View.INVISIBLE);
 				//items[2].setVisibility(View.VISIBLE);
 				break;
 			default:

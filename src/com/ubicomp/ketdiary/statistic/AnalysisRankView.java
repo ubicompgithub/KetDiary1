@@ -51,7 +51,6 @@ public class AnalysisRankView extends StatisticPageView {
 	private NetworkTask netTask;
 	private PointerHandler pointerHandler = new PointerHandler();
 	private ShowRadarChart showRadarChart;
-
 	public AnalysisRankView(ShowRadarChart showRadarChart) {
 		super(R.layout.analysis_rank_view);
 		
@@ -368,12 +367,12 @@ public class AnalysisRankView extends StatisticPageView {
 		contentLayoutMonth.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				showRadarChart.showRadarChart(calculateRank());
+				//showRadarChart.showRadarChart(calculateRank());
 			}
 		});
 
-		//netTask = new NetworkTask();
-		//netTask.execute();
+		netTask = new NetworkTask();
+		netTask.execute();
 		pointerHandler.sendEmptyMessage(0);
 	}
 
@@ -447,22 +446,22 @@ public class AnalysisRankView extends StatisticPageView {
 			return result;
 		}
 		String uid = PreferenceControl.getUID();
-		int test = 0, advice = 0, manage = 0, story = 0;
+		int test = 0, note = 0, question = 0, coping = 0;
 		for (int i = 0; i < ranks.length; ++i) {
 			if (ranks[i].getUid().equals(uid)) {
 				test = ranks[i].getTest();
-				advice = ranks[i].getAdvice();
-				manage = ranks[i].getManage();
-				story = ranks[i].getStory();
+				note = ranks[i].getNote();
+				question = ranks[i].getQuestion();
+				coping = ranks[i].getCoping();
 				break;
 			}
 		}
 
 		double test_r, advice_r, manage_r, story_r;
 		test_r = (double) ((double) test) / 600.0;
-		advice_r = (double) ((double) advice) / 600.0;
-		manage_r = (double) ((double) manage) / 700.0;
-		story_r = (double) ((double) story) / 600.0;
+		advice_r = (double) ((double) note) / 600.0;
+		manage_r = (double) ((double) question) / 700.0;
+		story_r = (double) ((double) coping) / 600.0;
 
 		result.add(test_r);
 		result.add(advice_r);

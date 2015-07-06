@@ -197,8 +197,6 @@
         <item>生活中能持續戒毒。此應用程式需要搭</item>
         <item>配專用口水檢測器方可使用。</item>
         <item>應用介面視覺設計：</item>
-        <item>插畫：</item>
-        <item>著色：</item>
     </string-array>
 
     <string name="phone">聯絡開發團隊：</string>
@@ -235,46 +233,54 @@
     <string name="bonus">特殊獎勵</string>
     <string name="lock_message">恭喜您已完成戒酒小幫手的療程，感謝您於療程期間的協助，希望您之後繼續保持並遠離酒精！\n\n因為研究需求，將暫停使用戒酒小幫手三個月。 這段期間，請定期回診進行追蹤觀察，再次感謝你對本研究的幫忙。\n\n您現在可以選擇移除掉戒酒小幫手，或是暫時將戒酒小幫手保留在手機內。三個月後，若是有需要再次啟用戒酒小幫手，請點選最下面的"關於"以聯絡戒酒小幫手團隊。謝謝！\n\n戒酒小幫手團隊　敬上</string>
     <string name="lock_about">完成訊息：</string>
+    
     <string name="radar_title">我的表現分析</string>
-    <string name="radar_label0">酒測\n表現</string>
-    <string name="radar_label0_full">\t\t\酒測功能　完成度</string>
-    <string name="radar_label0_0">酒測表現</string>
-    <string name="radar_label1">自我\n調適</string>
-    <string name="radar_label1_full">自我調適功能　完成度</string>
-    <string name="radar_label1_0">諮詢建議</string>
-    <string name="radar_label1_1">心情DIY</string>
-    <string name="radar_label2">自我\n管理</string>
-    <string name="radar_label2_full">自我管理功能　完成度</string>
-    <string name="radar_label2_0">心情紀錄</string>
-    <string name="radar_label2_1">情緒管理</string>
-    <string name="radar_label2_2">即時自我評量</string>
-    <string name="radar_label3">歷程\n分享</string>
-    <string name="radar_label3_full">歷程分享功能　完成度</string>
-    <string name="radar_label3_0">故事分享</string>
-    <string name="radar_label3_1">自我測試</string>
-    <string name="radar_label3_2">臉書分享</string>
+    
+    <string name="radar_label0">自我\n檢測</string>
+    <string name="radar_label0_full">自我檢測功能　完成度</string>
+    <string name="radar_label0_0">檢測次數</string>
+    <string name="radar_label0_1">檢測通過</string>
+    
+    <string name="radar_label1">應對\n技巧</string>
+    <string name="radar_label1_full">應對技巧功能　完成度</string>
+    <string name="radar_label1_0">應對技巧</string>
+   
+    <string name="radar_label2">問答\n參與</string>
+    <string name="radar_label2_full">問答參與功能　完成度</string>
+    <string name="radar_label2_0">一般問答</string>
+    <string name="radar_label2_1">隨機式問答</string>
+    
+    <string name="radar_label3">記事\n表現</string>
+    <string name="radar_label3_full">記事表現功能　完成度</string>
+    <string name="radar_label3_0">記事表現</string>
+
     <string name="score">分</string>
 
     <string-array name="radar_0">
-        <item>每天進行酒測是成功的第一步</item>
-        <item>在各時段進行酒測、遠離酒精、邁向成功</item>
+        <item>每天進行口水檢測，是成功的第一步</item>
+        <item>幸福，從拒絕愷他命開始</item>
         <item>表現優秀，請繼續加油！</item>
     </string-array>
     <string-array name="radar_1_0">
-        <item>完成酒測後，可點擊\'！\'按鈕尋求諮詢</item>
-        <item>每次酒測後，使用諮詢進一步幫助自己</item>
+        <item>可點擊\'！\'按鈕學習應對技巧</item>
         <item>表現優秀，請繼續加油！</item>
     </string-array>
+    <string-array name="radar_2_0">
+        <item>點擊\'自我測驗\'，測試一下自己</item>
+        <item>每日隨機出現問題</item>
+        <item>表現優秀，請繼續加油！</item>
+    </string-array>
+    <string-array name="radar_3_0">
+        <item>別忘了每天記下發生的事喔！</item>
+        <item>表現優秀，請繼續加油！</item>
+    </string-array>
+    
     <string-array name="radar_1_1">
         <item>諮詢建議中，使用心情DIY幫助自己</item>
         <item>心情不佳時，可隨時使用心情DIY舒緩心情</item>
         <item>表現優秀，請繼續加油！</item>
     </string-array>
-    <string-array name="radar_2_0">
-        <item>每天可在自我管理記錄中錄下留言</item>
-        <item>錄下留言讓自己更了解自己</item>
-        <item>表現優秀，請繼續加油！</item>
-    </string-array>
+    
     <string-array name="radar_2_1">
         <item>每天可使用情緒管理記錄心情</item>
         <item>可隨時留下心情供自己日後思索</item>
@@ -284,11 +290,7 @@
         <item>每天晚上會跳出\'即時自我評量\'喔</item>
         <item>表現優秀，請繼續加油！</item>
     </string-array>
-    <string-array name="radar_3_0">
-        <item>每天翻閱細讀圖畫，會有小發現喔</item>
-        <item>多多翻閱細讀圖畫，令自我成長</item>
-        <item>表現優秀，請繼續加油！</item>
-    </string-array>
+    
     <string-array name="radar_3_1">
         <item>點選圖畫上方黃色書籤，測試一下吧</item>
         <item>若不知道測試答案，回到圖畫再讀一次</item>
