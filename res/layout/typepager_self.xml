@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-10dp" >
+        android:layout_marginTop="30dp" >
 
         <ImageView
             android:id="@+id/vts_iv_cry"
@@ -39,7 +39,7 @@
         <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-30dp"
+        android:layout_marginTop="23dp"
         android:id="@+id/self_bottom_layout" >
 
         <ImageView
