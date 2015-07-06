@@ -30,6 +30,8 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
+import com.ubicomp.ketdiary.clicklog.ClickLog;
+import com.ubicomp.ketdiary.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.dialog.CheckResultDialog;
@@ -413,23 +415,23 @@ public class MainActivity extends FragmentActivity {
 			
 			
 			LoadingDialogControl.show(MainActivity.this);
-			/*setTimers();
+			//setTimers();
 			if (tabId.equals(tabName[0])) {
-				
+				ClickLog.Log(ClickLogId.TAB_TEST);
 				customTabs[1]
 						.showHighlight(PreferenceControl.getCouponChange());
-				customTabs[2].showHighlight(PreferenceControl.getPageChange());
+				customTabs[2].showHighlight(PreferenceControl.getRandomQustion());
 			} else if (tabId.equals(tabName[1])) {
-				
+				ClickLog.Log(ClickLogId.TAB_STATISTIC);
 				customTabs[1].showHighlight(false);
-				customTabs[2].showHighlight(PreferenceControl.getPageChange());
+				customTabs[2].showHighlight(PreferenceControl.getRandomQustion());
 			} else if (tabId.equals(tabName[2])) {
-				
+				ClickLog.Log(ClickLogId.TAB_DAYBOOK);
 				customTabs[1]
 						.showHighlight(PreferenceControl.getCouponChange());
 				customTabs[2].showHighlight(false);
 			}
-			*/
+			
 			for (int i = 0; i < fragments.length; ++i) {
 				if (fragments[i] != null)
 					ft.detach(fragments[i]);
@@ -616,8 +618,8 @@ public class MainActivity extends FragmentActivity {
 			startActivity(newIntent);
 			return true;
 		case R.id.menu_setting:
-			//newIntent = new Intent(this, NoteActivity.class);
-			//startActivity(newIntent);
+			newIntent = new Intent(this, SettingActivity.class);
+			startActivity(newIntent);
 			//setNotePage();
 			return true;
 		default:

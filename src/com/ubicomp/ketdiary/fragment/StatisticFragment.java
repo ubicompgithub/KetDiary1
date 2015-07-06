@@ -181,7 +181,7 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 		analysisViews = new StatisticPageView[3];
 		//analysisViews[0] = new AnalysisCounterView();
 		analysisViews[0] = new AnalysisProsConsView();
-		analysisViews[1] = new AnalysisCounterView();
+		analysisViews[1] = new AnalysisCounterView(statisticFragment);
 		analysisViews[2] = new AnalysisRankView(statisticFragment);
 		
 		statisticViewAdapter = new StatisticPagerAdapter();

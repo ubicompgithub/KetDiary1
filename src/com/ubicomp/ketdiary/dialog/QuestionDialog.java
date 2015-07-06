@@ -179,7 +179,7 @@ public class QuestionDialog{
 		questions = r.getStringArray(R.array.question_1);
 		answers = r.getStringArray(R.array.question_answer_1);
 		Random rand = new Random();
-		int qid = rand.nextInt(3);
+		int qid = rand.nextInt(questions.length);
 		question = questions[qid];
 		answer = new String(answers[qid * 4]);
 		

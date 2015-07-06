@@ -51,7 +51,6 @@ public class AnalysisRankView extends StatisticPageView {
 	private NetworkTask netTask;
 	private PointerHandler pointerHandler = new PointerHandler();
 	private ShowRadarChart showRadarChart;
-
 	public AnalysisRankView(ShowRadarChart showRadarChart) {
 		super(R.layout.analysis_rank_view);
 		
@@ -368,7 +367,7 @@ public class AnalysisRankView extends StatisticPageView {
 		contentLayoutMonth.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				showRadarChart.showRadarChart(calculateRank());
+				//showRadarChart.showRadarChart(calculateRank());
 			}
 		});
 

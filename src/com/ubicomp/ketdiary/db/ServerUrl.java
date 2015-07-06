@@ -70,7 +70,7 @@ public class ServerUrl {
 	 * @return url
 	 */
 	public static String SERVER_URL_CLICKLOG() {
-		final String URL = "upload/clickLog.php";
+		final String URL = "test/clickLog.php";
 			return SERVER_URL + URL;
 	}
 	

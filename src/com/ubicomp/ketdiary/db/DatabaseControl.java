@@ -1100,7 +1100,10 @@ public class DatabaseControl {
 			int note = cursor.getInt(3);
 			int question = cursor.getInt(4);
 			int coping = cursor.getInt(5);
-			Rank rank = new Rank(uid, score, test, note, question, coping);
+			int[] additionals = new int[4];
+			for (int j = 0; j < additionals.length; ++j)
+				additionals[j] = cursor.getInt(5 + j);
+			Rank rank = new Rank(uid, score, test, note, question, coping, additionals);
 			cursor.close();
 			db.close();
 			return rank;
@@ -1134,7 +1137,10 @@ public class DatabaseControl {
 				int note = cursor.getInt(3);
 				int question = cursor.getInt(4);
 				int coping = cursor.getInt(5);
-				ranks[i] = new Rank(uid, score, test, note, question, coping);
+				int[] additionals = new int[4];
+				for (int j = 0; j < additionals.length; ++j)
+					additionals[j] = cursor.getInt(5 + j);
+				ranks[i] = new Rank(uid, score, test, note, question, coping, additionals);
 			}
 			cursor.close();
 			db.close();
@@ -1208,13 +1214,23 @@ public class DatabaseControl {
 				content.put("note_score", data.getNote());
 				content.put("question_score", data.getQuestion());
 				content.put("coping_score", data.getCoping());
+				content.put("times_score", data.getTestTimes());
+				content.put("pass_score", data.getTestPass());
+				content.put("normalQ_score", data.getNormalQ());
+				content.put("randomQ_score", data.getRandomQ());
+				
 				db.insert("Ranking", null, content);
 			} else {
 				sql = "UPDATE Ranking SET" + " total_score = "
 						+ data.getScore() + "," + " test_score = "
 						+ data.getTest() + "," + " note_score = "
-						+ data.getQuestion() + "," + " question_score="
-						+ data.getCoping() + "," + " coping_score = "
+						+ data.getNote() + "," + " question_score="
+						+ data.getQuestion() + "," + " coping_score = "
+						+ data.getCoping() + "," + " times_score = "
+						+ data.getTestTimes() + "," + " pass_score = "
+						+ data.getTestPass() + "," + " normalQ_score = "
+						+ data.getNormalQ() + "," + " randomQ_score = "
+						+ data.getRandomQ()
 						+ " WHERE user_id = " + "'" + data.getUid() + "'";
 				db.execSQL(sql);
 			}

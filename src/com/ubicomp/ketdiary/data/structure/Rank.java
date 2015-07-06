@@ -8,6 +8,11 @@ public class Rank {
 	private int note = 0;
 	private int question = 0;
 	private int coping = 0;
+	
+	private int testTimes = 0;
+	private int testPass = 0;
+	private int normalQ = 0;
+	private int randomQ = 0;
 
 
 	public Rank(String uid, int score) {
@@ -17,13 +22,18 @@ public class Rank {
 	}
 
 	public Rank(String uid, int score, int test, int note, int question,
-			int coping) {
+			int coping, int[] additionals) {
 		this.uid = uid;
 		this.score = score;
 		this.test = test;
 		this.note = note;
 		this.question = question;
 		this.coping = coping;
+		
+		this.testTimes = additionals[0];
+		this.testPass = additionals[1];
+		this.normalQ = additionals[2];
+		this.randomQ = additionals[3];
 	}
 
 	public String toString() {
@@ -58,6 +68,22 @@ public class Rank {
 
 	public int getCoping() {
 		return coping;
+	}
+	
+	public int getTestTimes() {
+		return testTimes;
+	}
+	
+	public int getTestPass() {
+		return testPass;
+	}
+	
+	public int getNormalQ() {
+		return normalQ;
+	}
+	
+	public int getRandomQ() {
+		return randomQ;
 	}
 
 }

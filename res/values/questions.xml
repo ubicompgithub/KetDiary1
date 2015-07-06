@@ -8,27 +8,66 @@
     <string name="question_wrong">答錯了,再試試看</string>
     
     <string-array name="question_1">
-        <item>請問下列哪一項藥物不是毒品</item>
-        <item>請問下列哪一項不是吸食毒品的副作用</item>
-        <item>下列何者可能是使用毒品的特徵</item>
-        <item>吸食愷他命可能造成以下哪種症狀</item>
+        <item>請問下列哪一項藥物不是毒品?</item>
+        <item>請問下列哪一項不是吸食毒品的副作用?</item>
+        <item>下列何者可能是使用毒品的特徵?</item>
+        <item>吸食愷他命可能造成以下哪種症狀?</item>
+        <item>請問下列哪一項法律問題是正確的?</item>
+        <item>請問下列哪一項是正確的?</item>
+        <item>下列何種行為有助於戒毒?</item>
+        <item>下列何種行為不能夠幫助戒毒?</item>
+        <item>以下哪個機構可以幫助戒毒?</item>
+        <item>以下哪種行為可以幫助你遠離毒品?</item>
     </string-array>
     <string-array name="question_answer_1">
         <item>維他命B群</item>
         <item>愷他命</item>
         <item>安非他命</item>
         <item>海洛因</item>
+        
         <item>改善心肺功能</item>
         <item>噁心、嘔吐</item>
         <item>產生幻覺</item>
         <item>智力衰退</item>
+        
         <item>目光呆滯</item>
         <item>目光炯炯有神</item>
         <item>精神狀況良好</item>
         <item>情緒穩定</item>
+        
         <item>以上皆是</item>
         <item>震顫</item>
         <item>影響感覺、協調及判斷力</item>
         <item>作惡夢</item>
+        
+        <item>製毒者與販毒者都是有罪的</item>
+        <item>攜帶毒品但沒有使用是無罪的</item>
+        <item>吸食毒品是合法的</item>
+        <item>台灣法律規定愷他命不算毒品</item>
+        
+        <item>製毒者刑責比吸毒者重</item>
+        <item>轉讓毒品是合法的</item>
+        <item>愷他命為第一級毒品</item>
+        <item>販賣毒品但未使用是無罪的</item>
+        
+        <item>以上皆是</item>
+        <item>規律的運動習慣</item>
+        <item>正常的作息時間</item>
+        <item>遠離是非場所</item>
+        
+        <item>覺得自己能夠控制毒癮</item>
+        <item>與家人、朋友出外旅行</item>
+        <item>建立正確情緒紓解方法</item>
+        <item>不靠藥物提神、減肥</item>
+        
+        <item>衛生署指定辦理藥癮戒治機構</item>
+        <item>夜店</item>
+        <item>網咖</item>
+        <item>酒店</item>
+        
+        <item>以上皆是</item>
+        <item>堅持立場，不碰毒品</item>
+        <item>離開毒品出現的場所</item>
+        <item>不因好奇而嘗試毒品</item>
     </string-array>
 </resources>

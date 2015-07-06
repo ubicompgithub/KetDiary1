@@ -42,6 +42,8 @@ import com.ubicomp.ketdiary.camera.CameraRecorder;
 import com.ubicomp.ketdiary.camera.CameraRunHandler;
 import com.ubicomp.ketdiary.camera.ImageFileHandler;
 import com.ubicomp.ketdiary.camera.Tester;
+import com.ubicomp.ketdiary.clicklog.ClickLog;
+import com.ubicomp.ketdiary.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.db.TestDataParser2;
 import com.ubicomp.ketdiary.dialog.NoteDialog3;
 import com.ubicomp.ketdiary.dialog.TestQuestionCaller2;
@@ -381,6 +383,9 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		}
 		@Override
 		public void onClick(){
+			
+			ClickLog.Log(ClickLogId.TEST_START_BUTTON);
+			
 			first_connect =false;
 			first_voltage =false;
 			ble_pluginserted =false;
@@ -445,7 +450,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		}
 		@Override
 		public void onClick(){ 
-			
+			ClickLog.Log(ClickLogId.TEST_END_BUTTON);
 			//stop();
 			setState(new IdleState());
 		}
@@ -921,7 +926,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	
 	
 	public void onPause() {
-		
+		ClickLog.Log(ClickLogId.TEST_LEAVE);
 		stop();
 		super.onPause();
 	}
@@ -929,6 +934,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	@Override
 	public void onResume(){
 		super.onResume();
+		ClickLog.Log(ClickLogId.TEST_ENTER);
 		// dismiss sleep
 		//getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		checkDebug(is_debug);//PreferenceControl.isDebugMode());

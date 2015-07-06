@@ -6,6 +6,7 @@ import android.app.AlarmManager;
 import android.content.SharedPreferences;
 
 import com.ubicomp.ketdiary.App;
+import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 
 /**
@@ -316,8 +317,27 @@ public class PreferenceControl {
 		return sp.getString("targetBad", "尿失禁");	
 	}
 	
+	public static boolean getCouponChange() {
+		return sp.getBoolean("couponChange", false);
+	}
 
+	public static void setCouponChange(boolean change) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putBoolean("couponChange", change);
+		edit.commit();
+		if (MainActivity.getMainActivity() != null)
+			MainActivity.getMainActivity().setCouponChange(change);
+	}
 	
+	public static boolean getRandomQustion() {
+		return sp.getBoolean("randomQuestion", false);
+	}
+
+	public static void setRandomQustion(boolean change) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putBoolean("randomQuestion", change);
+		edit.commit();
+	}
 	// haven't use
 	/**
 	 * Check if it is the first time launching RehabDiary

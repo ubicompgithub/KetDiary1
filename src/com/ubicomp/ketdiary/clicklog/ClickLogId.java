@@ -73,34 +73,34 @@ public class ClickLogId {
 	public final static long STATISTIC_DETAIL_CHART_OPEN = 22200000;
 	public final static long STATISTIC_DETAIL_CHART_CLOSE = 22300000;
 
-	public final static long STORYTELLING_ENTER = 30000000;
-	public final static long STORYTELLING_LEAVE = 30010000;
-	public final static long STORYTELLING_PAGE_UP = 30100000;
-	public final static long STORYTELLING_PAGE_DOWN = 30110000;
+	public final static long DAYBOOK_ENTER = 30000000;
+	public final static long DAYBOOK_LEAVE = 30010000;
+	public final static long DAYBOOK_PAGE_UP = 30100000;
+	public final static long DAYBOOK_PAGE_DOWN = 30110000;
 
-	public final static long STORYTELLING_CHART_TYPE0 = 30200000;
-	public final static long STORYTELLING_CHART_TYPE1 = 30210000;
-	public final static long STORYTELLING_CHART_TYPE2 = 30220000;
-	public final static long STORYTELLING_CHART_TYPE3 = 30230000;
-	public final static long STORYTELLING_CHART = 30400000;
-	public final static long STORYTELLING_CHART_BUTTON = 30500000; // [appendix]
+	public final static long DAYBOOK_CHART_TYPE0 = 30200000;
+	public final static long DAYBOOK_CHART_TYPE1 = 30210000;
+	public final static long DAYBOOK_CHART_TYPE2 = 30220000;
+	public final static long DAYBOOK_CHART_TYPE3 = 30230000;
+	public final static long DAYBOOK_CHART = 30400000;
+	public final static long DAYBOOK_CHART_BUTTON = 30500000; // [appendix]
 																	// =
 																	// [month][date]
 
-	public final static long STORYTELLING_FACEBOOK = 30600000;
-	public final static long STORYTELLING_TEST = 30700000;
-	public final static long STORYTELLING_RECORD = 30800000;
-	public final static long STORYTELLING_RECORD_REC = 30900000;
-	public final static long STORYTELLING_RECORD_PAUSE_REC = 30910000;
-	public final static long STORYTELLING_RECORD_PLAY = 31000000;
-	public final static long STORYTELLING_RECORD_PAUSE_PLAY = 31010000;
-	public final static long STORYTELLING_RECORD_ADD_EM = 31100000;
-	public final static long STORYTELLING_RECORD_EM_HISTORY = 31200000;
-	public final static long STORYTELLING_RECORD_BACK = 31300000;
+	public final static long DAYBOOK_FACEBOOK = 30600000;
+	public final static long DAYBOOK_TEST = 30700000;
+	public final static long DAYBOOK_RECORD = 30800000;
+	public final static long DAYBOOK_RECORD_REC = 30900000;
+	public final static long DAYBOOK_RECORD_PAUSE_REC = 30910000;
+	public final static long DAYBOOK_RECORD_PLAY = 31000000;
+	public final static long DAYBOOK_RECORD_PAUSE_PLAY = 31010000;
+	public final static long DAYBOOK_RECORD_ADD_EM = 31100000;
+	public final static long DAYBOOK_RECORD_EM_HISTORY = 31200000;
+	public final static long DAYBOOK_RECORD_BACK = 31300000;
 
-	public final static long STORYTELLING_READ = 31600000;
-	public final static long STORYTELLING_READ_OK = 31400000;
-	public final static long STORYTELLING_READ_CANCEL = 31500000;
+	public final static long DAYBOOK_READ = 31600000;
+	public final static long DAYBOOK_READ_OK = 31400000;
+	public final static long DAYBOOK_READ_CANCEL = 31500000;
 
 	public final static long EMOTION_DIY_ENTER = 40000000;
 	public final static long EMOTION_DIY_LEAVE = 40010000;
@@ -131,26 +131,18 @@ public class ClickLogId {
 	public final static long TUTORIAL_NEXT = 60100000;
 	public final static long TUTORIAL_REPLAY = 60200000;
 
-	public final static long STORYTELLING_TEST_ENTER = 70000000;
-	public final static long STORYTELLING_TEST_LEAVE = 70010000;
-	public final static long STORYTELLING_TEST_SELECT = 70100000;
-	public final static long STORYTELLING_TEST_SUBMIT = 70200000; // change on
+	public final static long DAYBOOK_TEST_ENTER = 70000000;
+	public final static long DAYBOOK_TEST_LEAVE = 70010000;
+	public final static long DAYBOOK_TEST_SELECT = 70100000;
+	public final static long DAYBOOK_TEST_SUBMIT = 70200000; // change on
 																	// agreement
-	public final static long STORYTELLING_TEST_SUBMIT_EMPTY = 70210000; // no
+	public final static long DAYBOOK_TEST_SUBMIT_EMPTY = 70210000; // no
 																		// change
 																		// on
 																		// agreement
-	public final static long STORYTELLING_TEST_CANCEL = 70300000;
-
-	public final static long FACEBOOK_ENTER = 80000000;
-	public final static long FACEBOOK_LEAVE = 80010000;
-	public final static long FACEBOOK_SUBMIT = 80100000;
-	public final static long FACEBOOK_SUBMIT_OK = 80200000;
-	public final static long FACEBOOK_SUBMIT_CANCEL = 80300000;
-	public final static long FACEBOOK_PRIVACY = 80400000;
-	public final static long FACEBOOK_RETURN = 80500000;
+	public final static long DAYBOOK_TEST_CANCEL = 70300000;
 
 	public final static long TAB_TEST = 90000000;
 	public final static long TAB_STATISTIC = 90100000;
-	public final static long TAB_STORYTELLING = 90200000;
+	public final static long TAB_DAYBOOK = 90200000;
 }

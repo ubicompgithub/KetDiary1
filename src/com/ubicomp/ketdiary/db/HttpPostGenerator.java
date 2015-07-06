@@ -282,7 +282,6 @@ public class HttpPostGenerator {
 			builder.addPart("file[]", new FileBody(logFile));
 		}
 		httpPost.setEntity(builder.build());
-
 		return httpPost;
 	}
 	

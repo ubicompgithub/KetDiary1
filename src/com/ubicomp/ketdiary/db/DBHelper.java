@@ -13,7 +13,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 	/* SQLiteOpenHelper. need to migrate with */
 	private static final String DATABASE_NAME = "rehabdiary";
-	private static final int DB_VERSION = 8;
+	private static final int DB_VERSION = 9;
 
 	/**
 	 * Constructor
@@ -71,7 +71,12 @@ public class DBHelper extends SQLiteOpenHelper {
 				+ " test_score INTEGER NOT NULL  DEFAULT 0,"
 				+ " note_score INTEGER NOT NULL  DEFAULT 0,"
 				+ " question_score INTEGER NOT NULL  DEFAULT 0,"
-				+ " coping_score INTEGER NOT NULL  DEFAULT 0"+")");
+				+ " coping_score INTEGER NOT NULL  DEFAULT 0,"
+				
+				+ " times_score INTEGER NOT NULL  DEFAULT 0,"
+				+ " pass_score INTEGER NOT NULL  DEFAULT 0,"
+				+ " normalQ_score INTEGER NOT NULL  DEFAULT 0,"
+				+ " randomQ_score INTEGER NOT NULL  DEFAULT 0"+")");
 
 		db.execSQL("CREATE TABLE RankingShort ("
 				+ " user_id CHAR[255] PRIMERY KEY,"
@@ -137,7 +142,12 @@ public class DBHelper extends SQLiteOpenHelper {
 				+ " test_score INTEGER NOT NULL  DEFAULT 0,"
 				+ " note_score INTEGER NOT NULL  DEFAULT 0,"
 				+ " question_score INTEGER NOT NULL  DEFAULT 0,"
-				+ " coping_score INTEGER NOT NULL  DEFAULT 0"+")");
+				+ " coping_score INTEGER NOT NULL  DEFAULT 0,"
+				
+				+ " times_score INTEGER NOT NULL  DEFAULT 0,"
+				+ " pass_score INTEGER NOT NULL  DEFAULT 0,"
+				+ " normalQ_score INTEGER NOT NULL  DEFAULT 0,"
+				+ " randomQ_score INTEGER NOT NULL  DEFAULT 0"+")");
 		
 	}
 

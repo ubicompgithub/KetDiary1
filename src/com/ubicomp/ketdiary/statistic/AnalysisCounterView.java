@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.graphics.Typeface;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,12 +23,13 @@ public class AnalysisCounterView extends StatisticPageView {
 	private TextView levelHelp, levelHelp_value;
 	private TextView levelValue, levelText, couponValue, couponText;
 	private RelativeLayout titleLayout;
+	private FrameLayout frameLayout;
 	private ImageView levelCircle, QuestionButton;
 	
 	private DatabaseControl db;
 	private Typeface wordTypeface, digitTypefaceBold;
 	private QuestionDialog msgBox;
-	//private ShowRadarChart showRadarChart;
+	private ShowRadarChart showRadarChart;
 	
 	private final static int[] levelId = {R.drawable.level0,
 		R.drawable.level1, R.drawable.level2, R.drawable.level3, 
@@ -35,10 +37,11 @@ public class AnalysisCounterView extends StatisticPageView {
 	 	R.drawable.level7, R.drawable.level8, R.drawable.level9,
 	 	R.drawable.level10};
 	
-	public AnalysisCounterView() { //TODO: 1.讓加分的時候可以馬上看到圖有變 2. 雷達圖
+	public AnalysisCounterView(ShowRadarChart showRadarChart) { //TODO: 1.讓加分的時候可以馬上看到圖有變 2. 雷達圖
 		super(R.layout.analysis_counter_view2);
 		db = new DatabaseControl();
 		//this.showRadarChart = showRadarChart;
+		this.showRadarChart = showRadarChart;
 		
 		wordTypeface = Typefaces.getWordTypeface();
 		digitTypefaceBold = Typefaces.getDigitTypefaceBold();
@@ -78,6 +81,7 @@ public class AnalysisCounterView extends StatisticPageView {
 			}
 		});
 			
+		frameLayout = (FrameLayout) view.findViewById(R.id.frameLayout1);
 		
 	}
 
@@ -94,6 +98,12 @@ public class AnalysisCounterView extends StatisticPageView {
 			}
 		});*/
 		//msgBox = new QuestionDialog();
+		frameLayout.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				showRadarChart.showRadarChart(calculateRank());
+			}
+		});
 		
 		updateCounter();
 	}

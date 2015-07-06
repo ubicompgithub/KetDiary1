@@ -171,7 +171,10 @@ public class DataUploader {
 								Log.d(TAG, "FAIL TO UPLOAD - Clicklog");
 						}
 					}
-				}
+			}
+			else{
+				Log.d(TAG,"no clicklog");
+			}
 			
 			return null;
 		}
@@ -357,8 +360,10 @@ public class DataUploader {
 			try {
 				DefaultHttpClient httpClient = HttpSecureClientGenerator.getSecureHttpClient();
 				HttpPost httpPost = HttpPostGenerator.genPost(data);
-				if (upload(httpClient, httpPost))
+				if (upload(httpClient, httpPost)){
 					set_uploaded_logfile(data.getName());
+					Log.d(TAG, "Upload ClickLog Success.");
+				}
 				else
 					return ERROR;
 			} catch (Exception e) {

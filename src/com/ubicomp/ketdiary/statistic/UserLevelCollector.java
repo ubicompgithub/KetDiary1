@@ -147,8 +147,11 @@ public class UserLevelCollector {
 			int note = Integer.valueOf(items[3]);
 			int question = Integer.valueOf(items[4]);
 			int coping = Integer.valueOf(items[5]);
+			int[] additionals = new int[4];
+			for (int j = 0; j < additionals.length; ++j)
+				additionals[j] = Integer.valueOf(items[5+j]);
 
-			ranks[i] = new Rank(uid, level, test, note, question, coping);
+			ranks[i] = new Rank(uid, level, test, note, question, coping, additionals);
 
 		}
 
