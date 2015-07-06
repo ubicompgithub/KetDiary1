@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.system.PreferenceControl;
 
 public class CustomToast {
 
@@ -23,10 +24,14 @@ public class CustomToast {
 //	private static ImageView toastImage;
 	
 	private static ImageView toastCircle, toastContent;
+	private static ImageView toastCongra;
 	private static TextView toastDescribe;
-
-	private static Drawable c1Drawable, c2Drawable, c3Drawable, okDrawable;
-			//failDrawable;
+	private static int[] expId={R.drawable.toast_circle_level1,R.drawable.toast_circle_level2,R.drawable.toast_circle_level3
+		,R.drawable.toast_circle_level4,R.drawable.toast_circle_level5,R.drawable.toast_circle_level6,
+		R.drawable.toast_circle_level6,R.drawable.toast_circle_level7,R.drawable.toast_circle_level8,
+		R.drawable.toast_circle_level9,R.drawable.toast_circle_level10}; 
+	private static Drawable c1Drawable, c2Drawable, c3Drawable, okDrawable, 
+			failDrawable;
 
 	private static SoundPool soundpool;
 	private static int soundId;
@@ -60,8 +65,10 @@ public class CustomToast {
 			toastDescribe.setTypeface(Typefaces.getWordTypefaceBold());
 			toastContent=(ImageView) layout
 					.findViewById(R.id.toast_circlecontent);
-//			toastCircle=(ImageView) layout
-//					.findViewById(R.id.toast_circle);
+			toastCircle=(ImageView) layout
+					.findViewById(R.id.toast_circle);
+			toastCongra=(ImageView) layout
+					.findViewById(R.id.toast_congratulation);
 			c1Drawable = context.getResources().getDrawable(
 					R.drawable.toast_add_1);
 			c2Drawable = context.getResources().getDrawable(
@@ -70,8 +77,8 @@ public class CustomToast {
 					R.drawable.toast_add_3);
 			okDrawable = context.getResources().getDrawable(
 					R.drawable.toast_goodjob);
-//			failDrawable = context.getResources().getDrawable(
-//					R.drawable.toast_fail);
+			failDrawable = context.getResources().getDrawable(
+					R.drawable.toast_fail);
 		}
 		if (soundpool == null) {
 			soundpool = new SoundPool(1, AudioManager.STREAM_MUSIC, 1);
@@ -82,31 +89,47 @@ public class CustomToast {
 		toast.setGravity(Gravity.FILL, 0, 0);
 		toast.setDuration(Toast.LENGTH_SHORT);
 		toastDescribe.setText(str_id);
-
+		
+		int total_level = PreferenceControl.getPoint(); ///////////////////////////////////不確定抓經驗值的是什麼
+		int counterLevel = total_level % 10;
+		toastCircle.setImageResource(expId[counterLevel]);
+		//levelCircle.setImageResource(levelId[counter]);
+		
+		
 		switch (counter) {
 		case 0:
 			toastContent.setImageDrawable(okDrawable);
+			toastCircle.setVisibility(View.VISIBLE);
+			toastCongra.setVisibility(View.VISIBLE);
 			//toastCounter.setVisibility(View.INVISIBLE);
 			break;
 		case 1:
 			toastContent.setImageDrawable(c1Drawable);
 			//toastCounter.setVisibility(View.VISIBLE);
+			toastCircle.setVisibility(View.VISIBLE);
+			toastCongra.setVisibility(View.VISIBLE);
 			soundpool.play(soundId, 1.f, 1.f, 0, 0, 1.f);
 			break;
 		case 2:
 			toastContent.setImageDrawable(c2Drawable);
+			toastCircle.setVisibility(View.VISIBLE);
+			toastCongra.setVisibility(View.VISIBLE);
 			//toastCounter.setVisibility(View.VISIBLE);
 			soundpool.play(soundId, 1.f, 1.f, 0, 0, 1.f);
 			break;
 		case 3:
 			toastContent.setImageDrawable(c3Drawable);
+			toastCircle.setVisibility(View.VISIBLE);
+			toastCongra.setVisibility(View.VISIBLE);
 			//toastCounter.setVisibility(View.VISIBLE);
 			soundpool.play(soundId, 1.f, 1.f, 0, 0, 1.f);
 			break;
-//		case -1:
-//			toastImage.setImageDrawable(failDrawable);
-//			toastCounter.setVisibility(View.INVISIBLE);
-//			break;
+		case -1:
+			toastContent.setImageDrawable(failDrawable);
+			toastCircle.setVisibility(View.INVISIBLE);
+			toastCongra.setVisibility(View.INVISIBLE);
+			//toastCounter.setVisibility(View.INVISIBLE);
+			break;
 		}
 
 		toast.show();
