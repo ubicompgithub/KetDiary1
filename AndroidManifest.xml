@@ -143,7 +143,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".CopingActivity"
+            android:name="com.ubicomp.ketdiary.statistic.coping.CopingActivity"
             android:label="@string/title_activity_dev"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:launchMode="singleTop"

@@ -79,7 +79,7 @@
     <string name="ok">確定</string>
     <string name="Iknow">我知道了</string>
     <string name="last">上一則</string>
-    <string name="next">下一則</string>
+    <string name="next_one">下一則</string>
     <string name="go_result">看測試結果</string>
     <string name="msg_box_toast_cancel">確定放棄填寫？</string>
     <string name="msg_box_toast_send">確定完成自我了解？</string>

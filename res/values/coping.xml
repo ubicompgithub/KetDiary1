@@ -3,7 +3,7 @@
     <string name="coping_page">應對技巧</string>
     <string name="coping_relaxed">放鬆技巧</string>
     <string name="coping_breath">閉眼專注觀察呼吸</string>
-    <string name="coping_musle">閉眼讓肌肉放鬆</string>
+    <string name="coping_muscle">閉眼讓肌肉放鬆</string>
     <string name="coping_music">聆聽舒緩音樂</string>
     <string name="coping_stretch">伸展</string>
     <string name="coping_meditation">冥想</string>
@@ -34,7 +34,7 @@
     <string name="coping_lapse_dialog">現在放棄就前功盡棄了</string>
 
 	
-    
+    <string name="next">下一步</string>
     
     <string-array name="coping_list">
         <item>社交壓力的應對方法：\n當朋友邀約吸毒時，您可以委婉拒絕</item>

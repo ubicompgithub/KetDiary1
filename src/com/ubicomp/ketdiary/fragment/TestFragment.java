@@ -30,7 +30,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ubicomp.ketdiary.CopingActivity;
+import com.ubicomp.ketdiary.statistic.coping.CopingActivity;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.ResultService2;

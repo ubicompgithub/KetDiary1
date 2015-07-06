@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="question_type0_help">為了家人和不一樣的自己，請繼續加油，堅持下去</string>
+    <string name="question_type1_help">重新整理浮動的心，堅持持續戒酒的決心，建議您可以：</string>
+    <string name="question_type2_help">您似乎開始喝酒了，建議您可以：</string>
+    <string name="question_type3_help">您似乎喝了不少酒，建議您可以：</string>
+    <string name="breath_help">閉眼專注觀察呼吸30秒</string>
+    <string name= "breath_check_help">我會完成閉眼專注觀察呼吸</string>
+    <string name="inspire_help">默念勵志短句30秒</string>
+    <string name="start_emotion_diy_help">使用心情DIY自我處理 </string>
+    <string name="read_sentence">閱讀心情小語轉換心境</string>
+    <string name="try_again">酒測器回復後再重試</string>
+    <string name="self_help">自行處理與面對</string>
+    <string name="go_home">回家休息</string>
+    
+    <string name="follow_the_guide">請依照以下指示：</string>
+
+    <string-array name="question_solutions">
+        <item>立即離開有酒的地方</item>
+        <item>我已經決定停止喝酒了</item>
+        <item>請健走10~30分鐘</item>
+        <item>請專注於呼吸15次</item>
+        <item>請休息或就診</item>
+        <item>結束</item>
+    </string-array>
+    
+    <string name="follow_the_guide_music">閉眼專注聆聽舒緩音樂</string>
+    
+    <string name="self_help_help">請問您現在的狀況？</string>
+    <string name="self_help_selection0">身邊有酒</string>
+    <string name="self_help_selection1">想買酒</string>
+    <string name="self_help_selection2">感到無聊</string>
+    <string name="self_help_selection3">覺得有壓力</string>
+    <string name="self_help_selection4">身體不舒服</string>
+    <string name="self_help_selection5">其他原因</string>
+</resources>

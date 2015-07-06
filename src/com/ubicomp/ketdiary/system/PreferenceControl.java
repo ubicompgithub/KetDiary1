@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.data.structure.TimeValue;
 
 /**
  * Class for controlling Android Preference
@@ -144,6 +145,18 @@ public class PreferenceControl {
 
 	public static long getLatestTestCompleteTime() {
 		return sp.getLong("testCompleteTime", 0);
+	}
+
+	public static boolean questionnaireShowUpdateDetection() {
+		long curTs = System.currentTimeMillis();
+		long prevTs = sp.getLong("testCompleteTime", 0);
+		if (curTs - prevTs < 3 * 60 * 1000) {
+			long addTs = prevTs + 5 * 60 * 1000;
+			TimeValue prevTv = TimeValue.generate(prevTs);
+			TimeValue addTv = TimeValue.generate(addTs);
+			return prevTv.getTimeslot() == addTv.getTimeslot();
+		}
+		return false;
 	}
 
 	public static boolean getCheckResult() {
@@ -362,7 +375,21 @@ public class PreferenceControl {
 		edit.commit();
 	}
 
+	public static int[] getConnectSocialHelpIdx() {
+		int[] calls = new int[3];
+		calls[0] = sp.getInt("social_help0", 0);
+		calls[1] = sp.getInt("social_help1", 1);
+		calls[2] = sp.getInt("social_help2", 2);
+		return calls;
+	}
 
+	public static void setConnectSocialHelpIdx(int[] idx) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putInt("social_help0", idx[0]);
+		edit.putInt("social_help1", idx[1]);
+		edit.putInt("social_help2", idx[2]);
+		edit.commit();
+	}
 
 	public static void setTestResult(int result) {
 		SharedPreferences.Editor edit = sp.edit();
