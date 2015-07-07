@@ -157,7 +157,7 @@
             android:layout_gravity="bottom|center"
             android:layout_marginLeft="6dp"
             android:layout_marginBottom="80dp"
-            android:text="點擊頁面回到雷達圖"
+            android:text="點擊頁面回到表現分析"
             android:textColor="@color/blue"
             android:textSize="@dimen/large_text_size" 
             />
