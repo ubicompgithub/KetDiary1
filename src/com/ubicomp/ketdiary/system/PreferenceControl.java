@@ -361,6 +361,40 @@ public class PreferenceControl {
 		edit.putBoolean("randomQuestion", change);
 		edit.commit();
 	}
+	
+	public static String[] getRecreations() {
+		String[] recreation = new String[5];
+		recreation[0] = sp.getString("recreation0",
+				App.getContext().getString(R.string.default_recreation_1));
+		recreation[1] = sp.getString("recreation1",
+				App.getContext().getString(R.string.default_recreation_2));
+		recreation[2] = sp.getString("recreation2",
+				App.getContext().getString(R.string.default_recreation_3));
+		recreation[3] = sp.getString("recreation3", "");
+		recreation[4] = sp.getString("recreation4", "");
+		return recreation;
+	}
+
+	public static void setRecreation(String recreation, int id) {
+		String key = "recreation" + id;
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putString(key, recreation);
+		edit.commit();
+
+	}
+	
+	public static void setTestResult(int result) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putInt("testResult", result);
+		edit.commit();
+	}
+
+	public static int getTestResult() {
+		return sp.getInt("testResult", -1);
+	}
+
+	
+	
 	// haven't use
 	/**
 	 * Check if it is the first time launching RehabDiary
@@ -434,16 +468,7 @@ public class PreferenceControl {
 		edit.commit();
 	}
 
-	public static void setTestResult(int result) {
-		SharedPreferences.Editor edit = sp.edit();
-		edit.putInt("testResult", result);
-		edit.commit();
-	}
-
-	public static int getTestResult() {
-		return sp.getInt("testResult", -1);
-	}
-
+	
 
 
 	public static long getDetectionTimestamp() {
@@ -537,15 +562,6 @@ public class PreferenceControl {
 				App.getContext().getString(R.string.default_goal_good));
 	}
 
-	public static int getSavingGoalMoney() {
-		return sp.getInt("targetMoney", 50000);
-	}
-
-	public static int getSavingDrinkCost() {
-		return sp.getInt("perDrinkCost", 200);
-	}
-
-	
 
 	public static boolean isLocked() {
 		return sp.getBoolean("systemLock", false);
@@ -703,26 +719,7 @@ public class PreferenceControl {
 		edit.commit();
 	}
 
-	public static String[] getRecreations() {
-		String[] recreation = new String[5];
-		recreation[0] = sp.getString("recreation0",
-				App.getContext().getString(R.string.default_recreation_1));
-		recreation[1] = sp.getString("recreation1",
-				App.getContext().getString(R.string.default_recreation_2));
-		recreation[2] = sp.getString("recreation2",
-				App.getContext().getString(R.string.default_recreation_3));
-		recreation[3] = sp.getString("recreation3", "");
-		recreation[4] = sp.getString("recreation4", "");
-		return recreation;
-	}
-
-	public static void setRecreation(String recreation, int id) {
-		String key = "recreation" + id;
-		SharedPreferences.Editor edit = sp.edit();
-		edit.putString(key, recreation);
-		edit.commit();
-
-	}
+	
 
 	public static String[] getSponsors() {
 		String[] sponsor = new String[5];

@@ -32,6 +32,7 @@ import android.widget.TextView;
 
 import com.ubicomp.ketdiary.clicklog.ClickLog;
 import com.ubicomp.ketdiary.clicklog.ClickLogId;
+import com.ubicomp.ketdiary.color.TestStripDetection;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.dialog.CheckResultDialog;
@@ -119,6 +120,8 @@ public class MainActivity extends FragmentActivity {
 	public static final int ACTION_RECORD = 1;
 	public static final int ACTION_QUESTIONNAIRE = 2;
 	
+	private TestStripDetection testStripDetection;
+	
 	private DatabaseControl db;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -162,7 +165,7 @@ public class MainActivity extends FragmentActivity {
 			//startService(startIntent); 
             //
 			
-			
+			//testStripDetection = new TestStripDetection();
 			
 			Typefaces.initAll();
 			CustomToast.settingSoundPool();

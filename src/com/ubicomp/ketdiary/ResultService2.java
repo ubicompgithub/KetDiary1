@@ -284,4 +284,22 @@ public class ResultService2 extends Service implements BluetoothListener {
 		Log.i(TAG, "State: "+String.valueOf(header));
 		
 	}
+
+	@Override
+	public void bleTakePictureSuccess() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateProcessRate(float rate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void clearProcesssRate() {
+		// TODO Auto-generated method stub
+		
+	}
 }

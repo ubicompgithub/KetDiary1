@@ -1,4 +1,4 @@
-package com.example.bletest;
+package com.ubicomp.ketdiary.BluetoothLE;
 
 import android.app.Activity;
 import android.content.Intent;

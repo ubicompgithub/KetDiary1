@@ -134,4 +134,22 @@ public class MainActivity2 extends Activity implements BluetoothListener {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void bleTakePictureSuccess() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateProcessRate(float rate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void clearProcesssRate() {
+		// TODO Auto-generated method stub
+		
+	}
 }

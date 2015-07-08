@@ -234,7 +234,7 @@
     <string name="lock_message">恭喜您已完成戒酒小幫手的療程，感謝您於療程期間的協助，希望您之後繼續保持並遠離酒精！\n\n因為研究需求，將暫停使用戒酒小幫手三個月。 這段期間，請定期回診進行追蹤觀察，再次感謝你對本研究的幫忙。\n\n您現在可以選擇移除掉戒酒小幫手，或是暫時將戒酒小幫手保留在手機內。三個月後，若是有需要再次啟用戒酒小幫手，請點選最下面的"關於"以聯絡戒酒小幫手團隊。謝謝！\n\n戒酒小幫手團隊　敬上</string>
     <string name="lock_about">完成訊息：</string>
     
-    <string name="radar_title">我的表現分析</string>
+    <string name="radar_title">表現分析</string>
     
     <string name="radar_label0">自我\n檢測</string>
     <string name="radar_label0_full">自我檢測功能　完成度</string>
