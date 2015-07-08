@@ -30,8 +30,8 @@
 
     <FrameLayout
         android:id="@+id/test_bg_center"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_above="@+id/tv_center"
         android:layout_marginBottom="-75dp" >
