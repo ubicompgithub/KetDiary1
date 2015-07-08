@@ -346,7 +346,7 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 	public static void showQuestionTest() {
 		//removeRadarChart();
 		//removeDetailChart();
-		msgBox.show();
+		msgBox.show(0);
 		/*
 		qv = QuestionDialog.getView();
 

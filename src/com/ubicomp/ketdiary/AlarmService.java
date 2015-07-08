@@ -51,7 +51,7 @@ public class AlarmService extends Service {
 		if (cur_hour < 8)
 			return Service.START_REDELIVER_INTENT;
 
-		Intent mIntent = new Intent(this, TestActivity.class);
+		Intent mIntent = new Intent(this, MainActivity.class);
 		PendingIntent pIntent = PendingIntent.getActivity(this, 0, mIntent,
 				PendingIntent.FLAG_UPDATE_CURRENT);
 

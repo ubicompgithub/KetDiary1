@@ -200,6 +200,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private static int FIRST_VOLTAGE_THRESHOLD = PreferenceControl.getVoltag1(); 
 	private static int SECOND_VOLTAGE_THRESHOLD= PreferenceControl.getVoltag2();
 	private static int CAMERATIMEOUT = PreferenceControl.getVoltageCountDown();
+	private static int CAMERATIMEOUT2 = PreferenceControl.getVoltage2CountDown();
 	
 	private static final int TIMEOUT_SECOND = 30;
 	//private static final int CAMERATIMEOUT = 10;
@@ -317,9 +318,9 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		img_help.setOnClickListener(new View.OnClickListener(){
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent();
-				intent.setClass(activity, CopingActivity.class);
-				startActivity(intent);
+				//Intent intent = new Intent();
+				//intent.setClass(activity, CopingActivity.class);
+				//startActivity(intent);
 			}
 		});
 
@@ -612,7 +613,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			label_subtitle.setText("口水量不足");
 			
 			
-			cameraCountDownTimer = new CameraCountDownTimer(10);
+			cameraCountDownTimer = new CameraCountDownTimer(CAMERATIMEOUT2);
 			cameraCountDownTimer.start();
 			
 			/*if(	timeoutCountDownTimer==null	)
@@ -1506,6 +1507,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		FIRST_VOLTAGE_THRESHOLD = PreferenceControl.getVoltag1(); 
 		SECOND_VOLTAGE_THRESHOLD= PreferenceControl.getVoltag2();
 		CAMERATIMEOUT = PreferenceControl.getVoltageCountDown();
+		CAMERATIMEOUT2 = PreferenceControl.getVoltage2CountDown();
 		isDeveloper = PreferenceControl.isDeveloper();
 		debug = PreferenceControl.isDebugMode();
 		collectdata = PreferenceControl.getCollectData();

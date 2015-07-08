@@ -339,5 +339,19 @@ public class BarButtonGenerator {
 
 		return layout;
 	}
+	public static View createSettingButtonView2(String textStr,
+			OnClickListener listener) {
+
+		RelativeLayout layout = (RelativeLayout) inflater.inflate(
+				R.layout.bar_setting_item, null);
+		TextView text = (TextView) layout
+				.findViewById(R.id.question_description);
+		text.setTypeface(wordTypeface);
+		text.setText(textStr);
+
+		layout.setOnClickListener(listener);
+
+		return layout;
+	}
 
 }

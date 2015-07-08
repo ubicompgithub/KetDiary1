@@ -265,6 +265,16 @@ public class PreferenceControl {
 		edit.commit();
 	}
 	
+	public static int getVoltage2CountDown() {
+		return sp.getInt("Voltage2CountDown", 10);
+	}
+	
+	public static void setVoltage2CountDown(int voltageCountDown) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putInt("Voltage2CountDown", voltageCountDown);
+		edit.commit();
+	}
+	
 	public static int getSustainMonth(){
 		int sustainMonth = 0;
 		Calendar cal = Calendar.getInstance();

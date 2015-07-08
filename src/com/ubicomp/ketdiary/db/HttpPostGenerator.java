@@ -248,14 +248,14 @@ public class HttpPostGenerator {
 	 * @see ubicomp.soberdiary.data.structure.QuestionTest
 	 */
 	public static HttpPost genPost(CopingSkill data) {
-		HttpPost httpPost = new HttpPost(ServerUrl.getQuestionTestUrl());
+		HttpPost httpPost = new HttpPost(ServerUrl.getCopingSkillUrl());
 		String uid = PreferenceControl.getUID();
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("uid", uid));
 
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getTv().getTimestamp())));
-		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getSkillSelect())));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getSkillType())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getSkillSelect())));
 		nvps.add(new BasicNameValuePair("data[]", data.getRecreation()));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getScore())));
 		try {
