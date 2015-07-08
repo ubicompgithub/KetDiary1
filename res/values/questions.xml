@@ -7,6 +7,8 @@
     <string name="question_correct">答對了!</string>
     <string name="question_wrong">答錯了,再試試看</string>
     
+    <string name="question_type">請問這是哪一種事件類型?</string>
+    
     <string-array name="question_1">
         <item>請問下列哪一項藥物不是毒品?</item>
         <item>請問下列哪一項不是吸食毒品的副作用?</item>

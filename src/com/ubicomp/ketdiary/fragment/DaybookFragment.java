@@ -43,6 +43,7 @@ import com.ubicomp.ketdiary.dialog.AddNoteDialog2;
 import com.ubicomp.ketdiary.dialog.CheckResultDialog;
 import com.ubicomp.ketdiary.dialog.FilterDetailDialog;
 import com.ubicomp.ketdiary.dialog.MyDialog;
+import com.ubicomp.ketdiary.dialog.QuestionDialog;
 import com.ubicomp.ketdiary.dialog.TestQuestionCaller2;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.QuestionFile;
@@ -102,6 +103,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private static final int THIS_MONTH = Calendar.getInstance().get(Calendar.MONTH);
 	
 	public static int chart_type = 2;
+	private static QuestionDialog questionBox;
 	
 	private LinearLayout chartAreaLayout;
 	private LineChartView lineChart;
@@ -457,24 +459,26 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		});
 		addButton.setOnTouchListener(new ScaleOnTouchListener());
 		
-		Random rand = new Random();
-		int prob = rand.nextInt(100);
-		if(prob >= 50 ){
-			randomButton.setVisibility(View.VISIBLE);
-			randomButton.setImageResource(R.anim.animation_random_question);
-			animation = (AnimationDrawable) randomButton.getDrawable();
-			animation.start();
-		}
-		
-		randomButton.bringToFront();
-		randomButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				randomButton.setVisibility(View.GONE);
+		if(!db.randomQuestionDone()){
+			Random rand = new Random();
+			int prob = rand.nextInt(100);
+			if(prob >= 50 ){
+				randomButton.setVisibility(View.VISIBLE);
+				randomButton.setImageResource(R.anim.animation_random_question);
+				animation = (AnimationDrawable) randomButton.getDrawable();
+				animation.start();
 			}
-		});
-		randomButton.setOnTouchListener(new ScaleOnTouchListener());
-		
+			
+			randomButton.bringToFront();
+			randomButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					questionBox.show(1);
+					randomButton.setVisibility(View.GONE);
+				}
+			});
+			randomButton.setOnTouchListener(new ScaleOnTouchListener());
+		}
 		
 		
 		rotateLineChart.setOnClickListener(new OnClickListener() {
@@ -545,13 +549,24 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			
 			showDiary();
 			updateCalendarView();
+			updateFilterButton();
 			
-			
-			
-			
+			questionBox = new QuestionDialog((RelativeLayout) view);
+			questionBox.initialize();
 
 			MainActivity.getMainActivity().enableTabAndClick(true);
 			LoadingDialogControl.dismiss();
+		}
+	}
+	
+	private void updateFilterButton(){
+		if(!filterButtonIsPressed[0]){
+			lineChartFilterButton.setImageResource(R.drawable.filter1_color);
+			calendarFilterButton.setImageResource(R.drawable.filter1_color);
+		}
+		else{
+			lineChartFilterButton.setImageResource(R.drawable.button_filter);
+			calendarFilterButton.setImageResource(R.drawable.button_filter);
 		}
 	}
 	
@@ -1226,6 +1241,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
     		}
     		updateCalendarView();
     		showDiary();
+    		updateFilterButton();
     	}
     }
 

@@ -1,13 +1,11 @@
 package com.ubicomp.ketdiary.mydaybook.linechart;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Random;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -29,7 +27,6 @@ import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.fragment.DaybookFragment;
-import com.ubicomp.ketdiary.mydaybook.DummyData;
 import com.ubicomp.ketdiary.mydaybook.LineChartData;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 
@@ -38,21 +35,22 @@ public class LineChartView extends View {
 	private static final String TAG = "LineChartView";
 	
 	private static Context context = App.getContext();
+	private static Resources resource = context.getResources();
 	
     private static final int LINES = 7;
-    private static float offsetY = context.getResources().getDimensionPixelSize(R.dimen.offsetY);
-    private static float offsetX = context.getResources().getDimensionPixelSize(R.dimen.offsetX);
-    private static int unit_scale = context.getResources().getDimensionPixelSize(R.dimen.unit_scale);//50;
-    private static float date_Y_offset = context.getResources().getDimensionPixelSize(R.dimen.date_Y_offset);//120;
-    private static int dot_scale = context.getResources().getDimensionPixelSize(R.dimen.dot_scale);//25;
-    private static int dot_X_offset = context.getResources().getDimensionPixelSize(R.dimen.dot_X_offset);//12;
-    private static int dot_Y_offset = context.getResources().getDimensionPixelSize(R.dimen.dot_Y_offset);//10;
-    private static int rec_height = context.getResources().getDimensionPixelSize(R.dimen.rec_height);//28;
-    private static int rec_width = context.getResources().getDimensionPixelSize(R.dimen.rec_width);//60;
-    private static int rec_X_offset = context.getResources().getDimensionPixelSize(R.dimen.rec_X_offset);//25;
-    private static int cur_X_offset = context.getResources().getDimensionPixelSize(R.dimen.cur_X_offset);//12;
-    private static int legend_height = context.getResources().getDimensionPixelSize(R.dimen.legend_height);//40;
-    private static int legend_width = context.getResources().getDimensionPixelSize(R.dimen.legend_width);//350;
+    private static float offsetY = resource.getDimensionPixelSize(R.dimen.offsetY);
+    private static float offsetX = resource.getDimensionPixelSize(R.dimen.offsetX);
+    private static int unit_scale = resource.getDimensionPixelSize(R.dimen.unit_scale);//50;
+    private static float date_Y_offset = resource.getDimensionPixelSize(R.dimen.date_Y_offset);//120;
+    private static int dot_scale = resource.getDimensionPixelSize(R.dimen.dot_scale);//25;
+    private static int dot_X_offset = resource.getDimensionPixelSize(R.dimen.dot_X_offset);//12;
+    private static int dot_Y_offset = resource.getDimensionPixelSize(R.dimen.dot_Y_offset);//10;
+    private static int rec_height = resource.getDimensionPixelSize(R.dimen.rec_height);//28;
+    private static int rec_width = resource.getDimensionPixelSize(R.dimen.rec_width);//60;
+    private static int rec_X_offset = resource.getDimensionPixelSize(R.dimen.rec_X_offset);//25;
+    private static int cur_X_offset = resource.getDimensionPixelSize(R.dimen.cur_X_offset);//12;
+    private static int legend_height =resource.getDimensionPixelSize(R.dimen.legend_height);//40;
+    private static int legend_width = resource.getDimensionPixelSize(R.dimen.legend_width);//350;
     
     private static float range;
     
@@ -142,6 +140,18 @@ public class LineChartView extends View {
     	legend = getResizedBitmap(tmp, legend_height, legend_width);
     	
     	tmp.recycle();
+	}
+	private void releaseBitmap(){
+
+		for(int i=1; i<=8;i++){
+			dot_array[i].recycle();
+		}
+		passBarBg.recycle();
+		noPassBarBg.recycle();
+		skipBarBg.recycle();
+    	legend.recycle();
+    	System.gc();
+	
 	}
 	
 
@@ -305,6 +315,7 @@ public class LineChartView extends View {
     	super.onDraw(canvas);   	
     	canvas.save();
     	
+    	initBitmap();
     	setChartData3();
     	
     	if  (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -322,7 +333,7 @@ public class LineChartView extends View {
         drawCursor3(canvas);
         drawLineChart2(canvas);
         
-        
+        releaseBitmap();
         canvas.restore();
     }
 

@@ -49,7 +49,7 @@ public class QuestionDialog{
 	private String[] type_str;
 	
 	private TextView tv_question, tv_answer1, tv_answer2, tv_answer3, tv_answer4, tv_confirm, tv_cancel;
-	private ImageView radio1, radio2, radio3, radio4;
+	private ImageView radio1, radio2, radio3, radio4, iv_type;
 	private LinearLayout layout1, layout2, layout3, layout4;
 	/** @see Typefaces */
 	private Typeface wordTypeface, wordTypefaceBold, digitTypeface,
@@ -58,6 +58,17 @@ public class QuestionDialog{
 	private int select = -1;
 	private String[] selection;
 	private DatabaseControl db;
+	private int questionType = 0;
+	
+	private static final int[] iconId = {R.drawable.emoji5, R.drawable.emoji2, R.drawable.emoji4,
+		R.drawable.emoji1, R.drawable.emoji3, R.drawable.others_emoji3, R.drawable.others_emoji2,
+		R.drawable.others_emoji1};
+	
+	private static final int[] dotId2 = { 0, R.drawable.dot_color1, R.drawable.dot_color2,
+    	R.drawable.dot_color3, R.drawable.dot_color4, R.drawable.dot_color5,
+    	R.drawable.dot_color6, R.drawable.dot_color7, R.drawable.dot_color8
+    };
+	
 	
 	public QuestionDialog(RelativeLayout mainLayout){
 		
@@ -92,6 +103,7 @@ public class QuestionDialog{
 		tv_answer4 = (TextView) boxLayout.findViewById(R.id.question_answer4);
 		tv_cancel = (TextView)  boxLayout.findViewById(R.id.question_cancel);
 		tv_confirm = (TextView) boxLayout.findViewById(R.id.question_confirm);
+		iv_type = (ImageView)boxLayout.findViewById(R.id.question_image);
 		
 		tv_confirm.setOnClickListener(new ConfirmOnClickListener());
 		tv_cancel.setOnClickListener(new CancelOnClickListener());
@@ -134,9 +146,13 @@ public class QuestionDialog{
 	}
 	
 	/** show the dialog */
-	public void show() {
+	public void show(int type) {
 		
-		selection = settingQuestion();
+		if(type == 1)
+			selection = settingQuestion2();
+		else
+			selection = settingQuestion();
+		
 		tv_answer1.setText(selection[0]);
 		tv_answer2.setText(selection[1]);
 		tv_answer3.setText(selection[2]);
@@ -164,17 +180,47 @@ public class QuestionDialog{
 			boxLayout.setVisibility(View.INVISIBLE);
 	}
 	
-	private String[] settingQuestion() {
+	private String[] settingQuestion2() {
+		
+		questionType = 1;
+		
 		String[] questions = null;
 		String[] answers = null;
 		Resources r = App.getContext().getResources();
 		
-		Random rnd = new Random();
-		int qtype = rnd.nextInt(3);
-		if(qtype == 0){
-			int[] type_rank = db.getNoteAddTypeRank(0, 0);
-		}
+		Random rand = new Random();
+		int qid = rand.nextInt(8);
+		question = r.getString(R.string.question_type);
+		answers = r.getStringArray(R.array.trigger_list);
 		
+		answer = new String(answers[qid]);
+		iv_type.setImageResource(iconId[qid]);
+		iv_type.setVisibility(View.VISIBLE);
+		
+		String[] tempSelection = new String[4];
+		for (int i = 0; i < tempSelection.length; ++i){	
+			int index = qid+i;
+			if(index>= 8)
+				index%=8;
+		
+			tempSelection[i] = answers[index];
+		}
+		shuffleArray(tempSelection);
+		String[] selectAns = new String[4];
+		for (int i = 0; i < selectAns.length; ++i)
+			selectAns[i] = tempSelection[i];
+		
+		//int ans_id = rand.nextInt(selectAns.length); //把隨機一個選項換成答案
+		//selectAns[ans_id] = answer;
+
+		return selectAns;
+	}
+	
+	
+	private String[] settingQuestion() {
+		String[] questions = null;
+		String[] answers = null;
+		Resources r = App.getContext().getResources();
 		
 		questions = r.getStringArray(R.array.question_1);
 		answers = r.getStringArray(R.array.question_answer_1);
@@ -214,7 +260,6 @@ public class QuestionDialog{
 		/**Cancel and dismiss the check check dialog*/
 		public void onClick(View v) {
 			long ts = System.currentTimeMillis();
-			int questionType = 0;
 			int isCorrect = 0;
 			String selection = selectedAnswer;
 			int choose = select;

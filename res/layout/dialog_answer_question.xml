@@ -29,6 +29,13 @@
                 android:textColor="@color/red"
                 android:textSize="@dimen/large_text_size" />
             
+            <ImageView
+                android:id="@+id/question_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/emoji1"
+                android:visibility="gone" />
+            
             <TextView
                 android:id="@+id/question_question"
                 android:layout_width="wrap_content"

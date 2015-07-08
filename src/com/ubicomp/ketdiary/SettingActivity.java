@@ -192,7 +192,8 @@ public class SettingActivity extends Activity {
 
 				});
 		bluetoothView.setVisibility(View.GONE);
-
+		
+		/*
 		RelativeLayout systemView = createListView(R.string.setting_system,
 				new OnClickListener() {
 					private boolean visible = false;
@@ -215,7 +216,7 @@ public class SettingActivity extends Activity {
 				});
 		mainLayout.addView(systemView);
 		mainLayout.addView(bluetoothView);
-
+		*/
 	}
 
 	@Override
@@ -227,13 +228,13 @@ public class SettingActivity extends Activity {
 	@Override
 	protected void onPause() {
 
-		int[] socialSelections = new int[3];
+		/*int[] socialSelections = new int[3];
 		int social_idx = 0;
 		boolean[] socialSelected = socialGroup.getResult();
 		for (int i = 0; i < socialSelected.length; ++i) {
 			if (socialSelected[i])
 				socialSelections[social_idx++] = i;
-		}
+		}*/
 		//PreferenceControl.setConnectSocialHelpIdx(socialSelections);
 
 		PreferenceControl.setNotificationTimeIdx(notificationGroup.getResult());

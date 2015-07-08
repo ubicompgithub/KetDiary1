@@ -1,6 +1,5 @@
 package com.ubicomp.ketdiary.statistic.coping;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -20,7 +18,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,16 +30,14 @@ import android.widget.TextView;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.BootBoardcastReceiver;
-import com.ubicomp.ketdiary.EmotionActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.clicklog.ClickLog;
 import com.ubicomp.ketdiary.clicklog.ClickLogId;
-import com.ubicomp.ketdiary.db.DBControl;
+import com.ubicomp.ketdiary.data.structure.CopingSkill;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.BarButtonGenerator;
 import com.ubicomp.ketdiary.ui.CustomToast;
-import com.ubicomp.ketdiary.ui.CustomToastSmall;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
 /**
@@ -61,7 +56,7 @@ public class CopingActivity extends Activity {
 	private LinearLayout mainLayout, mainTop;
 
 	private Activity activity;
-
+	
 	private View fbView;
 	private View uvView;
 	private View[] recreationViews;
@@ -96,7 +91,22 @@ public class CopingActivity extends Activity {
 	private int intentType = -1;
 	private RelativeLayout.LayoutParams boxParam;
 	private int[] intentSequence = null;
+	private int skillType = -1, skillSelect = -1;
+	private String send_recreation = "";
+	
+	private static final int SELECT_BREATH = 0;
+	private static final int SELECT_WALK = 1;
+	private static final int SELECT_STRETCH = 2;
+	private static final int SELECT_MUSIC = 3;
+	private static final int SELECT_LEAVE = 4;
+	private static final int SELECT_TOLD = 5;
+	private static final int SELECT_CD = 6;
+	private static final int SELECT_POSITIVE = 7;
+	private static final int SELECT_POISON = 8;
+	private static final int SELECT_SUGGESTION = 9;
+	private static final int SELECT_HOW = 10;
 
+	
 	// These are used for folding lists
 	private ImageView[] listDownImg = new ImageView[5];
 	private boolean[] listVisible = new boolean[] {false, false, false, false, false};
@@ -143,7 +153,7 @@ public class CopingActivity extends Activity {
 		setRelaxedView();
 		setRecreationView();
 		setInterpersonView();
-		setSponsorView();
+		//setSponsorView();
 		setInfoView();
 
 	}
@@ -154,7 +164,7 @@ public class CopingActivity extends Activity {
 		muscleView.setVisibility(View.GONE);
 		stretchView.setVisibility(View.GONE);
 		musicView.setVisibility(View.GONE);
-		meditationView.setVisibility(View.GONE);
+		//meditationView.setVisibility(View.GONE);
 		
 		if(listDownImg[0] != null)
 			listDownImg[0].setVisibility(View.INVISIBLE);
@@ -169,13 +179,13 @@ public class CopingActivity extends Activity {
 		muscleView.setVisibility(View.VISIBLE);
 		stretchView.setVisibility(View.VISIBLE);
 		musicView.setVisibility(View.VISIBLE);
-		meditationView.setVisibility(View.VISIBLE);
+		//meditationView.setVisibility(View.VISIBLE);
 		
 		if(listDownImg[0] != null)
 			listDownImg[0].setVisibility(View.VISIBLE);
 
 		listVisible[0] = true;
-
+		skillType = 0;
 		// list.setVisibility(View.VISIBLE);
 	}
 
@@ -187,6 +197,7 @@ public class CopingActivity extends Activity {
 			listDownImg[1].setVisibility(View.INVISIBLE);
 
 		listVisible[1] = false;
+		
 		// list.setVisibility(View.INVISIBLE);
 	}
 
@@ -198,6 +209,7 @@ public class CopingActivity extends Activity {
 			listDownImg[1].setVisibility(View.VISIBLE);
 
 		listVisible[1] = true;
+		skillType = 1;
 		// list.setVisibility(View.VISIBLE);
 	}
 
@@ -222,9 +234,10 @@ public class CopingActivity extends Activity {
 			listDownImg[2].setVisibility(View.VISIBLE);
 
 		listVisible[2] = true;
+		skillType = 2;
 		// list.setVisibility(View.VISIBLE);
 	}
-
+	/*
 	private void foldSponsorView(){
 		for (int i = 0; i < sponsorViews.length; ++i)
 			sponsorViews[i].setVisibility(View.GONE);
@@ -245,7 +258,7 @@ public class CopingActivity extends Activity {
 
 		listVisible[3] = true;
 		// list.setVisibility(View.VISIBLE);
-	}
+	}*/
 
 	private void foldInfoView(){
 		encouragementView.setVisibility(View.GONE);
@@ -257,6 +270,7 @@ public class CopingActivity extends Activity {
 			listDownImg[4].setVisibility(View.INVISIBLE);
 
 		listVisible[4] = false;
+		
 		// list.setVisibility(View.INVISIBLE);
 	}
 
@@ -270,6 +284,7 @@ public class CopingActivity extends Activity {
 			listDownImg[4].setVisibility(View.VISIBLE);
 
 		listVisible[4] = true;
+		skillType = 4;
 		// list.setVisibility(View.VISIBLE);
 	}
 
@@ -286,7 +301,7 @@ public class CopingActivity extends Activity {
 						listDownImg[0] = (ImageView) v.findViewById(R.id.question_list);
 						if (listVisible[0]) {
 							foldRelaxedView();
-
+							
 							// breathView.setVisibility(View.GONE);
 							// muscleView.setVisibility(View.GONE);
 							// stretchView.setVisibility(View.GONE);
@@ -298,7 +313,7 @@ public class CopingActivity extends Activity {
 							unfoldRelaxedView();
 							foldRecreationView();
 							foldInterpersonView();
-							foldSponsorView();
+							//foldSponsorView();
 							foldInfoView();
 							// breathView.setVisibility(View.VISIBLE);
 							// muscleView.setVisibility(View.VISIBLE);
@@ -319,7 +334,9 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
+						
 						setAnimationView(1);
+						skillSelect = SELECT_BREATH;
 					}
 
 				});
@@ -331,7 +348,8 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
-						
+						setAnimationView(2);
+						skillSelect = SELECT_WALK;
 					}
 
 				});
@@ -343,7 +361,7 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
-						
+						skillSelect = SELECT_STRETCH;
 					}
 
 				});
@@ -356,6 +374,7 @@ public class CopingActivity extends Activity {
 					@Override
 					public void onClick(View v) {
 						setAnimationView(0);
+						skillSelect = SELECT_MUSIC;
 					}
 
 				});
@@ -363,6 +382,7 @@ public class CopingActivity extends Activity {
 		musicView.setVisibility(View.GONE);
 		mainLayout.addView(musicView);
 		
+		/*
 		meditationView= BarButtonGenerator.createSettingButtonView(
 				R.string.coping_meditation, new OnClickListener() {
 
@@ -374,7 +394,7 @@ public class CopingActivity extends Activity {
 				});
 		
 		meditationView.setVisibility(View.GONE);
-		mainLayout.addView(meditationView);
+		mainLayout.addView(meditationView);*/
 	}
 
 	private void setRecreationView(){
@@ -397,13 +417,13 @@ public class CopingActivity extends Activity {
 							unfoldRecreationView();
 							foldRelaxedView();
 							foldInterpersonView();
-							foldSponsorView();
+							//foldSponsorView();
 							foldInfoView();
 							// for (int i = 0; i < recreationViews.length-2; ++i)
 							// 	recreationViews[i].setVisibility(View.VISIBLE);
 							// list.setVisibility(View.VISIBLE);
 						}
-						listVisible[1] = !listVisible[1];
+						//listVisible[1] = !listVisible[1];
 					}
 				});
 		mainLayout.addView(recreationView);
@@ -412,7 +432,16 @@ public class CopingActivity extends Activity {
 		String[] recreations = PreferenceControl.getRecreations();
 		recreationViews = new RelativeLayout[recreations.length];
 		
+		 for (int i = 0; i < recreations.length; ++i) {
+		 	recreationViews[i] = BarButtonGenerator.createSettingButtonView2(
+		 			recreations[i], new RecreationOnClickListener(recreations[i]) );
 
+		 	recreationViews[i].setVisibility(View.GONE);
+		 	mainLayout.addView(recreationViews[i]);
+		}
+		 
+
+		/*
 		recreationViews[0] = BarButtonGenerator.createSettingButtonView(
 			R.string.coping_default_recreation0, new OnClickListener() {
 
@@ -450,7 +479,7 @@ public class CopingActivity extends Activity {
 			});
 
 		recreationViews[2].setVisibility(View.GONE);
-		mainLayout.addView(recreationViews[2]);
+		mainLayout.addView(recreationViews[2]);*/
 
 		// for (int i = 0; i < recreations.length; ++i) {
 		// 	recreationViews[i] = BarButtonGenerator.createSettingButtonView(
@@ -467,6 +496,22 @@ public class CopingActivity extends Activity {
 		// 	mainLayout.addView(recreationViews[i]);
 		// }
 
+
+	}
+	
+	private class RecreationOnClickListener implements View.OnClickListener {
+		private String recreation = null;
+		
+		public RecreationOnClickListener(String recreation){
+			this.recreation = recreation;
+		}
+		
+		@Override
+		public void onClick(View v) {
+			send_recreation = recreation;
+			generateDialog(R.string.coping_recreation_dialog);
+			
+		}
 
 	}
 
@@ -490,7 +535,7 @@ public class CopingActivity extends Activity {
 							unfoldInterpersonView();
 							foldRelaxedView();
 							foldRecreationView();
-							foldSponsorView();
+							//foldSponsorView();
 							foldInfoView();
 
 							// awayView.setVisibility(View.VISIBLE);
@@ -499,7 +544,7 @@ public class CopingActivity extends Activity {
 							
 							// list.setVisibility(View.VISIBLE);
 						}
-						listVisible[2] = !listVisible[2];
+						//listVisible[2] = !listVisible[2];
 					}
 				});
 		mainLayout.addView(interpersonView);
@@ -510,6 +555,7 @@ public class CopingActivity extends Activity {
 					@Override
 					public void onClick(View v) {
 						generateDialog(R.string.coping_away_dialog);
+						skillSelect = SELECT_LEAVE;
 					}
 
 				});
@@ -522,6 +568,7 @@ public class CopingActivity extends Activity {
 					@Override
 					public void onClick(View v) {
 						generateDialog(R.string.coping_told_dialog);
+						skillSelect = SELECT_TOLD;
 					}
 
 				});
@@ -534,6 +581,7 @@ public class CopingActivity extends Activity {
 					@Override
 					public void onClick(View v) {
 						generateDialog(R.string.coping_repeat_dialog);
+						skillSelect = SELECT_CD;	
 					}
 
 				});
@@ -542,7 +590,7 @@ public class CopingActivity extends Activity {
 
 	}
 
-
+	/*
 	private void setSponsorView(){
 		RelativeLayout sponsorView = createListView(
 				R.string.coping_sponsor, new OnClickListener() {
@@ -555,12 +603,12 @@ public class CopingActivity extends Activity {
 						// ImageView list = (ImageView) v
 						// 		.findViewById(R.id.question_list);
 						if (listVisible[3]) {
-							foldSponsorView();
+							//foldSponsorView();
 							// for (int i = 0; i < sponsorViews.length; ++i)
 							// 	sponsorViews[i].setVisibility(View.GONE);
 							// list.setVisibility(View.INVISIBLE);
 						} else {
-							unfoldSponsorView();
+							//unfoldSponsorView();
 							foldRelaxedView();
 							foldRecreationView();
 							foldInterpersonView();
@@ -569,7 +617,7 @@ public class CopingActivity extends Activity {
 							// 	sponsorViews[i].setVisibility(View.VISIBLE);
 							// list.setVisibility(View.VISIBLE);
 						}
-						listVisible[3] = !listVisible[3];
+						//listVisible[3] = !listVisible[3];
 					}
 				});
 		mainLayout.addView(sponsorView);
@@ -593,7 +641,7 @@ public class CopingActivity extends Activity {
 		}
 
 
-	}
+	}*/
 
 
 	private void setInfoView(){
@@ -618,7 +666,7 @@ public class CopingActivity extends Activity {
 							foldRelaxedView();
 							foldRecreationView();
 							foldInterpersonView();
-							foldSponsorView();
+							//foldSponsorView();
 							// encouragementView.setVisibility(View.VISIBLE);
 							// harmView.setVisibility(View.VISIBLE);
 							// lifestyleView.setVisibility(View.VISIBLE);
@@ -626,7 +674,7 @@ public class CopingActivity extends Activity {
 							
 							// list.setVisibility(View.VISIBLE);
 						}
-						listVisible[4] = !listVisible[4];
+						//listVisible[4] = !listVisible[4];
 					}
 				});
 		mainLayout.addView(infoView);
@@ -637,6 +685,7 @@ public class CopingActivity extends Activity {
 					@Override
 					public void onClick(View v) {
 						generateDialog(R.string.coping_encouragement_dialog);
+						skillSelect = SELECT_POSITIVE;
 					}
 
 				});
@@ -649,6 +698,7 @@ public class CopingActivity extends Activity {
 					@Override
 					public void onClick(View v) {
 						generateDialog(R.string.coping_harm_dialog);
+						skillSelect = SELECT_POISON;
 					}
 
 				});
@@ -661,6 +711,7 @@ public class CopingActivity extends Activity {
 					@Override
 					public void onClick(View v) {
 						generateDialog(R.string.coping_lifestyle_dialog);
+						skillSelect = SELECT_SUGGESTION;
 					}
 
 				});
@@ -673,6 +724,7 @@ public class CopingActivity extends Activity {
 					@Override
 					public void onClick(View v) {
 						generateDialog(R.string.coping_lapse_dialog);
+						skillSelect = SELECT_HOW;
 					}
 
 				});
@@ -697,13 +749,15 @@ public class CopingActivity extends Activity {
         dialog.show();
          
         TextView dialogOKButton = (TextView) dialog.findViewById(R.id.ok_button);
-        dialogOKButton.setOnClickListener(new OnClickListener() {
+        /*dialogOKButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Close dialog
                 dialog.dismiss();
+                
             }
-        });
+        });*/
+        dialogOKButton.setOnClickListener(new EndOnClickListener() );
 	}
 	
 	
@@ -754,7 +808,7 @@ public class CopingActivity extends Activity {
 
 		TextView button = (TextView) layout.findViewById(R.id.question_button);
 		button.setTypeface(wordTypefaceBold);
-		button.setOnClickListener(new RecreationOnClickListener());
+		//button.setOnClickListener(new RecreationOnClickListener());
 
 		return layout;
 	}
@@ -1224,13 +1278,18 @@ public class CopingActivity extends Activity {
 	private class EndOnClickListener implements View.OnClickListener {
 		private int selection;
 		private String recreation = null;
-
+		
+		
+		EndOnClickListener() {
+		}
 		/**
 		 * Constructor without recreation
 		 * 
 		 * @param selection
 		 *            what method selected by the user
 		 */
+		
+		
 		EndOnClickListener(int selection) {
 			this.selection = selection;
 		}
@@ -1250,14 +1309,16 @@ public class CopingActivity extends Activity {
 
 		@Override
 		public void onClick(View v) {
-			// long ts = System.currentTimeMillis();
-			// int addScore = db.insertEmotionDIY(new EmotionDIY(ts, selection, recreation, 0));
+			 long ts = System.currentTimeMillis();
+			 int addScore = db.insertCopingSkill(new CopingSkill(ts, skillType, skillSelect, send_recreation, 0));
 			// int addScore2 = 0;
 			// if (intentType > -2) {
 			// 	addScore2 = db.insertQuestionnaire(new Questionnaire(ts, intentType, seq_toString(), 0));
 			// 	PreferenceControl.setTestResult(-1);
 			// }
-//			CustomToast.generateToast(R.string.emotionDIY_end_toast, addScore + addScore2);
+			CustomToast.generateToast(R.string.emotionDIY_end_toast, addScore);
+			PreferenceControl.setPoint(addScore);
+			
 			ClickLog.Log(ClickLogId.EMOTION_DIY_SELECTION);
 			activity.finish();
 		}
@@ -1457,7 +1518,7 @@ public class CopingActivity extends Activity {
 	}
 
 	/** OnClickListener for selecting do recreation method */
-	private class RecreationOnClickListener implements View.OnClickListener {
+	private class Recreation123OnClickListener implements View.OnClickListener {
 		@Override
 		public void onClick(View v) {
 //			setRecreationQuestion();
@@ -1542,7 +1603,7 @@ public class CopingActivity extends Activity {
 				bgLayout.removeView(animEndLayout);
 				return false;
 			}
-			
+		
 			// return super.onKeyDown(keyCode, event);
 
 // 			if (state == 0) {

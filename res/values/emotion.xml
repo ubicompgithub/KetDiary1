@@ -18,7 +18,7 @@
     <string name="emotion_manage_title1">的情緒管理</string>
     <string name="emotion_manage_toast">確定放棄填寫情緒管理？</string>
     
-    <string name="emotionDIY_end_toast">完成心情DIY</string>
+    <string name="emotionDIY_end_toast">學習應對技巧</string>
     <string name="emotion_manage_end_toast">做好情緒管理</string>
     <string name="emotion_manage_check_toast">尚未填寫原因</string>
     <string name="emotionDIY_help_case0">閉眼專注聆聽舒緩音樂</string>

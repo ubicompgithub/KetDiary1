@@ -28,7 +28,7 @@ import com.ubicomp.ketdiary.system.PreferenceControl;
 public class PreSettingActivity extends Activity {
 
 	private EditText uid, did, target_good, target_bad, drink;
-	private EditText voltage1, voltage2, ACountDown, VCountDown;
+	private EditText voltage1, voltage2, ACountDown, VCountDown, V2CountDown;
 
 	private Button saveButton, exchangeButton, restoreButton, debugButton,
 			restoreVer1Button, dummyDataButton;
@@ -38,7 +38,7 @@ public class PreSettingActivity extends Activity {
 
 	private int mYear, mMonth, mDay;
 	private int lYear, lMonth, lDay;
-	private int v1, v2, aCount, vCount;
+	private int v1, v2, aCount, vCount, v2Count;
 
 	private TextView mDateDisplay;
 	private Button mPickDate;
@@ -96,6 +96,9 @@ public class PreSettingActivity extends Activity {
 		
 		VCountDown = (EditText) this.findViewById(R.id.voltage1_countdown_edit);
 		VCountDown.setText(String.valueOf(PreferenceControl.getVoltageCountDown()));
+		
+		V2CountDown = (EditText) this.findViewById(R.id.voltage2_countdown_edit);
+		V2CountDown.setText(String.valueOf(PreferenceControl.getVoltage2CountDown()));
 		
 		mDateDisplay = (TextView) findViewById(R.id.date);
 		mPickDate = (Button) findViewById(R.id.date_button);
@@ -299,6 +302,14 @@ public class PreSettingActivity extends Activity {
 					check = false;
 			}
 			
+			if (V2CountDown.getText().toString().length() == 0)
+				check = false;
+			else {
+				v2Count = Integer.valueOf(V2CountDown.getText().toString());
+				if (v2Count == 0)
+					check = false;
+			}
+			
 			Toast.makeText(activity, String.valueOf(check), Toast.LENGTH_SHORT).show();
 			
 			if (check) {
@@ -314,6 +325,7 @@ public class PreSettingActivity extends Activity {
 				PreferenceControl.setVoltage2(v2);
 				PreferenceControl.setAfterCountDown(aCount);
 				PreferenceControl.setVoltageCountDown(vCount);
+				PreferenceControl.setVoltage2CountDown(v2Count);
 				
 				PreferenceControl.setStartDate(mYear, mMonth, mDay);
 

@@ -26,7 +26,7 @@ public class CustomToast {
 	private static ImageView toastCircle, toastContent;
 	private static ImageView toastCongra;
 	private static TextView toastDescribe;
-	private static int[] expId={R.drawable.toast_circle_level1,R.drawable.toast_circle_level2,R.drawable.toast_circle_level3
+	private static int[] expId={android.R.color.transparent, R.drawable.toast_circle_level1,R.drawable.toast_circle_level2,R.drawable.toast_circle_level3
 		,R.drawable.toast_circle_level4,R.drawable.toast_circle_level5,R.drawable.toast_circle_level6,
 		R.drawable.toast_circle_level6,R.drawable.toast_circle_level7,R.drawable.toast_circle_level8,
 		R.drawable.toast_circle_level9,R.drawable.toast_circle_level10}; 

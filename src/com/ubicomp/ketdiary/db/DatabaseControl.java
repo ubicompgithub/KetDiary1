@@ -1561,7 +1561,11 @@ public class DatabaseControl {
 					addScore = 1;
 				if (!StartDateCheck.afterStartDate())
 					addScore = 0;
-
+				
+				if(data.getQuestionType() == 1){
+					addScore = 3;
+				}
+				
 				db = dbHelper.getWritableDatabase();
 				ContentValues content = new ContentValues();
 				content.put("year", data.getTv().getYear());
@@ -1640,6 +1644,29 @@ public class DatabaseControl {
 						+ ts;
 				db.execSQL(sql);
 				db.close();
+			}
+		}
+		
+		/**
+		 * This method is used for checking if the user do the brac detection at
+		 * this time slot
+		 * 
+		 * @return true if the user do a brac detection at the current time slot
+		 */
+		
+		public boolean randomQuestionDone() {
+			synchronized (sqlLock) {
+				db = dbHelper.getReadableDatabase();
+				long ts = System.currentTimeMillis();
+				TimeValue tv = TimeValue.generate(ts);
+				String sql = "SELECT id FROM QuestionTest WHERE" + " year ="
+						+ tv.getYear() + " AND month = " + tv.getMonth()
+						+ " AND day= " + tv.getDay() + " AND questionType= 1";
+				Cursor cursor = db.rawQuery(sql, null);
+				boolean result = cursor.getCount() > 0;
+				cursor.close();
+				db.close();
+				return result;
 			}
 		}
 		
