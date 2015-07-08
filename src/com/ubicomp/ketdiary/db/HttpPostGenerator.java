@@ -129,11 +129,18 @@ public class HttpPostGenerator {
 		builder.addTextBody("data[]", String.valueOf(data.isPrime));
 		builder.addTextBody("data[]", String.valueOf(data.isFilled));
 		builder.addTextBody("data[]", String.valueOf(data.getScore()));
+		
+		
 
 		String _ts = String.valueOf(data.tv.getTimestamp());
 		File[] imageFiles;
 		File testFile, detectionFile;
-		imageFiles = new File[3];
+		int fileNum = new File(mainStorageDir.getPath() + File.separator + _ts
+				+ File.separator).listFiles().length;
+		
+		builder.addTextBody("data[]", String.valueOf(fileNum));
+		
+		imageFiles = new File[fileNum-3];
 
 		testFile = new File(mainStorageDir.getPath() + File.separator + _ts
 				+ File.separator + "voltage.txt");

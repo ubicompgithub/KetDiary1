@@ -385,7 +385,7 @@ public class LineChartView extends View {
     			paint.setTextSize(convertDpToPixel((float)11.33));
     			canvas.drawText(currentMonth+"/"+currentDate, getXPos2(i), getHeight() - date_Y_offset, paint);
     		}
-    		else if(i % 5 == 0){
+    		else if(i % 5 == 0 && i== numOfDays-1){
     			paint.setStyle(Style.FILL);
     			paint.setColor(getResources().getColor(R.color.linechart_date_color));
     			paint.setTextAlign(Align.CENTER);
