@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.BluetoothLE;
+package com.example.bletest;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -41,4 +41,14 @@ public interface BluetoothListener {
 
     /* Color sensor readings */
     void bleColorReadings(byte[] colorReadings);
+    
+    // Add by Larry
+    /* Take picture successfully*/
+    void bleTakePictureSuccess();
+
+    /* Update process rate*/
+    void updateProcessRate(float rate);
+
+    /* Clear process rate*/
+    void clearProcesssRate();
 }
