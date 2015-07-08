@@ -471,12 +471,13 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			label_title.setText("準備中....");
 			
 			startConnection();
-			if(goThroughState)
+			if(goThroughState){
 				updateInitState(Tester._BT);
-			
-			
-			openSensorMsgTimer = new OpenSensorMsgTimer();
-			openSensorMsgTimer.start();
+			}
+			else{
+				openSensorMsgTimer = new OpenSensorMsgTimer();
+				openSensorMsgTimer.start();
+			}
 			/*  Next State decide by callback
 			 *  1. timeout 2. connect but no saliva(or wrong ID) 3.connect with right salivaId (continue)
 			 */
@@ -1076,25 +1077,28 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 				//img_face.setVisibility(View.INVISIBLE);
 				Log.i(TAG3, "FINISH");
 				
-				if(goThroughState){
+				if(state == CAMERA_STATE && goThroughState){
+					setState(new Stage2State());
+				}
+				else if(state == NOTENOUGH_STATE && goThroughState){
 					setState(new RunState());
 				}
-				
-				if(state == CAMERA_STATE){
-					failedState = state;
-					setState(new FailState("測試超時"));
-				}
-				else if (state == NOTENOUGH_STATE){ // 判斷第二個電極是否通過
-					if(voltage < SECOND_VOLTAGE_THRESHOLD){
-						secondVoltage = voltage;
-						setState(new RunState());
-					}
-					else{
+				else{
+					if(state == CAMERA_STATE){
 						failedState = state;
-						setState(new FailState("測試失敗,請更換試紙匣後重試"));
+						setState(new FailState("測試超時"));
+					}
+					else if (state == NOTENOUGH_STATE){ // 判斷第二個電極是否通過
+						if(voltage < SECOND_VOLTAGE_THRESHOLD){
+							secondVoltage = voltage;
+							setState(new RunState());
+						}
+						else{
+							failedState = state;
+							setState(new FailState("測試失敗,請更換試紙匣後重試"));
+						}
 					}
 				}
-				
 				//cameraRecorder.closeSuccess();
 			}
 
@@ -1185,17 +1189,18 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			//runBT();
 			if(goThroughState)
 				setState(new CameraState());
-			
-			if(voltage < FIRST_VOLTAGE_THRESHOLD)
-				if(collectdata){
-					Toast.makeText(activity, "Collect Data Mode", Toast.LENGTH_SHORT).show();	
-				}
-				else{
-					setState(new CameraState());
-				}
 			else{
-				failedState = state;
-				setState(new FailState("請更換試紙匣後重試"));
+				if(voltage < FIRST_VOLTAGE_THRESHOLD)
+					if(collectdata){
+						Toast.makeText(activity, "Collect Data Mode", Toast.LENGTH_SHORT).show();	
+					}
+					else{
+						setState(new CameraState());
+					}
+				else{
+					failedState = state;
+					setState(new FailState("請更換試紙匣後重試"));
+				}
 			}
 		}
 
@@ -1228,17 +1233,20 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			//countDownText.setText("");
 			//showDebug(">Start to run the  device");
 			//runBT();
-			in_stage2=true;
-			if( voltage < SECOND_VOLTAGE_THRESHOLD ){
-				img_water3.setImageResource(R.drawable.saliva3_yes);
-				setState(new DoneState());
-			}
-			else{
+			if(goThroughState){
 				setState(new NotEnoughSavilaState() );
 			}
+			else{
+				in_stage2=true;
+				if( voltage < SECOND_VOLTAGE_THRESHOLD ){
+					img_water3.setImageResource(R.drawable.saliva3_yes);
+					setState(new DoneState());
+				}
+				else{
+					setState(new NotEnoughSavilaState() );
+				}
+			}
 			
-			
-			//setState(new FormState());
 		}
 
 		@Override
@@ -1421,8 +1429,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		
 		//if(state == CAMERA_STATE && state == STAGE2_STATE && state == NOTENOUGH_STATE && state == RUN_STATE)
 		//	writeToVoltageFile(str+str2+"\n");
-		if(state == CAMERA_STATE && goThroughState)
-			setState(new Stage2State());
+		//if(state == RUN_STATE && goThroughState)
+		//	setState(new Stage2State());
 		
 		if(state == CAMERA_STATE && voltage > FIRST_VOLTAGE_THRESHOLD ){
 			firstVoltage = voltage;

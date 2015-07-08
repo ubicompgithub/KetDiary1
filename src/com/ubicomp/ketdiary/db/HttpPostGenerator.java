@@ -138,6 +138,8 @@ public class HttpPostGenerator {
 		int fileNum = new File(mainStorageDir.getPath() + File.separator + _ts
 				+ File.separator).listFiles().length;
 		
+		Log.d("FileNum: ", _ts + " Num: "+ fileNum);
+		
 		builder.addTextBody("data[]", String.valueOf(fileNum));
 		
 		imageFiles = new File[fileNum-3];
