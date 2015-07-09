@@ -161,7 +161,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private boolean ble_disconnect=false;
 	private boolean ble_connected = false;
 	private boolean ble_pluginserted = false;
-	private boolean goThroughState = true;
+	private boolean goThroughState = false;
 	
 	private static Object init_lock = new Object();
 	private static Object done_lock = new Object();
@@ -1282,7 +1282,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
     	Log.i(TAG, "connect timeout");
         Toast.makeText(activity, "BLE connection timeout", Toast.LENGTH_SHORT).show();
         failedState = state;
-        setState(new FailState("連接逾時"));
+        if(!goThroughState)
+        	setState(new FailState("連接逾時"));
     }
 
     @Override

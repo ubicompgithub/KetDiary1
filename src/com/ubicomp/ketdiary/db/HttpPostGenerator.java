@@ -142,7 +142,7 @@ public class HttpPostGenerator {
 		
 		builder.addTextBody("data[]", String.valueOf(fileNum));
 		
-		imageFiles = new File[fileNum-3];
+		imageFiles = new File[fileNum];
 
 		testFile = new File(mainStorageDir.getPath() + File.separator + _ts
 				+ File.separator + "voltage.txt");
