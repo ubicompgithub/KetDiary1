@@ -49,7 +49,7 @@ public class SettingActivity extends Activity {
 	private View socialGroupView;
 	private SingleRadioGroup notificationGroup;
 	private View notificationGroupView;
-	private View bluetoothView;
+	// private View bluetoothView;
 
 	private static final int PRIVACY = 0, RECREATION = 100, CONTACT = 200,
 			SOCIAL = 300, ALARM = 400, SYSTEM = 500;
@@ -77,9 +77,6 @@ public class SettingActivity extends Activity {
 	}
 
 	private void setting() {
-
-
-
 		RelativeLayout recreationView = createListView(
 				R.string.setting_recreation, new OnClickListener() {
 
@@ -178,20 +175,20 @@ public class SettingActivity extends Activity {
 		mainLayout.addView(alarmView);
 		mainLayout.addView(notificationGroupView);
 
-		bluetoothView = BarButtonGenerator.createSettingButtonView(
-				R.string.setting_bluetooth, new OnClickListener() {
+		// bluetoothView = BarButtonGenerator.createSettingButtonView(
+		// 		R.string.setting_bluetooth, new OnClickListener() {
 
-					@Override
-					public void onClick(View v) {
-						ClickLog.Log(ClickLogId.SETTING_CHECK + SYSTEM);
-						Intent intentBluetooth = new Intent();
-						intentBluetooth
-								.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
-						startActivity(intentBluetooth);
-					}
+		// 			@Override
+		// 			public void onClick(View v) {
+		// 				ClickLog.Log(ClickLogId.SETTING_CHECK + SYSTEM);
+		// 				Intent intentBluetooth = new Intent();
+		// 				intentBluetooth
+		// 						.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
+		// 				startActivity(intentBluetooth);
+		// 			}
 
-				});
-		bluetoothView.setVisibility(View.GONE);
+		// 		});
+		// bluetoothView.setVisibility(View.GONE);
 		
 		/*
 		RelativeLayout systemView = createListView(R.string.setting_system,
@@ -217,6 +214,7 @@ public class SettingActivity extends Activity {
 		mainLayout.addView(systemView);
 		mainLayout.addView(bluetoothView);
 		*/
+
 	}
 
 	@Override
@@ -440,5 +438,7 @@ public class SettingActivity extends Activity {
 
 		return layout;
 	}
+
+
 
 }

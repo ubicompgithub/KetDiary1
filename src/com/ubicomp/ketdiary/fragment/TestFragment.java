@@ -30,10 +30,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ubicomp.ketdiary.statistic.coping.CopingActivity;
+import com.ubicomp.ketdiary.CopingActivity;
+import com.ubicomp.ketdiary.HelpActivity;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.ResultService2;
+import com.ubicomp.ketdiary.SettingActivity;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE2;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothListener;
 import com.ubicomp.ketdiary.camera.CameraCaller;
@@ -320,9 +322,9 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		img_help.setOnClickListener(new View.OnClickListener(){
 			@Override
 			public void onClick(View v) {
-				//Intent intent = new Intent();
-				//intent.setClass(activity, CopingActivity.class);
-				//startActivity(intent);
+				Intent intent = new Intent();
+				intent.setClass(activity, HelpActivity.class);
+				startActivity(intent);
 			}
 		});
 

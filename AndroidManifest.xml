@@ -143,7 +143,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".statistic.coping.CopingActivity"
+            android:name=".CopingActivity"
             android:label="@string/title_activity_dev"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:launchMode="singleTop"
@@ -151,6 +151,13 @@
         </activity>
         <activity
             android:name=".SettingActivity"
+            android:label="@string/title_activity_dev"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".HelpActivity"
             android:label="@string/title_activity_dev"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:launchMode="singleTop"

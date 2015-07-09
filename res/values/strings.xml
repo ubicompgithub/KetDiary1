@@ -405,4 +405,8 @@
 	<string name="TAG_CAL_CELL_PAGE_MONTH">tag_cal_cell_page_month</string>
 	<string name="TAG_CAL_CELL_YEAR">tag_cal_cell_year</string>
 	<string name="TAG_CAL_CELL_TS">tag_cal_cell_ts</string>
+
+    <string name="help_page">更多</string>
+    
+
 </resources>
