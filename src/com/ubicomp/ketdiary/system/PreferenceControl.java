@@ -562,6 +562,15 @@ public class PreferenceControl {
 				App.getContext().getString(R.string.default_goal_good));
 	}
 
+	public static int getSavingGoalMoney() {
+		return sp.getInt("targetMoney", 50000);
+	}
+
+	public static int getSavingDrinkCost() {
+		return sp.getInt("perDrinkCost", 200);
+	}
+
+	
 
 	public static boolean isLocked() {
 		return sp.getBoolean("systemLock", false);
