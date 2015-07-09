@@ -274,7 +274,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		img_bg = (ImageView)view.findViewById(R.id.iv_bar_bg);
 		img_ac = (ImageView)view.findViewById(R.id.iv_bar_ac);
 		img_btn = (ImageView)view.findViewById(R.id.vts_iv_cry);
-		//img_face= (ImageView)view.findViewById(R.id.test_face);
+		img_face= (ImageView)view.findViewById(R.id.test_face);
 		
 		cameraLayout = (FrameLayout)view.findViewById(R.id.cameraLayout);
 		water_layout = (LinearLayout)view.findViewById(R.id.water_layout);
@@ -1076,7 +1076,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 
 			@Override
 			public void onFinish() {
-				//img_face.setVisibility(View.INVISIBLE);
+				img_face.setVisibility(View.INVISIBLE);
 				Log.i(TAG3, "FINISH");
 				
 				if(state == CAMERA_STATE && goThroughState){
