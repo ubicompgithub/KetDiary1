@@ -3,6 +3,7 @@ package com.ubicomp.ketdiary.statistic;
 import java.util.ArrayList;
 
 import android.graphics.Typeface;
+import android.os.Build;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -14,6 +15,7 @@ import com.ubicomp.ketdiary.data.structure.Rank;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.dialog.QuestionDialog;
 import com.ubicomp.ketdiary.fragment.StatisticFragment;
+import com.ubicomp.ketdiary.system.Config;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
@@ -37,7 +39,7 @@ public class AnalysisCounterView extends StatisticPageView {
 	 	R.drawable.level7, R.drawable.level8, R.drawable.level9,
 	 	R.drawable.level10};
 	
-	public AnalysisCounterView(ShowRadarChart showRadarChart) { //TODO: 1.讓加分的時候可以馬上看到圖有變 2. 雷達圖
+	public AnalysisCounterView(ShowRadarChart showRadarChart) { //TODO: 1.讓加分的時候可以馬上看到圖有變 
 		super(R.layout.analysis_counter_view2);
 		db = new DatabaseControl();
 		//this.showRadarChart = showRadarChart;
@@ -113,15 +115,16 @@ public class AnalysisCounterView extends StatisticPageView {
 		
 		int prev_coupon = PreferenceControl.lastShowedCoupon();
 		int total_point = PreferenceControl.getPoint();
+		int coupon = PreferenceControl.getCoupon();
 
-		int level = total_point / 10;		
-		int counter = total_point % 10;
+		int level = total_point / Config.COUPON_CREDITS;		
+		int counter = total_point % Config.COUPON_CREDITS;
 
-		//PreferenceControl.setShowedCoupon(coupon);
-		//PreferenceControl.setCouponChange(false);
+		PreferenceControl.setShowedCoupon(coupon);
+		PreferenceControl.setCouponChange(false);
 		
-		/*
-		if (prev_coupon < level) {
+		
+		if (prev_coupon < coupon) {
 			if (Build.VERSION.SDK_INT < 16)
 				titleLayout.setBackgroundDrawable(context.getResources()
 						.getDrawable(R.drawable.analysis_title_bar_highlight));
@@ -131,11 +134,11 @@ public class AnalysisCounterView extends StatisticPageView {
 		} else {
 			if (Build.VERSION.SDK_INT < 16)
 				titleLayout.setBackgroundDrawable(context.getResources()
-						.getDrawable(R.drawable.analysis_title_bar));
+						.getDrawable(R.drawable.analyse_line));
 			else
 				titleLayout.setBackground(context.getResources().getDrawable(
-						R.drawable.analysis_title_bar));
-		}*/
+						R.drawable.analyse_line));
+		}
 
 		levelCircle.setImageResource(levelId[counter]);
 		
@@ -145,7 +148,7 @@ public class AnalysisCounterView extends StatisticPageView {
 //		levelHelp.invalidate();
 		levelHelp_value.setText(String.valueOf(level));
 		levelHelp_value.invalidate();
-		couponValue.setText(String.valueOf(level));
+		couponValue.setText(String.valueOf(coupon));
 		couponValue.invalidate();
 	}
 	
@@ -174,10 +177,10 @@ public class AnalysisCounterView extends StatisticPageView {
 		}
 
 		double test_r, advice_r, manage_r, story_r;
-		test_r = (double) ((double) test) / 600.0;
-		advice_r = (double) ((double) note) / 600.0;
-		manage_r = (double) ((double) question) / 700.0;
-		story_r = (double) ((double) coping) / 600.0;
+		test_r = (double) ((double) test) / 200.0;
+		advice_r = (double) ((double) note) / 300.0;
+		manage_r = (double) ((double) question) / 600.0;
+		story_r = (double) ((double) coping) / 300.0;
 
 		result.add(test_r);
 		result.add(advice_r);

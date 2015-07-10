@@ -3,6 +3,7 @@ package com.ubicomp.ketdiary.mydaybook.linechart;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
@@ -18,28 +19,30 @@ import com.ubicomp.ketdiary.ui.Typefaces;
 
 public class LineChartTitle extends View {
 	
-	private Context context = App.getContext();
+	private static Context context = App.getContext();
+	private static Resources resource = context.getResources();
 	private ChartCaller caller;
 	private boolean chartTouchable = true;
 	
-	private int chartType;
-	private int title_0 = context.getResources().getDimensionPixelSize(R.dimen.chart_title_0);
-	private int title_1 = context.getResources().getDimensionPixelSize(R.dimen.chart_title_1);
-	private int title_2 = context.getResources().getDimensionPixelSize(R.dimen.chart_title_2);
-	
-	private int title_0_r = context.getResources().getDimensionPixelSize(R.dimen.chart_title_0_r);
-	private int title_1_r = context.getResources().getDimensionPixelSize(R.dimen.chart_title_1_r);
-	private int title_2_r = context.getResources().getDimensionPixelSize(R.dimen.chart_title_2_r);
-	
-	private int gap = context.getResources().getDimensionPixelSize(R.dimen.chart_gap);
-	private int gap_r = context.getResources().getDimensionPixelSize(R.dimen.chart_gap_r);
-	
 	private int t1, t2, t3, t_gap;
+	private int chartType;
 	
-	private int titleTop = context.getResources().getDimensionPixelSize(R.dimen.chart_title_top);
-	private int textSize = context.getResources().getDimensionPixelSize(R.dimen.large_text_size);
+	private static int title_0 = resource.getDimensionPixelSize(R.dimen.chart_title_0);
+	private static int title_1 = resource.getDimensionPixelSize(R.dimen.chart_title_1);
+	private static int title_2 = resource.getDimensionPixelSize(R.dimen.chart_title_2);
 	
-	private String[] title_str = { "自我狀態", "人際互動" ,"綜合分析" };
+	private static int title_0_r = resource.getDimensionPixelSize(R.dimen.chart_title_0_r);
+	private static int title_1_r = resource.getDimensionPixelSize(R.dimen.chart_title_1_r);
+	private static int title_2_r = resource.getDimensionPixelSize(R.dimen.chart_title_2_r);
+	
+	private static int gap = resource.getDimensionPixelSize(R.dimen.chart_gap);
+	private static int gap_r = resource.getDimensionPixelSize(R.dimen.chart_gap_r);
+	
+	private static int titleTop = resource.getDimensionPixelSize(R.dimen.chart_title_top);
+	private static int textSize = resource.getDimensionPixelSize(R.dimen.large_text_size);
+	
+	private static final String[] title_str = { "自我狀態", "人際互動" ,"綜合分析" };
+	
 	private Paint text_paint_large = new Paint();
 	private Paint text_paint_large_2 = new Paint();
 	

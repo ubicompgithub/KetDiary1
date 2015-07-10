@@ -270,10 +270,19 @@
         <item>每日隨機出現問題</item>
         <item>表現優秀，請繼續加油！</item>
     </string-array>
+    
+    <string-array name="radar_2_1">
+        <item>每日隨機出現問題</item>
+        <item>可隨時留下心情供自己日後思索</item>
+        <item>表現優秀，請繼續加油！</item>
+    </string-array>
+    
     <string-array name="radar_3_0">
         <item>別忘了每天記下發生的事喔！</item>
         <item>表現優秀，請繼續加油！</item>
     </string-array>
+    
+    
     
     <string-array name="radar_1_1">
         <item>諮詢建議中，使用心情DIY幫助自己</item>
@@ -281,11 +290,7 @@
         <item>表現優秀，請繼續加油！</item>
     </string-array>
     
-    <string-array name="radar_2_1">
-        <item>每天可使用情緒管理記錄心情</item>
-        <item>可隨時留下心情供自己日後思索</item>
-        <item>表現優秀，請繼續加油！</item>
-    </string-array>
+
     <string-array name="radar_2_2">
         <item>每天晚上會跳出\'即時自我評量\'喔</item>
         <item>表現優秀，請繼續加油！</item>

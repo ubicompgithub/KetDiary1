@@ -190,7 +190,7 @@ public class DetailChart {
 				params[1].width = len;
 				subtitles[1].setText(R.string.radar_label0_1);
 				items[1].updateViewLayout(bar_progress[1], params[1]);
-				comments[1].setText(detectionComment[1]);
+				comments[1].setText(detectionComment[0]);
 				
 				items[0].setVisibility(View.VISIBLE);	
 				items[1].setVisibility(View.VISIBLE);
@@ -243,7 +243,7 @@ public class DetailChart {
 				params[1].width = len;
 				subtitles[1].setText(R.string.radar_label2_1);
 				items[1].updateViewLayout(bar_progress[1], params[1]);
-				comments[1].setText(manageEmotionComment[1]);
+				comments[1].setText(manageEmotionComment[0]);
 
 //				len = Math.min(rank.getManageAdditional() * total_len / 100,
 //						total_len);
@@ -269,7 +269,7 @@ public class DetailChart {
 				params[0].width = len;
 				subtitles[0].setText(R.string.radar_label3_0);
 				items[0].updateViewLayout(bar_progress[0], params[0]);
-				comments[0].setText(storyReadComment[idx]);
+				comments[0].setText(storyReadComment[0]);
 
 				/*
 				len = Math

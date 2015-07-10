@@ -296,7 +296,7 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
-						
+						ClickLog.Log(ClickLogId.COPING_SELECTION);
 						setAnimationView(1);
 						skillSelect = SELECT_BREATH;
 					}
@@ -310,6 +310,7 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
+						ClickLog.Log(ClickLogId.COPING_SELECTION);
 						setAnimationView(2);
 						skillSelect = SELECT_WALK;
 					}
@@ -323,6 +324,8 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
+						ClickLog.Log(ClickLogId.COPING_SELECTION);
+						setAnimationView(3);
 						skillSelect = SELECT_STRETCH;
 					}
 
@@ -335,6 +338,7 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
+						ClickLog.Log(ClickLogId.COPING_SELECTION);
 						setAnimationView(0);
 						skillSelect = SELECT_MUSIC;
 					}
@@ -500,6 +504,7 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
+						ClickLog.Log(ClickLogId.COPING_SELECTION);
 						generateDialog(R.string.coping_away_dialog);
 						skillSelect = SELECT_LEAVE;
 					}
@@ -513,6 +518,7 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
+						ClickLog.Log(ClickLogId.COPING_SELECTION);
 						generateDialog(R.string.coping_told_dialog);
 						skillSelect = SELECT_TOLD;
 					}
@@ -526,6 +532,7 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
+						ClickLog.Log(ClickLogId.COPING_SELECTION);
 						generateDialog(R.string.coping_repeat_dialog);
 						skillSelect = SELECT_CD;	
 					}
@@ -616,6 +623,7 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
+						ClickLog.Log(ClickLogId.COPING_SELECTION);
 						generateDialog(R.string.coping_encouragement_dialog);
 						skillSelect = SELECT_POSITIVE;
 					}
@@ -629,6 +637,7 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
+						ClickLog.Log(ClickLogId.COPING_SELECTION);
 						generateDialog(R.string.coping_harm_dialog);
 						skillSelect = SELECT_POISON;
 					}
@@ -642,6 +651,7 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
+						ClickLog.Log(ClickLogId.COPING_SELECTION);
 						generateDialog(R.string.coping_lifestyle_dialog);
 						skillSelect = SELECT_SUGGESTION;
 					}
@@ -655,6 +665,7 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
+						ClickLog.Log(ClickLogId.COPING_SELECTION);
 						generateDialog(R.string.coping_lapse_dialog);
 						skillSelect = SELECT_HOW;
 					}
@@ -696,6 +707,7 @@ public class CopingActivity extends Activity {
 
 	@Override
 	protected void onResume() {
+		ClickLog.Log(ClickLogId.COPING_ENTER);
 		super.onResume();
 	}
 
@@ -704,9 +716,9 @@ public class CopingActivity extends Activity {
 
 		//PreferenceControl.setNotificationTimeIdx(notificationGroup.getResult());
 
-		BootBoardcastReceiver.setRegularNotification(getBaseContext(),
-				getIntent());
-
+//		BootBoardcastReceiver.setRegularNotification(getBaseContext(),
+//				getIntent());
+		ClickLog.Log(ClickLogId.COPING_LEAVE);
 		super.onPause();
 	}
 
@@ -1039,6 +1051,11 @@ public class CopingActivity extends Activity {
 			animId = R.anim.animation_walk;
 			mediaId = R.raw.emotion_2;
 			break;
+		case 3:	
+			tv = BarButtonGenerator.createTextView(R.string.emotionDIY_help_case2_2);
+			animId = R.anim.animation_stretch;
+			mediaId = R.raw.emotion_0;
+			break;
 		default:
 			tv = BarButtonGenerator.createTextView(R.string.emotionDIY_help_case1);
 			animId = R.anim.animation_breath;
@@ -1120,7 +1137,7 @@ public class CopingActivity extends Activity {
 				animCenter.setImageResource(0);
 				animCenter.setOnClickListener(null);
 				animation.stop();
-				ClickLog.Log(ClickLogId.EMOTION_DIY_PAUSE);
+				ClickLog.Log(ClickLogId.COPING_PAUSE);
 			} else {
 				musicTimer = new MusicTimer(mediaPlayer.getDuration() - mediaPlayer.getCurrentPosition());
 				mediaPlayer.start();
@@ -1130,7 +1147,7 @@ public class CopingActivity extends Activity {
 				animCenter.setImageResource(R.drawable.icon_stop);
 				animCenter.setOnClickListener(animationStopClickListener);
 				animation.start();
-				ClickLog.Log(ClickLogId.EMOTION_DIY_PLAY);
+				ClickLog.Log(ClickLogId.COPING_PLAY);
 			}
 		}
 	}
@@ -1152,7 +1169,7 @@ public class CopingActivity extends Activity {
 				animCenter.setImageResource(0);
 				animCenter.setOnClickListener(null);
 				animation.stop();
-				ClickLog.Log(ClickLogId.EMOTION_DIY_STOP);
+				ClickLog.Log(ClickLogId.COPING_STOP);
 			}
 		}
 	}
@@ -1249,7 +1266,7 @@ public class CopingActivity extends Activity {
 			CustomToast.generateToast(R.string.emotionDIY_end_toast, addScore);
 			PreferenceControl.setPoint(addScore);
 			
-			ClickLog.Log(ClickLogId.EMOTION_DIY_SELECTION);
+			ClickLog.Log(ClickLogId.COPING_SELECTION);
 			activity.finish();
 		}
 	}
@@ -1297,7 +1314,7 @@ public class CopingActivity extends Activity {
 
 			animOK.setOnClickListener(new EndOnClickListener(selection));
 			animCancel.setOnClickListener(new AnimCancelOnClickListener());
-			ClickLog.Log(ClickLogId.EMOTION_DIY_END_PLAY);
+			ClickLog.Log(ClickLogId.COPING_END_PLAY);
 		}
 	}
 
@@ -1310,7 +1327,7 @@ public class CopingActivity extends Activity {
 			animCenter.setEnabled(true);
 			animationImg.setEnabled(true);
 			bgLayout.removeView(animEndLayout);
-			ClickLog.Log(ClickLogId.EMOTION_DIY_END_PLAY_CANCEL);
+			ClickLog.Log(ClickLogId.COPING_END_PLAY_CANCEL);
 		}
 	}
 
@@ -1364,7 +1381,7 @@ public class CopingActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 //			setRecreationEnd(recreation);
-			ClickLog.Log(ClickLogId.EMOTION_DIY_SELECTION);
+			ClickLog.Log(ClickLogId.COPING_SELECTION);
 		}
 
 	}
@@ -1378,7 +1395,7 @@ public class CopingActivity extends Activity {
 			for (int i = 0; i < item_count; ++i)
 				mainLayout.getChildAt(i).setEnabled(true);
 			enableBack = true;
-			ClickLog.Log(ClickLogId.EMOTION_DIY_CALL_CANCEL);
+			ClickLog.Log(ClickLogId.COPING_CALL_CANCEL);
 		}
 
 	}
@@ -1434,7 +1451,7 @@ public class CopingActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			setAnimationView(selection);
-			ClickLog.Log(ClickLogId.EMOTION_DIY_SELECTION);
+			ClickLog.Log(ClickLogId.COPING_SELECTION);
 		}
 	}
 
@@ -1443,7 +1460,7 @@ public class CopingActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 //			setRecreationQuestion();
-			ClickLog.Log(ClickLogId.EMOTION_DIY_SELECTION);
+			ClickLog.Log(ClickLogId.COPING_SELECTION);
 		}
 	}
 
@@ -1464,7 +1481,7 @@ public class CopingActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			// setCallQuestion(type);
-			ClickLog.Log(ClickLogId.EMOTION_DIY_SELECTION);
+			ClickLog.Log(ClickLogId.COPING_SELECTION);
 		}
 	}
 
@@ -1501,7 +1518,7 @@ public class CopingActivity extends Activity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			ClickLog.Log(ClickLogId.EMOTION_DIY_RETURN);
+			ClickLog.Log(ClickLogId.COPING_RETURN);
 			if (!enableBack)
 				return false;
 			if (animationImg != null) {

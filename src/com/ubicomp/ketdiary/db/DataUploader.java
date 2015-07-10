@@ -27,6 +27,7 @@ import android.util.Log;
 import com.ubicomp.ketdiary.check.DefaultCheck;
 import com.ubicomp.ketdiary.check.NetworkCheck;
 import com.ubicomp.ketdiary.data.structure.CopingSkill;
+import com.ubicomp.ketdiary.data.structure.ExchangeHistory;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.QuestionTest;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
@@ -157,6 +158,15 @@ public class DataUploader {
 				for (int i = 0; i < copingSkills.length; ++i) {
 					if (connectToServer(copingSkills[i]) == ERROR)
 					Log.d(TAG, "FAIL TO UPLOAD - CopingSkill");
+				}
+			}
+			
+			// ExchangeHistory
+			ExchangeHistory[] ehs = db.getNotUploadedExchangeHistory();
+			if (ehs != null) {
+				for (int i = 0; i < ehs.length; ++i) {
+					if (connectToServer(ehs[i]) == ERROR)
+						Log.d(TAG, "FAIL TO UPLOAD - ExchangeHistory");
 				}
 			}
 			
@@ -346,6 +356,24 @@ public class DataUploader {
 				if (upload(httpClient, httpPost)){
 					db.setCopingSkillUploaded(data.getTv().getTimestamp());
 					Log.d(TAG, "Upload CopingSkill Success.");
+				}
+				else
+					return ERROR;
+			} catch (Exception e) {
+				Log.d(TAG, "EXCEPTION:" + e.toString());
+				return ERROR;
+			}
+			return SUCCESS;
+		}
+		
+		private int connectToServer(ExchangeHistory data) {// ExchangeHistory
+			try {
+				DefaultHttpClient httpClient = HttpSecureClientGenerator
+						.getSecureHttpClient();
+				HttpPost httpPost = HttpPostGenerator.genPost(data);
+				if (upload(httpClient, httpPost)){
+					db.setExchangeHistoryUploaded(data.getTv().getTimestamp());
+					Log.d(TAG, "Upload ExchangeHistory Success.");
 				}
 				else
 					return ERROR;

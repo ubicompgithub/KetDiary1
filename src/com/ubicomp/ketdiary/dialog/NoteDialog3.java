@@ -38,6 +38,8 @@ import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.check.TimeBlock;
+import com.ubicomp.ketdiary.clicklog.ClickLog;
+import com.ubicomp.ketdiary.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.file.QuestionFile;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.BarButtonGenerator;
@@ -114,8 +116,8 @@ public class NoteDialog3 implements ChooseItemCaller{
 	
 	private static final String[] Timeslot_str = {"上午", "下午", "晚上"};
 	private static final String[] Date_str = {"今天", "昨天", "前天"};
-	private static Typeface wordTypefaceBold = Typefaces.getWordTypefaceBold();
-	private static Typeface wordTypeface = Typefaces.getWordTypeface();
+	private static final Typeface wordTypefaceBold = Typefaces.getWordTypefaceBold();
+	private static final Typeface wordTypeface = Typefaces.getWordTypeface();
 	
 	public NoteDialog3(TestQuestionCaller2 testQuestionCaller, RelativeLayout mainLayout){
 		
@@ -175,9 +177,9 @@ public class NoteDialog3 implements ChooseItemCaller{
 		
 		timeslot_txt.setText(Timeslot_str[time_slot]);
 		
-		title_txt.setTypeface(Typefaces.getWordTypefaceBold());
-		date_txt.setTypeface(Typefaces.getWordTypefaceBold());
-		timeslot_txt.setTypeface(Typefaces.getWordTypefaceBold());
+		title_txt.setTypeface(wordTypefaceBold);
+		date_txt.setTypeface(wordTypefaceBold);
+		timeslot_txt.setTypeface(wordTypefaceBold);
 		
 		date_layout.setOnClickListener(new OnClickListener(){
 			
@@ -218,8 +220,8 @@ public class NoteDialog3 implements ChooseItemCaller{
 		text_self = (TextView)center_layout.findViewById(R.id.text_self);
 	    text_other = (TextView)center_layout.findViewById(R.id.text_other);
 	    iv_self_others_bar = (ImageView)center_layout.findViewById(R.id.self_others_bar);
-		text_self.setTypeface(Typefaces.getWordTypefaceBold());
-	    text_other.setTypeface(Typefaces.getWordTypefaceBold());
+		text_self.setTypeface(wordTypefaceBold);
+	    text_other.setTypeface(wordTypefaceBold);
 	    
 		text_self.setTextColor(context.getResources().getColor(R.color.blue));    
 	    text_self.setOnClickListener(new MyClickListener(0));
@@ -233,9 +235,9 @@ public class NoteDialog3 implements ChooseItemCaller{
 		
 		TextView type_title = (TextView)type_layout.findViewById(R.id.type_title);
 		type_title.setText("事件類型：");
-		type_title.setTypeface(Typefaces.getWordTypefaceBold());
+		type_title.setTypeface(wordTypefaceBold);
 		typetext = (TextView)type_layout.findViewById(R.id.type_content);
-		typetext.setTypeface(Typefaces.getWordTypefaceBold());
+		typetext.setTypeface(wordTypefaceBold);
 		//typetext.setEnabled(false);
 		
 		//Spinner
@@ -247,17 +249,18 @@ public class NoteDialog3 implements ChooseItemCaller{
 		
 		TextView spin_title = (TextView)spinner_layout.findViewById(R.id.spinner_title);
 		spin_title.setText("發生事件：");
-		spin_title.setTypeface(Typefaces.getWordTypefaceBold());
+		spin_title.setTypeface(wordTypefaceBold);
 		
 		sp_content = (TextView)spinner_layout.findViewById(R.id.spinner_content);
 		sp_content.setText("");
-		sp_content.setTypeface(Typefaces.getWordTypefaceBold());
+		sp_content.setTypeface(wordTypefaceBold);
 		sp_content.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
 				//listView.setVisibility(View.VISIBLE);
-				listViewShowHide();
+				if(items!= -1)
+					listViewShowHide();
 			}
 								
 		});
@@ -269,7 +272,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 				R.layout.bar_impact, null);
 		impactSeekBar=(SeekBar)impact_layout.findViewById(R.id.impact_seek_bar);
 		TextView impact_title = (TextView)impact_layout.findViewById(R.id.impact_title);
-		impact_title.setTypeface(Typefaces.getWordTypefaceBold());
+		impact_title.setTypeface(wordTypefaceBold);
 		
 		//Description
 		LinearLayout discription_layout = (LinearLayout) inflater.inflate(
@@ -277,7 +280,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 		
 		TextView dec_title = (TextView)discription_layout.findViewById(R.id.description_title);
 		dec_title.setText("補充說明：");
-		dec_title.setTypeface(Typefaces.getWordTypefaceBold());
+		dec_title.setTypeface(wordTypefaceBold);
 		edtext = (EditText)discription_layout.findViewById(R.id.description_content);
 		
 		//Bottom View
@@ -335,6 +338,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 	public void copingSetting(){
 		//boxLayout = (RelativeLayout) inflater.inflate(R.layout.activity_qtip, null);
 		//mainLayout.addView(boxLayout);
+		ClickLog.Log(ClickLogId.TEST_COPE_ENTER);
 		state = STATE_COPE;
 		PreferenceControl.setAfterTestState(STATE_COPE);
 		
@@ -380,6 +384,8 @@ public class NoteDialog3 implements ChooseItemCaller{
 	public void copingSettingToResult(){
 		//boxLayout = (RelativeLayout) inflater.inflate(R.layout.activity_qtip, null);
 		//mainLayout.addView(boxLayout);
+		
+		ClickLog.Log(ClickLogId.TEST_COPE_ENTER);
 		state = STATE_COPE;
 		PreferenceControl.setAfterTestState(STATE_COPE);
 		
@@ -420,6 +426,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 	}
 	
 	public void knowingSetting(){
+		ClickLog.Log(ClickLogId.TEST_KOWING_ENTER);
 		state = STATE_KNOW;
 		PreferenceControl.setAfterTestState(STATE_KNOW);
 		MainActivity.getMainActivity().enableTabAndClick(true);
@@ -509,6 +516,8 @@ public class NoteDialog3 implements ChooseItemCaller{
 	
 	/** show the dialog */
 	public void show() {
+		ClickLog.Log(ClickLogId.TEST_NOTE_ENTER);
+		
 		state = STATE_NOTE;
 		PreferenceControl.setAfterTestState(STATE_NOTE);
 		//questionLayout.setVisibility(View.VISIBLE);
@@ -597,21 +606,23 @@ public class NoteDialog3 implements ChooseItemCaller{
 						listView.setVisibility(View.GONE);
 					}
 					else{
+						ClickLog.Log(ClickLogId.TEST_QUESTION_SEND);
 						
 						PreferenceControl.setIsFilled(1);
 						impact = impactSeekBar.getProgress();
 						testQuestionCaller.writeQuestionFile(day, timeslot, type, items, impact, edtext.getText().toString());
 				
 						
-				
 						copingSetting();
 					}
 				}
 			}
 			else if(state == STATE_COPE){
+				ClickLog.Log(ClickLogId.TEST_COPING_CONFIRM);				
 				knowingSetting();
 			}
 			else if(state == STATE_KNOW){
+				ClickLog.Log(ClickLogId.TEST_KOWING_NEXT);
 				knowing_index++;
 				if(knowing_index>=knowing_msg.length)
 					knowing_index-=knowing_msg.length;
@@ -636,11 +647,12 @@ public class NoteDialog3 implements ChooseItemCaller{
 						listView.setVisibility(View.GONE);
 					}
 					else{
+						ClickLog.Log(ClickLogId.TEST_QUESTION_SEND);
 						
 						PreferenceControl.setIsFilled(1);
 						impact = impactSeekBar.getProgress();
 						testQuestionCaller.writeQuestionFile(day, timeslot, type, items, impact, edtext.getText().toString());
-					
+						
 						copingSettingToResult();
 					}
 				}
@@ -654,6 +666,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 			
 			if(state == STATE_NOTE){
 				//impact = impactSeekBar.getProgress();
+				ClickLog.Log(ClickLogId.TEST_QUESTION_CANCEL);
 				testQuestionCaller.writeQuestionFile(day, timeslot, -1, -1, -1, edtext.getText().toString());
 				
 				PreferenceControl.setIsFilled(0);
@@ -663,6 +676,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 				//startActivity(new Intent(that, EventCopeSkillActivity.class));
 			}
 			else if(state == STATE_KNOW){
+				ClickLog.Log(ClickLogId.TEST_KOWING_LAST);
 				knowing_index--;
 				if(knowing_index<0)
 					knowing_index+=knowing_msg.length;
@@ -678,6 +692,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 				
 				if(state == STATE_NOTE){
 					//impact = impactSeekBar.getProgress();
+					ClickLog.Log(ClickLogId.TEST_QUESTION_CANCEL);
 					testQuestionCaller.writeQuestionFile(day, timeslot, -1, -1, -1, edtext.getText().toString());
 					
 					PreferenceControl.setIsFilled(0);
@@ -692,6 +707,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 	class GoResultOnClickListener implements View.OnClickListener{
 		public void onClick(View v){
 			
+			ClickLog.Log(ClickLogId.TEST_CHECKING_RESULT);
 			MainActivity.getMainActivity().changeTab(1);
 			
 	    }
@@ -796,9 +812,6 @@ public class NoteDialog3 implements ChooseItemCaller{
 		        	typetext.setText(R.string.note_negative);
 		        	
 		        	SetListItem(R.array.note_negative);
-		        	//listViewShowHide();
-	        		//SetItem(sp_item,R.array.note_negative);
-	        		//spinner_content.performClick();
 	        		type = 1;
 	        		break;
 		        case R.id.vts_iv_not_good:
@@ -807,8 +820,6 @@ public class NoteDialog3 implements ChooseItemCaller{
 		        	typetext.setText(R.string.note_notgood);
 		        	
 		        	SetListItem(R.array.note_notgood);
-		        	//SetItem(sp_item,R.array.note_notgood);
-		        	//spinner_content.performClick();
 		        	type = 2;
 			        break;
 		        case R.id.vts_iv_smile:
@@ -817,8 +828,6 @@ public class NoteDialog3 implements ChooseItemCaller{
 		        	typetext.setText(R.string.note_positive);
 		        	
 		        	SetListItem(R.array.note_positive);
-		        	//SetItem(sp_item, R.array.note_positive);
-		        	//spinner_content.performClick();
 		        	type = 3;
 		        	break;
 		        case R.id.vts_iv_try:
@@ -827,8 +836,6 @@ public class NoteDialog3 implements ChooseItemCaller{
 		        	typetext.setText(R.string.note_selftest);
 		        	
 		        	SetListItem(R.array.note_selftest);
-		        	//SetItem(sp_item,R.array.note_selftest);
-		        	//sp_item.performClick();
 		        	type = 4; 
 		        	break;
 		        case R.id.vts_iv_urge:
@@ -837,8 +844,6 @@ public class NoteDialog3 implements ChooseItemCaller{
 		        	typetext.setText(R.string.note_temptation);
 		        	
 		        	SetListItem(R.array.note_temptation);
-		        	//SetItem(sp_item,R.array.note_temptation);
-		        	//sp_item.performClick();
 		        	type = 5;
 		        	break;
 		        case R.id.vts_iv_playing:
@@ -847,8 +852,6 @@ public class NoteDialog3 implements ChooseItemCaller{
 		        	typetext.setText(R.string.note_play);
 		        	
 		        	SetListItem(R.array.note_play);
-		        	//SetItem(sp_item,R.array.note_play);
-		        	//sp_item.performClick();
 		        	type = 6;
 		        	break;
 		        case R.id.vts_iv_social:
@@ -857,8 +860,6 @@ public class NoteDialog3 implements ChooseItemCaller{
 		        	typetext.setText(R.string.note_social);
 		        	
 		        	SetListItem(R.array.note_social);
-		        	//SetItem(sp_item,R.array.note_social);
-		        	//sp_item.performClick();
 		        	type = 7;
 		        	break;
 		        case R.id.vts_iv_conflict:
@@ -867,8 +868,6 @@ public class NoteDialog3 implements ChooseItemCaller{
 		        	typetext.setText(R.string.note_conflict);
 		        	
 		        	SetListItem(R.array.note_conflict);
-		        	//SetItem(sp_item,R.array.note_conflict);
-		        	//sp_item.performClick();
 		        	type = 8;
 		        	break;
 		        	

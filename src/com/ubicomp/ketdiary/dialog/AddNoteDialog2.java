@@ -39,6 +39,8 @@ import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.check.TimeBlock;
+import com.ubicomp.ketdiary.clicklog.ClickLog;
+import com.ubicomp.ketdiary.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.file.QuestionFile;
 import com.ubicomp.ketdiary.file.ReadDummyData;
 import com.ubicomp.ketdiary.system.PreferenceControl;
@@ -514,6 +516,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 	/** show the dialog */
 	public void show() {
 		state = STATE_NOTE;
+		ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_ENTER);
 		//PreferenceControl.setAfterTestState(STATE_NOTE);
 		//questionLayout.setVisibility(View.VISIBLE);
 		
@@ -536,6 +539,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 	
 	/** close the dialog */
 	public void close() {
+		ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_LEAVE);
 		testQuestionCaller.resetView();
 		MainActivity.getMainActivity().enableTabAndClick(true);
 		if (boxLayout != null)
@@ -615,7 +619,8 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 						listView.setVisibility(View.GONE);
 					}
 					else{
-					
+						ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_CONFIRM);
+						
 						impact = impactSeekBar.getProgress();
 						testQuestionCaller.writeQuestionFile(day, timeslot, type, items, impact, edtext.getText().toString());
 						close();
@@ -642,6 +647,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 	class CancelOnClickListener implements View.OnClickListener{
 		public void onClick(View v){
 			
+			ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_CANCEL);
 			
 			testQuestionCaller.writeQuestionFile(day, timeslot, -1, -1, -1, edtext.getText().toString());
 			close();

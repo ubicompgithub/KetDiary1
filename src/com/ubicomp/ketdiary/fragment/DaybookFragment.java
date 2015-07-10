@@ -34,6 +34,8 @@ import android.widget.TextView;
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.clicklog.ClickLog;
+import com.ubicomp.ketdiary.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.db.DatabaseControl;
@@ -277,6 +279,8 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			
 			@Override
 			public void onClick(View v) {
+				
+				ClickLog.Log(ClickLogId.DAYBOOK_CHART);
 
 				if (isFilterOpen == false) {				
 					drawerContent.removeAllViews();
@@ -315,8 +319,9 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			
 			@Override
 			public void onClick(View v) {
-				Log.i("OMG", "hi");
 				
+				ClickLog.Log(ClickLogId.DAYBOOK_CALENDAR);
+								
 				if (isFilterOpen == true) {				
 					LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
 					//Log.i("OMG", "H: "+lp.height);
@@ -365,6 +370,8 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 
 			@Override
 			public void onPageSelected(int arg0) {
+				
+				ClickLog.Log(ClickLogId.DAYBOOK_CHANGE_MONTH);
 				fragmentIdx = arg0;
 				titleText.setText( (startMonth + fragmentIdx) + "月");
 			}
@@ -374,10 +381,11 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		backToTodayText.setOnClickListener(new View.OnClickListener() { 
             @Override
             public void onClick(View v) {
-                // sv.smoothScrollTo(0 , 270*(thisDay+4)-1350-900);
-            	sv.fullScroll(View.FOCUS_DOWN);
-            	//sv.smoothScrollTo(0 , (int)convertDpToPixel(125)*diaryList.getChildCount());
             	
+            	ClickLog.Log(ClickLogId.DAYBOOK_TODAY);
+            	
+            	sv.fullScroll(View.FOCUS_DOWN);
+
                 View selectedView = mSectionsPagerAdapter.getSelectedView();
                 View thisDayView = mSectionsPagerAdapter.getThisDayView();
 
@@ -409,40 +417,41 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 
 
 		lineChartFilterButton = (ImageView) lineChartBar.findViewById(R.id.line_chart_filter);
-		lineChartFilterButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-//				DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-//		        float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
-//		        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-//				lineChart.setCanvasHeight( (int) (325*dpHeight) );
-				if (isFilterOpen == false) {				
-					LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
-					//Log.i("OMG", "H: "+lp.height);
-					lp.height = 1200;
-					lp.addRule(RelativeLayout.BELOW, lineChartBar.getId());
-					drawer.setLayoutParams(lp);
-					
-					drawerContent.removeAllViews();
-					
-					drawerContent.addView(lineChartFilter);
-					drawerContent.addView(lineChartView);
-					isFilterOpen = true;
-				}
-				else {
-					LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
-					lp.height = drawerHeight;
-					lp.addRule(RelativeLayout.BELOW, lineChartBar.getId());
-					drawer.setLayoutParams(lp);
-					
-					drawerContent.removeAllViews();
-					
-					drawerContent.addView(lineChartView);
-					isFilterOpen = false;
-				}
-				
-			}
-		});
+		
+//		lineChartFilterButton.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+////				DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+////		        float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
+////		        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+////				lineChart.setCanvasHeight( (int) (325*dpHeight) );
+//				if (isFilterOpen == false) {				
+//					LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
+//					//Log.i("OMG", "H: "+lp.height);
+//					lp.height = 1200;
+//					lp.addRule(RelativeLayout.BELOW, lineChartBar.getId());
+//					drawer.setLayoutParams(lp);
+//					
+//					drawerContent.removeAllViews();
+//					
+//					drawerContent.addView(lineChartFilter);
+//					drawerContent.addView(lineChartView);
+//					isFilterOpen = true;
+//				}
+//				else {
+//					LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
+//					lp.height = drawerHeight;
+//					lp.addRule(RelativeLayout.BELOW, lineChartBar.getId());
+//					drawer.setLayoutParams(lp);
+//					
+//					drawerContent.removeAllViews();
+//					
+//					drawerContent.addView(lineChartView);
+//					isFilterOpen = false;
+//				}
+//				
+//			}
+//		});
 		
 		
 		notePage = new AddNoteDialog2(daybookFragment, fragment_layout);
@@ -450,6 +459,9 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		addButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				
+				ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE);
+				
 				notePage.initialize();
 				notePage.show();
 				isNotePageShow = true;
@@ -473,6 +485,8 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			randomButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					ClickLog.Log(ClickLogId.DAYBOOK_RANDOMTEST);
+					
 					questionBox.show(1);
 					randomButton.setVisibility(View.GONE);
 				}
@@ -485,7 +499,9 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			
 			@Override
 			public void onClick(View v) {
-
+				
+				ClickLog.Log(ClickLogId.DAYBOOK_CHART_ROTATE);
+				
 				if (isRotated) {
 					MainActivity.getMainActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 					MainActivity.getMainActivity().setTabHostVisible(View.VISIBLE);
@@ -575,14 +591,17 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		chart_type = type;
 		switch (chart_type) {
 		case 0:
+			ClickLog.Log(ClickLogId.DAYBOOK_CHART_TYPE0);
 			chartTitle.setBackgroundResource(R.drawable.tab1_pressed);
 			setFilterType(chart_type);
 			break;
 		case 1:
+			ClickLog.Log(ClickLogId.DAYBOOK_CHART_TYPE1);
 			chartTitle.setBackgroundResource(R.drawable.tab2_pressed);
 			setFilterType(chart_type);
 			break;
 		case 2:
+			ClickLog.Log(ClickLogId.DAYBOOK_CHART_TYPE2);
 			chartTitle.setBackgroundResource(R.drawable.tab3_pressed);
 			setFilterType(chart_type);
 			break;		
@@ -663,10 +682,19 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	  }
 	}
 	
+	
+	@Override
+	public void onPause(){
+		ClickLog.Log(ClickLogId.DAYBOOK_LEAVE);
+		
+		super.onPause();
+		//TODO: release some resource
+	}
+	
 	@Override
 	public void onResume() {
 		super.onResume();
-		
+		ClickLog.Log(ClickLogId.DAYBOOK_ENTER);
 		filter_count = 0;
 
 		for(int i=0; i<filterButtonIsPressed.length; i++)
@@ -724,7 +752,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		
 		LayoutInflater inflater = LayoutInflater.from(context);
 		RelativeLayout lineView = (RelativeLayout)inflater.inflate(R.layout.white_line, null);
-		RelativeLayout white_line = (RelativeLayout)lineView.findViewById(R.id.white_line);
+		//RelativeLayout white_line = (RelativeLayout)lineView.findViewById(R.id.white_line);
 		
 		int last_day = 0;
 		int last_timeslot = -1;
@@ -836,11 +864,11 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			last_result = result;
 			last_day = date;
 			last_timeslot = slot;
-			Log.d(TAG, date+"號,星期"+dayOfweek+"時段"+slot+"項目"+items);
+			//Log.d(TAG, date+"號,星期"+dayOfweek+"時段"+slot+"項目"+items);
 			
 			diaryList.addView(diaryItem);
 			//diaryList.addView(white_line);
-			boxesLayout = (LinearLayout) view.findViewById(R.layout.diary_item);
+			//boxesLayout = (LinearLayout) view.findViewById(R.layout.diary_item);
 			}
 			
 			
@@ -957,6 +985,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 
 		@Override
 		public void onClick(View v) {
+			ClickLog.Log(ClickLogId.DAYBOOK_TOGGLE);
 			
 			if  (drawer.isOpened()) {
 				//drawer.toggle();
@@ -984,6 +1013,8 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 
 		@Override
 		public boolean onLongClick(View v) {
+			
+			ClickLog.Log(ClickLogId.DAYBOOK_FILTER_LONGCLICK);  
 			
 			new FilterDetailDialog(MainActivity.getMainActivity()).show();
 			
@@ -1021,6 +1052,8 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		@Override
 		public boolean onLongClick(View v) {
 			
+			ClickLog.Log(ClickLogId.DAYBOOK_SHOWDETAIL);  
+			
 			MyDialog dialog = new MyDialog(MainActivity.getMainActivity());
 			ImageView type_icon = (ImageView) dialog.findViewById(R.id.type_icon);
 	    	type_icon.setImageResource(typeId[type]);
@@ -1047,6 +1080,8 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
     	
     	@Override
     	public void onClick(View v) {
+    		
+    		ClickLog.Log(ClickLogId.DAYBOOK_FILTER_BUTTON);   
     		
     		if  (!drawer.isOpened()) {
     			LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
@@ -1151,6 +1186,8 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 
     	@Override
     	public void onClick(View v) {
+    		
+    		ClickLog.Log(ClickLogId.DAYBOOK_FILTER);
     		
     		switch (v.getId()) {
     		case (R.id.filter_all): { 

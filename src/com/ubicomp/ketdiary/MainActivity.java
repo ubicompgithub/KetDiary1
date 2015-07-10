@@ -36,11 +36,11 @@ import com.ubicomp.ketdiary.color.TestStripDetection;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.dialog.CheckResultDialog;
-import com.ubicomp.ketdiary.dialog.NoteDialog2;
 import com.ubicomp.ketdiary.fragment.DaybookFragment;
 import com.ubicomp.ketdiary.fragment.NoteFragment;
 import com.ubicomp.ketdiary.fragment.StatisticFragment;
 import com.ubicomp.ketdiary.fragment.TestFragment;
+import com.ubicomp.ketdiary.noUse.NoteDialog2;
 import com.ubicomp.ketdiary.system.Config;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.CustomMenu;
@@ -366,8 +366,8 @@ public class MainActivity extends FragmentActivity {
 		ft.add(android.R.id.tabcontent, fragments[0], tabName[0]);
 		setTabState(tabName[0]);
 
-		//customTabs[1].showHighlight(PreferenceControl.getCouponChange());
-		customTabs[2].showHighlight(PreferenceControl.getPageChange());
+		customTabs[1].showHighlight(PreferenceControl.getCouponChange());
+		customTabs[2].showHighlight(PreferenceControl.getRandomQustion());
 
 		ft.commit();
 	}

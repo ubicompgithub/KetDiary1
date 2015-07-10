@@ -3,6 +3,7 @@ package com.ubicomp.ketdiary.db;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -19,6 +20,7 @@ import android.util.Log;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.data.structure.CopingSkill;
+import com.ubicomp.ketdiary.data.structure.ExchangeHistory;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.QuestionTest;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
@@ -80,14 +82,16 @@ public class HttpPostGenerator {
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
 		nvps.add(new BasicNameValuePair("uid", uid));
 		//@SuppressWarnings("deprecation")
-		/*
+		
 		Calendar c = PreferenceControl.getStartDate();
 		String joinDate = c.get(Calendar.YEAR) + "-"
 				+ (c.get(Calendar.MONTH) + 1) + "-"
 				+ c.get(Calendar.DAY_OF_MONTH);
 
-		nvps.add(new BasicNameValuePair("userData[]", joinDate));*/
+		nvps.add(new BasicNameValuePair("userData[]", joinDate));
 		nvps.add(new BasicNameValuePair("userData[]", PreferenceControl.getDeviceId()));
+		nvps.add(new BasicNameValuePair("userData[]", String
+				.valueOf(PreferenceControl.getUsedCounter())));
 		PackageInfo pinfo;
 		try {
 			pinfo = App.getContext().getPackageManager()
@@ -291,6 +295,31 @@ public class HttpPostGenerator {
 			builder.addPart("file[]", new FileBody(logFile));
 		}
 		httpPost.setEntity(builder.build());
+		return httpPost;
+	}
+	
+	/**
+	 * Generate POST of credits exchange history
+	 * 
+	 * @param data
+	 *            ExchangeHistory
+	 * @return HttpPost contains ExchangeHistory
+	 * @see ubicomp.soberdiary.data.structure.ExchangeHistory
+	 */
+	public static HttpPost genPost(ExchangeHistory data) {
+		HttpPost httpPost = new HttpPost(ServerUrl.SERVER_URL_EXCHANGE_HISTORY());
+		String uid = PreferenceControl.getUID();
+		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+		nvps.add(new BasicNameValuePair("uid", uid));
+
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getTv()
+				.getTimestamp())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data
+				.getExchangeNum())));
+		try {
+			httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
+		} catch (UnsupportedEncodingException e) {
+		}
 		return httpPost;
 	}
 	

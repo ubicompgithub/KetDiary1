@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,6 +17,8 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
+import com.ubicomp.ketdiary.clicklog.ClickLog;
+import com.ubicomp.ketdiary.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.CustomToastSmall;
 import com.ubicomp.ketdiary.ui.CustomTypefaceSpan;
@@ -264,7 +265,7 @@ public class AboutActivity extends Activity {
 			phone_number.setOnClickListener(null);
 			email.setOnClickListener(null);
 			//website.setOnClickListener(null);
-			//ClickLog.Log(ClickLogId.ABOUT_CALL);
+			ClickLog.Log(ClickLogId.ABOUT_CALL);
 		}
 	}
 
@@ -278,7 +279,7 @@ public class AboutActivity extends Activity {
 			phone_number.setOnClickListener(new CallCheckOnClickListener());
 			email.setOnClickListener(new EmailOnClickListener());
 			//website.setOnClickListener(new WebsiteOnClickListener());
-			//ClickLog.Log(ClickLogId.ABOUT_CALL_CANCEL);
+			ClickLog.Log(ClickLogId.ABOUT_CALL_CANCEL);
 		}
 
 	}
@@ -288,7 +289,7 @@ public class AboutActivity extends Activity {
 		@Override
 		/**Calling out*/
 		public void onClick(View v) {
-			//ClickLog.Log(ClickLogId.ABOUT_CALL_OK);
+			ClickLog.Log(ClickLogId.ABOUT_CALL_OK);
 			Intent intentDial = new Intent("android.intent.action.CALL",
 					Uri.parse("tel:0233664926"));
 			activity.startActivity(intentDial);
@@ -319,7 +320,7 @@ public class AboutActivity extends Activity {
 			} catch (android.content.ActivityNotFoundException ex) {
 				CustomToastSmall.generateToast(R.string.email_fail);
 			}
-			//ClickLog.Log(ClickLogId.ABOUT_EMAIL);
+			ClickLog.Log(ClickLogId.ABOUT_EMAIL);
 		}
 	}
 
@@ -332,7 +333,7 @@ public class AboutActivity extends Activity {
 //			Intent browserIntent = new Intent(Intent.ACTION_VIEW,
 //					Uri.parse(WEBSITE));
 //			startActivity(browserIntent);
-//			//ClickLog.Log(ClickLogId.ABOUT_WEBSITE);
+//			ClickLog.Log(ClickLogId.ABOUT_WEBSITE);
 //		}
 //	}
 
@@ -357,13 +358,13 @@ public class AboutActivity extends Activity {
 	/**onResume of AboutActivity. Override for ClickLog*/
 	public void onResume() {
 		super.onResume();
-		//ClickLog.Log(ClickLogId.ABOUT_ENTER);
+		ClickLog.Log(ClickLogId.ABOUT_ENTER);
 	}
 
 	@Override
 	/**onPause of AboutActivity. Override for ClickLog*/
 	public void onPause() {
-		//ClickLog.Log(ClickLogId.ABOUT_LEAVE);
+		ClickLog.Log(ClickLogId.ABOUT_LEAVE);
 		super.onPause();
 	}
 

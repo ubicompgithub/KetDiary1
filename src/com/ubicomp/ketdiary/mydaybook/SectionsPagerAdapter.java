@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.clicklog.ClickLog;
+import com.ubicomp.ketdiary.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.data.structure.TimeValue;
@@ -160,7 +162,9 @@ public class SectionsPagerAdapter extends PagerAdapter {
             cellView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                	
+                	ClickLog.Log(ClickLogId.DAYBOOK_SPECIFIC_DAY);
+                	
                     if(selectedView != v){
                     	long selectedTs = Long.valueOf(v.getTag(TAG_CAL_CELL_TS).toString());
                     	if(selectedTs < startDay.getTimeInMillis() || selectedTs > today.getTimeInMillis()+86400000){

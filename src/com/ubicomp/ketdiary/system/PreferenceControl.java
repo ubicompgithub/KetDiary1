@@ -8,7 +8,9 @@ import android.content.SharedPreferences;
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.data.structure.ExchangeHistory;
 import com.ubicomp.ketdiary.data.structure.TimeValue;
+import com.ubicomp.ketdiary.db.DatabaseControl;
 
 /**
  * Class for controlling Android Preference
@@ -340,6 +342,12 @@ public class PreferenceControl {
 		return sp.getString("targetBad", "尿失禁");	
 	}
 	
+	public static boolean checkCouponChange() {
+		int prevCoupon = PreferenceControl.lastShowedCoupon();
+		int curCoupon = getCoupon();
+		return curCoupon != prevCoupon;
+	}
+	
 	public static boolean getCouponChange() {
 		return sp.getBoolean("couponChange", false);
 	}
@@ -391,6 +399,44 @@ public class PreferenceControl {
 
 	public static int getTestResult() {
 		return sp.getInt("testResult", -1);
+	}
+	
+	public static int getCoupon(){
+		int point = getPoint();
+		int usedScore = getUsedCounter();
+		int coupon = (point-usedScore)/10;
+		return coupon;
+	}
+	
+	public static void exchangeCoupon() {
+		int currentCounter = getPoint();
+		int usedCounter = sp.getInt("usedCounter", 0);
+		int coupon = currentCounter / Config.COUPON_CREDITS;
+		int exchangeCounter = coupon * Config.COUPON_CREDITS;
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putInt("usedCounter", usedCounter + exchangeCounter);
+		edit.commit();
+//		DatabaseControl db = new DatabaseControl();
+//		db.insertExchangeHistory(new ExchangeHistory(
+//				System.currentTimeMillis(), exchangeCounter));
+	}
+
+//	public static void cleanCoupon() {
+//		int currentCounter = getTotalCounter();
+//		int usedCounter = sp.getInt("usedCounter", 0);
+//		SharedPreferences.Editor edit = sp.edit();
+//		edit.putInt("usedCounter", usedCounter + currentCounter);
+//		edit.commit();
+//	}
+
+	public static int getUsedCounter() {
+		return sp.getInt("usedCounter", 0);
+	}
+
+	public static void setUsedCounter(int counter) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putInt("usedCounter", counter);
+		edit.commit();
 	}
 
 	
@@ -618,15 +664,6 @@ public class PreferenceControl {
 	}
 
 
-	public static int getUsedCounter() {
-		return sp.getInt("usedCounter", 0);
-	}
-
-	public static void setUsedCounter(int counter) {
-		SharedPreferences.Editor edit = sp.edit();
-		edit.putInt("usedCounter", counter);
-		edit.commit();
-	}
 
 	
 

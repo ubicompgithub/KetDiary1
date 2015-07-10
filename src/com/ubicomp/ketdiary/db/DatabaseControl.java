@@ -13,6 +13,7 @@ import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.check.StartDateCheck;
 import com.ubicomp.ketdiary.check.WeekNumCheck;
 import com.ubicomp.ketdiary.data.structure.CopingSkill;
+import com.ubicomp.ketdiary.data.structure.ExchangeHistory;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.QuestionTest;
 import com.ubicomp.ketdiary.data.structure.Rank;
@@ -1784,6 +1785,79 @@ public class DatabaseControl {
 			synchronized (sqlLock) {
 				db = dbHelper.getWritableDatabase();
 				String sql = "UPDATE CopingSkill SET upload = 1 WHERE ts = " + ts;
+				db.execSQL(sql);
+				db.close();
+			}
+		}
+		
+		// ExchangeHistory
+
+		/**
+		 * Insert a ExchangeHistory when the user exchanges credits for coupons
+		 * 
+		 * @param data
+		 *            inserted ExchangeHistory
+		 * @see ubicomp.soberdiary.data.structure.ExchangeHistory
+		 */
+		public void insertExchangeHistory(ExchangeHistory data) {
+			synchronized (sqlLock) {
+				db = dbHelper.getWritableDatabase();
+				ContentValues content = new ContentValues();
+				content.put("ts", data.getTv().getTimestamp());
+				content.put("exchangeCounter", data.getExchangeNum());
+				db.insert("ExchangeHistory", null, content);
+				db.close();
+			}
+		}
+
+		/**
+		 * Get all ExchangeHistory which are not uploaded to the server
+		 * 
+		 * @return An array of ExchangeHistory. If there are no ExchangeHistory,
+		 *         return null.
+		 * @see ubicomp.soberdiary.data.structure.ExchangeHistory
+		 */
+		public ExchangeHistory[] getNotUploadedExchangeHistory() {
+			synchronized (sqlLock) {
+				ExchangeHistory[] data = null;
+				db = dbHelper.getReadableDatabase();
+				String sql;
+				Cursor cursor;
+				sql = "SELECT * FROM ExchangeHistory WHERE upload = 0";
+				cursor = db.rawQuery(sql, null);
+				int count = cursor.getCount();
+				if (count == 0) {
+					cursor.close();
+					db.close();
+					return null;
+				}
+
+				data = new ExchangeHistory[count];
+
+				for (int i = 0; i < count; ++i) {
+					cursor.moveToPosition(i);
+					long ts = cursor.getLong(1);
+					int exchangeCounter = cursor.getInt(2);
+					data[i] = new ExchangeHistory(ts, exchangeCounter);
+				}
+				cursor.close();
+				db.close();
+				return data;
+			}
+		}
+
+		/**
+		 * Label the ExchangeHistory uploaded
+		 * 
+		 * @param ts
+		 *            Timestamp of the uploaded ExchangeHistory
+		 * @see ubicomp.soberdiary.data.structure.ExchangeHistory
+		 */
+		public void setExchangeHistoryUploaded(long ts) {
+			synchronized (sqlLock) {
+				db = dbHelper.getWritableDatabase();
+				String sql = "UPDATE ExchangeHistory SET upload = 1 WHERE ts = "
+						+ ts;
 				db.execSQL(sql);
 				db.close();
 			}

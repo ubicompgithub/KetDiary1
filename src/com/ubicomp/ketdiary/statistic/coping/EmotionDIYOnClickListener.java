@@ -2,7 +2,8 @@ package com.ubicomp.ketdiary.statistic.coping;
 
 import android.content.Intent;
 import android.view.View;
-import com.ubicomp.ketdiary.EmotionActivity;
+
+import com.ubicomp.ketdiary.noUse.EmotionActivity;
 import com.ubicomp.ketdiary.statistic.coping.QuestionnaireDialog;
 import com.ubicomp.ketdiary.clicklog.ClickLog;
 import com.ubicomp.ketdiary.clicklog.ClickLogId;

@@ -31,6 +31,8 @@ import android.widget.ScrollView;
 import com.ubicomp.ketdiary.CopingActivity;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.clicklog.ClickLog;
+import com.ubicomp.ketdiary.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.data.structure.Rank;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.dialog.QuestionDialog;
@@ -48,25 +50,6 @@ import com.ubicomp.ketdiary.ui.ScaleOnTouchListener;
 
 public class StatisticFragment extends Fragment implements ShowRadarChart{
 	
-	/*
-	private View view;
-	private Activity activity;
-	
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		activity = getActivity();
-
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		view = inflater.inflate(R.layout.fragment_statistic, container, false);
-		
-		return view;
-	}*/
 	private static final String TAG = "Statistic";
 	
 	private StatisticPageView[] analysisViews;
@@ -132,8 +115,8 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 		analysisLayout.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View arg0, MotionEvent motion) {
-				//if (motion.getAction() == MotionEvent.ACTION_DOWN)
-					//ClickLog.Log(ClickLogId.STATISTIC_ANALYSIS);
+				if (motion.getAction() == MotionEvent.ACTION_DOWN)
+					ClickLog.Log(ClickLogId.STATISTIC_ANALYSIS);
 				return false;
 			}
 		});
@@ -143,6 +126,7 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 
 	public void onResume() {
 		super.onResume();
+		ClickLog.Log(ClickLogId.STATISTIC_ENTER);
 		
 		long curTime = System.currentTimeMillis();
 		long testTime = PreferenceControl.getLatestTestCompleteTime();
@@ -205,6 +189,7 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 		if (loadHandler != null)
 			loadHandler.removeMessages(0);
 		clear();
+		ClickLog.Log(ClickLogId.STATISTIC_LEAVE);
 		super.onPause();
 	}
 
@@ -237,10 +222,10 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 
 			switch (idx) {
 			case 0:
-				//ClickLog.Log(ClickLogId.STATISTIC_TODAY);
+				ClickLog.Log(ClickLogId.STATISTIC_TODAY);
 				break;
 			case 1:
-				//ClickLog.Log(ClickLogId.STATISTIC_WEEK);
+				ClickLog.Log(ClickLogId.STATISTIC_WEEK);
 				break;
 			case 2:
 				//ClickLog.Log(ClickLogId.STATISTIC_MONTH);
@@ -308,7 +293,7 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 
 		@Override
 		public void onClick(View v) {
-			//ClickLog.Log(ClickLogId.STATISTIC_QUESTION_BUTTON);
+			ClickLog.Log(ClickLogId.STATISTIC_COPING_BUTTON);
 			//openQuestionnaire();
 			Intent intent = new Intent();
 			intent.setClass(activity, CopingActivity.class);
@@ -342,26 +327,10 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 		return this.getActivity();
 	}
 	
-	private View qv;
 	public static void showQuestionTest() {
-		//removeRadarChart();
-		//removeDetailChart();
+		ClickLog.Log(ClickLogId.STATISTIC_QUESTIONTEST_BUTTON);
 		msgBox.show(0);
-		/*
-		qv = QuestionDialog.getView();
-
-		allLayout.addView(rv);
-		RelativeLayout.LayoutParams rvParam = (RelativeLayout.LayoutParams) rv
-				.getLayoutParams();
-		rvParam.width = rvParam.height = LayoutParams.MATCH_PARENT;
-		allLayout.invalidate();
-		rv.invalidate();
-		rv.setOnClickListener(new RadarOnClickListener(-1));
-		//ClickLog.Log(ClickLogId.STATISTIC_RADAR_CHART_OPEN);*/
-		//enablePage(false);
 	}
-	
-	
 	
 	private View rv;
 	private View dv;
@@ -384,7 +353,7 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 		allLayout.invalidate();
 		rv.invalidate();
 		rv.setOnClickListener(new RadarOnClickListener(-1));
-		//ClickLog.Log(ClickLogId.STATISTIC_RADAR_CHART_OPEN);
+		ClickLog.Log(ClickLogId.STATISTIC_RADAR_CHART_OPEN);
 		enablePage(false);
 	}
 
@@ -398,10 +367,10 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 
 		@Override
 		public void onClick(View v) {
-			//ClickLog.Log(ClickLogId.STATISTIC_RADAR_CHART_CLOSE);
+			ClickLog.Log(ClickLogId.STATISTIC_RADAR_CHART_CLOSE);
 			removeRadarChart();
 			if (type >= 0) {
-				//ClickLog.Log(ClickLogId.STATISTIC_DETAIL_CHART_OPEN + type);
+				ClickLog.Log(ClickLogId.STATISTIC_DETAIL_CHART_OPEN + type);
 				addDetailChart(type);
 			}
 		}
@@ -428,7 +397,8 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 		dv.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//ClickLog.Log(ClickLogId.STATISTIC_DETAIL_CHART_CLOSE);
+				ClickLog.Log(ClickLogId.STATISTIC_DETAIL_CHART_CLOSE);
+				ClickLog.Log(ClickLogId.STATISTIC_RADAR_CHART_OPEN);
 				//removeDetailChart();
 				showRadarChart(calculateRank());
 			}
@@ -460,10 +430,10 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 		}
 
 		double test_r, advice_r, manage_r, story_r;
-		test_r = (double) ((double) test) / 600.0;
-		advice_r = (double) ((double) note) / 600.0;
-		manage_r = (double) ((double) question) / 700.0;
-		story_r = (double) ((double) coping) / 600.0;
+		test_r = (double) ((double) test) / 200.0;
+		advice_r = (double) ((double) note) / 300.0;
+		manage_r = (double) ((double) question) / 600.0;
+		story_r = (double) ((double) coping) / 300.0;
 
 		result.add(test_r);
 		result.add(advice_r);

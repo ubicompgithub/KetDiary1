@@ -1,7 +1,7 @@
 package com.ubicomp.ketdiary.system;
 
 /**
- * Class defines constants of SoberDiary
+ * Class defines constants of RehabDiary
  * 
  * @author Stanley Wang
  */
@@ -34,7 +34,7 @@ public class Config {
 
 	// Coupon
 	/** COUPON_CREDITS credits = 1 coupons */
-	public static final int COUPON_CREDITS = 50;
+	public static final int COUPON_CREDITS = 10;
 
 	// PWD
 	/** Password to enter the developer setting mode */

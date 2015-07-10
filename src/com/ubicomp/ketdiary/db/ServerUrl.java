@@ -3,6 +3,7 @@ package com.ubicomp.ketdiary.db;
 
 
 
+
 /** 
  * Return Server's Url
  * @author Andy Chen
@@ -64,6 +65,16 @@ public class ServerUrl {
 		final String URL = "rank/rankWeek.php";
 		return SERVER_URL + URL;
 	}
+	
+	/**
+	 * URL for inserting table ExchangeHistory
+	 * 
+	 * @return url
+	 */
+	public static String SERVER_URL_EXCHANGE_HISTORY() {
+		final String URL = "test/exchangeHistory.php";
+		return SERVER_URL + URL;
+	}
 	/**
 	 * URL for uploading clicklog
 	 * 
@@ -71,7 +82,7 @@ public class ServerUrl {
 	 */
 	public static String SERVER_URL_CLICKLOG() {
 		final String URL = "test/clickLog.php";
-			return SERVER_URL + URL;
+		return SERVER_URL + URL;
 	}
 	
 	

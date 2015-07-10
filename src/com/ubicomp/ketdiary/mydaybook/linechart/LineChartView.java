@@ -23,6 +23,8 @@ import android.view.View;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.clicklog.ClickLog;
+import com.ubicomp.ketdiary.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.db.DatabaseControl;
@@ -38,23 +40,23 @@ public class LineChartView extends View {
 	private static Resources resource = context.getResources();
 	
     private static final int LINES = 7;
-    private static float offsetY = resource.getDimensionPixelSize(R.dimen.offsetY);
-    private static float offsetX = resource.getDimensionPixelSize(R.dimen.offsetX);
-    private static int unit_scale = resource.getDimensionPixelSize(R.dimen.unit_scale);//50;
-    private static float date_Y_offset = resource.getDimensionPixelSize(R.dimen.date_Y_offset);//120;
-    private static int dot_scale = resource.getDimensionPixelSize(R.dimen.dot_scale);//25;
-    private static int dot_X_offset = resource.getDimensionPixelSize(R.dimen.dot_X_offset);//12;
-    private static int dot_Y_offset = resource.getDimensionPixelSize(R.dimen.dot_Y_offset);//10;
-    private static int rec_height = resource.getDimensionPixelSize(R.dimen.rec_height);//28;
-    private static int rec_width = resource.getDimensionPixelSize(R.dimen.rec_width);//60;
-    private static int rec_X_offset = resource.getDimensionPixelSize(R.dimen.rec_X_offset);//25;
-    private static int cur_X_offset = resource.getDimensionPixelSize(R.dimen.cur_X_offset);//12;
-    private static int legend_height =resource.getDimensionPixelSize(R.dimen.legend_height);//40;
-    private static int legend_width = resource.getDimensionPixelSize(R.dimen.legend_width);//350;
+    private static final float offsetY = resource.getDimensionPixelSize(R.dimen.offsetY);
+    private static final float offsetX = resource.getDimensionPixelSize(R.dimen.offsetX);
+    private static final int unit_scale = resource.getDimensionPixelSize(R.dimen.unit_scale);//50;
+    private static final float date_Y_offset = resource.getDimensionPixelSize(R.dimen.date_Y_offset);//120;
+    private static final int dot_scale = resource.getDimensionPixelSize(R.dimen.dot_scale);//25;
+    private static final int dot_X_offset = resource.getDimensionPixelSize(R.dimen.dot_X_offset);//12;
+    private static final int dot_Y_offset = resource.getDimensionPixelSize(R.dimen.dot_Y_offset);//10;
+    private static final int rec_height = resource.getDimensionPixelSize(R.dimen.rec_height);//28;
+    private static final int rec_width = resource.getDimensionPixelSize(R.dimen.rec_width);//60;
+    private static final int rec_X_offset = resource.getDimensionPixelSize(R.dimen.rec_X_offset);//25;
+    private static final int cur_X_offset = resource.getDimensionPixelSize(R.dimen.cur_X_offset);//12;
+    private static final int legend_height =resource.getDimensionPixelSize(R.dimen.legend_height);//40;
+    private static final int legend_width = resource.getDimensionPixelSize(R.dimen.legend_width);//350;
     
-    private static float range;
-    
+    private static float range; 
     private static float touchX;
+    
     private static LineChartData[] dataset = null;
     		
     private Paint paint = new Paint();
@@ -385,7 +387,7 @@ public class LineChartView extends View {
     			paint.setTextSize(convertDpToPixel((float)11.33));
     			canvas.drawText(currentMonth+"/"+currentDate, getXPos2(i), getHeight() - date_Y_offset, paint);
     		}
-    		else if(i % 5 == 0 && i== numOfDays-1){
+    		else if(i % 5 == 0 || i== numOfDays-1){
     			paint.setStyle(Style.FILL);
     			paint.setColor(getResources().getColor(R.color.linechart_date_color));
     			paint.setTextAlign(Align.CENTER);
@@ -626,6 +628,15 @@ public class LineChartView extends View {
     }
     
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
+    	
+    	 @Override
+         public boolean onScroll(MotionEvent e1, MotionEvent e2,
+                 float distanceX, float distanceY) {
+    		 
+    		 ClickLog.Log(ClickLogId.DAYBOOK_CHART_SCROLL);
+    		 
+             return false;
+         }
 
         @Override
         public boolean onDown(MotionEvent event) {
@@ -648,6 +659,8 @@ public class LineChartView extends View {
         public boolean onSingleTapConfirmed(MotionEvent event) {
         	float x = event.getX();
             float y = event.getY();
+            
+            ClickLog.Log(ClickLogId.DAYBOOK_CHART_TAP);
             
             touchX = x;
             

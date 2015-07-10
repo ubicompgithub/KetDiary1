@@ -13,7 +13,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 	/* SQLiteOpenHelper. need to migrate with */
 	private static final String DATABASE_NAME = "rehabdiary";
-	private static final int DB_VERSION = 9;
+	private static final int DB_VERSION = 10;
 
 	/**
 	 * Constructor
@@ -104,6 +104,14 @@ public class DBHelper extends SQLiteOpenHelper {
 				+ " recreation CHAR[255] NOT NULL,"
 				+ " score INTEGER NOT NULL,"
 				+ " upload INTEGER NOT NULL DEFAULT 0" + ")");
+		
+		db.execSQL("CREATE TABLE ExchangeHistory ("
+				+ " id INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ " ts INTEGER NOT NULL,"
+				+ " exchangeCounter INTEGER NOT NULL,"
+				+ " upload INTEGER NOT NULL DEFAULT 0,"
+				+ " testSuccess INTEGER NOT NULL DEFAULT 0,"
+				+ " hasData INTEGER NOT NULL DEFAULT 0" + ")");
 
 
 	}
@@ -148,6 +156,15 @@ public class DBHelper extends SQLiteOpenHelper {
 				+ " pass_score INTEGER NOT NULL  DEFAULT 0,"
 				+ " normalQ_score INTEGER NOT NULL  DEFAULT 0,"
 				+ " randomQ_score INTEGER NOT NULL  DEFAULT 0"+")");
+		
+		
+		db.execSQL("CREATE TABLE ExchangeHistory ("
+				+ " id INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ " ts INTEGER NOT NULL,"
+				+ " exchangeCounter INTEGER NOT NULL,"
+				+ " upload INTEGER NOT NULL DEFAULT 0,"
+				+ " testSuccess INTEGER NOT NULL DEFAULT 0,"
+				+ " hasData INTEGER NOT NULL DEFAULT 0" + ")");
 		
 	}
 

@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary;
+package com.ubicomp.ketdiary.noUse;
 
 import java.io.File;
 import java.util.TimerTask;
@@ -17,8 +17,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ubicomp.ketdiary.AlarmService;
+import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothListener;
+import com.ubicomp.ketdiary.R.id;
+import com.ubicomp.ketdiary.R.layout;
 import com.ubicomp.ketdiary.color.ColorDetect2;
 import com.ubicomp.ketdiary.db.DBTip;
 import com.ubicomp.ketdiary.db.TestDataParser;

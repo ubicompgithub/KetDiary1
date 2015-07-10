@@ -17,6 +17,8 @@ import android.widget.TextView;
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.clicklog.ClickLog;
+import com.ubicomp.ketdiary.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.data.structure.QuestionTest;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.system.PreferenceControl;
@@ -259,6 +261,9 @@ public class QuestionDialog{
 		@Override
 		/**Cancel and dismiss the check check dialog*/
 		public void onClick(View v) {
+			
+			ClickLog.Log(ClickLogId.STATISTIC_QUESTIONTEST_CONFIRM);
+			
 			long ts = System.currentTimeMillis();
 			int isCorrect = 0;
 			String selection = selectedAnswer;
@@ -295,6 +300,8 @@ public class QuestionDialog{
 		@Override
 		/**Calling out*/
 		public void onClick(View v) {
+			ClickLog.Log(ClickLogId.STATISTIC_QUESTIONTEST_CANCEL);
+			
 			MainActivity.getMainActivity().enableTabAndClick(true);
         	close();
 			//clear();

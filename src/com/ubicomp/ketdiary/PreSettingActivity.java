@@ -355,7 +355,7 @@ public class PreSettingActivity extends Activity {
 	private class CleanListener implements DialogInterface.OnClickListener {
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
-			//PreferenceControl.exchangeCoupon();
+			PreferenceControl.exchangeCoupon();
 		}
 	}
 
