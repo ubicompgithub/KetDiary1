@@ -505,6 +505,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 				if (isRotated) {
 					MainActivity.getMainActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 					MainActivity.getMainActivity().setTabHostVisible(View.VISIBLE);
+					randomButton.setVisibility(View.VISIBLE);
 					addButton.setVisibility(View.VISIBLE);
 					calendarIcon.setVisibility(View.VISIBLE);
 					toggle_linechart.setVisibility(View.VISIBLE);
@@ -517,6 +518,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 
 					MainActivity.getMainActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 					MainActivity.getMainActivity().setTabHostVisible(View.GONE);
+					randomButton.setVisibility(View.INVISIBLE);
 					addButton.setVisibility(View.INVISIBLE);
 					calendarIcon.setVisibility(View.INVISIBLE);
 					toggle_linechart.setVisibility(View.INVISIBLE);

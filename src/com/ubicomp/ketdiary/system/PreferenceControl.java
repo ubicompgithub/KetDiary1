@@ -184,7 +184,13 @@ public class PreferenceControl {
 	}
 	
 	public static int getPoint() {
-		return sp.getInt("Point", 0);
+		DatabaseControl db = new DatabaseControl();
+		int total_point = db.getLatestTestResult().getScore()
+				+ db.getLatestNoteAdd().getScore()
+				+ db.getLatestQuestionTest().getScore()
+				+ db.getLatestCopingSkill().getScore();
+		return total_point;	
+		//return sp.getInt("Point", 0);
 	}
 	
 	public static void setPoint(int addPoint) {

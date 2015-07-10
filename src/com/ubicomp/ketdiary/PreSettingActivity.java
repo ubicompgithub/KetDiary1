@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ubicomp.ketdiary.db.DatabaseRestore;
 import com.ubicomp.ketdiary.file.ReadDummyData;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 
@@ -201,9 +202,9 @@ public class PreSettingActivity extends Activity {
 			DialogInterface.OnClickListener {
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
-			/*DatabaseRestore rd = new DatabaseRestore(uid.getText().toString(),
+			DatabaseRestore rd = new DatabaseRestore(uid.getText().toString(),
 					activity);
-			rd.execute();*/
+			rd.execute();
 		}
 	}
 
