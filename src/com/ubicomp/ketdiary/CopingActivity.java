@@ -47,7 +47,6 @@ public class CopingActivity extends Activity {
 
 	private LayoutInflater inflater;
 
-	private Typeface wordTypeface;
 	private Typeface wordTypefaceBold;
 
 	private LinearLayout titleLayout;
@@ -55,14 +54,7 @@ public class CopingActivity extends Activity {
 
 	private Activity activity;
 	
-	private View fbView;
-	private View uvView;
 	private View[] recreationViews;
-	private RelativeLayout[] contactViews;
-	//private MultiRadioGroup socialGroup;
-	private View socialGroupView;
-	//private SingleRadioGroup notificationGroup;
-	private View notificationGroupView;
 	private View breathView, muscleView, stretchView, peacefulView, musicView, meditationView;
 	private View awayView, toldView, repeatView;
 	private View[] sponsorViews;
@@ -125,7 +117,6 @@ public class CopingActivity extends Activity {
 		mainLayout = (LinearLayout) this.findViewById(R.id.coping_main_layout);
 		mainTop = (LinearLayout) findViewById(R.id.coping_main_top);
 		inflater = LayoutInflater.from(activity);
-		wordTypeface = Typefaces.getWordTypeface();
 		wordTypefaceBold = Typefaces.getWordTypefaceBold();
 
 		mainLayout.removeAllViews();
@@ -722,188 +713,7 @@ public class CopingActivity extends Activity {
 		return layout;
 	}
 
-	private RelativeLayout createEditRecreationView(String defaultText, int id) {
 
-		RelativeLayout layout = (RelativeLayout) inflater.inflate(
-				R.layout.bar_edit_recreation_item, null);
-
-		TextView text = (TextView) layout.findViewById(R.id.question_text);
-		text.setTypeface(wordTypeface);
-		text.setText(defaultText);
-
-		EditText edit = (EditText) layout.findViewById(R.id.question_edit);
-		edit.setTypeface(wordTypefaceBold);
-		edit.setText(defaultText);
-		edit.setVisibility(View.INVISIBLE);
-
-		TextView button = (TextView) layout.findViewById(R.id.question_button);
-		button.setTypeface(wordTypefaceBold);
-		//button.setOnClickListener(new RecreationOnClickListener());
-
-		return layout;
-	}
-
-	// private class RecreationOnClickListener implements View.OnClickListener {
-	// 	private boolean editable = false;
-
-	// 	private TextView text;
-	// 	private EditText editText;
-	// 	private TextView button;
-	// 	private int id;
-
-	// 	private String ok = App.getContext().getString(R.string.ok);
-	// 	private String edit = App.getContext().getString(R.string.edit);
-
-	// 	private int ok_color = App.getContext().getResources()
-	// 			.getColor(R.color.lite_orange);
-	// 	private int edit_color = App.getContext().getResources()
-	// 			.getColor(R.color.text_gray);
-
-	// 	public RecreationOnClickListener(TextView text, EditText editText,
-	// 			TextView button, int id) {
-	// 		this.text = text;
-	// 		this.editText = editText;
-	// 		this.button = button;
-	// 		this.id = id;
-	// 	}
-
-	// 	@Override
-	// 	public void onClick(View v) {
-			
-	// 		if (editable) {
-	// 			String recreation = editText.getText().toString();
-	// 			text.setText(recreation);
-	// 			text.setVisibility(View.VISIBLE);
-	// 			editText.setVisibility(View.INVISIBLE);
-	// 			button.setText(edit);
-	// 			button.setTextColor(edit_color);
-	// 			PreferenceControl.setRecreation(recreation, id);
-	// 		} else {
-	// 			text.setVisibility(View.INVISIBLE);
-	// 			editText.setText(text.getText());
-	// 			editText.setVisibility(View.VISIBLE);
-	// 			button.setText(ok);
-	// 			button.setTextColor(ok_color);
-	// 		}
-	// 		editable = !editable;
-	// 	}
-
-	// }
-
-	private RelativeLayout createEditPhoneView(String defaultName,
-			String defaultPhone, int id) {
-
-		RelativeLayout layout = (RelativeLayout) inflater.inflate(
-				R.layout.bar_edit_contact_item, null);
-
-		TextView nt = (TextView) layout.findViewById(R.id.question_name_text);
-		nt.setTypeface(wordTypeface);
-		nt.setText(defaultName);
-		TextView pt = (TextView) layout.findViewById(R.id.question_phone_text);
-		pt.setTypeface(wordTypeface);
-		pt.setText(defaultPhone);
-
-		EditText name = (EditText) layout.findViewById(R.id.question_name);
-		name.setTypeface(wordTypefaceBold);
-		name.setVisibility(View.INVISIBLE);
-		EditText phone = (EditText) layout.findViewById(R.id.question_phone);
-		phone.setTypeface(wordTypefaceBold);
-		phone.setVisibility(View.INVISIBLE);
-
-		TextView button = (TextView) layout.findViewById(R.id.question_button);
-		button.setTypeface(wordTypefaceBold);
-		button.setOnClickListener(new PhoneOnClickListener(nt, pt, name, phone,
-				button, id));
-
-		return layout;
-	}
-
-	private class PhoneOnClickListener implements View.OnClickListener {
-		private boolean editable = false;
-
-		private TextView nt, pt;
-		private EditText name, phone;
-		private TextView button;
-		private int id;
-
-		private String ok = App.getContext().getString(R.string.ok);
-		private String edit = App.getContext().getString(R.string.edit);
-
-		private int ok_color = App.getContext().getResources()
-				.getColor(R.color.lite_orange);
-		private int edit_color = App.getContext().getResources()
-				.getColor(R.color.text_gray);
-
-		public PhoneOnClickListener(TextView nt, TextView pt, EditText name,
-				EditText phone, TextView button, int id) {
-			this.nt = nt;
-			this.pt = pt;
-			this.name = name;
-			this.phone = phone;
-			this.button = button;
-			this.id = id;
-		}
-
-		@Override
-		public void onClick(View v) {
-		
-			if (editable) {
-				String name_text = name.getText().toString();
-				nt.setText(name_text);
-				nt.setVisibility(View.VISIBLE);
-				name.setVisibility(View.INVISIBLE);
-				String phone_text = phone.getText().toString();
-				pt.setText(phone_text);
-				pt.setVisibility(View.VISIBLE);
-				phone.setVisibility(View.INVISIBLE);
-				button.setText(edit);
-				button.setTextColor(edit_color);
-				PreferenceControl.setFamilyCallData(name_text, phone_text, id);
-			} else {
-				nt.setVisibility(View.INVISIBLE);
-				pt.setVisibility(View.INVISIBLE);
-				name.setText(nt.getText());
-				name.setVisibility(View.VISIBLE);
-				phone.setText(pt.getText());
-				phone.setVisibility(View.VISIBLE);
-				button.setText(ok);
-				button.setTextColor(ok_color);
-			}
-			editable = !editable;
-		}
-
-	}
-
-	private View createCheckBoxView(int str_id,
-			OnCheckedChangeListener listener, boolean defaultCheck) {
-		LinearLayout layout = (LinearLayout) inflater.inflate(
-				R.layout.bar_checkbox_item, null);
-
-		TextView text = (TextView) layout
-				.findViewById(R.id.question_description);
-		text.setText(str_id);
-		text.setTypeface(wordTypeface);
-
-		RadioGroup radio = (RadioGroup) layout
-				.findViewById(R.id.question_check);
-		RadioButton yes = (RadioButton) layout
-				.findViewById(R.id.question_check_yes);
-		RadioButton no = (RadioButton) layout
-				.findViewById(R.id.question_check_no);
-		yes.setTypeface(wordTypefaceBold);
-		no.setTypeface(wordTypefaceBold);
-
-		if (defaultCheck)
-			radio.check(R.id.question_check_yes);
-		else
-			radio.check(R.id.question_check_no);
-
-		radio.setOnCheckedChangeListener(listener);
-
-		return layout;
-	}
-
-	// ====================== Animation ==========================
 	/** Initialize call check dialog */
 	private void initializeCallCheckDialog() {
 
@@ -928,84 +738,6 @@ public class CopingActivity extends Activity {
 		animOK.setTypeface(wordTypefaceBold);
 		animCancel.setTypeface(wordTypefaceBold);
 	}
-
-	/** Set questions of emotion */
-	// private void setEmotionQuestion() {
-	// 	state = 0;
-
-	// 	mainLayout.removeAllViews();
-	// 	mainTop.removeAllViews();
-
-	// 	View tv = BarButtonGenerator.createTextView(R.string.emotionDIY_help);
-	// 	mainLayout.addView(tv);
-
-	// 	for (int i = 0; i < solutionTexts.length; ++i) {
-	// 		View v = BarButtonGenerator.createIconView(solutionTexts[i], DRAWABLE_ID[i], ClickListeners[i]);
-	// 		mainLayout.addView(v);
-	// 	}
-
-	// 	int from = mainLayout.getChildCount();
-	// 	for (int i = from; i < MIN_BARS; ++i) {
-	// 		View v = BarButtonGenerator.createBlankView();
-	// 		mainLayout.addView(v);
-	// 	}
-
-	// }
-
-	/**
-	 * Ask the user which one he/she wants to call for
-	 * 
-	 * @param type
-	 *            trigger reason type
-	 */
-	// private void setCallQuestion(int type) {
-	// 	state = 1;
-
-	// 	mainLayout.removeAllViews();
-	// 	mainTop.removeAllViews();
-
-	// 	View tv = BarButtonGenerator.createTextView(R.string.call_to);
-	// 	mainLayout.addView(tv);
-
-	// 	String[] names = new String[3];
-	// 	String[] calls = new String[3];
-
-	// 	if (type == TYPE_FAMILY) {
-	// 		names = PreferenceControl.getConnectFamilyName();
-	// 		calls = PreferenceControl.getConnectFamilyPhone();
-	// 	} else if (type == TYPE_SOCIAL) {
-	// 		int[] idxs = PreferenceControl.getConnectSocialHelpIdx();
-	// 		names[0] = ConnectSocialInfo.NAME[idxs[0]];
-	// 		names[1] = ConnectSocialInfo.NAME[idxs[1]];
-	// 		names[2] = ConnectSocialInfo.NAME[idxs[2]];
-	// 		calls[0] = ConnectSocialInfo.PHONE[idxs[0]];
-	// 		calls[1] = ConnectSocialInfo.PHONE[idxs[1]];
-	// 		calls[2] = ConnectSocialInfo.PHONE[idxs[2]];
-	// 	}
-
-	// 	int counter = 0;
-	// 	for (int i = 0; i < 3; ++i) {
-	// 		OnClickListener listener = new CallCheckOnClickListener(type, names[i], calls[i]);
-	// 		String text = names[i];
-	// 		if (names[i].length() > 0) {
-	// 			View vv = BarButtonGenerator.createIconView(text, R.drawable.icon_call, listener);
-	// 			mainLayout.addView(vv);
-	// 			++counter;
-	// 		}
-	// 	}
-	// 	if (counter == 0) {
-	// 		mainLayout.removeAllViews();
-
-	// 		View tv2 = BarButtonGenerator.createTextView(R.string.emotion_connect_null);
-	// 		mainLayout.addView(tv2);
-	// 	}
-
-	// 	int from = mainLayout.getChildCount();
-	// 	for (int i = from; i < MIN_BARS; ++i) {
-	// 		View v = BarButtonGenerator.createBlankView();
-	// 		mainLayout.addView(v);
-	// 	}
-	// }
 
 	/**
 	 * Set the animation by the user's selection
@@ -1073,10 +805,7 @@ public class CopingActivity extends Activity {
 		barEnd = (ImageView) av.findViewById(R.id.question_progress_bar_end);
 
 		animationImg = (ImageView) av.findViewById(R.id.question_animation);
-		// animationImg.setImageResource(animId);
-		// animationImg.setVisibility(View.VISIBLE);
 		animation = (AnimationDrawable) animationImg.getDrawable();
-		// animation.start();
 		if (Build.VERSION.SDK_INT < 14)
 			animationImg.post(animRunnable);
 		else
@@ -1314,159 +1043,6 @@ public class CopingActivity extends Activity {
 		}
 	}
 
-	/** Used for showing dialog to ask if the user wants to call out for help */
-	// private class CallCheckOnClickListener implements View.OnClickListener {
-
-	// 	private int selection;
-	// 	private String name;
-	// 	private String call;
-
-	// 	CallCheckOnClickListener(int selection, String name, String call) {
-	// 		this.selection = selection;
-	// 		this.name = name;
-	// 		this.call = call;
-	// 	}
-
-	// 	@SuppressLint("InlinedApi")
-	// 	@Override
-	// 	public void onClick(View v) {
-	// 		int item_count = mainLayout.getChildCount();
-	// 		for (int i = 0; i < item_count; ++i)
-	// 			mainLayout.getChildAt(i).setEnabled(false);
-	// 		enableBack = false;
-
-	// 		bgLayout.addView(callLayout);
-
-	// 		boxParam = (LayoutParams) callLayout.getLayoutParams();
-	// 		boxParam.width = LayoutParams.MATCH_PARENT;
-	// 		boxParam.height = LayoutParams.MATCH_PARENT;
-	// 		boxParam.addRule(RelativeLayout.CENTER_IN_PARENT);
-
-	// 		String call_check = getResources().getString(R.string.call_check_help);
-	// 		String question_sign = getResources().getString(R.string.question_sign);
-	// 		callHelp.setText(call_check + " " + name + " " + question_sign);
-	// 		callOK.setOnClickListener(new CallOnClickListener(selection, name, call));
-	// 		callCancel.setOnClickListener(new CallCancelOnClickListener());
-	// 		ClickLog.Log(ClickLogId.EMOTION_DIY_SELECTION);
-	// 	}
-
-	// }
-
-	/** OnClickListener for user selecting a recreation */
-	private class RecreationSelectionOnClickListener implements View.OnClickListener {
-
-		private String recreation;
-
-		public RecreationSelectionOnClickListener(String recreation) {
-			this.recreation = recreation;
-		}
-
-		@Override
-		public void onClick(View v) {
-//			setRecreationEnd(recreation);
-			ClickLog.Log(ClickLogId.EMOTION_DIY_SELECTION);
-		}
-
-	}
-
-	/** Used for canceling calling out */
-	private class CallCancelOnClickListener implements View.OnClickListener {
-		@Override
-		public void onClick(View v) {
-			bgLayout.removeView(callLayout);
-			int item_count = mainLayout.getChildCount();
-			for (int i = 0; i < item_count; ++i)
-				mainLayout.getChildAt(i).setEnabled(true);
-			enableBack = true;
-			ClickLog.Log(ClickLogId.EMOTION_DIY_CALL_CANCEL);
-		}
-
-	}
-
-	/** Used for calling out */
-	// private class CallOnClickListener implements View.OnClickListener {
-	// 	private int selection;
-	// 	private String call;
-
-	// 	// private String name;
-
-	// 	CallOnClickListener(int selection, String name, String call) {
-	// 		this.selection = selection;
-	// 		// this.name = name;
-	// 		this.call = call;
-	// 	}
-
-	// 	@Override
-	// 	public void onClick(View v) {
-	// 		long ts = System.currentTimeMillis();
-	// 		db.insertEmotionDIY(new EmotionDIY(ts, selection, "", 0));
-	// 		if (intentType > -2) {
-	// 			db.insertQuestionnaire(new Questionnaire(ts, intentType, seq_toString(), 0));
-	// 			PreferenceControl.setTestResult(-1);
-	// 		}
-	// 		ClickLog.Log(ClickLogId.EMOTION_DIY_CALL_OK);
-	// 		Intent intentDial = new Intent("android.intent.action.CALL", Uri.parse("tel:" + call));
-	// 		activity.startActivity(intentDial);
-	// 		activity.finish();
-	// 	}
-	// }
-
-	/** Parse intentSequence received from the caller activity */
-	private String seq_toString() {
-		int size = intentSequence.length;
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < size; ++i) {
-			sb.append(intentSequence[i]);
-			if (i < size - 1)
-				sb.append(",");
-		}
-		return sb.toString();
-	}
-
-	/** OnClickListener for selecting method with animation */
-	private class AnimationSelectionOnClickListener implements View.OnClickListener {
-		private int selection;
-
-		AnimationSelectionOnClickListener(int selection) {
-			this.selection = selection;
-		}
-
-		@Override
-		public void onClick(View v) {
-			setAnimationView(selection);
-			ClickLog.Log(ClickLogId.EMOTION_DIY_SELECTION);
-		}
-	}
-
-	/** OnClickListener for selecting do recreation method */
-	private class Recreation123OnClickListener implements View.OnClickListener {
-		@Override
-		public void onClick(View v) {
-//			setRecreationQuestion();
-			ClickLog.Log(ClickLogId.EMOTION_DIY_SELECTION);
-		}
-	}
-
-	/** OnClickListener for finding help */
-	private class HelpOnClickListener implements View.OnClickListener {
-		private int type;
-
-		/**
-		 * Constructor
-		 * 
-		 * @param type
-		 *            Type of the callee
-		 */
-		HelpOnClickListener(int type) {
-			this.type = type;
-		}
-
-		@Override
-		public void onClick(View v) {
-			// setCallQuestion(type);
-			ClickLog.Log(ClickLogId.EMOTION_DIY_SELECTION);
-		}
-	}
 
 	/** CountDownTimer for the music progress bar */
 	private class MusicTimer extends CountDownTimer {

@@ -19,8 +19,6 @@ import com.ubicomp.ketdiary.data.structure.Rank;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.data.structure.TimeValue;
-import com.ubicomp.ketdiary.statistic.coping.EmotionDIY;
-import com.ubicomp.ketdiary.statistic.coping.Questionnaire;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 
 
@@ -1285,68 +1283,7 @@ public class DatabaseControl {
 		}
 	}
 	
-	// Questionnaire
 
-	/**
-	 * Get the latest ''! Questionnaire
-	 * 
-	 * @return Questionnaire. If there are no Questionnaire, return a dummy
-	 *         data.
-	 * @see ubicomp.soberdiary.data.structure.Questionnaire
-	 */
-	public Questionnaire getLatestQuestionnaire() {
-		synchronized (sqlLock) {
-			db = dbHelper.getReadableDatabase();
-			String sql;
-			Cursor cursor;
-			sql = "SELECT * FROM Questionnaire WHERE type >= 0 ORDER BY ts DESC LIMIT 1";
-			cursor = db.rawQuery(sql, null);
-			if (!cursor.moveToFirst()) {
-				cursor.close();
-				db.close();
-				return new Questionnaire(0, 0, null, 0);
-			}
-			long ts = cursor.getLong(4);
-			int type = cursor.getInt(7);
-			String seq = cursor.getString(8);
-			int score = cursor.getInt(9);
-			return new Questionnaire(ts, type, seq, score);
-		}
-	}
-	
-	/**
-	 * Insert the latest ''! Questionnaire
-	 * 
-	 * @return # credits got by the user
-	 * @param data
-	 *            Inserted Questionnaire
-	 * @see ubicomp.soberdiary.data.structure.Questionnaire
-	 */
-	public int insertQuestionnaire(Questionnaire data) {
-		synchronized (sqlLock) {
-			Questionnaire prev_data = getLatestQuestionnaire();
-			int addScore = 0;
-			if (!prev_data.getTv().isSameTimeBlock(data.getTv())
-					&& data.getType() >= 0)
-				addScore = 1;
-			if (!StartDateCheck.afterStartDate())
-				addScore = 0;
-			db = dbHelper.getWritableDatabase();
-			ContentValues content = new ContentValues();
-			content.put("year", data.getTv().getYear());
-			content.put("month", data.getTv().getMonth());
-			content.put("day", data.getTv().getDay());
-			content.put("ts", data.getTv().getTimestamp());
-			content.put("week", data.getTv().getWeek());
-			content.put("timeslot", data.getTv().getTimeslot());
-			content.put("type", data.getType());
-			content.put("sequence", data.getSeq());
-			content.put("score", prev_data.getScore() + addScore);
-			db.insert("Questionnaire", null, content);
-			db.close();
-			return addScore;
-		}
-	}
 	
 	// TestDetail
 
@@ -1450,66 +1387,6 @@ public class DatabaseControl {
 			}
 		}
 
-
-		// EmotionDIY
-
-		/**
-		 * Get the latest Emotion DIY result
-		 * 
-		 * @return EmotionDIY. If there are no EmotionDIY, return a dummy data.
-		 * @see ubicomp.soberdiary.data.structure.EmotionDIY
-		 */
-		public EmotionDIY getLatestEmotionDIY() {
-			synchronized (sqlLock) {
-				db = dbHelper.getReadableDatabase();
-				String sql;
-				Cursor cursor;
-				sql = "SELECT * FROM EmotionDIY ORDER BY ts DESC LIMIT 1";
-				cursor = db.rawQuery(sql, null);
-				if (!cursor.moveToFirst()) {
-					cursor.close();
-					db.close();
-					return new EmotionDIY(0, 0, null, 0);
-				}
-				long ts = cursor.getLong(4);
-				int selection = cursor.getInt(7);
-				String recreation = cursor.getString(8);
-				int score = cursor.getInt(9);
-				return new EmotionDIY(ts, selection, recreation, score);
-			}
-		}
-
-
-		/**
-		 * Insert an Emotion DIY result
-		 * 
-		 * @return # credits got by the user
-		 * @see ubicomp.soberdiary.data.structure.EmotionDIY
-		 */
-		public int insertEmotionDIY(EmotionDIY data) {
-			synchronized (sqlLock) {
-				EmotionDIY prev_data = getLatestEmotionDIY();
-				int addScore = 0;
-				if (!prev_data.getTv().isSameTimeBlock(data.getTv()))
-					addScore = 1;
-				if (!StartDateCheck.afterStartDate())
-					addScore = 0;
-				db = dbHelper.getWritableDatabase();
-				ContentValues content = new ContentValues();
-				content.put("year", data.getTv().getYear());
-				content.put("month", data.getTv().getMonth());
-				content.put("day", data.getTv().getDay());
-				content.put("ts", data.getTv().getTimestamp());
-				content.put("week", data.getTv().getWeek());
-				content.put("timeslot", data.getTv().getTimeslot());
-				content.put("selection", data.getSelection());
-				content.put("recreation", data.getRecreation());
-				content.put("score", prev_data.getScore() + addScore);
-				db.insert("EmotionDIY", null, content);
-				db.close();
-				return addScore;
-			}
-		}
 
 		
 		// QuestionTest
