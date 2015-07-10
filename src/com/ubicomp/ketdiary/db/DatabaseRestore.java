@@ -1,30 +1,12 @@
 package com.ubicomp.ketdiary.db;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 
-import com.ubicomp.ketdiary.PreSettingActivity;
-import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.file.MainStorage;
-import com.ubicomp.ketdiary.statistic.coping.EmotionDIY;
-import com.ubicomp.ketdiary.statistic.coping.Questionnaire;
-import com.ubicomp.ketdiary.system.PreferenceControl;
 
 /**
  * This class is an AsyncTask for handling Database restore procedure
