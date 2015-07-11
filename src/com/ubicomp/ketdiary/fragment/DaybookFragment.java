@@ -134,6 +134,10 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private Calendar startDay = PreferenceControl.getStartDate();
 	private int startMonth = startDay.get(Calendar.MONTH)+1;
 	
+	private static final int[] iconId = {0, R.drawable.emoji5, R.drawable.emoji2, R.drawable.emoji4,
+		R.drawable.emoji1, R.drawable.emoji3, R.drawable.others_emoji3, R.drawable.others_emoji2,
+		R.drawable.others_emoji1};
+	
 	private final static int[] typeId = {0, R.drawable.book_type1,
 		R.drawable.book_type2, R.drawable.book_type3, R.drawable.book_type4, 
 		R.drawable.book_type5, 	R.drawable.book_type6, R.drawable.book_type7, 
@@ -1058,7 +1062,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			
 			MyDialog dialog = new MyDialog(MainActivity.getMainActivity());
 			ImageView type_icon = (ImageView) dialog.findViewById(R.id.type_icon);
-	    	type_icon.setImageResource(typeId[type]);
+	    	type_icon.setImageResource(iconId[type]);
 	    	TextView detail_time = (TextView) dialog.findViewById(R.id.detail_time);
 			detail_time.setText("7月"+date+"號\n"+dayOfWeek[dayOfweek]+"\n"+timeslot[slot]);
 			TextView detail_type = (TextView) dialog.findViewById(R.id.detail_type_content);
