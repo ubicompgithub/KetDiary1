@@ -28,11 +28,12 @@
 		
 	    	<LinearLayout
 	        	android:id="@+id/ll_calendar_dots"
-	        	android:layout_width="35dp"
+	        	android:layout_width="wrap_content"
 	        	android:layout_height="wrap_content"
 	        	android:orientation="horizontal"        
 	        	android:gravity="center"
-	        	android:layout_alignBottom="@+id/date_frame">
+	        	android:layout_below="@+id/date_frame"
+	        	android:layout_centerHorizontal="true">
 	    
 	        <ImageView
 	            android:id="@+id/iv_calendar_dot1"
