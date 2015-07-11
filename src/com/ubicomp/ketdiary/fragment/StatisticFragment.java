@@ -134,22 +134,22 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 			
 		if( PreferenceControl.getCheckResult() && pastTime >= MainActivity.WAIT_RESULT_TIME){
 			MainActivity.getMainActivity().checkResultAddPoint();
-			/*
-			int addScore = PreferenceControl.getTestAddScore();
-			
-			PreferenceControl.setPoint(addScore);
-			
-			Log.d(TAG, "AddScore:"+addScore);
-			int result = db.getLatestTestResult().getResult(); //TODO: check if no data
-			
-			if (addScore == 0 && result == 1) // TestFail & get no credit //TODO: check TestResult
-				CustomToast.generateToast(R.string.after_test_fail, -1);
-			else if(result == 1)
-				CustomToast.generateToast(R.string.after_test_fail, addScore);
-			else
-				CustomToast.generateToast(R.string.after_test_pass, addScore);
-			
-			PreferenceControl.setCheckResult( false );*/
+//			
+//			int addScore = PreferenceControl.getTestAddScore();
+//			
+//			PreferenceControl.setPoint(addScore);
+//			
+//			Log.d(TAG, "AddScore:"+addScore);
+//			int result = db.getLatestTestResult().getResult(); //TODO: check if no data
+//			
+//			if (addScore == 0 && result == 1) // TestFail & get no credit //TODO: check TestResult
+//				CustomToast.generateToast(R.string.after_test_fail, -1);
+//			else if(result == 1)
+//				CustomToast.generateToast(R.string.after_test_fail, addScore);
+//			else
+//				CustomToast.generateToast(R.string.after_test_pass, addScore);
+//			
+//			PreferenceControl.setCheckResult( false );
 		}
 		else if ( PreferenceControl.getCheckResult() && pastTime < MainActivity.WAIT_RESULT_TIME ){
 			
@@ -171,14 +171,14 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 		statisticViewAdapter = new StatisticPagerAdapter();
 		msgBox = new QuestionDialog((RelativeLayout) view);
 
-		Bundle data = getArguments();
-		if (data != null) {
-			int action = data.getInt("action");
-			data.putInt("action", 0);
-			if (action == MainActivity.ACTION_QUESTIONNAIRE) {
-				notify_action = action;
-			}
-		}
+//		Bundle data = getArguments();
+//		if (data != null) {
+//			int action = data.getInt("action");
+//			data.putInt("action", 0);
+//			if (action == MainActivity.ACTION_QUESTIONNAIRE) {
+//				notify_action = action;
+//			}
+//		}
 		
 		//msgBox.generateCopingDialog();
 
@@ -270,10 +270,10 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 			if (msgBox != null)
 				msgBox.initialize();
 
-			questionAnimation = new AlphaAnimation(1.0F, 0.0F);
-			questionAnimation.setDuration(200);
-			questionAnimation.setRepeatCount(Animation.INFINITE);
-			questionAnimation.setRepeatMode(Animation.REVERSE);
+//			questionAnimation = new AlphaAnimation(1.0F, 0.0F);
+//			questionAnimation.setDuration(200);
+//			questionAnimation.setRepeatCount(Animation.INFINITE);
+//			questionAnimation.setRepeatMode(Animation.REVERSE);
 
 			//setQuestionAnimation();
 

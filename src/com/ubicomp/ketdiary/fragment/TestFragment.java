@@ -55,6 +55,7 @@ import com.ubicomp.ketdiary.file.QuestionFile;
 import com.ubicomp.ketdiary.file.VoltageFileHandler;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.LoadingDialogControl;
+import com.ubicomp.ketdiary.ui.ScaleOnTouchListener;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
 public class TestFragment extends Fragment implements BluetoothListener, CameraCaller, TestQuestionCaller2{
@@ -330,8 +331,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 				startActivity(intent);
 			}
 		});
-
-
+			
+		img_help.setOnTouchListener(new ScaleOnTouchListener());
 		//For Testing Function
 		
 		/*

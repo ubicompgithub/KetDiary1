@@ -206,8 +206,26 @@ public class PreferenceControl {
 	
 	public static void setPosition(int addPos) {
 		int last_position= getPosition();
+		int pos = last_position + addPos;
+		if(pos<0){
+			pos = 0;
+		}
+		else if(pos > 21){
+			pos = 21;
+		}
 		SharedPreferences.Editor edit = sp.edit();
-		edit.putInt("Postion", last_position + addPos);
+		edit.putInt("Postion", pos);
+		edit.commit();
+	}
+	
+	public static int getLastPosition() {
+		return sp.getInt("LastPostion", 11);
+	}
+	
+	public static void setLastPosition(int Pos) {
+//		int last_position= getLastPosition();
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putInt("LastPostion", Pos);
 		edit.commit();
 	}
 	

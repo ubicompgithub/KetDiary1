@@ -24,6 +24,8 @@ public class BootBoardcastReceiver extends BroadcastReceiver {
 	private static final int requestCodeRegularNotification = 0x2013;
 	/** RequestCode for regular Internet check */
 	private static final int requestCodeRegularCheck = 0x2014;
+	/** RequestCode for daily event */
+	private static final int requestCodeDailyEvent = 0x2015;
 
 	/** TAG for logcat */
 	private static final String TAG = "BOOT_BC_RECEIVER";
@@ -44,6 +46,8 @@ public class BootBoardcastReceiver extends BroadcastReceiver {
 
 		setRegularNotification(context, intent);
 		setRegularCheck(context, intent);
+		
+		setDailyEvent(context, intent);
 	}
 
 	/** Method for setting regular notification alarm */
@@ -134,5 +138,31 @@ public class BootBoardcastReceiver extends BroadcastReceiver {
 
 		Intent regularCheckIntent = new Intent(context, UploadService.class);
 		context.startService(regularCheckIntent);
+	}
+	
+	/** Method for setting daily event alarm */
+	public static void setDailyEvent(Context context, Intent intent) {
+		Log.d(TAG, "setDailyEvent");
+		AlarmManager alarm = (AlarmManager) context
+				.getSystemService(Context.ALARM_SERVICE);
+		
+		Calendar c = Calendar.getInstance();
+		int cur_year = c.get(Calendar.YEAR);
+		int cur_month = c.get(Calendar.MONTH);
+		int cur_date = c.get(Calendar.DAY_OF_MONTH);
+		int cur_hour = c.get(Calendar.HOUR_OF_DAY);
+		
+		c.set(Calendar.HOUR_OF_DAY, 0);
+		
+		Intent check_intent = new Intent();
+		check_intent.setClass(context, AlarmReceiver.class);
+		check_intent.setAction(Config.ACTION_DAILY_EVENT);
+
+		PendingIntent pending2 = PendingIntent.getBroadcast(context,
+				requestCodeDailyEvent, check_intent,
+				PendingIntent.FLAG_CANCEL_CURRENT);
+		alarm.cancel(pending2);
+		alarm.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pending2);
+		
 	}
 }

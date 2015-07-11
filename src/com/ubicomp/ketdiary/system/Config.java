@@ -49,4 +49,6 @@ public class Config {
 	public static final String ACTION_REGULAR_NOTIFICATION = "Regular_notification";
 	/** Action of regular Internet connection check */
 	public static final String ACTION_REGULAR_CHECK = "Regular_check";
+	/** Action of regular Set Daily event */
+	public static final String ACTION_DAILY_EVENT = "Daily_event";
 }

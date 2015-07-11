@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.fragment;
+package com.ubicomp.ketdiary.noUse;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,7 +25,6 @@ import android.widget.Spinner;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.QuestionFile;
-import com.ubicomp.ketdiary.noUse.EventCopeSkillActivity;
 
 
 /**

@@ -1,5 +1,7 @@
 package com.ubicomp.ketdiary.statistic;
 
+import java.util.Random;
+
 import android.annotation.SuppressLint;
 import android.graphics.Typeface;
 import android.os.Handler;
@@ -89,9 +91,9 @@ public class AnalysisProsConsView extends StatisticPageView {
 	public void load() {
 		
 	
-			
+		
 		barHandler.sendEmptyMessage(0);
-			
+		//updateBar();
 		
 
 		
@@ -113,39 +115,25 @@ public class AnalysisProsConsView extends StatisticPageView {
 		clear();
 	}
 	
-	private class BarHandler extends Handler {
-		@Override
-		public void handleMessage(Message msg) {
-			
-			//int today_situation=19; //pass or fail
-			int today_situation = PreferenceControl.getPosition();
-			/*
-			int result = db.getTodayPrimeResult();
-			int today_situation=0;
-			
-			if(result == 0)
-				today_situation = 1;
-			else 
-				today_situation = -1;
-			*/
-			//Log.d(TAG, today_situation+"");
-//			int curDrink = db.getPrimeDetectionPassTimes();
-//			currentMoney = curDrink * drinkCost;
-
-			int barWidth = bar.getRight() - bar.getLeft();
-			int positionWidth =currentBar.getRight() - currentBar.getLeft();
-			int leftWidth = barStart.getRight() - barStart.getLeft();
-			int rightWidth = barEnd.getRight() - barEnd.getLeft();
-			int curWidth = bar_followed.getRight()- bar_followed.getLeft();
-			int maxWidth = barWidth - positionWidth;
-			int width_per_block=maxWidth/21;
-			int nextWidth;
-			//nextWidth=curWidth+width_per_block*today_situation;
-			
-			nextWidth = width_per_block*today_situation;
-			System.out.println(nextWidth);
-			
-			
+	
+	private void updateBar(){
+		//int today_situation=19; //pass or fail
+		boolean check = PreferenceControl.getCheckResult();	
+		int today_situation = PreferenceControl.getPosition();
+		int barWidth = bar.getRight() - bar.getLeft();
+		int positionWidth =currentBar.getRight() - currentBar.getLeft();
+//		int leftWidth = barStart.getRight() - barStart.getLeft();
+//		int rightWidth = barEnd.getRight() - barEnd.getLeft();
+		
+		
+		int maxWidth = barWidth - positionWidth;
+		int width_per_block=maxWidth/21;
+		int nextWidth = width_per_block*today_situation;
+		Log.d(TAG,""+today_situation);
+		if(!check){		
+		}
+		else{
+			int curWidth = width_per_block*PreferenceControl.getLastPosition();
 			if(nextWidth>curWidth){
 				if(nextWidth>=maxWidth){
 					nextWidth=maxWidth;
@@ -173,20 +161,33 @@ public class AnalysisProsConsView extends StatisticPageView {
 				barStart.setVisibility(View.INVISIBLE);
 				barEnd.setVisibility(View.INVISIBLE);
 			}
-			RelativeLayout.LayoutParams currentBarParam = (RelativeLayout.LayoutParams) bar_followed.getLayoutParams();
-			currentBarParam.width = nextWidth;
-			layout.updateViewLayout(bar_followed, currentBarParam);
-//			if (currentMoney > goal)
-//				width = maxWidth;
-//			else {
-//				width = maxWidth * currentMoney / goal;
-//			}
-//
-//			RelativeLayout.LayoutParams currentBarParam1 = (RelativeLayout.LayoutParams) currentBar
-//					.getLayoutParams();
-//			currentBarParam1.width = width;
-//
-//			layout.updateViewLayout(currentBar, currentBarParam1);
+			PreferenceControl.setLastPosition(today_situation);
+		}
+		RelativeLayout.LayoutParams currentBarParam = (RelativeLayout.LayoutParams) bar_followed.getLayoutParams();
+		currentBarParam.width = nextWidth;
+		layout.updateViewLayout(bar_followed, currentBarParam);
+		currentBar.setVisibility(View.VISIBLE);
+		
+		
+		/*
+		int result = db.getTodayPrimeResult();
+		int today_situation=0;
+		
+		if(result == 0)
+			today_situation = 1;
+		else 
+			today_situation = -1;
+		*/
+		//Log.d(TAG, today_situation+"");
+//		int curDrink = db.getPrimeDetectionPassTimes();
+//		currentMoney = curDrink * drinkCost;
+	}
+	
+	private class BarHandler extends Handler {
+		@Override
+		public void handleMessage(Message msg) {
+			updateBar();
+			PreferenceControl.setCheckResult(false);
 		}
 	}
 
