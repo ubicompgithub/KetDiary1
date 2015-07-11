@@ -257,7 +257,7 @@
         android:layout_marginRight="2dp"
         android:layout_marginTop="2dp"
         android:padding="13.3dp"
-        android:src="@drawable/noti" />
+        android:src="@drawable/test_information" />
     
 
 </RelativeLayout>
