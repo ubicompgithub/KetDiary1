@@ -18,12 +18,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
@@ -61,9 +57,8 @@ public class CopingActivity extends Activity {
 	private View encouragementView, harmView, lifestyleView, lapseView;
 
 	
-	// Animation
-	private RelativeLayout bgLayout, callLayout, animEndLayout, barLayout;
-	private TextView callOK, callCancel, callHelp, animOK, animCancel, animHelp, endButton;
+	private RelativeLayout bgLayout, animEndLayout, barLayout;
+	private TextView animOK, animCancel, animHelp, endButton;
 
 	private int state = 0;
 	private int animId, mediaId;
@@ -119,26 +114,15 @@ public class CopingActivity extends Activity {
 		inflater = LayoutInflater.from(activity);
 		wordTypefaceBold = Typefaces.getWordTypefaceBold();
 
-		mainLayout.removeAllViews();
-
 		View title = BarButtonGenerator.createTitleView(R.string.coping_page);
 		titleLayout.addView(title);
 
-		// Setting views
-		setRelaxedView();
-		setRecreationView();
-		setInterpersonView();
-		//setSponsorView();
-		setInfoView();
-
-
-		// Animation
-		callLayout = (RelativeLayout) inflater.inflate(R.layout.dialog_callout_check, null);
 		bgLayout = (RelativeLayout) findViewById(R.id.coping_all_layout);
-		initializeCallCheckDialog();
 		animEndLayout = (RelativeLayout) inflater.inflate(R.layout.dialog_end_animation, null);
-		initializeAnimEndDialog();
 		db = new DatabaseControl();
+		initializeAnimEndDialog();
+
+		resetCopingActivityViews();
 		
 	}
 
@@ -694,6 +678,23 @@ public class CopingActivity extends Activity {
         dialogOKButton.setOnClickListener(new EndOnClickListener() );
 	}
 	
+
+	private void resetCopingActivityViews(){
+
+		mainLayout.removeAllViews();
+		mainTop.removeAllViews();
+
+		setRelaxedView();
+		setRecreationView();
+		setInterpersonView();
+		//setSponsorView();
+		setInfoView();
+
+		for (int i = 0; i < listVisible.length; i++)
+			listVisible[i] = false;
+
+		state = 0;
+	}
 	
 
 	@Override
@@ -725,19 +726,6 @@ public class CopingActivity extends Activity {
 		return layout;
 	}
 
-
-	/** Initialize call check dialog */
-	private void initializeCallCheckDialog() {
-
-		callOK = (TextView) callLayout.findViewById(R.id.call_ok_button);
-		callCancel = (TextView) callLayout.findViewById(R.id.call_cancel_button);
-		callHelp = (TextView) callLayout.findViewById(R.id.call_help);
-
-		callHelp.setTypeface(wordTypefaceBold);
-		callOK.setTypeface(wordTypefaceBold);
-		callCancel.setTypeface(wordTypefaceBold);
-
-	}
 
 	/** Initialize Animation end check dialog */
 	private void initializeAnimEndDialog() {
@@ -1272,6 +1260,17 @@ public class CopingActivity extends Activity {
 				bgLayout.removeView(animEndLayout);
 				return false;
 			}
+
+			if (state == 0){
+				return super.onKeyDown(keyCode, event);
+			}
+			else{
+				resetCopingActivityViews();
+				return false;
+			}
+
+
+
 		
 			// return super.onKeyDown(keyCode, event);
 
