@@ -471,6 +471,9 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 				
 				ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE);
 				
+				diaryList.removeAllViews();
+				drawerContent.removeAllViews();
+				
 				notePage.initialize();
 				notePage.show();
 				isNotePageShow = true;

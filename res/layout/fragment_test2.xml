@@ -122,7 +122,7 @@
     	    android:layout_height="75dp"
     	    android:layout_above="@+id/tv_subtitle"
     	    android:layout_centerHorizontal="true"
-    	    android:layout_marginTop="40dp"
+    	    android:layout_marginTop="60dp"
     	    android:layout_marginBottom="40dp"
     	    android:orientation="horizontal"
     	    android:visibility="invisible" >
@@ -132,6 +132,7 @@
     	        android:layout_width="wrap_content"
         	    android:layout_height="wrap_content"
             	android:layout_gravity="center"
+            	android:layout_marginRight="10dp"
             	android:padding="10dp"
             	android:src="@drawable/saliva1_no"/>
 
@@ -140,6 +141,7 @@
         	    android:layout_width="wrap_content"
             	android:layout_height="wrap_content"
             	android:layout_gravity="center"
+            	android:layout_marginRight="10dp"
             	android:padding="10dp"
             	android:src="@drawable/saliva2_no" />
 
