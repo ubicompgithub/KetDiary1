@@ -132,7 +132,7 @@
         	    android:layout_height="wrap_content"
             	android:layout_gravity="center"
             	android:padding="10dp"
-            	android:src="@drawable/saliva1_no1"/>
+            	android:src="@drawable/saliva1_no"/>
 
 	        <ImageView
     	        android:id="@+id/iv_water2"
