@@ -37,10 +37,10 @@ import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.dialog.CheckResultDialog;
 import com.ubicomp.ketdiary.fragment.DaybookFragment;
-import com.ubicomp.ketdiary.fragment.NoteFragment;
 import com.ubicomp.ketdiary.fragment.StatisticFragment;
 import com.ubicomp.ketdiary.fragment.TestFragment;
 import com.ubicomp.ketdiary.noUse.NoteDialog2;
+import com.ubicomp.ketdiary.noUse.NoteFragment;
 import com.ubicomp.ketdiary.system.Config;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.CustomMenu;
@@ -810,24 +810,26 @@ public class MainActivity extends FragmentActivity {
 			
 		Log.d(TAG,""+timestamp+" "+addScore);
 		//PreferenceControl.setTestAddScore(addScore);
-		
-		
-		
+
 		PreferenceControl.setPoint(addScore);
 		Log.d(TAG, "AddScore:"+addScore);		
 		if (addScore == 0 && result == 1){ // TestFail & get no credit 
 			CustomToast.generateToast(R.string.after_test_fail, -1);
+			PreferenceControl.setPosition(-1);
 		}
 		else if(result == 1){
 			CustomToast.generateToast(R.string.after_test_fail, addScore);
+			PreferenceControl.setPosition(-1);
 		}
-		else
+		else{
 			CustomToast.generateToast(R.string.after_test_pass, addScore);
+			PreferenceControl.setPosition(1);
+		}
 		
 		
 		
 		
-		PreferenceControl.setCheckResult( false );
+		//PreferenceControl.setCheckResult( false );
 	}
 
 	private void showResult(){

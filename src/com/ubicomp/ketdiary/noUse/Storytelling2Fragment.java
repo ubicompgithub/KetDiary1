@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.fragment;
+package com.ubicomp.ketdiary.noUse;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

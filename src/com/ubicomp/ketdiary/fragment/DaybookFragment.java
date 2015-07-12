@@ -6,11 +6,13 @@ import java.util.Random;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -21,8 +23,10 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -149,7 +153,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	public ImageView lineChartFilterButton, calendarFilterButton, rotateLineChart;
 	
 	public static boolean[] filterButtonIsPressed = {true, false, false, false, false, false, false, false, false};
-	private ImageView[] filterButtonArray = {filterAll, filter1, filter2, filter3, filter4, filter5, filter6, filter7, filter8};
+	//private ImageView[] filterButtonArray = {filterAll, filter1, filter2, filter3, filter4, filter5, filter6, filter7, filter8};
 	
 	private int drawerHeight = context.getResources().getDimensionPixelSize(R.dimen.drawer_normal_height);
 	private int drawerHeightWithFilter = context.getResources().getDimensionPixelSize(R.dimen.drawer_with_filter_height);
@@ -162,6 +166,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		activity = MainActivity.getMainActivity();
 		db = new DatabaseControl();
 		dict = new NoteCategory2();
 		caller = this;
@@ -1022,8 +1027,14 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			
 			ClickLog.Log(ClickLogId.DAYBOOK_FILTER_LONGCLICK);  
 			
-			new FilterDetailDialog(MainActivity.getMainActivity()).show();
-			
+			final Dialog dialog = new Dialog(activity);
+		
+			dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+			dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+	        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+	        
+	        dialog.getWindow().setContentView(R.layout.dialog_diary_detail);
+	        dialog.show();
 			/*
 			Dialog dialog = new Dialog(MainActivity.getMainActivity(), R.style.selectorDialog);
 			dialog.setContentView(R.layout.dialog_diary_detail);
@@ -1045,10 +1056,12 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		int items;
 		int impact;
 		String descripton;
+		String[] typeText = context.getResources().getStringArray(R.array.trigger_list);
 		   	
     	public TypeLongClickListener(int date, int dayOfweek, int slot, int type, int items, int impact, String descripton){
     		this.date = date;
     		this.dayOfweek = dayOfweek;
+    		this.slot = slot;
     		this.type = type;
     		this.items = items;
     		this.impact = impact;
@@ -1060,17 +1073,24 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			
 			ClickLog.Log(ClickLogId.DAYBOOK_SHOWDETAIL);  
 			
-			MyDialog dialog = new MyDialog(MainActivity.getMainActivity());
+			final Dialog dialog = new Dialog(activity);
+			
+			dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+			dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+	        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+	        
+	        dialog.getWindow().setContentView(R.layout.dialog_detail_activity);
+						
 			ImageView type_icon = (ImageView) dialog.findViewById(R.id.type_icon);
 	    	type_icon.setImageResource(iconId[type]);
 	    	TextView detail_time = (TextView) dialog.findViewById(R.id.detail_time);
 			detail_time.setText("7月"+date+"號\n"+dayOfWeek[dayOfweek]+"\n"+timeslot[slot]);
 			TextView detail_type = (TextView) dialog.findViewById(R.id.detail_type_content);
-			detail_type.setText("負面情緒");
+			detail_type.setText(typeText[type-1]);
 			TextView detail_item = (TextView) dialog.findViewById(R.id.detail_item_content);
 			detail_item.setText(dict.getItems(items));
 			TextView detail_impact = (TextView) dialog.findViewById(R.id.detail_impact_content);
-			detail_impact.setText(""+impact);
+			detail_impact.setText(""+(impact-3));
 			TextView detail_description = (TextView) dialog.findViewById(R.id.detail_description_content);
 			detail_description.setText(descripton);
 			

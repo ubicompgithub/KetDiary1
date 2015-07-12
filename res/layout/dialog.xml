@@ -4,14 +4,6 @@
     android:layout_height="150dp"
     android:background="@drawable/progress_dialog_bg"
     android:padding="20dp" >
-    
-
-    <TextView
-        android:id="@+id/dialog_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Empty" />
 
     <TextView
         android:id="@+id/ok_button"
@@ -21,5 +13,14 @@
         android:layout_alignParentRight="true"
         android:layout_margin="5dp"
         android:text="我知道了" />
+
+    <TextView
+        android:id="@+id/dialog_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="41dp"
+        android:text="Empty" />
       
 </RelativeLayout>

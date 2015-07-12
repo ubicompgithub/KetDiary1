@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/shadow" >
-
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="272dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/rank_chart_bg"
+        android:background="@drawable/daybook_detail_bg"
+        android:orientation="vertical"
+        android:padding="20dp"
         android:splitMotionEvents="true"
         android:translationX="5dp"
-        android:translationY="-5dp"
-        android:orientation="vertical"
-        android:padding="20dp" >
+        android:translationY="-5dp" >
         
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -212,4 +207,3 @@
         
     </LinearLayout>
 
-</FrameLayout>
