@@ -112,7 +112,7 @@ public class LineChartView extends View {
         dataset = new LineChartData[numOfDays];
         initDataset();
         //setChartData3();
-        initBitmap();
+        //initBitmap();
     	
     	Log.d("drawDate", "numOfDays:"+numOfDays);
     }

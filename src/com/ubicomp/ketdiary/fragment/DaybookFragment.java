@@ -283,6 +283,17 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		
 		
 		//for ( int i = 0; i < 9; i++ ) { filterList.add(i);} 
+		
+		
+		
+		lineChart = (LineChartView) lineChartView.findViewById(R.id.lineChart);
+        lineChart.requestLayout();
+        lineChart.getLayoutParams().width = 2200;
+        
+        chartTitle = (LineChartTitle) lineChartView.findViewById(R.id.chart_title);
+        chartTitle.setting(caller);
+        chartAreaLayout = (LinearLayout) lineChartView.findViewById(R.id.linechart_tabs);
+        chartAreaLayout.setBackgroundResource(R.drawable.linechart_bg);
 	
 		linechartIcon.setOnClickListener(new OnClickListener() {
 			
@@ -305,20 +316,11 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 					upperBarContent.addView(lineChartBar);
 				}
 				if  (!drawer.isOpened()) { drawer.toggle();}
-				
-				lineChart = (LineChartView) view.findViewById(R.id.lineChart);
-		        lineChart.requestLayout();
-		        lineChart.getLayoutParams().width = 2200;
-		        
-		        chartTitle = (LineChartTitle) view.findViewById(R.id.chart_title);
-		        chartTitle.setting(caller);
+								
 		        
 		        isContentAdd = true;
 		        setChartType(2);
-		        
-		        chartAreaLayout = (LinearLayout) view.findViewById(R.id.linechart_tabs);
-		        chartAreaLayout.setBackgroundResource(R.drawable.linechart_bg);
-		        
+		                
 		        if(rotateLineChart!=null && isContentAdd)
 					rotateLineChart.setVisibility(View.VISIBLE);
 			}
@@ -657,21 +659,34 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		}
 		
 		case 2: {
-			//Log.i("OMG", "CASE2");
-			if (isFilterOpen) {
-				LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
-				lp.height = drawerHeight;
-				lp.addRule(RelativeLayout.BELOW, lineChartBar.getId());
-				drawer.setLayoutParams(lp);
-				
-				drawerContent.removeAllViews();
-				
-				drawerContent.addView(lineChartView);
-				isFilterOpen = false;
+			if (isFilterOpen)  {
+				filter1.setVisibility(View.VISIBLE); 
+				filter2.setVisibility(View.VISIBLE);
+				filter3.setVisibility(View.VISIBLE); 
+				filter4.setVisibility(View.VISIBLE); 
+				filter5.setVisibility(View.VISIBLE); 
+				filter6.setVisibility(View.VISIBLE);
+				filter7.setVisibility(View.VISIBLE);
+				filter8.setVisibility(View.VISIBLE);
+				filterView.setPadding(10, 0, 10, 0);	
 			}
-			lineChartFilterButton.setVisibility(View.INVISIBLE);
-			lineChart.invalidate();
+			lineChartFilterButton.setVisibility(View.VISIBLE);
 			break;
+			//Log.i("OMG", "CASE2");
+//			if (isFilterOpen) {
+//				LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
+//				lp.height = drawerHeight;
+//				lp.addRule(RelativeLayout.BELOW, lineChartBar.getId());
+//				drawer.setLayoutParams(lp);
+//				
+//				drawerContent.removeAllViews();
+//				
+//				drawerContent.addView(lineChartView);
+//				isFilterOpen = false;
+//			}
+//			lineChartFilterButton.setVisibility(View.INVISIBLE);
+//			lineChart.invalidate();
+//			break;
 		}
 		case 3: {
 			//Log.i("OMG", "CASE2");
