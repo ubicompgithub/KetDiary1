@@ -372,7 +372,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		public void onStart(){
 			state = IDLE_STATE;
 			
-			img_water1.setImageResource(R.drawable.saliva1_no1);
+			img_water1.setImageResource(R.drawable.saliva1_no);
 			img_water2.setImageResource(R.drawable.saliva2_no);
 			img_water3.setImageResource(R.drawable.saliva3_no);
 			
@@ -588,7 +588,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			img_btn.setVisibility(View.INVISIBLE);
 			//cameraLayout.setVisibility(View.VISIBLE);
 			
-			img_water1.setImageResource(R.drawable.saliva1_yes1);
+			img_water1.setImageResource(R.drawable.saliva1_yes);
 			img_water2.setImageResource(R.drawable.saliva2_yes);
 			
 			salivaCountDownTimer = new SalivaCountDownTimer();
