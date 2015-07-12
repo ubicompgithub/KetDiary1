@@ -659,34 +659,34 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		}
 		
 		case 2: {
-			if (isFilterOpen)  {
-				filter1.setVisibility(View.VISIBLE); 
-				filter2.setVisibility(View.VISIBLE);
-				filter3.setVisibility(View.VISIBLE); 
-				filter4.setVisibility(View.VISIBLE); 
-				filter5.setVisibility(View.VISIBLE); 
-				filter6.setVisibility(View.VISIBLE);
-				filter7.setVisibility(View.VISIBLE);
-				filter8.setVisibility(View.VISIBLE);
-				filterView.setPadding(10, 0, 10, 0);	
-			}
-			lineChartFilterButton.setVisibility(View.VISIBLE);
-			break;
-			//Log.i("OMG", "CASE2");
-//			if (isFilterOpen) {
-//				LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
-//				lp.height = drawerHeight;
-//				lp.addRule(RelativeLayout.BELOW, lineChartBar.getId());
-//				drawer.setLayoutParams(lp);
-//				
-//				drawerContent.removeAllViews();
-//				
-//				drawerContent.addView(lineChartView);
-//				isFilterOpen = false;
+//			if (isFilterOpen)  {
+//				filter1.setVisibility(View.VISIBLE); 
+//				filter2.setVisibility(View.VISIBLE);
+//				filter3.setVisibility(View.VISIBLE); 
+//				filter4.setVisibility(View.VISIBLE); 
+//				filter5.setVisibility(View.VISIBLE); 
+//				filter6.setVisibility(View.VISIBLE);
+//				filter7.setVisibility(View.VISIBLE);
+//				filter8.setVisibility(View.VISIBLE);
+//				filterView.setPadding(10, 0, 10, 0);	
 //			}
-//			lineChartFilterButton.setVisibility(View.INVISIBLE);
-//			lineChart.invalidate();
+//			lineChartFilterButton.setVisibility(View.VISIBLE);
 //			break;
+			//Log.i("OMG", "CASE2");
+			if (isFilterOpen) {
+				LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
+				lp.height = drawerHeight;
+				lp.addRule(RelativeLayout.BELOW, lineChartBar.getId());
+				drawer.setLayoutParams(lp);
+				
+				drawerContent.removeAllViews();
+				
+				drawerContent.addView(lineChartView);
+				isFilterOpen = false;
+			}
+			lineChartFilterButton.setVisibility(View.INVISIBLE);
+			lineChart.invalidate();
+			break;
 		}
 		case 3: {
 			//Log.i("OMG", "CASE2");
@@ -713,6 +713,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	public void onPause(){
 		ClickLog.Log(ClickLogId.DAYBOOK_LEAVE);
 		
+		diaryList.removeAllViews();
 		super.onPause();
 		//TODO: release some resource
 	}
@@ -900,20 +901,20 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			
 			
 		}	
-		else{	//using dummy data
-			for (int n = 1  ; n <=30 ; n++) {
-				//LayoutInflater inflater = LayoutInflater.from(context);
-				diaryItem = inflater.inflate(R.layout.diary_item, null);
-			
-				//sv_item_height = diaryItem.getMeasuredHeight();
-				TextView date_num = (TextView) diaryItem.findViewById(R.id.diary_date);
-				diaryList.addView(diaryItem);
-				date_num.setText(Integer.toString(n) + "號");
-			
-				boxesLayout = (LinearLayout) view.findViewById(R.layout.diary_item);
-		
-			}
-		}
+//		else{	//using dummy data
+//			for (int n = 1  ; n <=30 ; n++) {
+//				//LayoutInflater inflater = LayoutInflater.from(context);
+//				diaryItem = inflater.inflate(R.layout.diary_item, null);
+//			
+//				//sv_item_height = diaryItem.getMeasuredHeight();
+//				TextView date_num = (TextView) diaryItem.findViewById(R.id.diary_date);
+//				diaryList.addView(diaryItem);
+//				date_num.setText(Integer.toString(n) + "號");
+//			
+//				boxesLayout = (LinearLayout) view.findViewById(R.layout.diary_item);
+//		
+//			}
+//		}
 		sv.fullScroll(View.FOCUS_DOWN);
 		//sv.smoothScrollTo(0 , (int)convertDpToPixel(125)*(noteAdds.length) +1000000);
 	}
@@ -936,75 +937,94 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		mViewPager.setCurrentItem(pageIdx);
 	}
 	
+//	private void addDrawerContent(int id){
+//		
+//		setArrow(true);
+//		
+//		switch(id){
+//		case R.id.toggle_layout:
+//			
+//			if (isFilterOpen == true) {				
+//				LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
+//				lp.height = drawerHeightWithFilter;
+//				lp.addRule(RelativeLayout.BELOW, lineChartBar.getId());
+//				drawer.setLayoutParams(lp);
+//				
+//				drawerContent.removeAllViews();
+//				
+//				drawerContent.addView(lineChartFilter);
+//				setFilterSize();
+//				Log.i("OMG", "CASE: "+ chart_type);
+//				setFilterType(chart_type);
+//				drawerContent.addView(lineChartView);
+//			
+//			}
+//			else {
+//				LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
+//				lp.height = drawerHeight;
+//				lp.addRule(RelativeLayout.BELOW, lineChartBar.getId());
+//				drawer.setLayoutParams(lp);
+//				
+//				drawerContent.removeAllViews();
+//				
+//				drawerContent.addView(lineChartView);
+//			}
+//			
+//			break;
+//		
+//		case R.id.cal_toggle_layout:
+//			
+//			if (isFilterOpen == true) {				
+//				LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
+//				//Log.i("OMG", "H: "+lp.height);
+//				lp.height = drawerHeightWithFilter;
+//				lp.addRule(RelativeLayout.BELOW, calendarBar.getId());
+//				drawer.setLayoutParams(lp);
+//				
+//				drawerContent.removeAllViews();
+//				
+//				drawerContent.addView(lineChartFilter);
+//				isFilterOpen = true;
+//				setFilterSize();
+//				setFilterType(3);
+//				drawerContent.addView(calendarView);
+//				
+//			}
+//			else {
+//				LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
+//				lp.height = drawerHeight;
+//				lp.addRule(RelativeLayout.BELOW, calendarBar.getId());
+//				drawer.setLayoutParams(lp);
+//				
+//				drawerContent.removeAllViews();
+//				
+//				drawerContent.addView(calendarView);
+//				isFilterOpen = false;
+//			}
+//			
+//			break;
+//		}	
+//	}
 	private void addDrawerContent(int id){
 		
 		setArrow(true);
-		
+		isFilterOpen = false;
+		LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
+		lp.height = drawerHeight;
+		lp.addRule(RelativeLayout.BELOW, calendarBar.getId());
+		drawer.setLayoutParams(lp);
+		drawerContent.removeAllViews();
 		switch(id){
-		case R.id.toggle_layout:
-			
-			if (isFilterOpen == true) {				
-				LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
-				lp.height = drawerHeightWithFilter;
-				lp.addRule(RelativeLayout.BELOW, lineChartBar.getId());
-				drawer.setLayoutParams(lp);
-				
-				drawerContent.removeAllViews();
-				
-				drawerContent.addView(lineChartFilter);
-				setFilterSize();
-				Log.i("OMG", "CASE: "+ chart_type);
-				setFilterType(chart_type);
+		case R.id.toggle_layout:			
 				drawerContent.addView(lineChartView);
-			
-			}
-			else {
-				LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
-				lp.height = drawerHeight;
-				lp.addRule(RelativeLayout.BELOW, lineChartBar.getId());
-				drawer.setLayoutParams(lp);
-				
-				drawerContent.removeAllViews();
-				
-				drawerContent.addView(lineChartView);
-			}
-			
-			break;
+		break;
 		
 		case R.id.cal_toggle_layout:
-			
-			if (isFilterOpen == true) {				
-				LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
-				//Log.i("OMG", "H: "+lp.height);
-				lp.height = drawerHeightWithFilter;
-				lp.addRule(RelativeLayout.BELOW, calendarBar.getId());
-				drawer.setLayoutParams(lp);
-				
-				drawerContent.removeAllViews();
-				
-				drawerContent.addView(lineChartFilter);
-				isFilterOpen = true;
-				setFilterSize();
-				setFilterType(3);
-				drawerContent.addView(calendarView);
-				
-			}
-			else {
-				LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
-				lp.height = drawerHeight;
-				lp.addRule(RelativeLayout.BELOW, calendarBar.getId());
-				drawer.setLayoutParams(lp);
-				
-				drawerContent.removeAllViews();
-				
-				drawerContent.addView(calendarView);
-				isFilterOpen = false;
-			}
-			
+		
+			drawerContent.addView(calendarView);
+		
 			break;
 		}	
-		
-		
 	}
 			
     private class ToggleListener implements View.OnClickListener {
