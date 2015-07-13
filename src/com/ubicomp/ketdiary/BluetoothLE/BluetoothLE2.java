@@ -187,6 +187,33 @@ public class BluetoothLE2 {
             	//Log.i(TAG, Sbuffer.toString());
 
 //                String dataString = "";
+            	
+            	 switch(data[0]) { // Handling notification depending on types
+                 case (byte)0xFA:
+                     Log.i(TAG, "----0xFA----");
+                     ((BluetoothListener) bluetoothListener).bleNoPlug();
+                     break;
+                 case (byte)0xFB:
+                     Log.i(TAG, "----0xFB----");
+                     byte[] plugId = new byte[data.length-1];
+                     System.arraycopy(data, 1, plugId, 0, data.length - 1);
+                     ((BluetoothListener) bluetoothListener).blePlugInserted(plugId);
+                     break;
+                 case (byte)0xFC:
+                 case (byte)0xFD:
+                 case (byte)0xFE:
+                     byte[] adcReading = new byte[data.length-1];
+                     System.arraycopy(data, 1, adcReading, 0, data.length - 1);
+                     ((BluetoothListener) bluetoothListener).bleElectrodeAdcReading(data[0], adcReading);
+                     break;
+
+                 case (byte)0xFF:
+                     Log.i(TAG, "----0xFF----");
+                     byte[] colorReadings = new byte[data.length-1];
+                     System.arraycopy(data, 1, colorReadings, 0, data.length-1);
+                     ((BluetoothListener) bluetoothListener).bleColorReadings(colorReadings);
+                     break;
+             }
 				
                 if(data[0] == (byte)0xA7){
                     seqNum = (data[2] & 0xFF)*256 + (data[1] & 0xFF);
@@ -320,7 +347,7 @@ public class BluetoothLE2 {
                             }
                         }
                     }
-
+                    
 //                for(int i=0; i<data.length; i++) {
 //                    dataString += data[i] + " ";
 //                }
@@ -332,32 +359,7 @@ public class BluetoothLE2 {
 //                }
 //                testCount++;
 
-                switch(data[0]) { // Handling notification depending on types
-                    case (byte)0xFA:
-                        Log.i(TAG, "----0xFA----");
-                        ((BluetoothListener) bluetoothListener).bleNoPlug();
-                        break;
-                    case (byte)0xFB:
-                        Log.i(TAG, "----0xFB----");
-                        byte[] plugId = new byte[data.length-1];
-                        System.arraycopy(data, 1, plugId, 0, data.length - 1);
-                        ((BluetoothListener) bluetoothListener).blePlugInserted(plugId);
-                        break;
-                    case (byte)0xFC:
-                    case (byte)0xFD:
-                    case (byte)0xFE:
-                        byte[] adcReading = new byte[data.length-1];
-                        System.arraycopy(data, 1, adcReading, 0, data.length - 1);
-                        ((BluetoothListener) bluetoothListener).bleElectrodeAdcReading(data[0], adcReading);
-                        break;
-
-                    case (byte)0xFF:
-                        Log.i(TAG, "----0xFF----");
-                        byte[] colorReadings = new byte[data.length-1];
-                        System.arraycopy(data, 1, colorReadings, 0, data.length-1);
-                        ((BluetoothListener) bluetoothListener).bleColorReadings(colorReadings);
-                        break;
-                }
+               
 
 //                int color_sensor0[] = new int[4];
 //                int color_sensor1[] = new int[4];

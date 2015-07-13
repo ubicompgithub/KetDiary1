@@ -512,7 +512,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			img_btn.setEnabled(false);
 			
 			if(ble != null)
-				ble.bleWriteState((byte)2);
+				ble.bleWriteState((byte)0x02);
 			
 			//if(	testCountDownTimer == null )
 			testCountDownTimer = new TestCountDownTimer(COUNT_DOWN_SECOND);
@@ -790,7 +790,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		if(!is_connect)
 			ble.bleConnect();
 		
-		ble.bleWriteState((byte)1);
+		ble.bleWriteState((byte)0x01);
 		// initialize camera task
 		cameraInitHandler = new CameraInitHandler(this, cameraRecorder);
 		cameraInitHandler.sendEmptyMessage(0);
@@ -1541,7 +1541,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		collectdata = PreferenceControl.getCollectData();
 		
 		Log.d(TAG1, "V1: "+FIRST_VOLTAGE_THRESHOLD+" V2: "+SECOND_VOLTAGE_THRESHOLD+" TIMEOUT: "+CAMERATIMEOUT);
-		Log.d(TAG1, "isDeveloper: "+isDeveloper+" debug: "+debug);
+		Log.d(TAG1, "isDeveloper: "+isDeveloper+" debug: "+debug+" Did: "+PreferenceControl.getDeviceId());
 	}
 	
 	

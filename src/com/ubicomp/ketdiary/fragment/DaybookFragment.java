@@ -2,13 +2,13 @@ package com.ubicomp.ketdiary.fragment;
 
 import java.io.File;
 import java.util.Calendar;
-import java.util.Random;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
@@ -23,9 +23,9 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,8 +47,8 @@ import com.ubicomp.ketdiary.db.NoteCategory2;
 import com.ubicomp.ketdiary.db.TestDataParser2;
 import com.ubicomp.ketdiary.dialog.AddNoteDialog2;
 import com.ubicomp.ketdiary.dialog.CheckResultDialog;
-import com.ubicomp.ketdiary.dialog.FilterDetailDialog;
 import com.ubicomp.ketdiary.dialog.MyDialog;
+import com.ubicomp.ketdiary.dialog.QuestionCaller;
 import com.ubicomp.ketdiary.dialog.QuestionDialog;
 import com.ubicomp.ketdiary.dialog.TestQuestionCaller2;
 import com.ubicomp.ketdiary.file.MainStorage;
@@ -63,7 +63,7 @@ import com.ubicomp.ketdiary.ui.ScaleOnTouchListener;
 import com.ubicomp.ketdiary.ui.Typefaces;
 //import android.view.ViewGroup.LayoutParams;
 
-public class DaybookFragment extends Fragment implements ChartCaller, TestQuestionCaller2 {
+public class DaybookFragment extends Fragment implements ChartCaller, TestQuestionCaller2, QuestionCaller{
 	
 	public Activity activity = null;
 	private DaybookFragment daybookFragment;
@@ -155,10 +155,11 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	public static boolean[] filterButtonIsPressed = {true, false, false, false, false, false, false, false, false};
 	//private ImageView[] filterButtonArray = {filterAll, filter1, filter2, filter3, filter4, filter5, filter6, filter7, filter8};
 	
-	private int drawerHeight = context.getResources().getDimensionPixelSize(R.dimen.drawer_normal_height);
-	private int drawerHeightWithFilter = context.getResources().getDimensionPixelSize(R.dimen.drawer_with_filter_height);
-	private int filterHeight = context.getResources().getDimensionPixelSize(R.dimen.filter_normal_height);
-	private int filterHeightLandscape = context.getResources().getDimensionPixelSize(R.dimen.filter_landscape_height);
+	private static Resources resources = context.getResources();
+	private int drawerHeight = resources.getDimensionPixelSize(R.dimen.drawer_normal_height);
+	private int drawerHeightWithFilter = resources.getDimensionPixelSize(R.dimen.drawer_with_filter_height);
+	private int filterHeight = resources.getDimensionPixelSize(R.dimen.filter_normal_height);
+	private int filterHeightLandscape = resources.getDimensionPixelSize(R.dimen.filter_landscape_height);
 	
 	
 	@SuppressWarnings("deprecation")
@@ -283,6 +284,17 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		
 		
 		//for ( int i = 0; i < 9; i++ ) { filterList.add(i);} 
+		
+		
+		
+		lineChart = (LineChartView) lineChartView.findViewById(R.id.lineChart);
+        lineChart.requestLayout();
+        lineChart.getLayoutParams().width = 2200;
+        
+        chartTitle = (LineChartTitle) lineChartView.findViewById(R.id.chart_title);
+        chartTitle.setting(caller);
+        chartAreaLayout = (LinearLayout) lineChartView.findViewById(R.id.linechart_tabs);
+        chartAreaLayout.setBackgroundResource(R.drawable.linechart_bg);
 	
 		linechartIcon.setOnClickListener(new OnClickListener() {
 			
@@ -305,20 +317,11 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 					upperBarContent.addView(lineChartBar);
 				}
 				if  (!drawer.isOpened()) { drawer.toggle();}
-				
-				lineChart = (LineChartView) view.findViewById(R.id.lineChart);
-		        lineChart.requestLayout();
-		        lineChart.getLayoutParams().width = 2200;
-		        
-		        chartTitle = (LineChartTitle) view.findViewById(R.id.chart_title);
-		        chartTitle.setting(caller);
+								
 		        
 		        isContentAdd = true;
 		        setChartType(2);
-		        
-		        chartAreaLayout = (LinearLayout) view.findViewById(R.id.linechart_tabs);
-		        chartAreaLayout.setBackgroundResource(R.drawable.linechart_bg);
-		        
+		                
 		        if(rotateLineChart!=null && isContentAdd)
 					rotateLineChart.setVisibility(View.VISIBLE);
 			}
@@ -425,43 +428,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 
 
 		lineChartFilterButton = (ImageView) lineChartBar.findViewById(R.id.line_chart_filter);
-		
-//		lineChartFilterButton.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-////				DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-////		        float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
-////		        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-////				lineChart.setCanvasHeight( (int) (325*dpHeight) );
-//				if (isFilterOpen == false) {				
-//					LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
-//					//Log.i("OMG", "H: "+lp.height);
-//					lp.height = 1200;
-//					lp.addRule(RelativeLayout.BELOW, lineChartBar.getId());
-//					drawer.setLayoutParams(lp);
-//					
-//					drawerContent.removeAllViews();
-//					
-//					drawerContent.addView(lineChartFilter);
-//					drawerContent.addView(lineChartView);
-//					isFilterOpen = true;
-//				}
-//				else {
-//					LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
-//					lp.height = drawerHeight;
-//					lp.addRule(RelativeLayout.BELOW, lineChartBar.getId());
-//					drawer.setLayoutParams(lp);
-//					
-//					drawerContent.removeAllViews();
-//					
-//					drawerContent.addView(lineChartView);
-//					isFilterOpen = false;
-//				}
-//				
-//			}
-//		});
-		
-		
+			
 		notePage = new AddNoteDialog2(daybookFragment, fragment_layout);
 		addButton.bringToFront();
 		addButton.setOnClickListener(new OnClickListener() {
@@ -471,7 +438,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 				ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE);
 				
 				diaryList.removeAllViews();
-				drawerContent.removeAllViews();
+				mViewPager.removeAllViews();
 				
 				notePage.initialize();
 				notePage.show();
@@ -482,28 +449,48 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		});
 		addButton.setOnTouchListener(new ScaleOnTouchListener());
 		
-		if(!db.randomQuestionDone()){
-			Random rand = new Random();
-			int prob = rand.nextInt(100);
-			if(prob >= 50 ){
-				randomButton.setVisibility(View.VISIBLE);
-				randomButton.setImageResource(R.anim.animation_random_question);
-				animation = (AnimationDrawable) randomButton.getDrawable();
-				animation.start();
-			}
+//		if(!db.randomQuestionDone()){
+//			Random rand = new Random();
+//			int prob = rand.nextInt(100);
+//			if(prob >= 50 ){
+//				randomButton.setVisibility(View.VISIBLE);
+//				randomButton.setImageResource(R.anim.animation_random_question);
+//				animation = (AnimationDrawable) randomButton.getDrawable();
+//				animation.start();
+//			}
+//			
+//			randomButton.bringToFront();
+//			randomButton.setOnClickListener(new OnClickListener() {
+//				@Override
+//				public void onClick(View v) {
+//					ClickLog.Log(ClickLogId.DAYBOOK_RANDOMTEST);
+//					
+//					questionBox.show(1);
+//					randomButton.setVisibility(View.GONE);
+//				}
+//			});
+//			randomButton.setOnTouchListener(new ScaleOnTouchListener());
+//		}
+		if(PreferenceControl.getRandomQustion()){
+			randomButton.setVisibility(View.VISIBLE);
+			randomButton.setImageResource(R.anim.animation_random_question);
+			animation = (AnimationDrawable) randomButton.getDrawable();
+			animation.start();
 			
 			randomButton.bringToFront();
 			randomButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					ClickLog.Log(ClickLogId.DAYBOOK_RANDOMTEST);
-					
+				
 					questionBox.show(1);
-					randomButton.setVisibility(View.GONE);
+					//randomButton.setVisibility(View.GONE);
 				}
 			});
 			randomButton.setOnTouchListener(new ScaleOnTouchListener());
+						
 		}
+		
 		
 		
 		rotateLineChart.setOnClickListener(new OnClickListener() {
@@ -580,7 +567,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			updateCalendarView(currentPageIdx);
 			updateFilterButton();
 			
-			questionBox = new QuestionDialog((RelativeLayout) view);
+			questionBox = new QuestionDialog((RelativeLayout) view, daybookFragment);
 			questionBox.initialize();
 
 			MainActivity.getMainActivity().enableTabAndClick(true);
@@ -659,6 +646,19 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		}
 		
 		case 2: {
+//			if (isFilterOpen)  {
+//				filter1.setVisibility(View.VISIBLE); 
+//				filter2.setVisibility(View.VISIBLE);
+//				filter3.setVisibility(View.VISIBLE); 
+//				filter4.setVisibility(View.VISIBLE); 
+//				filter5.setVisibility(View.VISIBLE); 
+//				filter6.setVisibility(View.VISIBLE);
+//				filter7.setVisibility(View.VISIBLE);
+//				filter8.setVisibility(View.VISIBLE);
+//				filterView.setPadding(10, 0, 10, 0);	
+//			}
+//			lineChartFilterButton.setVisibility(View.VISIBLE);
+//			break;
 			//Log.i("OMG", "CASE2");
 			if (isFilterOpen) {
 				LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
@@ -694,11 +694,15 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		}
 	  }
 	}
-	
+
 	
 	@Override
 	public void onPause(){
 		ClickLog.Log(ClickLogId.DAYBOOK_LEAVE);
+		
+		diaryList.removeAllViews();
+		
+		
 		
 		super.onPause();
 		//TODO: release some resource
@@ -887,20 +891,20 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			
 			
 		}	
-		else{	//using dummy data
-			for (int n = 1  ; n <=30 ; n++) {
-				//LayoutInflater inflater = LayoutInflater.from(context);
-				diaryItem = inflater.inflate(R.layout.diary_item, null);
-			
-				//sv_item_height = diaryItem.getMeasuredHeight();
-				TextView date_num = (TextView) diaryItem.findViewById(R.id.diary_date);
-				diaryList.addView(diaryItem);
-				date_num.setText(Integer.toString(n) + "號");
-			
-				boxesLayout = (LinearLayout) view.findViewById(R.layout.diary_item);
-		
-			}
-		}
+//		else{	//using dummy data
+//			for (int n = 1  ; n <=30 ; n++) {
+//				//LayoutInflater inflater = LayoutInflater.from(context);
+//				diaryItem = inflater.inflate(R.layout.diary_item, null);
+//			
+//				//sv_item_height = diaryItem.getMeasuredHeight();
+//				TextView date_num = (TextView) diaryItem.findViewById(R.id.diary_date);
+//				diaryList.addView(diaryItem);
+//				date_num.setText(Integer.toString(n) + "號");
+//			
+//				boxesLayout = (LinearLayout) view.findViewById(R.layout.diary_item);
+//		
+//			}
+//		}
 		sv.fullScroll(View.FOCUS_DOWN);
 		//sv.smoothScrollTo(0 , (int)convertDpToPixel(125)*(noteAdds.length) +1000000);
 	}
@@ -922,73 +926,30 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	
 	private void addDrawerContent(int id){
 		
+		Log.d(TAG, "chart_type: "+chart_type);
 		setArrow(true);
-		
+		isFilterOpen = false;
+		isContentAdd = true;
+		LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
+		lp.height = drawerHeight;
+		lp.addRule(RelativeLayout.BELOW, calendarBar.getId());
+		drawer.setLayoutParams(lp);
+		drawerContent.removeAllViews();
 		switch(id){
-		case R.id.toggle_layout:
-			
-			if (isFilterOpen == true) {				
-				LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
-				lp.height = drawerHeightWithFilter;
-				lp.addRule(RelativeLayout.BELOW, lineChartBar.getId());
-				drawer.setLayoutParams(lp);
-				
-				drawerContent.removeAllViews();
-				
-				drawerContent.addView(lineChartFilter);
-				setFilterSize();
-				Log.i("OMG", "CASE: "+ chart_type);
-				setFilterType(chart_type);
+			case R.id.toggle_layout: //linechart			
 				drawerContent.addView(lineChartView);
+				if(chart_type == 2){ 
+					lineChartFilterButton.setVisibility(View.INVISIBLE);
+				}
+				if(rotateLineChart!=null && isContentAdd)
+					rotateLineChart.setVisibility(View.VISIBLE);
+				break;
 			
-			}
-			else {
-				LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
-				lp.height = drawerHeight;
-				lp.addRule(RelativeLayout.BELOW, lineChartBar.getId());
-				drawer.setLayoutParams(lp);
-				
-				drawerContent.removeAllViews();
-				
-				drawerContent.addView(lineChartView);
-			}
-			
-			break;
-		
-		case R.id.cal_toggle_layout:
-			
-			if (isFilterOpen == true) {				
-				LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
-				//Log.i("OMG", "H: "+lp.height);
-				lp.height = drawerHeightWithFilter;
-				lp.addRule(RelativeLayout.BELOW, calendarBar.getId());
-				drawer.setLayoutParams(lp);
-				
-				drawerContent.removeAllViews();
-				
-				drawerContent.addView(lineChartFilter);
-				isFilterOpen = true;
-				setFilterSize();
-				setFilterType(3);
+			case R.id.cal_toggle_layout: //calendar
+			case R.id.toggle:  
 				drawerContent.addView(calendarView);
-				
-			}
-			else {
-				LayoutParams lp = new LayoutParams(drawer.getLayoutParams());
-				lp.height = drawerHeight;
-				lp.addRule(RelativeLayout.BELOW, calendarBar.getId());
-				drawer.setLayoutParams(lp);
-				
-				drawerContent.removeAllViews();
-				
-				drawerContent.addView(calendarView);
-				isFilterOpen = false;
-			}
-			
-			break;
+				break;
 		}	
-		
-		
 	}
 			
     private class ToggleListener implements View.OnClickListener {
@@ -1001,19 +962,16 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 				//drawer.toggle();
 				if(!isContentAdd){
 					addDrawerContent(v.getId());
-					isContentAdd = true;
 				}
 				else{
 					drawer.toggle();
 					setArrow(false);
+					lineChartFilterButton.setVisibility(View.VISIBLE);
 				}
-				lineChartFilterButton.setVisibility(View.VISIBLE);
 			}
 			else{
 				addDrawerContent(v.getId());
-				isContentAdd = true;
-				drawer.toggle();
-				
+				drawer.toggle();				
 			}
 			
 		}
@@ -1417,6 +1375,13 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			}
 			
 		}
+	}
+
+
+	@Override
+	public void QuestionDone() {
+		// TODO Auto-generated method stub
+		randomButton.setVisibility(View.GONE);
 	}
 		
 

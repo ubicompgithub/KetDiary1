@@ -1,5 +1,15 @@
 package com.ubicomp.ketdiary;
 
+import java.io.File;
+import java.util.Random;
+
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Mat;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
+
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -32,10 +42,11 @@ import android.widget.TextView;
 
 import com.ubicomp.ketdiary.clicklog.ClickLog;
 import com.ubicomp.ketdiary.clicklog.ClickLogId;
-import com.ubicomp.ketdiary.color.TestStripDetection;
+import com.ubicomp.ketdiary.color.TestStripDetection2;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.dialog.CheckResultDialog;
+import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.fragment.DaybookFragment;
 import com.ubicomp.ketdiary.fragment.StatisticFragment;
 import com.ubicomp.ketdiary.fragment.TestFragment;
@@ -120,13 +131,20 @@ public class MainActivity extends FragmentActivity {
 	public static final int ACTION_RECORD = 1;
 	public static final int ACTION_QUESTIONNAIRE = 2;
 	
-	private TestStripDetection testStripDetection;
+	private TestStripDetection2 testStripDetection;
+	
+	static {
+        System.loadLibrary("opencv_java");
+    }
 	
 	private DatabaseControl db;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
+		OpenCVLoader.initDebug();
+		//OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_9, this, mLoaderCallback);
+    
 		mainActivity = this;
 		setContentView(R.layout.activity_main);
 		enableTabAndClick(false);
@@ -148,12 +166,31 @@ public class MainActivity extends FragmentActivity {
 					R.raw.end_count_down, 0);
 		}
 		
+		db = new DatabaseControl();
+		
 		loadingHandler.sendEmptyMessage(0);
 
 		loadingPageTimer = new LoadingPageTimer();
 		loadingPageTimer.start();
 
 	}
+	
+	private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
+        @Override
+        public void onManagerConnected(int status) {
+            switch (status) {
+                case LoaderCallbackInterface.SUCCESS:
+                {
+                    Log.i(TAG, "OpenCV loaded successfully");
+                    testStripDetection = new TestStripDetection2();
+                } break;
+                default:
+                {
+                    super.onManagerConnected(status);
+                } break;
+            }
+        }
+    };
 
 	private class LoadingHandler extends Handler {
 		public void handleMessage(Message msg) {
@@ -161,11 +198,25 @@ public class MainActivity extends FragmentActivity {
 				PreferenceControl.defaultSetting();
 			
 			//For test Sevice
-			//Intent startIntent =  new  Intent( mainActivity , ResultService. class );  
+			//Intent startIntent =  new  Intent( mainActivity , ResultService2.class );  
 			//startService(startIntent); 
             //
 			
-			//testStripDetection = new TestStripDetection();
+			testStripDetection = new TestStripDetection2();
+			testStripDetection.testOpencv();
+//			File mainStorageDir = MainStorage.getMainStorageDirectory();	    	
+//	        Mat matOrigin = Imgcodecs.imread(mainStorageDir.getPath() + File.separator + "Avon.jpg");
+//	        Log.d(TAG, "TEST");
+//	        Mat matROI = matOrigin.submat(60, 160, 80, 240);
+//	        Mat matClone = matROI.clone();
+//	        Imgproc.cvtColor(matROI, matROI, Imgproc.COLOR_RGB2GRAY, 0);
+//	        
+//	        Log.d(TAG, "TEST");
+//	        
+//	        Mat matFilter = new Mat();
+//	        Mat matCanny = new Mat();
+//	        Mat matLines = new Mat();
+			
 			
 			Typefaces.initAll();
 			CustomToast.settingSoundPool();
@@ -202,6 +253,21 @@ public class MainActivity extends FragmentActivity {
 			
 			count_down_text.setTypeface(Typefaces.getDigitTypefaceBold());
 			count_down_layout.setOnTouchListener(new CountDownCircleOnTouchListener());
+			
+			
+			//Random Question setting
+			if(!db.randomQuestionDone() && !PreferenceControl.getRandomQustion()){
+				Random rand = new Random();
+				int prob = rand.nextInt(100);
+				if( prob >= 50 ){
+					PreferenceControl.setRandomQustion(true);
+					PreferenceControl.setRandomTs(System.currentTimeMillis());
+				}
+			}
+			else if(PreferenceControl.getRandomDiff(System.currentTimeMillis())){
+					PreferenceControl.setRandomQustion(false);
+			}
+			
 		}
 	}
 	
@@ -796,7 +862,7 @@ public class MainActivity extends FragmentActivity {
 	}
 	
 	public void checkResultAddPoint(){
-		db = new DatabaseControl();
+		
 		int addScore=0;
 		//NoteAdd noteAdd = ((TestFragment) fragments[0]).TDP.noteAdd;//TODO: set NoteAdd, get NoteAdd
 		

@@ -35,6 +35,7 @@ import com.ubicomp.ketdiary.clicklog.ClickLog;
 import com.ubicomp.ketdiary.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.data.structure.Rank;
 import com.ubicomp.ketdiary.db.DatabaseControl;
+import com.ubicomp.ketdiary.dialog.QuestionCaller;
 import com.ubicomp.ketdiary.dialog.QuestionDialog;
 import com.ubicomp.ketdiary.statistic.AnalysisCounterView;
 import com.ubicomp.ketdiary.statistic.AnalysisProsConsView;
@@ -48,7 +49,7 @@ import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.LoadingDialogControl;
 import com.ubicomp.ketdiary.ui.ScaleOnTouchListener;
 
-public class StatisticFragment extends Fragment implements ShowRadarChart{
+public class StatisticFragment extends Fragment implements ShowRadarChart, QuestionCaller{
 	
 	private static final String TAG = "Statistic";
 	
@@ -169,7 +170,7 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 		analysisViews[2] = new AnalysisRankView(statisticFragment);
 		
 		statisticViewAdapter = new StatisticPagerAdapter();
-		msgBox = new QuestionDialog((RelativeLayout) view);
+		msgBox = new QuestionDialog((RelativeLayout) view, statisticFragment);
 
 //		Bundle data = getArguments();
 //		if (data != null) {
@@ -449,6 +450,12 @@ public class StatisticFragment extends Fragment implements ShowRadarChart{
 			allLayout.removeView(dv);
 		detailChart.hide();
 		enablePage(true);
+	}
+
+	@Override
+	public void QuestionDone() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

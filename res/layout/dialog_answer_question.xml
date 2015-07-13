@@ -25,7 +25,7 @@
                 android:id="@+id/question_q"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Q"
+                android:text="@string/question_Q"
                 android:textColor="@color/red"
                 android:textSize="@dimen/large_text_size" />
             
@@ -42,7 +42,8 @@
                 android:layout_height="wrap_content"
                 android:text="請問下列哪一項不是?"
                 android:textColor="@color/text_gray3"
-                android:textSize="@dimen/large_text_size" />
+                android:textSize="@dimen/large_text_size"
+                android:layout_marginLeft="10dp" />
 
         </LinearLayout>
 

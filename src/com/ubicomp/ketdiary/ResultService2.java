@@ -50,12 +50,12 @@ public class ResultService2 extends Service implements BluetoothListener {
         
         db = new DatabaseControl();
         
-        /*
+        
         if(ble == null) {
 			ble = new BluetoothLE2( myservice , PreferenceControl.getDeviceId());
 			ble.bleConnect();
 			
-        }*/
+        }
         
         long timestamp = PreferenceControl.getUpdateDetectionTimestamp();
         Log.d(TAG,"1:"+timestamp);
@@ -79,9 +79,9 @@ public class ResultService2 extends Service implements BluetoothListener {
 			notification.setLatestEventInfo( myservice ,  "測試結果倒數" ,  minius+":"+seconds , pendingIntent);  
 	        startForeground( 1 , notification); 
 	        
-	        /*
+	        
 	        if(!stateSuccess)
-	        	ble.bleWriteState((byte)3);*/
+	        	ble.bleWriteState((byte)0x06);
 			
 			mhandler.postDelayed(this, 1000);
 			
@@ -294,6 +294,7 @@ public class ResultService2 extends Service implements BluetoothListener {
 	@Override
 	public void updateProcessRate(float rate) {
 		// TODO Auto-generated method stub
+		Toast.makeText(this, String.valueOf(rate).concat(" %"), Toast.LENGTH_SHORT).show();
 		
 	}
 
