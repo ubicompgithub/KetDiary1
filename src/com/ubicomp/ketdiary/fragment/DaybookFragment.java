@@ -316,7 +316,10 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 					drawerContent.addView(lineChartView);
 					upperBarContent.addView(lineChartBar);
 				}
-				if  (!drawer.isOpened()) { drawer.toggle();}
+				if  (!drawer.isOpened()) {
+					drawer.toggle();
+					setArrow(true);
+				}
 								
 		        
 		        isContentAdd = true;
@@ -800,10 +803,6 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 				TextView impact_word = (TextView) diaryItem.findViewById(R.id.diary_impact_word);
 				TextView impact_txt = (TextView) diaryItem.findViewById(R.id.diary_impact);
 				
-				
-				
-				
-				
 				date_num.setTypeface(wordTypefaceBold);
 				week_num.setTypeface(wordTypefaceBold);
 				timeslot_num.setTypeface(wordTypefaceBold);
@@ -842,9 +841,9 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			
 
 			
-			type_img.setOnLongClickListener(new TypeLongClickListener(date, dayOfweek, slot, type, items, 
+			//type_img.setOnLongClickListener(new TypeLongClickListener(date, dayOfweek, slot, type, items,	impact, descripton));
+			layout.setOnLongClickListener(new TypeLongClickListener(date, dayOfweek, slot, type, items, 
 					impact, descripton));
-			
 			
 			if(type > 0 && type <=8)
 				type_img.setImageResource(typeId[type]);

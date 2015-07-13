@@ -368,8 +368,7 @@ public class MainActivity extends FragmentActivity {
 		
 		Log.d("InApp",String.valueOf(clickable));
 		
-		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		notificationManager.cancel(0); //回到APP裡要把Notification關掉
+		
 		//clickable = true;
 	}
 
@@ -893,7 +892,8 @@ public class MainActivity extends FragmentActivity {
 		}
 		
 		
-		
+		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager.cancel(0); //做完檢測才把Notification關掉
 		
 		//PreferenceControl.setCheckResult( false );
 	}

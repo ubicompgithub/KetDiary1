@@ -26,7 +26,7 @@
         
     </LinearLayout>
     
-    <ScrollView
+    <com.ubicomp.ketdiary.ui.CustomScrollView
         android:id="@+id/note_main_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
         </LinearLayout>
-    </ScrollView>
+    </com.ubicomp.ketdiary.ui.CustomScrollView>
     
 
 
