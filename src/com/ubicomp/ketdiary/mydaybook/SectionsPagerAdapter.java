@@ -118,8 +118,6 @@ public class SectionsPagerAdapter extends PagerAdapter {
         int pageViewMonth = Integer.valueOf((pageView.getTag()).toString());
         GridLayout glCalendar = (GridLayout) pageView.findViewById(R.id.gl_calendar);
         
-        
-
         // Initialize the calendar
         Calendar mCalendar = Calendar.getInstance();
         int maxDaysOfWeek = mCalendar.getMaximum(Calendar.DAY_OF_WEEK);
@@ -133,7 +131,6 @@ public class SectionsPagerAdapter extends PagerAdapter {
         mCalendar.add(Calendar.DAY_OF_MONTH, -(mCalendar.get(Calendar.DAY_OF_WEEK)-2));
         TimeValue tv = TimeValue.generate(mCalendar.getTimeInMillis());
         
-        		
         View cellView;
         TextView calDateText;
         ImageView calDot1, calDot2, calDot3, date_result;
@@ -142,8 +139,22 @@ public class SectionsPagerAdapter extends PagerAdapter {
         TestResult testResult=null;
  
         for (int i=0;i<maxWeeksOfMonth*maxDaysOfWeek;++i){
-                    
+            
             cellView = inflater.inflate(R.layout.calendar_cell, null, false);
+
+            // Set the invisible days(dummy days before 1st day of that month)
+            if (mCalendar.get(Calendar.MONTH) != pageViewMonth){
+                glCalendar.addView(cellView);
+                cellView.setVisibility(View.INVISIBLE);
+                mCalendar.add(Calendar.DAY_OF_MONTH, 1);
+                
+                LayoutParams params = cellView.getLayoutParams();
+                params.width = (int)convertDpToPixel((float)39.33);
+                params.height =(int)convertDpToPixel((float)43.33);
+                cellView.setLayoutParams(params);
+                continue;
+            }
+            
             calDateText = (TextView) cellView.findViewById(R.id.tv_calendar_date);
             calDot1 = (ImageView) cellView.findViewById(R.id.iv_calendar_dot1);
             calDot2 = (ImageView) cellView.findViewById(R.id.iv_calendar_dot2);
@@ -164,27 +175,22 @@ public class SectionsPagerAdapter extends PagerAdapter {
                 public void onClick(View v) {
                 	
                 	ClickLog.Log(ClickLogId.DAYBOOK_SPECIFIC_DAY);
-                	
+
                     if(selectedView != v){
                     	long selectedTs = Long.valueOf(v.getTag(TAG_CAL_CELL_TS).toString());
-                    	if(selectedTs < startDay.getTimeInMillis() || selectedTs > today.getTimeInMillis()+86400000){
-                    		return;
-                    	}
+                    	// if(selectedTs < startDay.getTimeInMillis() || selectedTs > today.getTimeInMillis()+86400000){
+                    	// 	return;
+                    	// }
                     	
-                        int selectedPageMonth = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_PAGE_MONTH).toString());
                         int selectedMonth = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_MONTH).toString());
                         TextView selectedDayTextView = (TextView) selectedView.findViewById(R.id.tv_calendar_date);
                         selectedDayTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                        selectedDayTextView.setTextColor(context.getResources().getColor(R.color.white));
                         
-                        if(selectedPageMonth == selectedMonth)  // If selected month is exactly current page month
-                            selectedDayTextView.setTextColor(context.getResources().getColor(R.color.white));
-                        else
-                            selectedDayTextView.setTextColor(Color.BLACK);
-
                         // Set the new selected day
                         selectedView = v;
                         TextView newSelectedDayTextView = (TextView) selectedView.findViewById(R.id.tv_calendar_date);
-                        newSelectedDayTextView.setTextColor(context.getResources().getColor(R.color.black));                       
+                        newSelectedDayTextView.setTextColor(context.getResources().getColor(R.color.black));
                         newSelectedDayTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                
                     }
@@ -193,26 +199,21 @@ public class SectionsPagerAdapter extends PagerAdapter {
                     int selectedDay = Integer.valueOf(v.getTag(TAG_CAL_CELL_DAY).toString());
                     DaybookFragment.scrolltoItem(selectedYear, selectedMonth, selectedDay);
                     
-                    
                     // sv.smoothScrollTo(0 , 270*(Integer.parseInt(parsed_date[0])+4)-1350-900);
-                    
                 }
             });
             
             calDateText.setGravity(Gravity.CENTER);
             
             calDateText.setText(mCalendar.get(Calendar.DAY_OF_MONTH) + "");
-            //calDateText.setTextColor(context.getResources().getColor(R.color.text_gray2));
             calDateText.setTextColor(context.getResources().getColor(R.color.text_gray2));
             calDateText.setTypeface(Typefaces.getDigitTypefaceBold());
             
             
-            
             if ( mCalendar.get(Calendar.MONTH) == pageViewMonth){
-            	
-            	
+
             	if(mCalendar.getTimeInMillis()> startDay.getTimeInMillis() && mCalendar.getTimeInMillis() <= today.getTimeInMillis()+86400000){
-            	
+
             		noteAdds = db.getDayNoteAdd(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH));
             	            	
             		if(noteAdds != null){
@@ -229,11 +230,9 @@ public class SectionsPagerAdapter extends PagerAdapter {
             					typedot[++k] = type;
             					continue;
             				}
-            				
 
             				if(DaybookFragment.filterButtonIsPressed[type])
             					typedot[++k] = type;
-            				
             				
             			}
             			if(k>=2){
@@ -292,16 +291,17 @@ public class SectionsPagerAdapter extends PagerAdapter {
             		}
             		calDateText.setTextColor(context.getResources().getColor(R.color.white));
             	}
-            	else if(mCalendar.getTimeInMillis() < startDay.getTimeInMillis())
+            	else if(mCalendar.getTimeInMillis() < startDay.getTimeInMillis()){
+                    // If current day is before the start day
             		calDateText.setTextColor(context.getResources().getColor(R.color.date_before_gray));
+                    cellView.setOnClickListener(null);
+                }
             	
             	else{
+                    // If current day is a future day
             		calDateText.setTextColor(context.getResources().getColor(R.color.text_gray2));
+                    cellView.setOnClickListener(null);
             	}
-            }
-            else {
-            	//calDateText.setTextColor(context.getResources().getColor(R.color.dark_gray));
-            	calDateText.setVisibility(View.INVISIBLE);
             }
                         
             // Initialize the selected view on current day
@@ -328,7 +328,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
             glCalendar.addView(cellView);
             mCalendar.add(Calendar.DAY_OF_MONTH, 1);
             
-            LayoutParams params=cellView.getLayoutParams();
+            LayoutParams params = cellView.getLayoutParams();
             params.width = (int)convertDpToPixel((float)39.33);
             params.height =(int)convertDpToPixel((float)43.33);
             //params.width=118;
