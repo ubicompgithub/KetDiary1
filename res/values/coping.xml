@@ -24,7 +24,7 @@
     <string name="coping_sponsor">親密他人</string>
     <string name="coping_default_sponsor">聯絡人</string>
     <string name="coping_information">資訊站</string>
-    <string name="coping_encouragement">心情小語</string>
+    <string name="coping_encouragement">勵志短句</string>
     <string name="coping_encouragement_dialog">你已經在戒毒的路上了，繼續加油</string>
     <string name="coping_harm">吸毒造成的危害</string>
     <string name="coping_harm_dialog">研究顯示濫用愷他命，會罹患慢性間質性膀胱炎</string>
@@ -35,6 +35,29 @@
 
 	
     <string name="next">下一步</string>
+    
+    <string-array name="lapse_list">
+        <item>我已決定停用了！</item>
+        <item>我已經開始新的生活了！</item>
+        <item>我值得更好的生活！</item>
+        <item>我是個值得被尊重的人！</item>
+        <item>我正在一點一點地變好！</item>
+        <item>現在放棄就前功盡棄了！</item>
+        <item>這次我一定可以！</item>
+        <item>別走回頭路！</item>
+    </string-array>
+    
+    <string-array name="lifestyle_list">
+        <item>放鬆身心，停整作息</item>
+        <item>多運動有益身心健康</item>
+        <item>早睡早起身體好</item>
+        <item>一天5蔬果，疾病遠離我</item>
+        <item>多喝水沒事，沒事多喝水</item>
+        <item>少吃垃圾食物</item>
+        <item>愛自己的身體</item>
+        <item>充足睡眠</item>
+        <item>遠離菸酒</item>
+    </string-array>
     
     <string-array name="coping_list">
         <item>社交壓力的應對方法：\n當朋友邀約吸毒時，您可以委婉拒絕</item>

@@ -1,5 +1,7 @@
 package com.ubicomp.ketdiary;
 
+import java.util.Random;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -599,7 +601,10 @@ public class CopingActivity extends Activity {
 					@Override
 					public void onClick(View v) {
 						ClickLog.Log(ClickLogId.COPING_SELECTION);
-						generateDialog(R.string.coping_encouragement_dialog);
+						String[] tmp = activity.getResources().getStringArray(R.array.question_reading_question);
+						Random rand = new Random();
+						int idx = rand.nextInt(tmp.length);
+						generateDialog(tmp[idx]);
 						skillSelect = SELECT_POSITIVE;
 					}
 
@@ -613,7 +618,10 @@ public class CopingActivity extends Activity {
 					@Override
 					public void onClick(View v) {
 						ClickLog.Log(ClickLogId.COPING_SELECTION);
-						generateDialog(R.string.coping_harm_dialog);
+						String[] tmp = activity.getResources().getStringArray(R.array.knowing_list);
+						Random rand = new Random();
+						int idx = rand.nextInt(tmp.length);
+						generateDialog(tmp[idx]);
 						skillSelect = SELECT_POISON;
 					}
 
@@ -627,7 +635,10 @@ public class CopingActivity extends Activity {
 					@Override
 					public void onClick(View v) {
 						ClickLog.Log(ClickLogId.COPING_SELECTION);
-						generateDialog(R.string.coping_lifestyle_dialog);
+						String[] tmp = activity.getResources().getStringArray(R.array.lifestyle_list);
+						Random rand = new Random();
+						int idx = rand.nextInt(tmp.length);
+						generateDialog(tmp[idx]);
 						skillSelect = SELECT_SUGGESTION;
 					}
 
@@ -641,7 +652,10 @@ public class CopingActivity extends Activity {
 					@Override
 					public void onClick(View v) {
 						ClickLog.Log(ClickLogId.COPING_SELECTION);
-						generateDialog(R.string.coping_lapse_dialog);
+						String[] tmp = activity.getResources().getStringArray(R.array.lapse_list);
+						Random rand = new Random();
+						int idx = rand.nextInt(tmp.length);
+						generateDialog(tmp[idx]);
 						skillSelect = SELECT_HOW;
 					}
 
@@ -654,9 +668,36 @@ public class CopingActivity extends Activity {
 	private void generateDialog(int textResource){
 		// Create custom dialog object
         final Dialog dialog = new Dialog(activity);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        
+        dialog.setContentView(R.layout.dialog);
+        TextView dialogText = (TextView) dialog.findViewById(R.id.dialog_text);
+        dialogText.setText(textResource);
+        dialogText.setTextColor(getResources().getColor(R.color.text_gray3));
+        
+        dialog.show();
+         
+        TextView dialogOKButton = (TextView) dialog.findViewById(R.id.ok_button);
+        /*dialogOKButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                dialog.dismiss();
+                
+            }
+        });*/
+        dialogOKButton.setOnClickListener(new EndOnClickListener() );
+	}
+	
+	private void generateDialog(String textResource){
+		// Create custom dialog object
+        final Dialog dialog = new Dialog(activity);
         
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        //dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         
         dialog.setContentView(R.layout.dialog);

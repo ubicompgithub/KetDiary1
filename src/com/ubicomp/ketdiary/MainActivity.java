@@ -202,8 +202,8 @@ public class MainActivity extends FragmentActivity {
 			//startService(startIntent); 
             //
 			
-			testStripDetection = new TestStripDetection2();
-			testStripDetection.testOpencv();
+			//testStripDetection = new TestStripDetection2();
+			//testStripDetection.testOpencv();
 //			File mainStorageDir = MainStorage.getMainStorageDirectory();	    	
 //	        Mat matOrigin = Imgcodecs.imread(mainStorageDir.getPath() + File.separator + "Avon.jpg");
 //	        Log.d(TAG, "TEST");
