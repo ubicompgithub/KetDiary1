@@ -394,6 +394,20 @@ public class PreferenceControl {
 		edit.commit();
 	}
 	
+	public static long getRandomTs() {
+		return sp.getLong("randomTs", 0);
+	}
+	
+	public static boolean getRandomDiff(Long newTs){
+		return (newTs - getRandomTs()) > 30*60*1000;
+	}
+	
+	public static void setRandomTs(Long ts) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putLong("randomTs", 0);
+		edit.commit();
+	}
+	
 	public static String[] getRecreations() {
 		String[] recreation = new String[5];
 		recreation[0] = sp.getString("recreation0",

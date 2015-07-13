@@ -35,6 +35,7 @@ public class QuestionDialog{
 	
 	private Activity activity;
 	private QuestionDialog noteFragment = this;
+	private QuestionCaller questionCaller;
 	private static final String TAG = "ADD_PAGE";
 	
 	private TestQuestionCaller testQuestionCaller;
@@ -72,7 +73,7 @@ public class QuestionDialog{
     };
 	
 	
-	public QuestionDialog(RelativeLayout mainLayout){
+	public QuestionDialog(RelativeLayout mainLayout, QuestionCaller questionCaller){
 		
 		this.context = App.getContext();
 		this.inflater = (LayoutInflater) context
@@ -80,6 +81,7 @@ public class QuestionDialog{
 		this.mainLayout = mainLayout;
 		
 		db = new DatabaseControl();
+		this.questionCaller = questionCaller;
 		
 		wordTypeface = Typefaces.getWordTypeface();
 		wordTypefaceBold = Typefaces.getWordTypefaceBold();
@@ -287,7 +289,10 @@ public class QuestionDialog{
 			
 			PreferenceControl.setPoint(addScore);			
 			
-			
+			if(questionType == 1){
+				PreferenceControl.setRandomQustion(false);
+				questionCaller.QuestionDone();
+			}
 			MainActivity.getMainActivity().enableTabAndClick(true);
 			close();
 			//clear();	

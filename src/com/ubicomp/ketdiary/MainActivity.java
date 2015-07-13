@@ -1,6 +1,7 @@
 package com.ubicomp.ketdiary;
 
 import java.io.File;
+import java.util.Random;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
@@ -165,6 +166,8 @@ public class MainActivity extends FragmentActivity {
 					R.raw.end_count_down, 0);
 		}
 		
+		db = new DatabaseControl();
+		
 		loadingHandler.sendEmptyMessage(0);
 
 		loadingPageTimer = new LoadingPageTimer();
@@ -199,7 +202,8 @@ public class MainActivity extends FragmentActivity {
 			//startService(startIntent); 
             //
 			
-			//testStripDetection = new TestStripDetection2();
+			testStripDetection = new TestStripDetection2();
+			testStripDetection.testOpencv();
 //			File mainStorageDir = MainStorage.getMainStorageDirectory();	    	
 //	        Mat matOrigin = Imgcodecs.imread(mainStorageDir.getPath() + File.separator + "Avon.jpg");
 //	        Log.d(TAG, "TEST");
@@ -249,6 +253,21 @@ public class MainActivity extends FragmentActivity {
 			
 			count_down_text.setTypeface(Typefaces.getDigitTypefaceBold());
 			count_down_layout.setOnTouchListener(new CountDownCircleOnTouchListener());
+			
+			
+			//Random Question setting
+			if(!db.randomQuestionDone() && !PreferenceControl.getRandomQustion()){
+				Random rand = new Random();
+				int prob = rand.nextInt(100);
+				if( prob >= 50 ){
+					PreferenceControl.setRandomQustion(true);
+					PreferenceControl.setRandomTs(System.currentTimeMillis());
+				}
+			}
+			else if(PreferenceControl.getRandomDiff(System.currentTimeMillis())){
+					PreferenceControl.setRandomQustion(false);
+			}
+			
 		}
 	}
 	
@@ -843,7 +862,7 @@ public class MainActivity extends FragmentActivity {
 	}
 	
 	public void checkResultAddPoint(){
-		db = new DatabaseControl();
+		
 		int addScore=0;
 		//NoteAdd noteAdd = ((TestFragment) fragments[0]).TDP.noteAdd;//TODO: set NoteAdd, get NoteAdd
 		
