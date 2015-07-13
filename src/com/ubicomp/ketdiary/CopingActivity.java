@@ -125,7 +125,7 @@ public class CopingActivity extends Activity {
 		resetCopingActivityViews();
 		
 	}
-
+ 
 
 	private void foldRelaxedView(){
 		breathView.setVisibility(View.GONE);
