@@ -12,7 +12,7 @@ import org.opencv.android.Utils;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
-import org.opencv.highgui.Highgui;
+//import org.opencv.highgui.Highgui;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -167,12 +167,12 @@ public class TestStripDetection2 {
         Log.i( TAG, "Result: " + result);     
         File output = new File(mainStorage, FILE+"out.jpg");
         String filename = output.toString();
-        Boolean bool = Highgui.imwrite(filename, matROI);
-
-        if (bool)
-         Log.i(TAG, "SUCCESS writing image to external storage");
-        else
-         Log.i(TAG, "Fail writing image to external storage");
+//        Boolean bool = Highgui.imwrite(filename, matROI);
+//
+//        if (bool)
+//         Log.i(TAG, "SUCCESS writing image to external storage");
+//        else
+//         Log.i(TAG, "Fail writing image to external storage");
 
     }
     
