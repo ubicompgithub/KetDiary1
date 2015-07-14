@@ -145,7 +145,8 @@ public class LineChartView extends View {
 		noPassBarBg.recycle();
 		skipBarBg.recycle();
     	legend.recycle();
-    	cursor.recycle();
+    	if(cursor!= null)
+    		cursor.recycle();
     	System.gc();
 	
 	}
