@@ -63,15 +63,6 @@ public class LineChartView extends View {
 
     private int[] dots = {0, R.drawable.dot_color1, R.drawable.dot_color2, R.drawable.dot_color3, R.drawable.dot_color4, R.drawable.dot_color5, R.drawable.dot_color6, R.drawable.dot_color7, R.drawable.dot_color8};
     
-    Bitmap dot1 ;//= BitmapFactory.decodeResource(getResources(), R.drawable.dot_color1);
-    Bitmap dot2 ;//= BitmapFactory.decodeResource(getResources(), R.drawable.dot_color2);
-    Bitmap dot3 ;//= BitmapFactory.decodeResource(getResources(), R.drawable.dot_color3);
-    Bitmap dot4 ;//= BitmapFactory.decodeResource(getResources(), R.drawable.dot_color4);
-    Bitmap dot5 ;//= BitmapFactory.decodeResource(getResources(), R.drawable.dot_color5);
-    Bitmap dot6 ;//= BitmapFactory.decodeResource(getResources(), R.drawable.dot_color6);
-    Bitmap dot7 ;//= BitmapFactory.decodeResource(getResources(), R.drawable.dot_color7);
-    Bitmap dot8 ;//= BitmapFactory.decodeResource(getResources(), R.drawable.dot_color8);
-    
     Bitmap[] dot_array ;//= {null, dot1, dot2, dot3, dot4, dot5, dot6, dot7, dot8};
     Bitmap passBarBg;
     Bitmap noPassBarBg;
@@ -128,19 +119,20 @@ public class LineChartView extends View {
 		
 		Bitmap tmp = getLocalBitmap(context, R.drawable.pass_rect);
 		passBarBg = getResizedBitmap(tmp, rec_height, rec_width);
+		tmp.recycle();
 		
 		tmp = getLocalBitmap(context, R.drawable.nopass_rect);
 		noPassBarBg = getResizedBitmap(tmp, rec_height, rec_width);
+		tmp.recycle();
 		
 		tmp = getLocalBitmap(context, R.drawable.skip_rect);
 		skipBarBg = getResizedBitmap(tmp, rec_height, rec_width);
-	
+		tmp.recycle();
 		/*tmp = getLocalBitmap(context, R.drawable.linechart_cursor);
     	cursor = getResizedBitmap(tmp, getHeight() - 2*getPaddingTop() - 2*getPaddingBottom() , dot_scale);*/
-    	
-    	tmp = BitmapFactory.decodeResource(getResources(), R.drawable.linechart_legend);
-    	legend = getResizedBitmap(tmp, legend_height, legend_width);
-    	
+		
+    	tmp = getLocalBitmap(context, R.drawable.linechart_legend);
+    	legend = getResizedBitmap(tmp, legend_height, legend_width); 	
     	tmp.recycle();
 	}
 	private void releaseBitmap(){

@@ -7,6 +7,7 @@ import java.util.Random;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -29,7 +30,6 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -62,6 +62,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 	
 	private TestQuestionCaller2 testQuestionCaller;
 	private Context context;
+	private Resources resource = context.getResources();
 	private LayoutInflater inflater;
 	private RelativeLayout boxLayout = null;
 	private LinearLayout center_layout, title_layout, main_layout, bottom_layout, title, date_layout, timeslot_layout;
@@ -132,7 +133,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.mainLayout = mainLayout;
 		
-		coping_msg = context.getResources().getStringArray(R.array.coping_list);
+		coping_msg = resource.getStringArray(R.array.coping_list);
 		
 	    
 		//view = inflater.inflate(R.layout.fragment_note, container, false);
@@ -181,9 +182,9 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		
 		
 		
-		title_txt.setTypeface(Typefaces.getWordTypefaceBold());
-		date_txt.setTypeface(Typefaces.getWordTypefaceBold());
-		timeslot_txt.setTypeface(Typefaces.getWordTypefaceBold());
+		title_txt.setTypeface(wordTypefaceBold);
+		date_txt.setTypeface(wordTypefaceBold);
+		timeslot_txt.setTypeface(wordTypefaceBold);
 		
 		title_txt.setOnClickListener(new OnClickListener(){
 			
@@ -238,10 +239,10 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		text_self = (TextView)center_layout.findViewById(R.id.text_self);
 	    text_other = (TextView)center_layout.findViewById(R.id.text_other);
 	    
-		text_self.setTypeface(Typefaces.getWordTypeface());
-	    text_other.setTypeface(Typefaces.getWordTypeface());
+		text_self.setTypeface(wordTypefaceBold);
+	    text_other.setTypeface(wordTypefaceBold);
 	    
-		text_self.setTextColor(context.getResources().getColor(R.color.blue));    
+		text_self.setTextColor(resource.getColor(R.color.blue));    
 	    text_self.setOnClickListener(new MyClickListener(0));
 	    text_other.setOnClickListener(new MyClickListener(1));
 	    
@@ -253,9 +254,9 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		
 		TextView type_title = (TextView)type_layout.findViewById(R.id.type_title);
 		type_title.setText("事件類型：");
-		type_title.setTypeface(Typefaces.getWordTypefaceBold());
+		type_title.setTypeface(wordTypefaceBold);
 		typetext = (TextView)type_layout.findViewById(R.id.type_content);
-		typetext.setTypeface(Typefaces.getWordTypefaceBold());
+		typetext.setTypeface(wordTypefaceBold);
 
 		
 		//Spinner
@@ -267,11 +268,11 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		
 		TextView spin_title = (TextView)spinner_layout.findViewById(R.id.spinner_title);
 		spin_title.setText("發生事件：");
-		spin_title.setTypeface(Typefaces.getWordTypefaceBold());
+		spin_title.setTypeface(wordTypefaceBold);
 		
 		sp_content = (TextView)spinner_layout.findViewById(R.id.spinner_content);
 		sp_content.setText("");
-		sp_content.setTypeface(Typefaces.getWordTypefaceBold());
+		sp_content.setTypeface(wordTypefaceBold);
 		sp_content.setOnClickListener(new OnClickListener(){
 
 			@Override
@@ -316,7 +317,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 				R.layout.bar_impact, null);
 		impactSeekBar=(SeekBar)impact_layout.findViewById(R.id.impact_seek_bar);
 		TextView impact_title = (TextView)impact_layout.findViewById(R.id.impact_title);
-		impact_title.setTypeface(Typefaces.getWordTypefaceBold());
+		impact_title.setTypeface(wordTypefaceBold);
 		
 		//Description
 		LinearLayout discription_layout = (LinearLayout) inflater.inflate(
@@ -324,7 +325,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		
 		TextView dec_title = (TextView)discription_layout.findViewById(R.id.description_title);
 		dec_title.setText("補充說明：");
-		dec_title.setTypeface(Typefaces.getWordTypefaceBold());
+		dec_title.setTypeface(wordTypefaceBold);
 		edtext = (EditText)discription_layout.findViewById(R.id.description_content);
 		
 		//Bottom View
@@ -411,7 +412,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 	    //Spinner sp_timeslot = (Spinner)layout.findViewById(R.id.note_sp_timeslot);
 	    
 	    note_title.setTypeface(wordTypefaceBold);
-	    note_title.setTextColor(context.getResources().getColor(R.color.text_gray2));
+	    note_title.setTextColor(resource.getColor(R.color.text_gray2));
 	    note_title.setText(R.string.countdown);
 	    
 	    sp_date.setVisibility(View.INVISIBLE);
@@ -457,7 +458,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 	    //Spinner sp_timeslot = (Spinner)layout.findViewById(R.id.note_sp_timeslot);
 	    
 	    note_title.setTypeface(wordTypefaceBold);
-	    note_title.setTextColor(context.getResources().getColor(R.color.text_gray2));
+	    note_title.setTextColor(resource.getColor(R.color.text_gray2));
 	    note_title.setText(R.string.countdown);
 	    
 	    sp_date.setVisibility(View.INVISIBLE);
@@ -881,13 +882,13 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 			vPager.setCurrentItem(index);
 			switch(index){
 			case 0:
-				text_self.setTextColor(context.getResources().getColor(R.color.blue));
-				text_other.setTextColor(context.getResources().getColor(R.color.text_gray3));
+				text_self.setTextColor(resource.getColor(R.color.blue));
+				text_other.setTextColor(resource.getColor(R.color.text_gray3));
 				iv_self_others_bar.setImageResource(R.drawable.note_slide_line1);
 				break;
 			case 1:
-				text_self.setTextColor(context.getResources().getColor(R.color.text_gray3));
-				text_other.setTextColor(context.getResources().getColor(R.color.blue));
+				text_self.setTextColor(resource.getColor(R.color.text_gray3));
+				text_other.setTextColor(resource.getColor(R.color.blue));
 				iv_self_others_bar.setImageResource(R.drawable.note_slide_line2);
 				break;
 
@@ -906,13 +907,13 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 
 				switch (index) {
 				case 0:
-					text_self.setTextColor(context.getResources().getColor(R.color.blue));
-					text_other.setTextColor(context.getResources().getColor(R.color.text_gray3));
+					text_self.setTextColor(resource.getColor(R.color.blue));
+					text_other.setTextColor(resource.getColor(R.color.text_gray3));
 					iv_self_others_bar.setImageResource(R.drawable.note_slide_line1);
 					break;
 				case 1:
-					text_self.setTextColor(context.getResources().getColor(R.color.text_gray3));
-					text_other.setTextColor(context.getResources().getColor(R.color.blue));
+					text_self.setTextColor(resource.getColor(R.color.text_gray3));
+					text_other.setTextColor(resource.getColor(R.color.blue));
 					iv_self_others_bar.setImageResource(R.drawable.note_slide_line2);
 					break;
 				}
@@ -927,7 +928,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		}
 		
 		public float getDensity(){
-			 DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+			 DisplayMetrics metrics = resource.getDisplayMetrics();
 			 return metrics.density;
 			}
 		
