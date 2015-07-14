@@ -288,8 +288,9 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		
 		
 		lineChart = (LineChartView) lineChartView.findViewById(R.id.lineChart);
-        lineChart.requestLayout();
-        lineChart.getLayoutParams().width = 2200;
+		lineChart.setWidth();
+//        lineChart.requestLayout();
+//        lineChart.getLayoutParams().width = 2200;
         
         chartTitle = (LineChartTitle) lineChartView.findViewById(R.id.chart_title);
         chartTitle.setting(caller);

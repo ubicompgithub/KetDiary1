@@ -81,7 +81,7 @@ public class LineChartView extends View {
     private int mode = 0;  
     private int cursorLinePos = 0;
     private int initHeight;
-    private int numOfDays = 0;
+    private static int numOfDays = 0;
     private int lastNoteAddNum = 0;
     private boolean drawBackground = true;
 
@@ -104,9 +104,15 @@ public class LineChartView extends View {
         initDataset();
         //setChartData3();
         //initBitmap();
-    	
+        
+        
+        
     	Log.d("drawDate", "numOfDays:"+numOfDays);
     }
+	public void setWidth(){
+		this.requestLayout();
+		this.getLayoutParams().width = (int) (numOfDays*rec_width);	
+	}
 	
 	private void initBitmap(){
 		dot_array = new Bitmap[9];
@@ -214,7 +220,7 @@ public class LineChartView extends View {
     				int type = noteAdd[j].getType();
     				//if(drawTheDotOrNot(type)); // 假如一天記多種, 沒顯示的要不要可以filter
     					self_type = type;
-    				Log.d(TAG, "SelfType: "+ self_type);
+    				//Log.d(TAG, "SelfType: "+ self_type);
     			}
     			if(count>0){
     				self_score/=count;
@@ -231,7 +237,7 @@ public class LineChartView extends View {
     				int type = noteAdd[j].getType();
     				//if(drawTheDotOrNot(type));
     					other_type = type;
-    				Log.d(TAG, "OtherType: "+ other_type);
+    				//Log.d(TAG, "OtherType: "+ other_type);
     			}    			
     			if(count>0){
     				other_score/=count;
@@ -312,6 +318,7 @@ public class LineChartView extends View {
     	super.onDraw(canvas);   	
     	canvas.save();
     	
+        
     	initBitmap();
     	setChartData3();
     	
@@ -418,7 +425,7 @@ public class LineChartView extends View {
         
     	int startPoint = 0;
         for (int i = 0; i < dataset.length; i++) {
-        	Log.d(TAG, "length: " + dataset.length);
+        	//Log.d(TAG, "length: " + dataset.length);
         	int selfType = dataset[i].getSelfType();
         	if (selfType < 6 && selfType > 0) {
         		path_self.moveTo(getXPos2(i), getYPos(dataset[i].getSelfScore()));
@@ -463,7 +470,7 @@ public class LineChartView extends View {
         	
         	 for (int i = 0; i < dataset.length; i++) {
         		int selfType = dataset[i].getSelfType();
-        		Log.d(TAG, "SelfType:" + selfType + " SelfScore:"+dataset[i].getSelfScore());
+        		//Log.d(TAG, "SelfType:" + selfType + " SelfScore:"+dataset[i].getSelfScore());
         		if (selfType > 5 || selfType < 1) continue;
  	        	if (drawTheDotOrNot(selfType)) {
 	 	            canvas.drawBitmap(dot_array[selfType], getXPos2(i)-dot_X_offset, getYPos(dataset[i].getSelfScore())-dot_Y_offset, p);
@@ -531,7 +538,7 @@ public class LineChartView extends View {
     private void drawRectBar2(Canvas canvas) { 
     	Paint p = new Paint();
     	
-    	Log.d(TAG, "data_length: "+dataset.length);
+    	//Log.d(TAG, "data_length: "+dataset.length);
     	for (int i = 0; i < dataset.length; i++) {
     		if (dataset[i].getResult() == 0) {
 	            canvas.drawBitmap(passBarBg, getXPos2(i)-rec_X_offset, getHeight()-offsetY, p);
@@ -545,22 +552,7 @@ public class LineChartView extends View {
         }    	
     }
     
- 
-    private void drawCursor2(Canvas canvas) {
-    	// TODO : only draw above dates
-    	
-    	Paint p = new Paint();
-    	//p.setColor(Color.RED);
-    	//p.setStyle(Style.STROKE);
-    	//p.setStrokeWidth(5);
-    	//p.setPathEffect(new DashPathEffect(new float[] {10,20}, 0));
-    	Bitmap tmp = getLocalBitmap(App.getContext(), R.drawable.linechart_cursor);
-    	Bitmap cursor = getResizedBitmap(tmp, getHeight() - 2*getPaddingTop() - 2*getPaddingBottom() , dot_scale);
-    	tmp.recycle();
-    	//System.gc();
-    	canvas.drawBitmap(cursor, touchX, 0, p);
-    	
-    }
+
     
     private void drawCursor3(Canvas canvas) {
     	// TODO : only draw above dates
