@@ -534,7 +534,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		if (mainLayout != null && boxLayout != null
 				&& boxLayout.getParent() != null
 				&& boxLayout.getParent().equals(mainLayout))
-			mainLayout.removeView(boxLayout);
+			mainLayout.removeAllViews();
 	}
 	
 	/** close the dialog */

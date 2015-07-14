@@ -133,9 +133,9 @@ public class MainActivity extends FragmentActivity {
 	
 	private TestStripDetection2 testStripDetection;
 	
-	static {
-        System.loadLibrary("opencv_java");
-    }
+//	static {
+//        System.loadLibrary("opencv_java");
+//    }
 	
 	private DatabaseControl db;
 	@Override
@@ -202,8 +202,8 @@ public class MainActivity extends FragmentActivity {
 			//startService(startIntent); 
             //
 			
-			testStripDetection = new TestStripDetection2();
-			testStripDetection.testOpencv();
+//			testStripDetection = new TestStripDetection2();
+//			testStripDetection.testOpencv();
 //			File mainStorageDir = MainStorage.getMainStorageDirectory();	    	
 //	        Mat matOrigin = Imgcodecs.imread(mainStorageDir.getPath() + File.separator + "Avon.jpg");
 //	        Log.d(TAG, "TEST");
