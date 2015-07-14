@@ -102,7 +102,6 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private File mainDirectory = null;
 	private TestDataParser2 TDP;
 	
-	private int fragmentIdx;
 	private View[] pageViewList = null;
 	private MyDialog dialog;
 	
@@ -137,6 +136,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private int sustainMonth = PreferenceControl.getSustainMonth();
 	private Calendar startDay = PreferenceControl.getStartDate();
 	private int startMonth = startDay.get(Calendar.MONTH)+1;
+	private int currentPageIdx = Calendar.getInstance().get(Calendar.MONTH) + 1 - startMonth;
 	
 	private static final int[] iconId = {0, R.drawable.emoji5, R.drawable.emoji2, R.drawable.emoji4,
 		R.drawable.emoji1, R.drawable.emoji3, R.drawable.others_emoji3, R.drawable.others_emoji2,
@@ -272,9 +272,9 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 				
 		drawer.toggle();
 		
-		setCurrentCalendarPage(THIS_MONTH + 1 - startMonth);
+		mViewPager.setCurrentItem(THIS_MONTH + 1 - startMonth);
 		titleText.setText( (THIS_MONTH + 1)  + "月");
-;		//titleText.setTypeface(wordTypefaceBold);
+		//titleText.setTypeface(wordTypefaceBold);
 		
 		charttoggleLayout.setOnClickListener(new ToggleListener() );
 		caltoggleLayout.setOnClickListener(new ToggleListener() );
@@ -316,7 +316,10 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 					drawerContent.addView(lineChartView);
 					upperBarContent.addView(lineChartBar);
 				}
-				if  (!drawer.isOpened()) { drawer.toggle();}
+				if  (!drawer.isOpened()) {
+					drawer.toggle();
+					setArrow(true);
+				}
 								
 		        
 		        isContentAdd = true;
@@ -382,10 +385,9 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 
 			@Override
 			public void onPageSelected(int arg0) {
-				
 				ClickLog.Log(ClickLogId.DAYBOOK_CHANGE_MONTH);
-				fragmentIdx = arg0;
-				titleText.setText( (startMonth + fragmentIdx) + "月");
+				currentPageIdx = arg0;
+				titleText.setText( (startMonth + currentPageIdx) + "月");
 			}
 			
 		});
@@ -504,13 +506,15 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 				if (isRotated) {
 					MainActivity.getMainActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 					MainActivity.getMainActivity().setTabHostVisible(View.VISIBLE);
-					randomButton.setVisibility(View.VISIBLE);
 					addButton.setVisibility(View.VISIBLE);
 					calendarIcon.setVisibility(View.VISIBLE);
 					toggle_linechart.setVisibility(View.VISIBLE);
 					charttoggleLayout.setOnClickListener(new ToggleListener() );
 					diaryList.setVisibility(View.VISIBLE);
 					isRotated = false;
+					
+					if(PreferenceControl.getRandomQustion())
+						randomButton.setVisibility(View.VISIBLE);
 					
 				}
 				else {
@@ -565,7 +569,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			
 			
 			showDiary();
-			updateCalendarView();
+			updateCalendarView(currentPageIdx);
 			updateFilterButton();
 			
 			questionBox = new QuestionDialog((RelativeLayout) view, daybookFragment);
@@ -800,10 +804,6 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 				TextView impact_word = (TextView) diaryItem.findViewById(R.id.diary_impact_word);
 				TextView impact_txt = (TextView) diaryItem.findViewById(R.id.diary_impact);
 				
-				
-				
-				
-				
 				date_num.setTypeface(wordTypefaceBold);
 				week_num.setTypeface(wordTypefaceBold);
 				timeslot_num.setTypeface(wordTypefaceBold);
@@ -842,9 +842,9 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			
 
 			
-			type_img.setOnLongClickListener(new TypeLongClickListener(date, dayOfweek, slot, type, items, 
+			//type_img.setOnLongClickListener(new TypeLongClickListener(date, dayOfweek, slot, type, items,	impact, descripton));
+			layout.setOnLongClickListener(new TypeLongClickListener(date, dayOfweek, slot, type, items, 
 					impact, descripton));
-			
 			
 			if(type > 0 && type <=8)
 				type_img.setImageResource(typeId[type]);
@@ -924,9 +924,6 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	    return px;
 	}
 	
-	public void setCurrentCalendarPage(int pageIdx){
-		mViewPager.setCurrentItem(pageIdx);
-	}
 	
 	private void addDrawerContent(int id){
 		
@@ -1263,7 +1260,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
     			filterButtonIsPressed[0]=true;
     			filterAll.setImageResource(R.drawable.filter_all_selected);
     		}
-    		updateCalendarView();
+    		updateCalendarView(currentPageIdx);
     		showDiary();
     		updateFilterButton();
     	}
@@ -1335,13 +1332,17 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			lineChart.invalidate();
 		
 		//update Calendar View
-		updateCalendarView();
+		updateCalendarView(-1);
 		
 		//sv.fullScroll(View.FOCUS_DOWN);
 		Log.d(TAG, "DiaryCount:"+diaryList.getChildCount());
 	}
 	
-	private void updateCalendarView(){
+
+	/**
+	 * @param {int} pageIdx Index of page to be shown. Assign pageIdx to -1 for showing this month.
+	 */
+	private void updateCalendarView(int pageIdx){
 		mViewPager.removeAllViews();
 		
 		LayoutInflater inflater = LayoutInflater.from(context);
@@ -1352,7 +1353,11 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		}
 		mSectionsPagerAdapter = new SectionsPagerAdapter(pageViewList);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
-		mViewPager.setCurrentItem(Calendar.getInstance().get(Calendar.MONTH) + 1 - startMonth);
+
+		if (pageIdx == -1)
+			mViewPager.setCurrentItem(Calendar.getInstance().get(Calendar.MONTH) + 1 - startMonth);
+		else
+			mViewPager.setCurrentItem(pageIdx);
 	}
 	
 	public static void scrolltoItem(int year, int month, int day){

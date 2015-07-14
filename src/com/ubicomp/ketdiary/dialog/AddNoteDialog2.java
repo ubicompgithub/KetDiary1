@@ -42,9 +42,9 @@ import com.ubicomp.ketdiary.check.TimeBlock;
 import com.ubicomp.ketdiary.clicklog.ClickLog;
 import com.ubicomp.ketdiary.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.file.QuestionFile;
-import com.ubicomp.ketdiary.file.ReadDummyData;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.BarButtonGenerator;
+import com.ubicomp.ketdiary.ui.CustomScrollView;
 import com.ubicomp.ketdiary.ui.CustomToast;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
@@ -111,7 +111,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 	private String description;
 	private boolean viewshow = false;
 	
-	private ScrollView sv;
+	private CustomScrollView sv;
 	
 	public static final int STATE_TEST = 0;
 	public static final int STATE_NOTE = 1;
@@ -162,7 +162,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		
 		
 		bottom_layout = (LinearLayout) boxLayout.findViewById(R.id.note_bottom_layout);
-		sv = (ScrollView) boxLayout.findViewById(R.id.note_main_scroll);
+		sv = (CustomScrollView) boxLayout.findViewById(R.id.note_main_scroll);
 		
 		//
 		
@@ -589,7 +589,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		});
 		setListViewHeightBasedOnItems(listView);
 		listView.setVisibility(View.VISIBLE);
-		sv.smoothScrollTo(0 , 600);
+		sv.smoothScrollTo(0 , (int)convertDpToPixel((float)200));
 		
 		//.setOnItemSelectedListener(new SpinnerXMLSelectedListener());
 	}

@@ -202,8 +202,12 @@ public class MainActivity extends FragmentActivity {
 			//startService(startIntent); 
             //
 			
+<<<<<<< HEAD
 //			testStripDetection = new TestStripDetection2();
 //			testStripDetection.testOpencv();
+=======
+			//testStripDetection.testOpencv();
+>>>>>>> cbc4498ad58a880cfa43a7a5297d691e30fcb095
 //			File mainStorageDir = MainStorage.getMainStorageDirectory();	    	
 //	        Mat matOrigin = Imgcodecs.imread(mainStorageDir.getPath() + File.separator + "Avon.jpg");
 //	        Log.d(TAG, "TEST");
@@ -368,8 +372,7 @@ public class MainActivity extends FragmentActivity {
 		
 		Log.d("InApp",String.valueOf(clickable));
 		
-		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		notificationManager.cancel(0); //回到APP裡要把Notification關掉
+		
 		//clickable = true;
 	}
 
@@ -893,7 +896,8 @@ public class MainActivity extends FragmentActivity {
 		}
 		
 		
-		
+		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager.cancel(0); //做完檢測才把Notification關掉
 		
 		//PreferenceControl.setCheckResult( false );
 	}
