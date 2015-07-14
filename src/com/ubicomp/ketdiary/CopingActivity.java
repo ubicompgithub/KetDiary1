@@ -2,6 +2,7 @@ package com.ubicomp.ketdiary;
 
 import java.util.Random;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -59,8 +61,8 @@ public class CopingActivity extends Activity {
 	private View encouragementView, harmView, lifestyleView, lapseView;
 
 	
-	private RelativeLayout bgLayout, animEndLayout, barLayout;
-	private TextView animOK, animCancel, animHelp, endButton;
+	private RelativeLayout bgLayout, callLayout, animEndLayout, barLayout;
+	private TextView callOK, callCancel, callHelp, animOK, animCancel, animHelp, endButton;
 
 	private int state = 0;
 	private int animId, mediaId;
@@ -118,8 +120,11 @@ public class CopingActivity extends Activity {
 
 		View title = BarButtonGenerator.createTitleView(R.string.coping_page);
 		titleLayout.addView(title);
-
 		bgLayout = (RelativeLayout) findViewById(R.id.coping_all_layout);
+		
+		callLayout = (RelativeLayout) inflater.inflate(R.layout.dialog_callout_check, null);
+		initializeCallCheckDialog();
+
 		animEndLayout = (RelativeLayout) inflater.inflate(R.layout.dialog_end_animation, null);
 		db = new DatabaseControl();
 		initializeAnimEndDialog();
@@ -199,7 +204,7 @@ public class CopingActivity extends Activity {
 		listVisible[2] = true;
 		skillType = 2;
 	}
-	/*
+	
 	private void foldSponsorView(){
 		for (int i = 0; i < sponsorViews.length; ++i)
 			sponsorViews[i].setVisibility(View.GONE);
@@ -218,7 +223,7 @@ public class CopingActivity extends Activity {
 			listDownImg[3].setVisibility(View.VISIBLE);
 
 		listVisible[3] = true;
-	}*/
+	}
 
 	private void foldInfoView(){
 		encouragementView.setVisibility(View.GONE);
@@ -260,7 +265,7 @@ public class CopingActivity extends Activity {
 							unfoldRelaxedView();
 							foldRecreationView();
 							foldInterpersonView();
-							//foldSponsorView();
+							foldSponsorView();
 							foldInfoView();
 						}
 					}
@@ -355,7 +360,7 @@ public class CopingActivity extends Activity {
 							unfoldRecreationView();
 							foldRelaxedView();
 							foldInterpersonView();
-							//foldSponsorView();
+							foldSponsorView();
 							foldInfoView();
 						}
 					}
@@ -363,7 +368,7 @@ public class CopingActivity extends Activity {
 		mainLayout.addView(recreationView);
 		
 		String[] recreations = PreferenceControl.getRecreations();
-		String[] nonemptyRecreations = new String[5];
+		String[] nonemptyRecreations = new String[recreations.length];
 		int numOfRecreations = 0;
 		for (int i = 0; i < recreations.length; ++i){
 			if (recreations[i].length() > 0){
@@ -469,7 +474,7 @@ public class CopingActivity extends Activity {
 							unfoldInterpersonView();
 							foldRelaxedView();
 							foldRecreationView();
-							//foldSponsorView();
+							foldSponsorView();
 							foldInfoView();
 						}
 					}
@@ -520,58 +525,52 @@ public class CopingActivity extends Activity {
 
 	}
 
-	/*
+	
 	private void setSponsorView(){
 		RelativeLayout sponsorView = createListView(
 				R.string.coping_sponsor, new OnClickListener() {
-
-					// listVisible[3] = false;
-
 					@Override
 					public void onClick(View v) {
 						listDownImg[3] = (ImageView) v.findViewById(R.id.question_list);
-						// ImageView list = (ImageView) v
-						// 		.findViewById(R.id.question_list);
 						if (listVisible[3]) {
-							//foldSponsorView();
-							// for (int i = 0; i < sponsorViews.length; ++i)
-							// 	sponsorViews[i].setVisibility(View.GONE);
-							// list.setVisibility(View.INVISIBLE);
+							foldSponsorView();
 						} else {
-							//unfoldSponsorView();
+							unfoldSponsorView();
 							foldRelaxedView();
 							foldRecreationView();
 							foldInterpersonView();
 							foldInfoView();
-							// for (int i = 0; i < sponsorViews.length; ++i)
-							// 	sponsorViews[i].setVisibility(View.VISIBLE);
-							// list.setVisibility(View.VISIBLE);
 						}
-						//listVisible[3] = !listVisible[3];
 					}
 				});
 		mainLayout.addView(sponsorView);
 		
 
-		String[] sponsors = PreferenceControl.getSponsors();
-		sponsorViews = new RelativeLayout[sponsors.length];
-		for (int i = 0; i < sponsors.length; ++i) {
-			sponsorViews[i] = BarButtonGenerator.createSettingButtonView(
-				R.string.coping_default_sponsor, new OnClickListener() {
+		String[] sponsorNames = PreferenceControl.getSponsorName();
+		String[] sponsorPhones = PreferenceControl.getSponsorPhone();
+		String[] nonemptySponsorNames = new String[sponsorNames.length];
+		String[] nonemptySponsorPhones = new String[sponsorPhones.length];
+		int numOfSponsors = 0;
+		for (int i = 0; i < sponsorNames.length; i++){
+			if (sponsorNames[i].length() > 0){
+				nonemptySponsorNames[numOfSponsors] = sponsorNames[i];
+				nonemptySponsorPhones[numOfSponsors] = sponsorPhones[i];
+				numOfSponsors++;
+			}
+		}
 
-					@Override
-					public void onClick(View v) {
-						
-					}
-
-				});
+		sponsorViews = new RelativeLayout[numOfSponsors];
+		for (int i = 0; i < numOfSponsors; ++i) {
+			OnClickListener listener = new CallCheckOnClickListener(nonemptySponsorNames[i], nonemptySponsorPhones[i]);
+			sponsorViews[i] = BarButtonGenerator.createIconView(
+				nonemptySponsorNames[i], R.drawable.icon_call, listener);
 
 			sponsorViews[i].setVisibility(View.GONE);
 			mainLayout.addView(sponsorViews[i]);
 		}
 
 
-	}*/
+	}
 
 
 	private void setInfoView(){
@@ -589,7 +588,7 @@ public class CopingActivity extends Activity {
 							foldRelaxedView();
 							foldRecreationView();
 							foldInterpersonView();
-							//foldSponsorView();
+							foldSponsorView();
 						}
 					}
 				});
@@ -728,7 +727,7 @@ public class CopingActivity extends Activity {
 		setRelaxedView();
 		setRecreationView();
 		setInterpersonView();
-		//setSponsorView();
+		setSponsorView();
 		setInfoView();
 
 		for (int i = 0; i < listVisible.length; i++)
@@ -1029,6 +1028,20 @@ public class CopingActivity extends Activity {
 		}
 	}
 
+
+	/** Initialize call check dialog */
+	private void initializeCallCheckDialog() {
+
+		callOK = (TextView) callLayout.findViewById(R.id.call_ok_button);
+		callCancel = (TextView) callLayout.findViewById(R.id.call_cancel_button);
+		callHelp = (TextView) callLayout.findViewById(R.id.call_help);
+
+		callHelp.setTypeface(wordTypefaceBold);
+		callOK.setTypeface(wordTypefaceBold);
+		callCancel.setTypeface(wordTypefaceBold);
+
+	}
+
 	/** OnClickListener for checking if stop the animation and leave Emotion DIY */
 	private class AnimCheckOnClickListener implements View.OnClickListener {
 		private int selection;
@@ -1091,42 +1104,40 @@ public class CopingActivity extends Activity {
 
 
 	/** Used for showing dialog to ask if the user wants to call out for help */
-	// private class CallCheckOnClickListener implements View.OnClickListener {
+	private class CallCheckOnClickListener implements View.OnClickListener {
 
-	// 	private int selection;
-	// 	private String name;
-	// 	private String call;
+		private String name;
+		private String call;
 
-	// 	CallCheckOnClickListener(int selection, String name, String call) {
-	// 		this.selection = selection;
-	// 		this.name = name;
-	// 		this.call = call;
-	// 	}
+		CallCheckOnClickListener(String name, String call) {
+			this.name = name;
+			this.call = call;
+		}
 
-	// 	@SuppressLint("InlinedApi")
-	// 	@Override
-	// 	public void onClick(View v) {
-	// 		int item_count = mainLayout.getChildCount();
-	// 		for (int i = 0; i < item_count; ++i)
-	// 			mainLayout.getChildAt(i).setEnabled(false);
-	// 		enableBack = false;
+		@SuppressLint("InlinedApi")
+		@Override
+		public void onClick(View v) {
+			int item_count = mainLayout.getChildCount();
+			for (int i = 0; i < item_count; ++i)
+				mainLayout.getChildAt(i).setEnabled(false);
+			enableBack = false;
 
-	// 		bgLayout.addView(callLayout);
+			bgLayout.addView(callLayout);
 
-	// 		boxParam = (LayoutParams) callLayout.getLayoutParams();
-	// 		boxParam.width = LayoutParams.MATCH_PARENT;
-	// 		boxParam.height = LayoutParams.MATCH_PARENT;
-	// 		boxParam.addRule(RelativeLayout.CENTER_IN_PARENT);
+			boxParam = (LayoutParams) callLayout.getLayoutParams();
+			boxParam.width = LayoutParams.MATCH_PARENT;
+			boxParam.height = LayoutParams.MATCH_PARENT;
+			boxParam.addRule(RelativeLayout.CENTER_IN_PARENT);
 
-	// 		String call_check = getResources().getString(R.string.call_check_help);
-	// 		String question_sign = getResources().getString(R.string.question_sign);
-	// 		callHelp.setText(call_check + " " + name + " " + question_sign);
-	// 		callOK.setOnClickListener(new CallOnClickListener(selection, name, call));
-	// 		callCancel.setOnClickListener(new CallCancelOnClickListener());
-	// 		ClickLog.Log(ClickLogId.EMOTION_DIY_SELECTION);
-	// 	}
+			String call_check = getResources().getString(R.string.call_check_help);
+			String question_sign = getResources().getString(R.string.question_sign);
+			callHelp.setText(call_check + " " + name + " " + question_sign);
+			callOK.setOnClickListener(new CallOnClickListener(name, call));
+			callCancel.setOnClickListener(new CallCancelOnClickListener());
+//			ClickLog.Log(ClickLogId.EMOTION_DIY_SELECTION);
+		}
 
-	// }
+	}
 //
 //	/** OnClickListener for user selecting a recreation */
 //	private class RecreationSelectionOnClickListener implements View.OnClickListener {
@@ -1146,46 +1157,46 @@ public class CopingActivity extends Activity {
 //	}
 //
 //	/** Used for canceling calling out */
-//	private class CallCancelOnClickListener implements View.OnClickListener {
-//		@Override
-//		public void onClick(View v) {
-//			bgLayout.removeView(callLayout);
-//			int item_count = mainLayout.getChildCount();
-//			for (int i = 0; i < item_count; ++i)
-//				mainLayout.getChildAt(i).setEnabled(true);
-//			enableBack = true;
-//			ClickLog.Log(ClickLogId.COPING_CALL_CANCEL);
-//		}
-//
-//	}
+	private class CallCancelOnClickListener implements View.OnClickListener {
+		@Override
+		public void onClick(View v) {
+			bgLayout.removeView(callLayout);
+			int item_count = mainLayout.getChildCount();
+			for (int i = 0; i < item_count; ++i)
+				mainLayout.getChildAt(i).setEnabled(true);
+			enableBack = true;
+			ClickLog.Log(ClickLogId.COPING_CALL_CANCEL);
+		}
+
+	}
 
 	/** Used for calling out */
-	// private class CallOnClickListener implements View.OnClickListener {
-	// 	private int selection;
-	// 	private String call;
+	private class CallOnClickListener implements View.OnClickListener {
+		private int selection;
+		private String call;
 
-	// 	// private String name;
+		// private String name;
 
-	// 	CallOnClickListener(int selection, String name, String call) {
-	// 		this.selection = selection;
-	// 		// this.name = name;
-	// 		this.call = call;
-	// 	}
+		CallOnClickListener(String name, String call) {
+			// this.selection = selection;
+			// this.name = name;
+			this.call = call;
+		}
 
-	// 	@Override
-	// 	public void onClick(View v) {
-	// 		long ts = System.currentTimeMillis();
-	// 		db.insertEmotionDIY(new EmotionDIY(ts, selection, "", 0));
-	// 		if (intentType > -2) {
-	// 			db.insertQuestionnaire(new Questionnaire(ts, intentType, seq_toString(), 0));
-	// 			PreferenceControl.setTestResult(-1);
-	// 		}
-	// 		ClickLog.Log(ClickLogId.EMOTION_DIY_CALL_OK);
-	// 		Intent intentDial = new Intent("android.intent.action.CALL", Uri.parse("tel:" + call));
-	// 		activity.startActivity(intentDial);
-	// 		activity.finish();
-	// 	}
-	// }
+		@Override
+		public void onClick(View v) {
+			// long ts = System.currentTimeMillis();
+			// db.insertEmotionDIY(new EmotionDIY(ts, selection, "", 0));
+			// if (intentType > -2) {
+			// 	db.insertQuestionnaire(new Questionnaire(ts, intentType, seq_toString(), 0));
+			// 	PreferenceControl.setTestResult(-1);
+			// }
+			// ClickLog.Log(ClickLogId.EMOTION_DIY_CALL_OK);
+			Intent intentDial = new Intent("android.intent.action.CALL", Uri.parse("tel:" + call));
+			activity.startActivity(intentDial);
+			activity.finish();
+		}
+	}
 
 //	/** Parse intentSequence received from the caller activity */
 //	private String seq_toString() {

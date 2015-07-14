@@ -133,8 +133,8 @@ public class SettingActivity extends Activity {
 				});
 		mainLayout.addView(contactView);
 
-		String[] names = PreferenceControl.getConnectFamilyName();
-		String[] phones = PreferenceControl.getConnectFamilyPhone();
+		String[] names = PreferenceControl.getSponsorName();
+		String[] phones = PreferenceControl.getSponsorPhone();
 		int contactLen = names.length;
 		contactViews = new RelativeLayout[contactLen];
 		for (int i = 0; i < contactLen; ++i) {
@@ -394,7 +394,7 @@ public class SettingActivity extends Activity {
 				phone.setVisibility(View.INVISIBLE);
 				button.setText(edit);
 				button.setTextColor(edit_color);
-				PreferenceControl.setFamilyCallData(name_text, phone_text, id);
+				PreferenceControl.setSponsorCallData(name_text, phone_text, id);
 			} else {
 				nt.setVisibility(View.INVISIBLE);
 				pt.setVisibility(View.INVISIBLE);

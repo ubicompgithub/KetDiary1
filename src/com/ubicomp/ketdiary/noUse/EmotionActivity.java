@@ -217,8 +217,8 @@ public class EmotionActivity extends Activity {
 		String[] calls = new String[3];
 
 		if (type == TYPE_FAMILY) {
-			names = PreferenceControl.getConnectFamilyName();
-			calls = PreferenceControl.getConnectFamilyPhone();
+//			names = PreferenceControl.getConnectFamilyName();
+//			calls = PreferenceControl.getConnectFamilyPhone();
 		} else if (type == TYPE_SOCIAL) {
 			/*
 			int[] idxs = PreferenceControl.getConnectSocialHelpIdx();
