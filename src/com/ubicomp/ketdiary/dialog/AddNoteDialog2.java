@@ -62,7 +62,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 	
 	private TestQuestionCaller2 testQuestionCaller;
 	private Context context;
-	private Resources resource = context.getResources();
+	private Resources resource;
 	private LayoutInflater inflater;
 	private RelativeLayout boxLayout = null;
 	private LinearLayout center_layout, title_layout, main_layout, bottom_layout, title, date_layout, timeslot_layout;
@@ -132,6 +132,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		this.inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.mainLayout = mainLayout;
+		resource = context.getResources();
 		
 		coping_msg = resource.getStringArray(R.array.coping_list);
 		
@@ -535,7 +536,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		if (mainLayout != null && boxLayout != null
 				&& boxLayout.getParent() != null
 				&& boxLayout.getParent().equals(mainLayout))
-			mainLayout.removeView(boxLayout);
+			mainLayout.removeAllViews();
 	}
 	
 	/** close the dialog */
