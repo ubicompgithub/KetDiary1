@@ -24,8 +24,8 @@ public class PreferenceControl {
 	/* UID
 	 * DeviceId
 	 * sensorId
-	 * family_name
-	 * family_phone
+	 * sponsor_name
+	 * sponsor_phone
 	 * TestResult
 	 * LatestDetectionTimstamp
 	 * LatestDoneDetectionTimstamp
@@ -511,25 +511,25 @@ public class PreferenceControl {
 	}
 
 	/** Get the names of the */
-	public static String[] getConnectFamilyName() {
+	public static String[] getSponsorName() {
 		String[] names = new String[3];
-		names[0] = sp.getString("family_name0", "");
-		names[1] = sp.getString("family_name1", "");
-		names[2] = sp.getString("family_name2", "");
+		names[0] = sp.getString("sponsor_name0", "");
+		names[1] = sp.getString("sponsor_name1", "");
+		names[2] = sp.getString("sponsor_name2", "");
 		return names;
 	}
 
-	public static String[] getConnectFamilyPhone() {
+	public static String[] getSponsorPhone() {
 		String[] calls = new String[3];
-		calls[0] = sp.getString("family_phone0", "");
-		calls[1] = sp.getString("family_phone1", "");
-		calls[2] = sp.getString("family_phone2", "");
+		calls[0] = sp.getString("sponsor_phone0", "");
+		calls[1] = sp.getString("sponsor_phone1", "");
+		calls[2] = sp.getString("sponsor_phone2", "");
 		return calls;
 	}
 
-	public static void setFamilyCallData(String name, String phone, int id) {
-		String keyName = "family_name" + id;
-		String keyPhone = "family_phone" + id;
+	public static void setSponsorCallData(String name, String phone, int id) {
+		String keyName = "sponsor_name" + id;
+		String keyPhone = "sponsor_phone" + id;
 		SharedPreferences.Editor edit = sp.edit();
 		edit.putString(keyName, name);
 		edit.putString(keyPhone, phone);
@@ -805,15 +805,15 @@ public class PreferenceControl {
 
 	
 
-	public static String[] getSponsors() {
-		String[] sponsor = new String[5];
-		sponsor[0] = sp.getString("sponsor0", "");
-		sponsor[1] = sp.getString("sponsor1", "");
-		sponsor[2] = sp.getString("sponsor2", "");
-		sponsor[3] = sp.getString("sponsor3", "");
-		sponsor[4] = sp.getString("sponsor4", "");
-		return sponsor;
-	}
+	// public static String[] getSponsors() {
+	// 	String[] sponsor = new String[5];
+	// 	sponsor[0] = sp.getString("sponsor0", "");
+	// 	sponsor[1] = sp.getString("sponsor1", "");
+	// 	sponsor[2] = sp.getString("sponsor2", "");
+	// 	sponsor[3] = sp.getString("sponsor3", "");
+	// 	sponsor[4] = sp.getString("sponsor4", "");
+	// 	return sponsor;
+	// }
 
 	// public static void setSponsor(String sponsor, int id) {
 	// 	String key = "recreation" + id;
