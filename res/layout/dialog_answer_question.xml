@@ -51,8 +51,8 @@
             android:layout_width="match_parent"
             android:layout_height="220dp"
             android:orientation="vertical"
-            android:paddingTop="30dp"
-            android:paddingBottom = "30dp"
+            android:paddingTop="20dp"
+            android:paddingBottom = "20dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp" >
             
@@ -74,7 +74,7 @@
                 	android:id="@+id/question_a"
                	 	android:layout_width="wrap_content"
                 	android:layout_height="wrap_content"
-                	android:text="A"
+                	android:text="A."
                 	android:textColor="@color/red"
                 	android:textSize="@dimen/large_text_size"
                 	android:layout_marginLeft="10dp" />
@@ -107,7 +107,7 @@
                 	android:id="@+id/question_b"
                	 	android:layout_width="wrap_content"
                 	android:layout_height="wrap_content"
-                	android:text="B"
+                	android:text="B."
                 	android:textColor="@color/red"
                 	android:textSize="@dimen/large_text_size"
                 	android:layout_marginLeft="10dp" />
@@ -140,7 +140,7 @@
                 	android:id="@+id/question_c"
                	 	android:layout_width="wrap_content"
                 	android:layout_height="wrap_content"
-                	android:text="C"
+                	android:text="C."
                 	android:textColor="@color/red"
                 	android:textSize="@dimen/large_text_size"
                 	android:layout_marginLeft="10dp" />
@@ -173,7 +173,7 @@
                 	android:id="@+id/question_d"
                	 	android:layout_width="wrap_content"
                 	android:layout_height="wrap_content"
-                	android:text="D"
+                	android:text="D."
                 	android:textColor="@color/red"
                 	android:textSize="@dimen/large_text_size"
                 	android:layout_marginLeft="10dp" />

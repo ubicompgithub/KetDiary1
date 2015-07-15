@@ -23,7 +23,7 @@ public class CustomToast {
 	private static ImageView toastImage;
 
 	private static Drawable c1Drawable, c2Drawable, c3Drawable, okDrawable,
-			failDrawable;
+			failDrawable, levelupDrawable;
 
 	private static SoundPool soundpool;
 	private static int soundId;
@@ -62,6 +62,8 @@ public class CustomToast {
 					R.drawable.toast_pass);
 			failDrawable = context.getResources().getDrawable(
 					R.drawable.toast_fail);
+			levelupDrawable = context.getResources().getDrawable(
+					R.drawable.toast_lvup);
 		}
 		if (soundpool == null) {
 			soundpool = new SoundPool(1, AudioManager.STREAM_MUSIC, 1);
@@ -92,6 +94,10 @@ public class CustomToast {
 			toastImage.setImageDrawable(c3Drawable);
 			toastCounter.setVisibility(View.VISIBLE);
 			soundpool.play(soundId, 1.f, 1.f, 0, 0, 1.f);
+			break;
+		case 4:
+			toastImage.setImageDrawable(levelupDrawable);
+			toastCounter.setVisibility(View.INVISIBLE);
 			break;
 		case -1:
 			toastImage.setImageDrawable(failDrawable);
