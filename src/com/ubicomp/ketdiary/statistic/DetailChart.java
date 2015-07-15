@@ -54,12 +54,12 @@ public class DetailChart {
 	private String[] storyFbComment = App.getContext().getResources()
 			.getStringArray(R.array.radar_3_2);
 
-	public static final int TYPE_DETECTION = 0;
-	public static final int TYPE_ADVICE = 1;
-	public static final int TYPE_MANAGE = 2;
-	public static final int TYPE_STORY = 3;
+	public static final int TYPE_TEST = 0;
+	public static final int TYPE_COPING = 1;
+	public static final int TYPE_QUESTION = 2;
+	public static final int TYPE_NOTE = 3;
 
-	private int type = TYPE_DETECTION;
+	private int type = TYPE_TEST;
 	private Rank rank = new Rank("", 0);
 
 	private UIHandler handler = new UIHandler();
@@ -130,7 +130,7 @@ public class DetailChart {
 	 * set which type of the detail chart
 	 * 
 	 * @param type
-	 *            TYPE_DETECTION, TYPE_ADVICE, TYPE_MANAGE, and TYPE_STORY
+	 *            TYPE_TEST, TYPE_COPING, TYPE_QUESTION, and TYPE_NOTE
 	 * @param rank
 	 *            Rank information
 	 */
@@ -172,20 +172,20 @@ public class DetailChart {
 			int idx = 0;
 			
 			switch (type) {
-			case TYPE_DETECTION:
+			case TYPE_TEST:
 				title.setText(R.string.radar_label0_full);
 
-				len = Math.min(rank.getTestTimes() * total_len / 600, total_len);
-				idx = Math.min(rank.getTestTimes() * 3 / 600,
+				len = Math.min(rank.getTestTimes() * total_len / 100, total_len);
+				idx = Math.min(rank.getTestTimes() * 3 / 100,
 						detectionComment.length - 1);
 				params[0].width = len;
 				subtitles[0].setText(R.string.radar_label0_0);
 				items[0].updateViewLayout(bar_progress[0], params[0]);
 				comments[0].setText(detectionComment[0]);
 
-				len = Math.min(rank.getTestPass() * total_len / 300,
+				len = Math.min(rank.getTestPass() * total_len / 100,
 						total_len);
-				idx = Math.min(rank.getTestPass() * 3 / 300,
+				idx = Math.min(rank.getTestPass() * 3 / 100,
 						detectionComment.length - 1);
 				params[1].width = len;
 				subtitles[1].setText(R.string.radar_label0_1);
@@ -197,7 +197,7 @@ public class DetailChart {
 				//items[2].setVisibility(View.INVISIBLE);
 				break;
 
-			case TYPE_ADVICE:
+			case TYPE_COPING:
 				title.setText(R.string.radar_label1_full);
 
 				len = Math.min(rank.getCoping() * total_len / 300,
@@ -224,12 +224,12 @@ public class DetailChart {
 				//items[2].setVisibility(View.INVISIBLE);
 				break;
 
-			case TYPE_MANAGE:
+			case TYPE_QUESTION:
 				title.setText(R.string.radar_label2_full);
 
-				len = Math.min(rank.getNormalQ() * total_len / 300,
+				len = Math.min(rank.getNormalQ() * total_len / 200,
 						total_len);
-				idx = Math.min(rank.getNormalQ() * 3 / 300,
+				idx = Math.min(rank.getNormalQ() * 3 / 200,
 						manageVoiceComment.length - 1);
 				params[0].width = len;
 				subtitles[0].setText(R.string.radar_label2_0);
@@ -259,7 +259,7 @@ public class DetailChart {
 				//items[2].setVisibility(View.VISIBLE);
 				break;
 
-			case TYPE_STORY:
+			case TYPE_NOTE:
 				title.setText(R.string.radar_label3_full);
 
 				len = Math

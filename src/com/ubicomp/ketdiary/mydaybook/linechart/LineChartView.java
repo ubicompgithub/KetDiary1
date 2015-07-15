@@ -111,14 +111,15 @@ public class LineChartView extends View {
     }
 	public void setWidth(){
 		this.requestLayout();
-		this.getLayoutParams().width = (int) (numOfDays*rec_width);	
+		//this.getLayoutParams().width = (int) (numOfDays*rec_width);	
+		this.getLayoutParams().width = (int) getXPos2(numOfDays);
 	}
 	
 	private void initBitmap(){
 		dot_array = new Bitmap[9];
 		dot_array[0] = null;
 		for(int i=1; i<=8;i++){
-			Bitmap tmp = BitmapFactory.decodeResource(getResources(), dots[i]);		
+			Bitmap tmp = getLocalBitmap(context, dots[i]);		
 			Bitmap resizedImg = getResizedBitmap(tmp, dot_scale, dot_scale);
 			dot_array[i] = resizedImg;
 		}
@@ -491,7 +492,7 @@ public class LineChartView extends View {
         	
         	 for (int i = 0; i < dataset.length; i++) {
         		int otherType = dataset[i].getOtherType(); 
-        		Log.d(TAG, "OtherType:" + otherType + " OtherScore:"+dataset[i].getOtherScore());
+        		//Log.d(TAG, "OtherType:" + otherType + " OtherScore:"+dataset[i].getOtherScore());
         		
         		if (otherType < 6) continue;
   	        	if (drawTheDotOrNot(otherType)) {

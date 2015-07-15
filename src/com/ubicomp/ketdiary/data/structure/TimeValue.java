@@ -5,7 +5,7 @@ import java.util.Calendar;
 import android.app.AlarmManager;
 
 import com.ubicomp.ketdiary.App;
-import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.check.WeekNumCheck;
 
 public class TimeValue {
 	private int year;
@@ -28,7 +28,7 @@ public class TimeValue {
 		int day = cal.get(Calendar.DAY_OF_MONTH);
 		int hour = cal.get(Calendar.HOUR_OF_DAY);
 		int day_of_week = cal.get(Calendar.DAY_OF_WEEK);
-		int week = 0;//WeekNumCheck.getWeek(timestamp);
+		int week = WeekNumCheck.getWeek(timestamp);
 		int timeslot;
 		if (hour < 12)
 			timeslot = TimeValue.TIME_MORNING;

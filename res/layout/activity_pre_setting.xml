@@ -613,7 +613,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Restore user&apos;s data from the SoberDiary Version 1?"
+                        android:text="Modify User's TestResult"
                         android:textColor="@color/white"
                         android:textSize="@dimen/small_title_size" />
 
@@ -627,7 +627,7 @@
                         android:paddingLeft="12dp"
                         android:paddingRight="12dp"
                         android:paddingTop="3dp"
-                        android:text="Restore"
+                        android:text="Modify"
                         android:textColor="@color/white"
                         android:textSize="@dimen/small_title_size" />
                 </LinearLayout>

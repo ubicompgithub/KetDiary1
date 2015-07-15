@@ -254,7 +254,7 @@ public class DatabaseControl {
 
 			String sql = "SELECT result FROM TestResult WHERE year = "
 					+ year + " AND month = " + month + " AND day = " + day
-					+ " AND isPrime = 1" + " ORDER BY timeSlot ASC";
+					+ " AND isPrime = 1" + " ORDER BY ASC";
 			Cursor cursor = db.rawQuery(sql, null);
 
 			int count = cursor.getCount();
@@ -263,6 +263,34 @@ public class DatabaseControl {
 			cursor.close();
 			db.close();
 			return result;
+		}
+	}
+	
+	/**
+	 * This method is used for getting result of today's prime detections
+	 * 
+	 * @return result 
+	 */
+	public int getTodayTestCount() {
+		synchronized (sqlLock) {
+			//int result;
+			Calendar cal = Calendar.getInstance();
+			int year = cal.get(Calendar.YEAR);
+			int month = cal.get(Calendar.MONTH);
+			int day = cal.get(Calendar.DATE);
+
+			db = dbHelper.getReadableDatabase();
+
+			String sql = "SELECT result FROM TestResult WHERE year = "
+					+ year + " AND month = " + month + " AND day = " + day;
+			Cursor cursor = db.rawQuery(sql, null);
+
+			int count = cursor.getCount();
+			//result = cursor.getInt(1);
+
+			cursor.close();
+			db.close();
+			return count;
 		}
 	}
 
@@ -396,6 +424,20 @@ public class DatabaseControl {
 			String sql = "UPDATE TestResult SET upload = 1 WHERE ts=" + ts;
 			db.execSQL(sql);
 			db.close();
+		}
+	}
+	
+	public void modifyResultByTs(long ts, int result) {
+		synchronized (sqlLock) {
+
+			db = dbHelper.getReadableDatabase();
+			String sql;
+			//sql = "SELECT * FROM TestResult WHERE ts = " + ts + " AND isPrime = 1";
+			sql = "UPDATE TestResult SET result = " + result + ", upload = 0 WHERE ts=" + ts;
+			db.execSQL(sql);
+			db.close();
+
+			return ;
 		}
 	}
 
@@ -539,7 +581,7 @@ public class DatabaseControl {
 			int year = curTV.getYear();
 			int month = curTV.getMonth();
 			int day = curTV.getDay();
-			int timeslot = curTV.getTimeslot();
+			//int timeslot = curTV.getTimeslot();
 			db = dbHelper.getReadableDatabase();
 			String sql = "SELECT * FROM TestResult WHERE year=" + year
 					+ " AND month=" + month + " AND day=" + day;
@@ -1417,6 +1459,10 @@ public class DatabaseControl {
 				String selection = cursor.getString(9);
 				int choose = cursor.getInt(10);
 				int score = cursor.getInt(11);
+				
+				cursor.close();
+				db.close();
+				
 				return new QuestionTest(ts, type, isCorrect, selection,
 						choose, score);
 			}
@@ -1573,7 +1619,12 @@ public class DatabaseControl {
 				int skillSelect = cursor.getInt(8);
 				String recreation = cursor.getString(9);
 				int score = cursor.getInt(10);
+				
+				cursor.close();
+				db.close();
+				
 				return new CopingSkill(ts, skillType, skillSelect, recreation, score);
+				
 			}
 		}
 

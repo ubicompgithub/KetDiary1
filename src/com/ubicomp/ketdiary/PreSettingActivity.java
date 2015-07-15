@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
@@ -169,12 +170,13 @@ public class PreSettingActivity extends Activity {
 
 		builder = new AlertDialog.Builder(this);
 		builder.setTitle("由SoberDiary Ver1回復資料?");
-		builder.setPositiveButton("確定", new RestoreVer1OnClickListener());
+		//builder.setPositiveButton("確定", new RestoreVer1OnClickListener());
 		builder.setNegativeButton("取消", null);
 		AlertDialog resotreAlertDialogVer1 = builder.create();
 		restoreVer1Button = (Button) this.findViewById(R.id.restore_ver1);
-		restoreVer1Button.setOnClickListener(new AlertOnClickListener(
-				resotreAlertDialogVer1));
+//		restoreVer1Button.setOnClickListener(new AlertOnClickListener(
+//				resotreAlertDialogVer1));
+		restoreVer1Button.setOnClickListener(new RestoreVer1OnClickListener());
 
 		debug = PreferenceControl.isDebugMode();
 		debugButton = (Button) this.findViewById(R.id.debug_normal_switch);
@@ -208,15 +210,26 @@ public class PreSettingActivity extends Activity {
 		}
 	}
 
+//	private class RestoreVer1OnClickListener implements
+//			DialogInterface.OnClickListener {
+//		@Override
+//		public void onClick(DialogInterface dialog, int which) {
+//			/*DatabaseRestoreVer1 rd = new DatabaseRestoreVer1(uid.getText()
+//					.toString(), activity);
+//			rd.execute();*/
+//		}
+//	}
+	
 	private class RestoreVer1OnClickListener implements
-			DialogInterface.OnClickListener {
+	View.OnClickListener {
+
 		@Override
-		public void onClick(DialogInterface dialog, int which) {
-			/*DatabaseRestoreVer1 rd = new DatabaseRestoreVer1(uid.getText()
-					.toString(), activity);
-			rd.execute();*/
+		public void onClick(View v) {
+			Intent intent = new Intent();
+			intent.setClass(activity, ModifyActivity.class);
+			startActivity(intent);	
 		}
-	}
+}
 
 	private class DummyDataOnClickListener implements
 			DialogInterface.OnClickListener {

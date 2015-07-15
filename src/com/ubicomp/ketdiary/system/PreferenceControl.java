@@ -449,14 +449,14 @@ public class PreferenceControl {
 	public static void exchangeCoupon() {
 		int currentCounter = getPoint();
 		int usedCounter = sp.getInt("usedCounter", 0);
-		int coupon = currentCounter / Config.COUPON_CREDITS;
+		int coupon = getCoupon();
 		int exchangeCounter = coupon * Config.COUPON_CREDITS;
 		SharedPreferences.Editor edit = sp.edit();
 		edit.putInt("usedCounter", usedCounter + exchangeCounter);
 		edit.commit();
-//		DatabaseControl db = new DatabaseControl();
-//		db.insertExchangeHistory(new ExchangeHistory(
-//				System.currentTimeMillis(), exchangeCounter));
+		DatabaseControl db = new DatabaseControl();
+		db.insertExchangeHistory(new ExchangeHistory(
+				System.currentTimeMillis(), exchangeCounter));
 	}
 
 //	public static void cleanCoupon() {

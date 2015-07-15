@@ -142,7 +142,7 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		OpenCVLoader.initDebug();
+		//OpenCVLoader.initDebug();
 		//OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_9, this, mLoaderCallback);
     
 		mainActivity = this;
@@ -875,7 +875,12 @@ public class MainActivity extends FragmentActivity {
 				
 		TestResult testResult = new TestResult(result, timestamp, "tmp_id",	1, isFilled, 0, 0);
 		
-		addScore = db.insertTestResult(testResult, false);
+		if(db.getTodayTestCount() == 1){
+			addScore = db.insertTestResult(testResult, true);
+		}
+		else{
+			addScore = db.insertTestResult(testResult, false);
+		}
 			
 		Log.d(TAG,""+timestamp+" "+addScore);
 		//PreferenceControl.setTestAddScore(addScore);

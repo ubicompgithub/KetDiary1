@@ -30,12 +30,10 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ubicomp.ketdiary.CopingActivity;
 import com.ubicomp.ketdiary.HelpActivity;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.ResultService2;
-import com.ubicomp.ketdiary.SettingActivity;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE2;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothListener;
 import com.ubicomp.ketdiary.camera.CameraCaller;
@@ -327,7 +325,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 				ClickLog.Log(ClickLogId.TEST_TUTORIAL_BUTTON);
 				
 				Intent intent = new Intent();
-				intent.setClass(activity, HelpActivity.class);
+				intent.setClass(activity, HelpActivity.class); // tmp modify
 				startActivity(intent);
 			}
 		});

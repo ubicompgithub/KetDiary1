@@ -19,6 +19,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 
 import com.ubicomp.ketdiary.App;
+import com.ubicomp.ketdiary.check.WeekNumCheck;
 import com.ubicomp.ketdiary.data.structure.CopingSkill;
 import com.ubicomp.ketdiary.data.structure.ExchangeHistory;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
@@ -100,6 +101,7 @@ public class HttpPostGenerator {
 			nvps.add(new BasicNameValuePair("userData[]", versionName));
 		} catch (NameNotFoundException e) {
 		}
+		nvps.add(new BasicNameValuePair("userData[]", String.valueOf( WeekNumCheck.getWeek(System.currentTimeMillis()))));
 		
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
@@ -133,7 +135,7 @@ public class HttpPostGenerator {
 		builder.addTextBody("data[]", String.valueOf(data.isPrime));
 		builder.addTextBody("data[]", String.valueOf(data.isFilled));
 		builder.addTextBody("data[]", String.valueOf(data.getScore()));
-		
+		builder.addTextBody("data[]", String.valueOf(data.getTv().getWeek()));
 		
 
 		String _ts = String.valueOf(data.tv.getTimestamp());
@@ -196,6 +198,7 @@ public class HttpPostGenerator {
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getImpact())));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getDescription())));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getScore())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getTv().getWeek())));
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 		} catch (UnsupportedEncodingException e) {}
@@ -219,6 +222,7 @@ public class HttpPostGenerator {
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getColorReading())));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getConnectionFailRate())));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getFailedReason())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getTv().getWeek())));
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 		} catch (UnsupportedEncodingException e) {}
@@ -245,6 +249,7 @@ public class HttpPostGenerator {
 		nvps.add(new BasicNameValuePair("data[]", data.getSelection()));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getChoose())));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getScore())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getTv().getWeek())));
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 		} catch (UnsupportedEncodingException e) {
@@ -271,6 +276,7 @@ public class HttpPostGenerator {
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getSkillSelect())));
 		nvps.add(new BasicNameValuePair("data[]", data.getRecreation()));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getScore())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getTv().getWeek())));
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 		} catch (UnsupportedEncodingException e) {
@@ -316,6 +322,7 @@ public class HttpPostGenerator {
 				.getTimestamp())));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data
 				.getExchangeNum())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getTv().getWeek())));
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 		} catch (UnsupportedEncodingException e) {
