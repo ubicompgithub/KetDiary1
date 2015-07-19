@@ -31,7 +31,7 @@ import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 
 @SuppressLint("NewApi")
-public class BluetoothLE2 {
+public class BluetoothLE3 extends BluetoothLE2{
 	private static final String TAG = "BluetoothLE";
 
     // Write UUID
@@ -93,7 +93,8 @@ public class BluetoothLE2 {
     private int picNum = 0;
 
 
-    public BluetoothLE2(BluetoothListener bluetoothListener, String mDeviceName) {
+    public BluetoothLE3(BluetoothListener bluetoothListener, String mDeviceName) {
+    	super(bluetoothListener, mDeviceName);
         mHandler = new Handler();
 
         this.bluetoothListener = bluetoothListener;
@@ -188,7 +189,7 @@ public class BluetoothLE2 {
             		String s1 = Integer.toHexString(data[ii] & 0xFF);
             		Sbuffer.append(s1 + ",");
             	}
-            	//Log.i(TAG, Sbuffer.toString());
+            	Log.i(TAG, Sbuffer.toString());
 
 //                String dataString = "";
             	

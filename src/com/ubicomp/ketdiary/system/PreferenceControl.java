@@ -404,7 +404,7 @@ public class PreferenceControl {
 	
 	public static void setRandomTs(Long ts) {
 		SharedPreferences.Editor edit = sp.edit();
-		edit.putLong("randomTs", 0);
+		edit.putLong("randomTs", ts);
 		edit.commit();
 	}
 	

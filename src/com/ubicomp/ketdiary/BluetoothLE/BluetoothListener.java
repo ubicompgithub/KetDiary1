@@ -51,4 +51,11 @@ public interface BluetoothListener {
 
     /* Clear process rate*/
     void clearProcesssRate();
+    
+
+    /* Show image preview*/
+    void showImgPreview(String filePath);
+
+    /* Display current saliva Id*/
+    void displayCurrentId(String id);
 }

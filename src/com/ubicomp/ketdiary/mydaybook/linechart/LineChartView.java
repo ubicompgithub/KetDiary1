@@ -504,7 +504,7 @@ public class LineChartView extends View {
         
         case 2: {
         	paint.setStyle(Style.STROKE);
-	        paint.setStrokeWidth(4);
+	        paint.setStrokeWidth(8);
 	        paint.setColor(getResources().getColor(R.color.path_other_color));
 	        paint.setAntiAlias(true);
 	        paint.setShadowLayer(4, 2, 2, 0x80000000);

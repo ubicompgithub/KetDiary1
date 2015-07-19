@@ -1,5 +1,8 @@
 package com.ubicomp.ketdiary.BluetoothLE;
 
+import java.util.List;
+import java.util.UUID;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -19,11 +22,9 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.util.List;
-import java.util.UUID;
 
 @SuppressLint("NewApi")
-public class BluetoothLE {
+public class BluetoothLE_old {
 	private static final String TAG = "BluetoothLE";
 
     // Write UUID
@@ -59,7 +60,7 @@ public class BluetoothLE {
     private int testCount = 0;
 
 
-    public BluetoothLE(Activity activity, String mDeviceName) {
+    public BluetoothLE_old(Activity activity, String mDeviceName) {
         mHandler = new Handler();
 
         this.activity = activity;

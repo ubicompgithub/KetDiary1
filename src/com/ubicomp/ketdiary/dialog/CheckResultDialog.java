@@ -13,6 +13,7 @@ import android.widget.RelativeLayout.LayoutParams;
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.CustomToast;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
@@ -35,6 +36,7 @@ public class CheckResultDialog{
 	private LinearLayout questionLayout;
 	
 	private RelativeLayout mainLayout;
+	private boolean testFail;
 	
 	private TextView checkOK, checkCancel, checkHelp;
 	/** @see Typefaces */
@@ -75,6 +77,7 @@ public class CheckResultDialog{
 		//boxParam.height = LayoutParams.MATCH_PARENT;
 
 		checkHelp.setTypeface(wordTypefaceBold);
+		checkHelp.setText("前往測試結果?");
 		checkOK.setTypeface(wordTypefaceBold);
 		checkCancel.setTypeface(wordTypefaceBold);
 		
@@ -87,7 +90,10 @@ public class CheckResultDialog{
 	/** Initialize the dialog */
 	public void initialize() {
 		//RelativeLayout.LayoutParams boxParam = (RelativeLayout.LayoutParams) boxLayout.getLayoutParams();
-		
+		testFail = PreferenceControl.isTestFail();
+		if(testFail){
+			checkHelp.setText("測試失敗,回到檢測頁重測?");
+		}
 		
 		RelativeLayout.LayoutParams boxParam = (LayoutParams) boxLayout
 				.getLayoutParams();
@@ -98,6 +104,7 @@ public class CheckResultDialog{
 	
 	/** show the dialog */
 	public void show() {
+		
 		MainActivity.getMainActivity().enableTabAndClick(false);
 		boxLayout.setVisibility(View.VISIBLE);
 
@@ -120,8 +127,6 @@ public class CheckResultDialog{
 	
 	/** Initialize the dialog to check if the user check out to the developer */
 	private void initializeCallCheckDialog() {
-
-
 	}
 
 
@@ -144,8 +149,11 @@ public class CheckResultDialog{
 		/**Calling out*/
 		public void onClick(View v) {
 			MainActivity.getMainActivity().enableTabAndClick(true);
-			CustomToast.generateToast(R.string.after_test_pass, 2);
-        	MainActivity.getMainActivity().changeTab(1);
+			//CustomToast.generateToast(R.string.after_test_pass, 2);
+			if(!testFail)
+				MainActivity.getMainActivity().changeTab(1);
+			else
+				MainActivity.getMainActivity().changeTab(0);
         	close();
 			clear();
 		}

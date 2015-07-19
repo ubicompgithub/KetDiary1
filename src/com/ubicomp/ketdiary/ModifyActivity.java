@@ -33,7 +33,7 @@ public class ModifyActivity extends Activity {
 
 	private Activity activity;
 	private DatabaseControl db;
-	private static final String[] RESULT = {"陰性", "陽性"};
+	private static final String[] RESULT = {"陰性", "陽性", ""};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +64,11 @@ public class ModifyActivity extends Activity {
 		
 		TestResult[] testResult = db.getAllPrimeTestResult();
 		
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("確定修改結果?");
-		//builder.setPositiveButton("確定", new ModifyListener());
-		builder.setNegativeButton("取消", null);
-		AlertDialog cleanAlertDialog = builder.create();
+//		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//		builder.setTitle("確定修改結果?");
+//		//builder.setPositiveButton("確定", new ModifyListener());
+//		builder.setNegativeButton("取消", null);
+//		AlertDialog cleanAlertDialog = builder.create();
 		
 		for(int i=0; i<testResult.length; i++){
 			
@@ -78,17 +78,32 @@ public class ModifyActivity extends Activity {
 			final long ts = testResult[i].getTv().getTimestamp();
 			final int result = testResult[i].getResult();
 			String text = year+"年"+(month+1)+"月"+day+"日"+" 結果: "+RESULT[result];
+			
+			
+			
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("確定修改結果?");
+//			builder.setPositiveButton("確定", new ModifyListener(ts, result)); 
+//			builder.setNegativeButton("取消", null);
+			builder.setNegativeButton("確定", new ModifyListener(ts, result)); 
+			builder.setPositiveButton("取消", null);
+			AlertDialog cleanAlertDialog = builder.create();	
 			RelativeLayout aboutView = createListView(text,
-					new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							db.modifyResultByTs(ts, (result ^ 1) );
-//							finish();
-//							startActivity(getIntent());
-							updateView();
-						}
-			});
+					new AlertOnClickListener(cleanAlertDialog));
 			mainLayout.addView(aboutView);		
+		}
+	}
+	private class AlertOnClickListener implements View.OnClickListener {
+
+		private AlertDialog alertDialog;
+
+		public AlertOnClickListener(AlertDialog ad) {
+			this.alertDialog = ad;
+		}
+
+		@Override
+		public void onClick(View v) {
+			alertDialog.show();
 		}
 	}
 	
@@ -99,11 +114,17 @@ public class ModifyActivity extends Activity {
 	
 	private class ModifyListener implements
 	DialogInterface.OnClickListener {
+		long ts;
+		int result;
+		public ModifyListener(long ts, int result){
+			this.ts = ts;
+			this.result = result;
+		}
+		
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
-	/*DatabaseRestoreVer1 rd = new DatabaseRestoreVer1(uid.getText()
-			.toString(), activity);
-	rd.execute();*/
+			db.modifyResultByTs(ts, (result ^ 1) );
+			updateView();
 		}
 	}
 

@@ -5,9 +5,11 @@ import java.util.Random;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
@@ -15,18 +17,19 @@ import android.widget.Toast;
 
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE2;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothListener;
-import com.ubicomp.ketdiary.color.ColorDetect2;
-import com.ubicomp.ketdiary.data.structure.TestResult;
+import com.ubicomp.ketdiary.color.TestStripDetection3;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.system.PreferenceControl;
-import com.ubicomp.ketdiary.ui.CustomToast;
 
-public class ResultService2 extends Service implements BluetoothListener {
+public class ResultService3 extends Service implements BluetoothListener {
 	
-	private ResultService2 myservice = this;
+	private ResultService3 myservice = this;
+	private Context context = App.getContext();
 	
 	public  static  final  String TAG =  "MyService" ;  
-	private Handler mhandler = new Handler();  
+	private Handler mhandler = new Handler();
+	private Handler blehandler = new Handler();
+	
 	private long startTime;
 	private static long timeout = MainActivity.getMainActivity().WAIT_RESULT_TIME; //1*60*1000;//10*60*1000;
 	private Notification notification;
@@ -38,7 +41,10 @@ public class ResultService2 extends Service implements BluetoothListener {
 	private int result= -1;
 	private DatabaseControl db;
 	private int picNum = 0;
+	private TestStripDetection3 testStripDetection;
+	private OpenSensorMsgTimer openSensorMsgTimer;
 	
+	private ProgressDialog dialog = null;
     @Override  
     public  void  onCreate() {  
         super .onCreate();  
@@ -49,22 +55,9 @@ public class ResultService2 extends Service implements BluetoothListener {
         notification.setLatestEventInfo( this ,  "這是通知的標題" ,  "這是通知的內容" , pendingIntent);  
         startForeground( 1 , notification);  
         
+        testStripDetection = new TestStripDetection3();
         db = new DatabaseControl();
-        
-        
-        if(ble == null) {
-			ble = new BluetoothLE2( myservice , PreferenceControl.getDeviceId());
-			ble.bleConnect();
-			
-        }
-        
-        long timestamp = PreferenceControl.getUpdateDetectionTimestamp();
-        Log.d(TAG,"1:"+timestamp);
-        
-        Log.d(TAG,  "onCreate() executed" );  
-        startTime = System.currentTimeMillis();
-         
-        mhandler.postDelayed(updateTimer, 1000);
+        openSensorMsgTimer = new OpenSensorMsgTimer();
     }  
     
 	private Runnable updateTimer = new Runnable() {
@@ -89,63 +82,41 @@ public class ResultService2 extends Service implements BluetoothListener {
 			if(spentTime < 0){ //想一下時間到要做什麼    跳出不一樣的notification讓他點or直接跳出activity
 				mhandler.removeCallbacks(updateTimer);
 				
-				notification.defaults = Notification.DEFAULT_ALL;
-				notification.flags |= Notification.FLAG_AUTO_CANCEL;
-				notification.setLatestEventInfo( myservice , "檢測倒數結束", "前往測試結果", pendingIntent);
-				NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-				
-				boolean inApp = PreferenceControl.getInApp();
-				
-				Log.d("InApp",String.valueOf(inApp));
-				if(!inApp)
-					notificationManager.notify(0, notification);
-				
-				
-				/*
-				if(ble!=null){
-					isConnect = false;
-					ble.bleDisconnect();
-					ble = null;
-				}*/
-				
-				
-				Random rand = new Random();
-				result = rand.nextInt(2); //Random Gen Result
-				//test_msg.setText(test_guide_msg[idx]);
-				PreferenceControl.setTestResult(result);
-				
-				/*
-				//Toast.makeText(myservice, "Result:"+result, Toast.LENGTH_SHORT).show();
-				TestResult testResult = new TestResult(result, timestamp, "tmp_id", 
-						0, 1, 0, 0); //TODO: check IsFilled
-				
-				int addScore = db.insertTestResult(testResult, false);
-				
-				Log.d(TAG,""+timestamp+" "+addScore);
-				PreferenceControl.setTestAddScore(addScore);
-				/*
-				if (addScore == 0 && testResult.getResult()==1) // TestFail & get no credit
-					CustomToast.generateToast(R.string.after_test_fail, -1);
-				else if (testResult.getResult()==1)
-					CustomToast.generateToast(R.string.after_test_fail, addScore);
-				else
-					CustomToast.generateToast(R.string.after_test_pass, addScore);
-				*/
-				
-				
 				//stopSelf();
 			}
-			/*
-			final TextView time = (TextView) findViewById(R.id.timer);
-			Long spentTime = System.currentTimeMillis() - startTime;
-		            //計算目前已過分鐘數
-		    
-		            //計算目前已過秒數
-		    
-		    time.setText(minius+":"+seconds);
-		    handler.postDelayed(this, 1000);*/
+
 		}
     };
+    
+    private void goResult(){
+    	notification.defaults = Notification.DEFAULT_ALL;
+		notification.flags |= Notification.FLAG_AUTO_CANCEL;
+		notification.setLatestEventInfo( myservice , "檢測倒數結束", "前往測試結果", pendingIntent);
+		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+	
+		boolean inApp = PreferenceControl.getInApp();
+	
+		Log.d("InApp",String.valueOf(inApp));
+		if(!inApp)
+			notificationManager.notify(0, notification);
+    	
+		
+		if(ble!=null){
+			isConnect = false;
+			ble.bleDisconnect();
+			ble = null;
+		}
+		
+		testStripDetection.sendEmptyMessage(0);
+		
+		Random rand = new Random();
+		result = rand.nextInt(2); //Random Gen Result
+		//test_msg.setText(test_guide_msg[idx]);
+		PreferenceControl.setTestResult(result);   	
+		PreferenceControl.setTestSuccess();
+		
+		stopSelf();
+    }
 
 
 	@Override
@@ -157,27 +128,66 @@ public class ResultService2 extends Service implements BluetoothListener {
 	@Override  
     public void onDestroy() {  
         super.onDestroy();  
-        
+        if(openSensorMsgTimer!=null){
+			openSensorMsgTimer.cancel();
+			openSensorMsgTimer=null;
+		}
+        if(ble!= null){
+        	ble.bleDisconnect();
+        	ble = null;
+        }      	
     }  
 	
 	/**Use startService to call ResultService*/
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		new  Thread( new  Runnable() {  
-	        @Override  
-	        public  void  run() {  
-	        	Log.d(TAG,  "onStartCommand() executed" ); 
-	        	/*
-	        	if(ble == null) {
-	    			ble = new BluetoothLE2( myservice , PreferenceControl.getDeviceId());
-	    			ble.bleConnect();
-	    			ble.bleWriteState((byte)4);
-	    		
-	            }*/ 
-	        }  
-	    }).start();  
-	    return  super .onStartCommand(intent, flags, startId);  
+				
+		//testDialog();
 		
+	        	Log.d(TAG,  "onStartCommand() executed" ); 
+	        	if(ble == null ) {
+	    			ble = new BluetoothLE2( myservice , PreferenceControl.getDeviceId());	
+	            }
+	        	if(!isConnect){
+	        		ble.bleConnect();
+	        	}
+	        	if(openSensorMsgTimer!=null)
+	        		openSensorMsgTimer.start();
+	        	
+	            long timestamp = PreferenceControl.getUpdateDetectionTimestamp();
+	            Log.d(TAG,"1:"+timestamp);
+	            
+	            stateSuccess = false;
+	            startTime = System.currentTimeMillis();
+	          
+	            mhandler.postDelayed(updateTimer, 1000);
+  
+	    return  super .onStartCommand(intent, flags, startId);  
+	}
+	
+	private class OpenSensorMsgTimer extends CountDownTimer {
 
+		public OpenSensorMsgTimer() {
+			super(5000, 50);
+		}
+
+		@Override
+		public void onFinish() {
+			Toast.makeText(myservice, "請開啟檢測器", Toast.LENGTH_SHORT).show();
+			PreferenceControl.setTestFail();
+		}
+
+		@Override
+		public void onTick(long millisUntilFinished) {
+		}
+	}
+	
+	
+	private void testDialog(){
+		dialog = new ProgressDialog(context);
+		dialog.setMessage("Please Wait...");
+		dialog.setCancelable(false);
+		dialog.show();
+		
 	}
 
 	@Override
@@ -203,7 +213,12 @@ public class ResultService2 extends Service implements BluetoothListener {
     public void bleConnected() {
     	isConnect = true;
         Log.i(TAG, "BLE connected");
-        //Toast.makeText(this, "BLE connected", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "BLE connected", Toast.LENGTH_SHORT).show();
+        if(openSensorMsgTimer!=null){
+			openSensorMsgTimer.cancel();
+			openSensorMsgTimer=null;
+		}
+        PreferenceControl.setTestSuccess();
     }
 
     @Override
@@ -225,7 +240,7 @@ public class ResultService2 extends Service implements BluetoothListener {
     @Override
     public void bleWriteStateFail() {
         Log.i(TAG, "BLE ACTION_DATA_WRITE_FAIL");
-        //Toast.makeText(this, "BLE writefstate fail", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "BLE writefstate fail", Toast.LENGTH_SHORT).show();
         stateSuccess = false;
     }
 
@@ -237,45 +252,13 @@ public class ResultService2 extends Service implements BluetoothListener {
 
     @Override
     public void blePlugInserted(byte[] plugId) {
-        //Log.i(TAG, "Test plug is inserted");
+        Log.i(TAG, "Test plug is inserted");
     
     }
 
 
     @Override
     public void bleColorReadings(byte[] colorReadings) {
-    	String feature, feature2;
-    	String str1 ="";
-    	String str2 ="";
-    	int[] color = new int[4];
-    	for(int i=0; i<8; i+=2){
-    		//color[i/2] = colorReadings[i]+colorReadings[i+1]*256;
-    		
-    		color[i/2] = ((colorReadings[i+1] & 0xFF) << 8) | (colorReadings[i] & 0xFF);
-    		str1 = str1+ " " + String.valueOf(color[i/2]);
-    	}
-    	//ColorDetect2.colorDetect(color);
-    	//feature = ColorDetect2.colorDetect2(color);
-    	result = ColorDetect2.colorDetect(color);
-    	//writeToColorRawFile(str1+"\n");
-    	//writeToColorRawFile(feature+"\n");
-    	//writeToColorRawFile(str1+"\n");
-    	
-    	int[] color2 = new int[4];
-    	for(int i=8; i<16; i+=2){
-    		//color2[(i-8)/2] = colorReadings[i]+colorReadings[i+1]*256;
-    		color2[(i-8)/2] = ((colorReadings[i+1] & 0xFF) << 8) | (colorReadings[i] & 0xFF);
-    		str2 = str2+ " " + String.valueOf(color2[(i-8)/2]);
-    	}
-    	
-    	//feature2 = ColorDetect2.colorDetect2(color2);
-    	//writeToVoltageFile(feature2+"\n");	
-    	
-    	//showDebug(">First:"+str1+" Second:"+str2);
-    	Log.i(TAG, "First: "+str1);
-    	Log.i(TAG, "Second: "+str2);
-    	
-        //Log.i(TAG, "Color sensor readings");
     }
     
 
@@ -291,18 +274,32 @@ public class ResultService2 extends Service implements BluetoothListener {
 		picNum++;
 		Log.i(TAG, "Picture: " + picNum + " Save");
 		Toast.makeText(this, "Picture: " + picNum + " Save", Toast.LENGTH_SHORT).show();
-		ble.bleWriteState((byte)0x06);
-		ble.bleWriteState((byte)0x06);
-		ble.bleWriteState((byte)0x06);
-		ble.bleWriteState((byte)0x06);
+		
+		
+		blehandler.postDelayed(writeBle, 2000);
+	
+		if(picNum == 1){
+			goResult();
+			Log.i(TAG, "GoResult!");
+		}
 		
 	}
+	
+	private Runnable writeBle = new Runnable() {
+		public void run() {
+			blehandler.removeCallbacks(writeBle);
+			if(ble!=null)
+				ble.bleWriteState((byte)0x06);
+			//blehandler.postDelayed(this, 1000);
+
+		}
+    };
 
 	@Override
 	public void updateProcessRate(float rate) {
 		// TODO Auto-generated method stub
-		Toast.makeText(this, String.valueOf(rate).concat(" %"), Toast.LENGTH_SHORT).show();
-		
+		//Toast.makeText(this, String.valueOf(rate).concat(" %"), Toast.LENGTH_SHORT).show();
+		Log.i(TAG, String.valueOf(rate).concat(" %"));
 	}
 
 	@Override
@@ -311,11 +308,13 @@ public class ResultService2 extends Service implements BluetoothListener {
 		
 	}
 
+
 	@Override
 	public void showImgPreview(String filePath) {
 		// TODO Auto-generated method stub
 		
 	}
+
 
 	@Override
 	public void displayCurrentId(String id) {

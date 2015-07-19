@@ -16,7 +16,7 @@ public class MainActivity2 extends Activity implements BluetoothListener {
 
     private static final String TAG = "BluetoothLE";
 
-	private BluetoothLE ble = null;
+	private BluetoothLE_old ble = null;
     MainActivity2 mainActivity = this;
 
 	
@@ -35,7 +35,7 @@ public class MainActivity2 extends Activity implements BluetoothListener {
                 if(ble != null) {
                     return;
                 }
-                ble = new BluetoothLE(mainActivity, "KetDiary-000");
+                ble = new BluetoothLE_old(mainActivity, "KetDiary-000");
                 ble.bleConnect();
             }
 
@@ -149,6 +149,18 @@ public class MainActivity2 extends Activity implements BluetoothListener {
 
 	@Override
 	public void clearProcesssRate() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void showImgPreview(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void displayCurrentId(String id) {
 		// TODO Auto-generated method stub
 		
 	}

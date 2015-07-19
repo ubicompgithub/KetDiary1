@@ -46,6 +46,7 @@ import com.ubicomp.ketdiary.color.TestStripDetection2;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.dialog.CheckResultDialog;
+import com.ubicomp.ketdiary.dialog.NoteDialog3;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.fragment.DaybookFragment;
 import com.ubicomp.ketdiary.fragment.StatisticFragment;
@@ -124,6 +125,7 @@ public class MainActivity extends FragmentActivity {
 	private boolean clickable = false;   // back 
 	private boolean doubleClickState = false;
 	private long latestClickTime = 0;
+	private boolean testFail = false;
 	
 	private int changeClock=0;
 	
@@ -331,6 +333,13 @@ public class MainActivity extends FragmentActivity {
 
 	protected void onResume() {
 		super.onResume();
+		if (!OpenCVLoader.initDebug()) {
+            Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_9, this, mLoaderCallback);
+        } else {
+            Log.d(TAG, "OpenCV library found inside package. Using it!");
+            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+        }
 		/*if (LockCheck.check()) {
 			Intent lock_intent = new Intent(this, LockedActivity.class);
 			startActivity(lock_intent);
@@ -338,6 +347,8 @@ public class MainActivity extends FragmentActivity {
 			return;
 		}*/
 		//showResult();
+		testFail = PreferenceControl.isTestFail();
+		
 		WAIT_RESULT_TIME = PreferenceControl.getAfterCountDown() * 1000;
 		PreferenceControl.setInApp(true);		
 		boolean inApp = PreferenceControl.getInApp();	
@@ -357,14 +368,16 @@ public class MainActivity extends FragmentActivity {
 			clickable = true;
 		}
 		
+
 		if(PreferenceControl.getCheckResult() && pastTime < WAIT_RESULT_TIME)
 			setTimers();
-		
 		else if(PreferenceControl.getCheckResult() && pastTime >= WAIT_RESULT_TIME){
-			setResult();
-			//showResult();
-			//setTimers();
-			//changeTab(1);
+			if(testFail){
+				showResultFail();
+			}
+			else{
+				setResult();
+			}
 		}
 		else{
 			enableTabAndClick(true);
@@ -789,30 +802,30 @@ public class MainActivity extends FragmentActivity {
 
 		@Override
 		public void onFinish() {
-			//soundpool.play(timer_sound_id, 1f, 1f, 0, 0, 1f);
+			testFail = PreferenceControl.isTestFail();
 			isRecovery = false;
 			count_down_layout.setVisibility(View.GONE);
 			
-			//showResult();
-			if (tabHost.getCurrentTab() == 0 && fragments[0] != null
-					&& fragments[0].isAdded()) {
-				soundpool.play(timer_sound_id, 1f, 1f, 0, 0, 1f);
-				((TestFragment) fragments[0]).msgBox.setResult();
-				//((TestFragment) fragments[0]).setState(TestFragment.STATE_INIT);
-				//((TestFragment) fragments[0]).enableStartButton(true);
-			}
-			else if(tabHost.getCurrentTab() == 1 && fragments[1] != null
-					&& fragments[1].isAdded()){
-				
-				checkResultAddPoint();
-				/*
-				PreferenceControl.setPoint(2);
-				CustomToast.generateToast(R.string.after_test_pass, 2);
-				PreferenceControl.setCheckResult( false );*/
+			
+			if(testFail){
+				showResultFail();
 			}
 			else{
-				soundpool.play(timer_sound_id, 1f, 1f, 0, 0, 1f);
-				showResult();
+				if (tabHost.getCurrentTab() == 0 && fragments[0] != null
+						&& fragments[0].isAdded()) {
+					soundpool.play(timer_sound_id, 1f, 1f, 0, 0, 1f);
+					((TestFragment) fragments[0]).msgBox.setResult();
+					//((TestFragment) fragments[0]).setState(TestFragment.STATE_INIT);
+					//((TestFragment) fragments[0]).enableStartButton(true);
+				}
+				else if(tabHost.getCurrentTab() == 1 && fragments[1] != null
+						&& fragments[1].isAdded()){				
+					checkResultAddPoint();
+				}
+				else{
+					soundpool.play(timer_sound_id, 1f, 1f, 0, 0, 1f);
+					showResult();
+				}
 			}
 			
 		}
@@ -844,19 +857,16 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 	private void setResult(){
+		
+
+		
 		if (tabHost.getCurrentTab() == 0 && fragments[0] != null
 				&& fragments[0].isAdded()) {
-			//soundpool.play(timer_sound_id, 1f, 1f, 0, 0, 1f);
 			((TestFragment) fragments[0]).msgBox.setResult();
-			//((TestFragment) fragments[0]).setState(TestFragment.STATE_INIT);
-			//((TestFragment) fragments[0]).enableStartButton(true);
 		}
 		else if(tabHost.getCurrentTab() == 1 && fragments[1] != null
-				&& fragments[1].isAdded()){
-			
+				&& fragments[1].isAdded()){			
 			checkResultAddPoint();
-			//CustomToast.generateToast(R.string.after_test_pass, 2);
-			//PreferenceControl.setCheckResult( false );
 		}
 		else{
 			//soundpool.play(timer_sound_id, 1f, 1f, 0, 0, 1f);
@@ -915,6 +925,29 @@ public class MainActivity extends FragmentActivity {
 		
 	}
 	
+	private void showResultFail(){
+		
+		PreferenceControl.setCheckResult(false);
+		msgBox = new CheckResultDialog(mainLayout);
+		msgBox.initialize();
+		msgBox.show();
+		PreferenceControl.setAfterTestState(NoteDialog3.STATE_TEST);
+		if (tabHost.getCurrentTab() == 0 && fragments[0] != null
+				&& fragments[0].isAdded()) {
+			ft = fm.beginTransaction();
+			ft.detach(fragments[0]);
+			ft.attach(fragments[0]);
+			ft.commit();
+		}
+		else if(tabHost.getCurrentTab() == 1 && fragments[1] != null
+				&& fragments[1].isAdded()){			
+			
+		}
+		else{
+
+		}
+
+	}
 	
 
 	public void setTimers() {

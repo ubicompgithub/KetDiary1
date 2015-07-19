@@ -132,28 +132,15 @@ public class StatisticFragment extends Fragment implements ShowRadarChart, Quest
 		long curTime = System.currentTimeMillis();
 		long testTime = PreferenceControl.getLatestTestCompleteTime();
 		long pastTime = curTime - testTime;
+		boolean testFail = PreferenceControl.isTestFail();	
+		
+		if(testFail){
 			
-		if( PreferenceControl.getCheckResult() && pastTime >= MainActivity.WAIT_RESULT_TIME){
+		}
+		else if( PreferenceControl.getCheckResult() && pastTime >= MainActivity.WAIT_RESULT_TIME){
 			MainActivity.getMainActivity().checkResultAddPoint();
-//			
-//			int addScore = PreferenceControl.getTestAddScore();
-//			
-//			PreferenceControl.setPoint(addScore);
-//			
-//			Log.d(TAG, "AddScore:"+addScore);
-//			int result = db.getLatestTestResult().getResult(); //TODO: check if no data
-//			
-//			if (addScore == 0 && result == 1) // TestFail & get no credit //TODO: check TestResult
-//				CustomToast.generateToast(R.string.after_test_fail, -1);
-//			else if(result == 1)
-//				CustomToast.generateToast(R.string.after_test_fail, addScore);
-//			else
-//				CustomToast.generateToast(R.string.after_test_pass, addScore);
-//			
-//			PreferenceControl.setCheckResult( false );
 		}
 		else if ( PreferenceControl.getCheckResult() && pastTime < MainActivity.WAIT_RESULT_TIME ){
-			
 		}
 		else{
 			//CustomToast.generateToast(R.string.after_test_pass, 2);

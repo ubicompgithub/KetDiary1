@@ -140,6 +140,7 @@ public class HttpPostGenerator {
 
 		String _ts = String.valueOf(data.tv.getTimestamp());
 		File[] imageFiles;
+		File[] picFiles;
 		File testFile, detectionFile;
 		int fileNum = new File(mainStorageDir.getPath() + File.separator + _ts
 				+ File.separator).listFiles().length;
@@ -149,7 +150,8 @@ public class HttpPostGenerator {
 		builder.addTextBody("data[]", String.valueOf(fileNum));
 		
 		imageFiles = new File[fileNum];
-
+		picFiles = new File[2];
+		
 		testFile = new File(mainStorageDir.getPath() + File.separator + _ts
 				+ File.separator + "voltage.txt");
 
@@ -170,7 +172,8 @@ public class HttpPostGenerator {
 				builder.addPart("file[]", new FileBody(imageFiles[i]));
 				Log.d("image", imageFiles[i].getName());
 			}
-
+		
+		
 		httpPost.setEntity(builder.build());
 		return httpPost;
 	}

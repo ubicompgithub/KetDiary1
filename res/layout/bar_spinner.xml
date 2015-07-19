@@ -45,7 +45,7 @@
         android:background="@drawable/note_spinner"
         android:divider="@drawable/list_divider"
         android:dividerHeight="1dp"
-        android:visibility="visible" >
+        android:visibility="gone" >
 
     </ListView>
     

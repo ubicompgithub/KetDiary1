@@ -33,7 +33,7 @@ import android.widget.Toast;
 import com.ubicomp.ketdiary.HelpActivity;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
-import com.ubicomp.ketdiary.ResultService2;
+import com.ubicomp.ketdiary.ResultService3;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE2;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothListener;
 import com.ubicomp.ketdiary.camera.CameraCaller;
@@ -723,7 +723,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			//msgBox.show();
 			
 			//
-			Intent startIntent =  new  Intent( getActivity() , ResultService2. class );  
+			Intent startIntent =  new  Intent( getActivity() , ResultService3. class );  
 			getActivity().startService(startIntent);
 			
 			//startActivity(new Intent(, EventCopeSkillActivity.class));
@@ -955,12 +955,16 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		int note_state = PreferenceControl.getAfterTestState();
 		
 		
-		if(PreferenceControl.getCheckResult() && pastTime < MainActivity.WAIT_RESULT_TIME){ //還沒察看結果且時間還沒到
+		
+		if(note_state == msgBox.STATE_TEST){
+			setState(new IdleState());
+		}
+		else if(PreferenceControl.getCheckResult() && pastTime < MainActivity.WAIT_RESULT_TIME){ //還沒察看結果且時間還沒到
 			img_btn.setOnClickListener(null);
 			img_btn.setEnabled(false);
-			msgBox.initialize();
-			msgBox.show();
 			
+			msgBox.initialize();
+			msgBox.show();			
 			if(note_state == msgBox.STATE_KNOW)
 				msgBox.knowingSetting();
 			else if(note_state == msgBox.STATE_COPE)
@@ -976,6 +980,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 				msgBox.knowingSetting();
 			else if(note_state == msgBox.STATE_COPE)
 				msgBox.copingSetting();
+			
 
 			msgBox.setResult();
 			
@@ -1010,7 +1015,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		//setGuideMessage(R.string.test_guide_reset_top,R.string.test_guide_reset_bottom);
 
 		PreferenceControl.setUpdateDetectionTimestamp(timestamp);
-		long ts = PreferenceControl.getUpdateDetectionTimestamp();
+		//long ts = PreferenceControl.getUpdateDetectionTimestamp();
 		Log.d(TAG1,""+timestamp);
 		
 		setStorage();
@@ -1627,6 +1632,16 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	}
 	@Override
 	public void clearProcesssRate() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void showImgPreview(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void displayCurrentId(String id) {
 		// TODO Auto-generated method stub
 		
 	}

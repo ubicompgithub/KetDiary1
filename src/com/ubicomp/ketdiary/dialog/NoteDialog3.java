@@ -969,7 +969,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 		        // Set list height.
 		        ViewGroup.LayoutParams params = listView.getLayoutParams();
 		        //params.height = totalItemsHeight + totalDividersHeight;
-		        params.height = (int) (convertDpToPixel((float)40)* numberOfItems);
+		        params.height = (int) (convertDpToPixel((float)40)* numberOfItems + totalDividersHeight);
 		        listView.setLayoutParams(params);
 		        listView.requestLayout();
 

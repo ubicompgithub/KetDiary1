@@ -83,6 +83,7 @@
         <service android:name=".UploadService" />
         <service android:name=".ResultService" />
         <service android:name=".ResultService2" />
+        <service android:name=".ResultService3" />
         <service
             android:name=".BluetoothLE.BluetoothLeService"
             android:enabled="true" >

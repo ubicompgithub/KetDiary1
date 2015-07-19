@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.ubicomp.ketdiary.AlarmService;
 import com.ubicomp.ketdiary.R;
-import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE;
+import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE_old;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothListener;
 import com.ubicomp.ketdiary.R.id;
 import com.ubicomp.ketdiary.R.layout;
@@ -50,7 +50,7 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
 	private Button btn_tipup;
 	private Button btn_tipdown;
 	
-	private BluetoothLE ble = null;
+	private BluetoothLE_old ble = null;
 	private TestDataParser testDataParser;
 	private ColorRawFileHandler colorRawFileHandler;
 	private VoltageFileHandler voltageFileHandler;
@@ -210,7 +210,7 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
     private void bleConnection(){
     	if(ble == null) {
 			//ble = new BluetoothLE(this, "ket_020");
-			ble = new BluetoothLE(this, PreferenceControl.getDeviceId());//PreferenceControl.getDeviceId();
+			ble = new BluetoothLE_old(this, PreferenceControl.getDeviceId());//PreferenceControl.getDeviceId();
 		}
 		ble.bleConnect();
 		//ble.bleWriteState((byte)1);
@@ -531,6 +531,18 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
 
 	@Override
 	public void clearProcesssRate() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void showImgPreview(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void displayCurrentId(String id) {
 		// TODO Auto-generated method stub
 		
 	}
