@@ -1,14 +1,10 @@
 package com.ubicomp.ketdiary;
 
-import java.io.File;
 import java.util.Random;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
-import org.opencv.core.Mat;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
 
 import android.app.NotificationManager;
 import android.content.Context;
@@ -42,12 +38,11 @@ import android.widget.TextView;
 
 import com.ubicomp.ketdiary.clicklog.ClickLog;
 import com.ubicomp.ketdiary.clicklog.ClickLogId;
-import com.ubicomp.ketdiary.color.TestStripDetection2;
+import com.ubicomp.ketdiary.color.TestStripDetection3;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.dialog.CheckResultDialog;
 import com.ubicomp.ketdiary.dialog.NoteDialog3;
-import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.fragment.DaybookFragment;
 import com.ubicomp.ketdiary.fragment.StatisticFragment;
 import com.ubicomp.ketdiary.fragment.TestFragment;
@@ -133,11 +128,11 @@ public class MainActivity extends FragmentActivity {
 	public static final int ACTION_RECORD = 1;
 	public static final int ACTION_QUESTIONNAIRE = 2;
 	
-	private TestStripDetection2 testStripDetection;
+	private TestStripDetection3 testStripDetection;
 	
-//	static {
-//        System.loadLibrary("opencv_java");
-//    }
+	static {
+       System.loadLibrary("opencv_java");
+    }
 	
 	private DatabaseControl db;
 	@Override
@@ -184,7 +179,7 @@ public class MainActivity extends FragmentActivity {
                 case LoaderCallbackInterface.SUCCESS:
                 {
                     Log.i(TAG, "OpenCV loaded successfully");
-                    testStripDetection = new TestStripDetection2();
+                    testStripDetection = new TestStripDetection3();
                 } break;
                 default:
                 {
@@ -204,7 +199,8 @@ public class MainActivity extends FragmentActivity {
 			//startService(startIntent); 
             //
 			
-
+//			testStripDetection = new TestStripDetection3();
+//			testStripDetection.sendEmptyMessage(0);
 //			testStripDetection = new TestStripDetection2();
 //			testStripDetection.testOpencv();
 
@@ -927,6 +923,7 @@ public class MainActivity extends FragmentActivity {
 	
 	private void showResultFail(){
 		
+
 		PreferenceControl.setCheckResult(false);
 		msgBox = new CheckResultDialog(mainLayout);
 		msgBox.initialize();

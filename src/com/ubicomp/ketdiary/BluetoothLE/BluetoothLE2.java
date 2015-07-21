@@ -38,7 +38,6 @@ public class BluetoothLE2 {
     public static final UUID SERVICE4_WRITE_STATE_CHAR1 = UUID.fromString("0000fff1-0000-1000-8000-00805f9b34fb");
     public static final UUID SERVICE4_WRITE_STATE_CHAR3 = UUID.fromString("0000fff3-0000-1000-8000-00805f9b34fb");
     
-	public static final UUID SERVICE4_WRITE_STATE_CHAR6 = UUID.fromString("0000fff6-0000-1000-8000-00805f9b34fb");
 	// Notification UUID
 	private static final UUID SERVICE4 = UUID.fromString("0000fff0-0000-1000-8000-00805f9b34fb");
     private static final UUID SERVICE4_NOTIFICATION_CHAR = UUID.fromString("0000fff4-0000-1000-8000-00805f9b34fb");
@@ -60,23 +59,23 @@ public class BluetoothLE2 {
     private BluetoothGattCharacteristic mNotifyCharacteristic;
     private BluetoothGattCharacteristic mWriteStateCharacteristic1;
     private BluetoothGattCharacteristic mWriteStateCharacteristic3;
-    private BluetoothGattCharacteristic mWriteStateCharacteristic6;
     
     private Handler mHandler;
     private Runnable mRunnable;
 
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 3000;
-    
-    private DataTransmission dataTransmission = null;
 
     private int testCount = 0;
     
     // Write binary file
     private File mainStorage = null;
+    private File mainDirectory = null;
     private File file;
+    private Timestamp timestamp;
     private FileOutputStream fos;
-
+    
+    private int picNum = 0;
 
     byte[] tempBuf;
     int picTotalLen = 0;
@@ -90,7 +89,7 @@ public class BluetoothLE2 {
     int bufOffset = 0;
     boolean picInfoPktRecv = false;
     boolean picDataRecvDone = true;
-    private int picNum = 0;
+
 
 
     public BluetoothLE2(BluetoothListener bluetoothListener, String mDeviceName) {
@@ -119,8 +118,7 @@ public class BluetoothLE2 {
             return;
         }
         
-        //tempBuf = new byte [128];
-		dataTransmission = new DataTransmission(bluetoothListener, this);
+        tempBuf = new byte [128];
     }
      
 	// Code to manage Service lifecycle.
@@ -169,7 +167,6 @@ public class BluetoothLE2 {
 
                 mWriteStateCharacteristic1 = gattServices.get(3).getCharacteristic(SERVICE4_WRITE_STATE_CHAR1);
                 mWriteStateCharacteristic3 = gattServices.get(3).getCharacteristic(SERVICE4_WRITE_STATE_CHAR3);
-				mWriteStateCharacteristic6 = gattServices.get(3).getCharacteristic(SERVICE4_WRITE_STATE_CHAR6);
 
                 Log.i(TAG, "BLE ACTION_GATT_SERVICES_DISCOVERED");
 
@@ -192,192 +189,157 @@ public class BluetoothLE2 {
 
 //                String dataString = "";
             	
-            	if(data[0] == (byte)0xA9){
-                    dataTransmission.checkPackets();
-                }
-                else if(data[0] == (byte)0xA7){
-                    dataTransmission.parsePackets(data);
-                }
-                else if (data[0] == (byte)0xFA){
-                    //((BluetoothListener) bluetoothListener).displayCurrentId("None");
-                    Log.i(TAG, "----0xFA----");
-                    ((BluetoothListener) bluetoothListener).bleNoPlug();
-                }
-                else if (data[0] == (byte)0xFB){
-                    long temp = (data[4] & 0xFF) + (data[3] & 0xFF)*256 + (data[2] & 0xFF)*256*256 + (data[1] & 0xFF)*256*256*256;
-                    ((BluetoothListener) bluetoothListener).displayCurrentId(String.valueOf(temp));
-                }
-                else{
-                	Log.i(TAG, "----BLE Can't handle data----");
-                }
-            	
-//            	 switch(data[0]) { // Handling notification depending on types
-//                 case (byte)0xFA:
-//                     Log.i(TAG, "----0xFA----");
-//                     ((BluetoothListener) bluetoothListener).bleNoPlug();
-//                     break;
-//                 case (byte)0xFB:
-//                     Log.i(TAG, "----0xFB----");
-//                     byte[] plugId = new byte[data.length-1];
-//                     System.arraycopy(data, 1, plugId, 0, data.length - 1);
-//                     ((BluetoothListener) bluetoothListener).blePlugInserted(plugId);
-//                     break;
-//                 case (byte)0xFC:
-//                 case (byte)0xFD:
-//                 case (byte)0xFE:
-//                     byte[] adcReading = new byte[data.length-1];
-//                     System.arraycopy(data, 1, adcReading, 0, data.length - 1);
-//                     ((BluetoothListener) bluetoothListener).bleElectrodeAdcReading(data[0], adcReading);
-//                     break;
-//
-//                 case (byte)0xFF:
-//                     Log.i(TAG, "----0xFF----");
-//                     byte[] colorReadings = new byte[data.length-1];
-//                     System.arraycopy(data, 1, colorReadings, 0, data.length-1);
-//                     ((BluetoothListener) bluetoothListener).bleColorReadings(colorReadings);
-//                     break;
-//            	 }
+            	 switch(data[0]) { // Handling notification depending on types
+                 case (byte)0xFA:
+                     Log.i(TAG, "----0xFA----");
+                     ((BluetoothListener) bluetoothListener).bleNoPlug();
+                     break;
+                 case (byte)0xFB:
+                     Log.i(TAG, "----0xFB----");
+                     byte[] plugId = new byte[data.length-1];
+                     System.arraycopy(data, 1, plugId, 0, data.length - 1);
+                     ((BluetoothListener) bluetoothListener).blePlugInserted(plugId);
+                     break;
+                 case (byte)0xFC:
+                 case (byte)0xFD:
+                 case (byte)0xFE:
+                     byte[] adcReading = new byte[data.length-1];
+                     System.arraycopy(data, 1, adcReading, 0, data.length - 1);
+                     ((BluetoothListener) bluetoothListener).bleElectrodeAdcReading(data[0], adcReading);
+                     break;
+
+                 case (byte)0xFF:
+                     Log.i(TAG, "----0xFF----");
+                     byte[] colorReadings = new byte[data.length-1];
+                     System.arraycopy(data, 1, colorReadings, 0, data.length-1);
+                     ((BluetoothListener) bluetoothListener).bleColorReadings(colorReadings);
+                     break;
+             }
 				
-//                if(data[0] == (byte)0xA7){
-//                    seqNum = (data[2] & 0xFF)*256 + (data[1] & 0xFF);
-//
-////                    // Checksum for BLE packet
-////                    int checksum = 0;
-////                    for(int i = 0; i < data.length-1; i++){
-//
-////                        checksum += (data[i] & 0xFF);
-////                        checksum = checksum & 0xFF;
-////                    }
-////
-////                    if (checksum != (data[data.length-1] & 0xFF)){
-////                        Log.d(TAG, "Checksum error on ble packets ".concat(String.valueOf(seqNum)));
-////                    }
-//
-//
-//
-//                    if( seqNum == 0x7FFF){
-//                        if( picInfoPktRecv == false ) {
-//                            picInfoPktRecv = true;
-//                            picDataRecvDone = false;
-//                            tempPktId = 0;
-//                            bufOffset = 0;
-//                            picTotalLen = (data[4] & 0xFF) * 256 + (data[3] & 0xFF);
-//                            pktNum = picTotalLen / (128 - 6);
-//                            if (pktNum % (128 - 6) != 0) {
-//                                pktNum++;
-//                                lastPktSize = picTotalLen % (128 - 6) + 6;
-//                            }
-//                            //bleWriteData((byte) 0x05);
-//                            Log.d(TAG, "Total picture length:".concat(String.valueOf(picTotalLen)));
-//                            Log.d(TAG, "Total packets:".concat(String.valueOf(pktNum)));
-//                            Log.d(TAG, "Last packet size:".concat(String.valueOf(lastPktSize)));
-//
-////                            if (mainStorage == null) {
-////                                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
-////                                    mainStorage = new File(Environment.getExternalStorageDirectory(), "TempPicDir");
-////                                else
-////                                    mainStorage = new File(App.getContext().getFilesDir(), "TempPicDir");
-////                            }
-////                            if (!mainStorage.exists())
-////                                mainStorage.mkdirs();
-////
-////                            timestamp = new Timestamp(System.currentTimeMillis());
-//                            
-//                          
-////                        if (mainDirectory == null)
-////                            mainDirectory = new File(mainStorage.getAbsolutePath(), String.valueOf(timestamp));
-////                        if (!mainDirectory.exists())
-////                            mainDirectory.mkdirs();
-//                            long ts = PreferenceControl.getUpdateDetectionTimestamp();
-//                            File dir = MainStorage.getMainStorageDirectory();
-//                            mainStorage = new File(dir, String.valueOf(ts));
-//                            String file_name = "PIC_" + ts + "_" + picNum + ".jpg";
-//                            
-//                            picNum ++ ;
-//                          
-//                            //file = new File(mainStorage, "PIC_".concat(String.valueOf(ts)).concat(".jpg"));
-//                            file = new File(mainStorage, file_name);
-//                            try {
-//                                fos = new FileOutputStream(file, true);
-//                            } catch (IOException e) {
-//                                Log.d(TAG, "FAIL TO OPEN");
-//                                fos = null;
-//                            }
-//                        }
-//                        else{
-//                            bleWriteData((byte) 0x05);
-//                        }
+                if(data[0] == (byte)0xA7){
+                    seqNum = (data[2] & 0xFF)*256 + (data[1] & 0xFF);
+
+//                    // Checksum for BLE packet
+//                    int checksum = 0;
+//                    for(int i = 0; i < data.length-1; i++){
+
+//                        checksum += (data[i] & 0xFF);
+//                        checksum = checksum & 0xFF;
 //                    }
-//                    else{
-//                        if( picDataRecvDone == false ) {
-//                            if( seqNum / 8 < tempPktId ) {
-//                                //bleWriteData((byte) (0xF0|(0xFF & tempPktId)));
-//                                bleWriteData((byte) 0x05);
-//                                Log.d(TAG, "Packet has been received.".concat(String.valueOf(seqNum / 8)).concat(String.valueOf(tempPktId)));
-//                                return;
-//                            }
 //
-//                            if( bufOffset / 16 != seqNum % 8) {
-//                                Log.d(TAG, "Packet is recieved.".concat(String.valueOf(bufOffset / 16)).concat(String.valueOf(seqNum % 8)));
-//                                return;
-//                            }
-//
-//                            System.arraycopy(data, 3, tempBuf, bufOffset, data.length - 4);
-//                            bufOffset += (data.length - 4);
-//
-//                            if ( bufOffset == 128 || ((tempPktId == pktNum - 1) && bufOffset == lastPktSize) ) {
-//                                tempPktId++;
-//                                if (tempPktId == pktNum) {
-//                                    Log.d(TAG, "LastDataRecvLength: ".concat(String.valueOf(bufOffset)).concat(
-//                                            " LastDataLength: ").concat(String.valueOf(lastPktSize)));
-//                                }
-//                                int sum = 0;
-//                                for(int i = 0; i < bufOffset-2; i++){
-//                                    sum += (tempBuf[i] & 0xFF);
-//                                    sum = sum & 0xFF;
-//                                }
-//
-//                                if (( sum & 0xFF ) == (tempBuf[bufOffset-2] & 0xFF) ){
-//                                    Log.d(TAG, String.valueOf(tempPktId).concat(" packets recieved."));
-//                                    byte[] byteToWrite = new byte[bufOffset - 6];
-//                                    System.arraycopy(tempBuf, 4, byteToWrite, 0, bufOffset - 6);
-//                                    try {
-//                                        fos.write(byteToWrite);
-//                                        ((BluetoothListener) bluetoothListener).updateProcessRate((float)tempPktId*100/pktNum );
-//
-//                                        bufOffset = 0;
-//                                        if(tempPktId == pktNum || tempPktId % 2 == 1) {
-////                                            bleWriteData((byte) 0x05);
-////                                            bleWriteData((byte) 0x05);
-////                                            bleWriteData((byte) 0x05);
-////                                            bleWriteData((byte) 0x05);
-//                                        }
-//                                        picInfoPktRecv = false;
-//                                        if (tempPktId == pktNum) {
-//                                            Log.d(TAG, "Can not enter here more than 1 time.");
-//                                            try {
-//                                                fos.close();
-//                                                picInfoPktRecv = false;
-//                                                picDataRecvDone = true;
-//                                                tempPktId = 0;
-//                                                bufOffset = 0;
-//                                                bleWriteState((byte)0x07);
-//                                                ((BluetoothListener) bluetoothListener).bleTakePictureSuccess();
-//                                            } catch (IOException e) {
-//                                                e.printStackTrace();
-//                                            }
-//                                        }
-//                                    } catch (IOException e) {
-//                                        e.printStackTrace();
-//                                    }
-//                                }else{
-//                                    Log.d(TAG, "Checksum error in ".concat(String.valueOf(tempPktId)).concat("th packet."));
-//                                    tempPktId--;
-//                                    bufOffset = 0;
-//                                }
-//                            }
-//                        }
+//                    if (checksum != (data[data.length-1] & 0xFF)){
+//                        Log.d(TAG, "Checksum error on ble packets ".concat(String.valueOf(seqNum)));
 //                    }
+
+
+
+                    if( seqNum == 0x7FFF){
+                        if( picInfoPktRecv == false ) {
+                            picInfoPktRecv = true;
+                            picDataRecvDone = false;
+                            tempPktId = 0;
+                            bufOffset = 0;
+                            picTotalLen = (data[4] & 0xFF) * 256 + (data[3] & 0xFF);
+                            pktNum = picTotalLen / (128 - 6);
+                            if (pktNum % (128 - 6) != 0) {
+                                pktNum++;
+                                lastPktSize = picTotalLen % (128 - 6) + 6;
+                            }
+                            //bleWriteData((byte) 0x05);
+                            Log.d(TAG, "Total picture length:".concat(String.valueOf(picTotalLen)));
+                            Log.d(TAG, "Total packets:".concat(String.valueOf(pktNum)));
+                            Log.d(TAG, "Last packet size:".concat(String.valueOf(lastPktSize)));
+
+                            long ts = PreferenceControl.getUpdateDetectionTimestamp();
+                          File dir = MainStorage.getMainStorageDirectory();
+                          mainStorage = new File(dir, String.valueOf(ts));
+                          String file_name = "PIC_" + ts + "_" + picNum + ".jpg";
+                          
+                          picNum ++ ;
+                        
+                          //file = new File(mainStorage, "PIC_".concat(String.valueOf(ts)).concat(".jpg"));
+                          file = new File(mainStorage, file_name);
+                            try {
+                                fos = new FileOutputStream(file, true);
+                            } catch (IOException e) {
+                                Log.d(TAG, "FAIL TO OPEN");
+                                fos = null;
+                            }
+                        }
+                        else{
+                            bleWriteData((byte) 0x05);
+                        }
+                    }
+                    else{
+                        if( picDataRecvDone == false ) {
+                            if( seqNum / 8 < tempPktId ) {
+                                //bleWriteData((byte) (0xF0|(0xFF & tempPktId)));
+                                bleWriteData((byte) 0x05);
+                                Log.d(TAG, "Packet has been received.".concat(String.valueOf(seqNum / 8)).concat(String.valueOf(tempPktId)));
+                                return;
+                            }
+
+                            if( bufOffset / 16 != seqNum % 8) {
+                                Log.d(TAG, "Packet is recieved.".concat(String.valueOf(bufOffset / 16)).concat(String.valueOf(seqNum % 8)));
+                                return;
+                            }
+
+                            System.arraycopy(data, 3, tempBuf, bufOffset, data.length - 4);
+                            bufOffset += (data.length - 4);
+
+                            if ( bufOffset == 128 || ((tempPktId == pktNum - 1) && bufOffset == lastPktSize) ) {
+                                tempPktId++;
+                                if (tempPktId == pktNum) {
+                                    Log.d(TAG, "LastDataRecvLength: ".concat(String.valueOf(bufOffset)).concat(
+                                            " LastDataLength: ").concat(String.valueOf(lastPktSize)));
+                                }
+                                int sum = 0;
+                                for(int i = 0; i < bufOffset-2; i++){
+                                    sum += (tempBuf[i] & 0xFF);
+                                    sum = sum & 0xFF;
+                                }
+
+                                if (( sum & 0xFF ) == (tempBuf[bufOffset-2] & 0xFF) ){
+                                    Log.d(TAG, String.valueOf(tempPktId).concat(" packets recieved."));
+                                    byte[] byteToWrite = new byte[bufOffset - 6];
+                                    System.arraycopy(tempBuf, 4, byteToWrite, 0, bufOffset - 6);
+                                    try {
+                                        fos.write(byteToWrite);
+                                        ((BluetoothListener) bluetoothListener).updateProcessRate((float)tempPktId*100/pktNum );
+
+                                        bufOffset = 0;
+                                        if(tempPktId == pktNum || tempPktId % 2 == 1) {
+                                            bleWriteData((byte) 0x05);
+                                            bleWriteData((byte) 0x05);
+                                            bleWriteData((byte) 0x05);
+                                            bleWriteData((byte) 0x05);
+                                        }
+                                        picInfoPktRecv = false;
+                                        if (tempPktId == pktNum) {
+                                            Log.d(TAG, "Can not enter here more than 1 time.");
+                                            try {
+                                                fos.close();
+                                                picInfoPktRecv = false;
+                                                picDataRecvDone = true;
+                                                tempPktId = 0;
+                                                bufOffset = 0;
+                                                bleWriteState((byte)0x07);
+                                                ((BluetoothListener) bluetoothListener).bleTakePictureSuccess();
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }else{
+                                    Log.d(TAG, "Checksum error in ".concat(String.valueOf(tempPktId)).concat("th packet."));
+                                    tempPktId--;
+                                    bufOffset = 0;
+                                }
+                            }
+                        }
+                    }
                     
 //                for(int i=0; i<data.length; i++) {
 //                    dataString += data[i] + " ";
@@ -399,7 +361,10 @@ public class BluetoothLE2 {
 //                    color_sensor1[i] = data[(i*2)+9]<<8 + data[i*2+8];
                 
 
-            
+            }
+            else{
+                	Log.i(TAG, "----BLE Can't handle data----");
+                }
             
             }
         }
@@ -450,7 +415,7 @@ public class BluetoothLE2 {
         return;
     }
 
-	public void bleWriteAck(byte data) {
+	public void bleWriteData(byte data) {
 
         if((mBluetoothLeService != null) && (mWriteStateCharacteristic3 != null)) {
             mWriteStateCharacteristic3.setValue(new byte[] { data });
@@ -459,14 +424,6 @@ public class BluetoothLE2 {
         return;
     }
 
-	public void bleWriteData(byte [] bytes){
-        if((mBluetoothLeService != null) && (mWriteStateCharacteristic6 != null)) {
-            mWriteStateCharacteristic6.setValue(bytes);
-            mBluetoothLeService.writeCharacteristic(mWriteStateCharacteristic6);
-        }
-        return;
-    }
-	
     private void bleScan() {
         mHandler.postDelayed(mRunnable = new Runnable() {
             @Override

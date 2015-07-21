@@ -6,6 +6,7 @@ import java.util.TimerTask;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -536,13 +537,25 @@ public class EventCopeSkillActivity extends Activity implements BluetoothListene
 	}
 
 	@Override
-	public void showImgPreview(String filePath) {
+	public void displayCurrentId(String id) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void displayCurrentId(String id) {
+	public void bleTakePictureSuccess(Bitmap bitmap) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void bleTakePictureFail(float dropRate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void imgDetect(Bitmap bitmap) {
 		// TODO Auto-generated method stub
 		
 	}

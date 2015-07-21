@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -32,6 +34,8 @@ public class AnalysisCounterView extends StatisticPageView {
 	private Typeface wordTypeface, digitTypefaceBold;
 	private QuestionDialog msgBox;
 	private ShowRadarChart showRadarChart;
+	
+	private AlphaAnimation titleAnimation;
 	
 	private final static int[] levelId = {R.drawable.level0,
 		R.drawable.level1, R.drawable.level2, R.drawable.level3, 
@@ -109,6 +113,14 @@ public class AnalysisCounterView extends StatisticPageView {
 		
 		updateCounter();
 	}
+	private void setAnimation(){
+		titleAnimation = new AlphaAnimation(1.0F, 0.0F);
+		titleAnimation.setDuration(200);
+		titleAnimation.setRepeatCount(Animation.INFINITE);
+		titleAnimation.setRepeatMode(Animation.REVERSE);
+		titleLayout.setAnimation(titleAnimation);
+		titleAnimation.start();
+	}
 
 	@SuppressWarnings("deprecation")
 	public void updateCounter() {
@@ -125,6 +137,7 @@ public class AnalysisCounterView extends StatisticPageView {
 		
 		
 		if (prev_coupon < coupon) {
+			setAnimation();
 			if (Build.VERSION.SDK_INT < 16)
 				titleLayout.setBackgroundDrawable(context.getResources()
 						.getDrawable(R.drawable.analysis_title_bar_highlight));

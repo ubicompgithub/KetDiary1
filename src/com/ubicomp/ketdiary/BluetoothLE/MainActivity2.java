@@ -3,6 +3,7 @@ package com.ubicomp.ketdiary.BluetoothLE;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -153,14 +154,27 @@ public class MainActivity2 extends Activity implements BluetoothListener {
 		
 	}
 
+
 	@Override
-	public void showImgPreview(String filePath) {
+	public void displayCurrentId(String id) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void displayCurrentId(String id) {
+	public void bleTakePictureSuccess(Bitmap bitmap) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void bleTakePictureFail(float dropRate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void imgDetect(Bitmap bitmap) {
 		// TODO Auto-generated method stub
 		
 	}

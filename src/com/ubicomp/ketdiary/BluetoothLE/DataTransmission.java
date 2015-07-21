@@ -1,12 +1,17 @@
 package com.ubicomp.ketdiary.BluetoothLE;
 
+
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.ubicomp.ketdiary.file.MainStorage;
@@ -18,9 +23,10 @@ import com.ubicomp.ketdiary.system.PreferenceControl;
 public class DataTransmission {
     private static final String TAG = "DataTransmission";
     private static final int maximumPktNum = 80;
+	private static final int timeout = 5000;
 
     private BluetoothListener bluetoothListener = null;
-    private BluetoothLE2 ble = null;
+    private BluetoothLE3 ble = null;
 
     private File mainStorage = null;
     private File file;
@@ -39,8 +45,11 @@ public class DataTransmission {
     private int picNum = 0;
 
     private Set<Integer> integerSet;
+    
+    private Timer timer;
+    private int counter = 0;
 
-    public DataTransmission(BluetoothListener bluetoothListener, BluetoothLE2 ble){
+    public DataTransmission(BluetoothListener bluetoothListener, BluetoothLE3 ble){
     	this.bluetoothListener = bluetoothListener; 
         this.ble = ble;
         tempBuf = new byte [128];
@@ -96,6 +105,9 @@ public class DataTransmission {
             }
             else{
                 ble.bleWriteAck((byte) 0x05);
+				timer = new Timer();
+                timer.schedule(new TimeoutTask(), timeout);
+                counter = 0;
             }
         }
         else{
@@ -149,10 +161,22 @@ public class DataTransmission {
         Log.i(TAG, "Dropout rate: " + (float) (pktNum - recvNum)*100/ pktNum + "%");
         if(recvNum == pktNum){
             try {
+                int currentIdx = 0;
+                byte [] pictureBytes = new byte [(pktNum-1) * 122 + (lastPktSize - 6)];
                 for(int i = 0; i < pktNum; i++) {
+                    System.arraycopy(picBuf[i], 0, pictureBytes, currentIdx, picBuf[i].length);
                     fos.write(picBuf[i]);
+                    currentIdx += picBuf[i].length;
                 }
+
+                BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
+                bmpFactoryOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(pictureBytes);
+                
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream, null, bmpFactoryOptions);
                 bufOffset = 0;
+
 
                 picInfoPktRecv = false;
 
@@ -160,9 +184,17 @@ public class DataTransmission {
                     fos.close();
                     //ble.bleWriteAck((byte) 0x05);
                     ble.bleWriteState((byte) 0x07);
-                    resetParameters();
+					timer.cancel();
+
+                    ((BluetoothListener) bluetoothListener).bleTakePictureSuccess(bitmap);
+                    Log.i(TAG, bitmap.getHeight() + " " + bitmap.getWidth());
+                    ((BluetoothListener) bluetoothListener).imgDetect(bitmap);
                     ((BluetoothListener) bluetoothListener).bleTakePictureSuccess();
-                    ((BluetoothListener) bluetoothListener).showImgPreview(file.getAbsolutePath());
+                    
+                    
+                    resetParameters();
+                    
+
                 } catch (IOException e2) {
                     e2.printStackTrace();
                 }
@@ -204,5 +236,20 @@ public class DataTransmission {
             picBuf[i] = null;
         }
         integerSet.clear();
+    }
+	class TimeoutTask extends TimerTask{
+
+        @Override
+        public void run() {
+            Log.i(TAG, "Timeout timer was  fired once.");
+            if(counter < 10){
+                checkPackets();
+                counter++;
+            }
+            else{
+                timer.cancel();
+                ((BluetoothListener) bluetoothListener).bleTakePictureFail((float) (pktNum - recvNum) / pktNum);
+            }
+        }
     }
 }

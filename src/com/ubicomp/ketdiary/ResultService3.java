@@ -1,7 +1,5 @@
 package com.ubicomp.ketdiary;
 
-import java.util.Random;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -9,15 +7,16 @@ import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE2;
+import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE3;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothListener;
-import com.ubicomp.ketdiary.color.TestStripDetection3;
+import com.ubicomp.ketdiary.color.TestStripDetection4;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 
@@ -35,16 +34,17 @@ public class ResultService3 extends Service implements BluetoothListener {
 	private Notification notification;
 	private PendingIntent pendingIntent;
 	
-	private BluetoothLE2 ble = null;
+	private BluetoothLE3 ble = null;
 	private boolean stateSuccess = false;
 	private boolean isConnect = false;
 	private int result= -1;
 	private DatabaseControl db;
 	private int picNum = 0;
-	private TestStripDetection3 testStripDetection;
+	private TestStripDetection4 testStripDetection;
 	private OpenSensorMsgTimer openSensorMsgTimer;
 	
 	private ProgressDialog dialog = null;
+	private boolean first = true;
     @Override  
     public  void  onCreate() {  
         super .onCreate();  
@@ -55,7 +55,7 @@ public class ResultService3 extends Service implements BluetoothListener {
         notification.setLatestEventInfo( this ,  "這是通知的標題" ,  "這是通知的內容" , pendingIntent);  
         startForeground( 1 , notification);  
         
-        testStripDetection = new TestStripDetection3();
+        testStripDetection = new TestStripDetection4();
         db = new DatabaseControl();
         openSensorMsgTimer = new OpenSensorMsgTimer();
     }  
@@ -72,17 +72,31 @@ public class ResultService3 extends Service implements BluetoothListener {
 			
 			notification.setLatestEventInfo( myservice ,  "測試結果倒數" ,  minius+":"+seconds , pendingIntent);  
 	        startForeground( 1 , notification); 
+
 	        
 	        
-	        if(!stateSuccess)
-	        	ble.bleWriteState((byte)0x06);
-			
 			mhandler.postDelayed(this, 1000);
+			
+			
+			if(spentTime < 2*60*1000){   //剩兩分鐘的時候才開始拍照傳照片
+				
+				if(first){
+					first = false;
+					if(!isConnect){
+		        		ble.bleConnect();
+		        	}				
+					if(openSensorMsgTimer!=null)
+		        		openSensorMsgTimer.start();
+				}
+				
+				
+				if(!stateSuccess && isConnect)
+		        	ble.bleWriteState((byte)0x06);
+			}
 			
 			if(spentTime < 0){ //想一下時間到要做什麼    跳出不一樣的notification讓他點or直接跳出activity
 				mhandler.removeCallbacks(updateTimer);
-				
-				//stopSelf();
+				stopSelf();
 			}
 
 		}
@@ -109,13 +123,20 @@ public class ResultService3 extends Service implements BluetoothListener {
 		
 		testStripDetection.sendEmptyMessage(0);
 		
-		Random rand = new Random();
-		result = rand.nextInt(2); //Random Gen Result
-		//test_msg.setText(test_guide_msg[idx]);
-		PreferenceControl.setTestResult(result);   	
-		PreferenceControl.setTestSuccess();
+//		Random rand = new Random();
+//		result = rand.nextInt(2); //Random Gen Result
+//		//test_msg.setText(test_guide_msg[idx]);
+//		PreferenceControl.setTestResult(result);   	
+//		PreferenceControl.setTestSuccess();
 		
 		stopSelf();
+    }
+    
+    private void stop(){
+    	
+    	
+    	mhandler.removeCallbacks(updateTimer);
+    	stopSelf();
     }
 
 
@@ -142,20 +163,15 @@ public class ResultService3 extends Service implements BluetoothListener {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 				
 		//testDialog();
-		
+		//testStripDetection.sendEmptyMessage(0);
 	        	Log.d(TAG,  "onStartCommand() executed" ); 
 	        	if(ble == null ) {
-	    			ble = new BluetoothLE2( myservice , PreferenceControl.getDeviceId());	
+	    			ble = new BluetoothLE3( myservice , PreferenceControl.getDeviceId());	
 	            }
-	        	if(!isConnect){
-	        		ble.bleConnect();
-	        	}
-	        	if(openSensorMsgTimer!=null)
-	        		openSensorMsgTimer.start();
-	        	
-	            long timestamp = PreferenceControl.getUpdateDetectionTimestamp();
+	        	long timestamp = PreferenceControl.getUpdateDetectionTimestamp();
 	            Log.d(TAG,"1:"+timestamp);
 	            
+	            PreferenceControl.setTestFail();
 	            stateSuccess = false;
 	            startTime = System.currentTimeMillis();
 	          
@@ -164,20 +180,26 @@ public class ResultService3 extends Service implements BluetoothListener {
 	    return  super .onStartCommand(intent, flags, startId);  
 	}
 	
-	private class OpenSensorMsgTimer extends CountDownTimer {
+	private class OpenSensorMsgTimer extends CountDownTimer { //五秒鐘之內沒連到會直接fail
 
 		public OpenSensorMsgTimer() {
-			super(5000, 50);
+			super(20000, 2000);
 		}
 
 		@Override
 		public void onFinish() {
 			Toast.makeText(myservice, "請開啟檢測器", Toast.LENGTH_SHORT).show();
-			PreferenceControl.setTestFail();
+			PreferenceControl.setTestFail();			
+			//stop();	
 		}
 
 		@Override
 		public void onTick(long millisUntilFinished) {
+			if(!isConnect){
+        		ble.bleConnect();
+			}
+			
+			Toast.makeText(myservice, "請開啟檢測器", Toast.LENGTH_SHORT).show();
 		}
 	}
 	
@@ -218,7 +240,7 @@ public class ResultService3 extends Service implements BluetoothListener {
 			openSensorMsgTimer.cancel();
 			openSensorMsgTimer=null;
 		}
-        PreferenceControl.setTestSuccess();
+        //PreferenceControl.setTestSuccess();
     }
 
     @Override
@@ -278,7 +300,7 @@ public class ResultService3 extends Service implements BluetoothListener {
 		
 		blehandler.postDelayed(writeBle, 2000);
 	
-		if(picNum == 1){
+		if(picNum == 2){
 			goResult();
 			Log.i(TAG, "GoResult!");
 		}
@@ -288,7 +310,7 @@ public class ResultService3 extends Service implements BluetoothListener {
 	private Runnable writeBle = new Runnable() {
 		public void run() {
 			blehandler.removeCallbacks(writeBle);
-			if(ble!=null)
+		if(ble!=null)
 				ble.bleWriteState((byte)0x06);
 			//blehandler.postDelayed(this, 1000);
 
@@ -308,16 +330,26 @@ public class ResultService3 extends Service implements BluetoothListener {
 		
 	}
 
-
 	@Override
-	public void showImgPreview(String filePath) {
+	public void displayCurrentId(String id) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	@Override
+	public void bleTakePictureSuccess(Bitmap bitmap) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
-	public void displayCurrentId(String id) {
+	public void bleTakePictureFail(float dropRate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void imgDetect(Bitmap bitmap) {
 		// TODO Auto-generated method stub
 		
 	}

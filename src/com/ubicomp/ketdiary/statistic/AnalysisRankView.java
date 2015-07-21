@@ -9,6 +9,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
@@ -51,6 +53,9 @@ public class AnalysisRankView extends StatisticPageView {
 	private NetworkTask netTask;
 	private PointerHandler pointerHandler = new PointerHandler();
 	private ShowRadarChart showRadarChart;
+	
+	private AlphaAnimation titleAnimation;
+	
 	public AnalysisRankView(ShowRadarChart showRadarChart) {
 		super(R.layout.analysis_rank_view);
 		
@@ -144,6 +149,7 @@ public class AnalysisRankView extends StatisticPageView {
 		setWeek(pWeek);
 
 		if (pMonth != 0 || pWeek != 0) {
+			setAnimation();
 			if (Build.VERSION.SDK_INT < 16)
 				titleLayout.setBackgroundDrawable(context.getResources()
 						.getDrawable(R.drawable.analysis_title_bar_highlight));
@@ -152,6 +158,15 @@ public class AnalysisRankView extends StatisticPageView {
 						R.drawable.analysis_title_bar_highlight));
 		}
 		titleLayout.invalidate();
+	}
+	
+	private void setAnimation(){
+		titleAnimation = new AlphaAnimation(1.0F, 0.0F);
+		titleAnimation.setDuration(200);
+		titleAnimation.setRepeatCount(Animation.INFINITE);
+		titleAnimation.setRepeatMode(Animation.REVERSE);
+		titleLayout.setAnimation(titleAnimation);
+		titleAnimation.start();
 	}
 
 	private void setMonth(int change) {

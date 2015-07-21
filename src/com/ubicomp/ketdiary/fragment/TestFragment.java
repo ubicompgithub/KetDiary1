@@ -7,6 +7,7 @@ import java.util.Random;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.media.AudioManager;
@@ -1636,12 +1637,22 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		
 	}
 	@Override
-	public void showImgPreview(String filePath) {
+	public void displayCurrentId(String id) {
 		// TODO Auto-generated method stub
 		
 	}
 	@Override
-	public void displayCurrentId(String id) {
+	public void bleTakePictureSuccess(Bitmap bitmap) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void bleTakePictureFail(float dropRate) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void imgDetect(Bitmap bitmap) {
 		// TODO Auto-generated method stub
 		
 	}

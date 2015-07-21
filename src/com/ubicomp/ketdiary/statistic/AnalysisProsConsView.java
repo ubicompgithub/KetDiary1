@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.system.PreferenceControl;
@@ -187,7 +188,23 @@ public class AnalysisProsConsView extends StatisticPageView {
 		@Override
 		public void handleMessage(Message msg) {
 			updateBar();
-			PreferenceControl.setCheckResult(false);
+			
+			long curTime = System.currentTimeMillis();
+			long testTime = PreferenceControl.getLatestTestCompleteTime();
+			long pastTime = curTime - testTime;
+			boolean testFail = PreferenceControl.isTestFail();	
+			
+			if(testFail){				
+			}
+			else if( PreferenceControl.getCheckResult() && pastTime >= MainActivity.WAIT_RESULT_TIME){
+				
+				PreferenceControl.setCheckResult(false);
+			}
+			else if ( PreferenceControl.getCheckResult() && pastTime < MainActivity.WAIT_RESULT_TIME ){
+			}
+			else{
+			}
+			
 		}
 	}
 

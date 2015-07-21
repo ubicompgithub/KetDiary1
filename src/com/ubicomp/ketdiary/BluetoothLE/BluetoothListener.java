@@ -2,6 +2,7 @@ package com.ubicomp.ketdiary.BluetoothLE;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 
 public interface BluetoothListener {
 	
@@ -45,6 +46,12 @@ public interface BluetoothListener {
     // Add by Larry
     /* Take picture successfully*/
     void bleTakePictureSuccess();
+    
+    /* Take picture successfully*/
+    void bleTakePictureSuccess(Bitmap bitmap);
+    
+    /* Take picture failed*/
+    void bleTakePictureFail(float dropRate);
 
     /* Update process rate*/
     void updateProcessRate(float rate);
@@ -54,7 +61,7 @@ public interface BluetoothListener {
     
 
     /* Show image preview*/
-    void showImgPreview(String filePath);
+    void imgDetect(Bitmap bitmap);
 
     /* Display current saliva Id*/
     void displayCurrentId(String id);
