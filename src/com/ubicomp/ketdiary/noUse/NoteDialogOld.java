@@ -24,7 +24,6 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.ubicomp.ketdiary.R;
-import com.ubicomp.ketdiary.db.NoteCatagory;
 
 
 /**

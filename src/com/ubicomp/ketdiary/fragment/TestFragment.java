@@ -45,6 +45,7 @@ import com.ubicomp.ketdiary.camera.ImageFileHandler;
 import com.ubicomp.ketdiary.camera.Tester;
 import com.ubicomp.ketdiary.clicklog.ClickLog;
 import com.ubicomp.ketdiary.clicklog.ClickLogId;
+import com.ubicomp.ketdiary.data.structure.TestDetail;
 import com.ubicomp.ketdiary.db.TestDataParser2;
 import com.ubicomp.ketdiary.dialog.NoteDialog3;
 import com.ubicomp.ketdiary.dialog.TestQuestionCaller2;
@@ -187,7 +188,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private float connectionFailRate;
 	private String failedReason; 
 	
-	
+	public static TestDetail testDetail = null;
 	
 	private static final int COUNT_DOWN_SECOND = 5;
 	private static final int WAIT_SALIVA_SECOND = 7;
@@ -434,11 +435,17 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		public void onStart(){
 			state = FAIL_STATE;
 			failedReason =  err_msg;
-			if( TDP!= null ){
-				TDP.startTestDetail(cassetteId, failedState, firstVoltage,
-						secondVoltage, devicePower, colorReading,
-		                connectionFailRate, failedReason);
-			}
+			
+			testDetail = new TestDetail(cassetteId, timestamp, failedState, firstVoltage,
+					secondVoltage, devicePower, colorReading,
+	                connectionFailRate, failedReason);
+			
+			
+//			if( TDP!= null ){
+//				TDP.startTestDetail(cassetteId, failedState, firstVoltage,
+//						secondVoltage, devicePower, colorReading,
+//		                connectionFailRate, failedReason);
+//			}
 			
 			test_msg.setText("");
 			label_btn.setText("確認");
@@ -707,6 +714,11 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			
 			MainActivity.getMainActivity().enableTabAndClick(false);
 			MainActivity.getMainActivity().setTimers();
+			
+			
+			testDetail = new TestDetail(cassetteId, timestamp, failedState, firstVoltage,
+					secondVoltage, devicePower, colorReading,
+	                connectionFailRate, failedReason);
 			
 			/*
 			try {

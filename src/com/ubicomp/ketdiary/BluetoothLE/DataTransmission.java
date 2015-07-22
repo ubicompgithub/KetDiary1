@@ -89,7 +89,7 @@ public class DataTransmission {
                 long ts = PreferenceControl.getUpdateDetectionTimestamp();
 	            File dir = MainStorage.getMainStorageDirectory();
 	            mainStorage = new File(dir, String.valueOf(ts));
-	            String file_name = "PIC_" + ts + "_" + picNum + ".jpg";
+	            String file_name = "PIC_" + ts + "_" + picNum + ".sob";
 	              
 	            picNum ++ ;
 

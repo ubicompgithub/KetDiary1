@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.SelectActivity;
 import com.ubicomp.ketdiary.data.structure.ExchangeHistory;
 import com.ubicomp.ketdiary.data.structure.TimeValue;
 import com.ubicomp.ketdiary.db.DatabaseControl;
@@ -551,7 +552,256 @@ public class PreferenceControl {
 		edit.putInt("social_help2", idx[2]);
 		edit.commit();
 	}
+	
+	private static int noteNum = SelectActivity.NOTE_UPPER_BOUND;
+	/** Get the names of the */
+	public static String[] getType1() {
+		String[] names = new String[noteNum];
+		names[0] = sp.getString("type1_name0", "");
+		names[1] = sp.getString("type1_name1", "");
+		names[2] = sp.getString("type1_name2", "");
+		names[3] = sp.getString("type1_name3", "");
+		names[4] = sp.getString("type1_name4", "");
+		names[5] = sp.getString("type1_name5", "");
+		names[6] = sp.getString("type1_name6", "");
+		names[7] = sp.getString("type1_name7", "");
+		names[8] = sp.getString("type1_name8", "");
+		names[9] = sp.getString("type1_name9", "");
+		return names;
+	}
 
+	public static void setType1(String[] type1) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putString("type1_name0", type1[0]);
+		edit.putString("type1_name1", type1[1]);
+		edit.putString("type1_name2", type1[2]);
+		edit.putString("type1_name3", type1[3]);
+		edit.putString("type1_name4", type1[4]);
+		edit.putString("type1_name5", type1[5]);
+		edit.putString("type1_name6", type1[6]);
+		edit.putString("type1_name7", type1[7]);
+		edit.putString("type1_name8", type1[8]);
+		edit.putString("type1_name9", type1[9]);
+		edit.commit();
+	}
+	
+	/** Get the names of the */
+	public static String[] getType2() {
+		String[] names = new String[noteNum];
+		names[0] = sp.getString("type2_name0", "");
+		names[1] = sp.getString("type2_name1", "");
+		names[2] = sp.getString("type2_name2", "");
+		names[3] = sp.getString("type2_name3", "");
+		names[4] = sp.getString("type2_name4", "");
+		names[5] = sp.getString("type2_name5", "");
+		names[6] = sp.getString("type2_name6", "");
+		names[7] = sp.getString("type2_name7", "");
+		names[8] = sp.getString("type2_name8", "");
+		names[9] = sp.getString("type2_name9", "");
+		return names;
+	}
+
+	public static void setType2(String[] type1) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putString("type2_name0", type1[0]);
+		edit.putString("type2_name1", type1[1]);
+		edit.putString("type2_name2", type1[2]);
+		edit.putString("type2_name3", type1[3]);
+		edit.putString("type2_name4", type1[4]);
+		edit.putString("type2_name5", type1[5]);
+		edit.putString("type2_name6", type1[6]);
+		edit.putString("type2_name7", type1[7]);
+		edit.putString("type2_name8", type1[8]);
+		edit.putString("type2_name9", type1[9]);
+		edit.commit();
+	}
+	
+	/** Get the names of the */
+	public static String[] getType3() {
+		String[] names = new String[noteNum];
+		names[0] = sp.getString("type3_name0", "");
+		names[1] = sp.getString("type3_name1", "");
+		names[2] = sp.getString("type3_name2", "");
+		names[3] = sp.getString("type3_name3", "");
+		names[4] = sp.getString("type3_name4", "");
+		names[5] = sp.getString("type3_name5", "");
+		names[6] = sp.getString("type3_name6", "");
+		names[7] = sp.getString("type3_name7", "");
+		names[8] = sp.getString("type3_name8", "");
+		names[9] = sp.getString("type3_name9", "");
+		return names;
+	}
+
+	public static void setType3(String[] type1) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putString("type3_name0", type1[0]);
+		edit.putString("type3_name1", type1[1]);
+		edit.putString("type3_name2", type1[2]);
+		edit.putString("type3_name3", type1[3]);
+		edit.putString("type3_name4", type1[4]);
+		edit.putString("type3_name5", type1[5]);
+		edit.putString("type3_name6", type1[6]);
+		edit.putString("type3_name7", type1[7]);
+		edit.putString("type3_name8", type1[8]);
+		edit.putString("type3_name9", type1[9]);
+		edit.commit();
+	}
+	
+	/** Get the names of the */
+	public static String[] getType4() {
+		String[] names = new String[noteNum];
+		names[0] = sp.getString("type4_name0", "");
+		names[1] = sp.getString("type4_name1", "");
+		names[2] = sp.getString("type4_name2", "");
+		names[3] = sp.getString("type4_name3", "");
+		names[4] = sp.getString("type4_name4", "");
+		names[5] = sp.getString("type4_name5", "");
+		names[6] = sp.getString("type4_name6", "");
+		names[7] = sp.getString("type4_name7", "");
+		names[8] = sp.getString("type4_name8", "");
+		names[9] = sp.getString("type4_name9", "");
+		return names;
+	}
+
+	public static void setType4(String[] type1) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putString("type4_name0", type1[0]);
+		edit.putString("type4_name1", type1[1]);
+		edit.putString("type4_name2", type1[2]);
+		edit.putString("type4_name3", type1[3]);
+		edit.putString("type4_name4", type1[4]);
+		edit.putString("type4_name5", type1[5]);
+		edit.putString("type4_name6", type1[6]);
+		edit.putString("type4_name7", type1[7]);
+		edit.putString("type4_name8", type1[8]);
+		edit.putString("type4_name9", type1[9]);
+		edit.commit();
+	}
+	
+	/** Get the names of the */
+	public static String[] getType5() {
+		String[] names = new String[noteNum];
+		names[0] = sp.getString("type5_name0", "");
+		names[1] = sp.getString("type5_name1", "");
+		names[2] = sp.getString("type5_name2", "");
+		names[3] = sp.getString("type5_name3", "");
+		names[4] = sp.getString("type5_name4", "");
+		names[5] = sp.getString("type5_name5", "");
+		names[6] = sp.getString("type5_name6", "");
+		names[7] = sp.getString("type5_name7", "");
+		names[8] = sp.getString("type5_name8", "");
+		names[9] = sp.getString("type5_name9", "");
+		return names;
+	}
+
+	public static void setType5(String[] type1) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putString("type5_name0", type1[0]);
+		edit.putString("type5_name1", type1[1]);
+		edit.putString("type5_name2", type1[2]);
+		edit.putString("type5_name3", type1[3]);
+		edit.putString("type5_name4", type1[4]);
+		edit.putString("type5_name5", type1[5]);
+		edit.putString("type5_name6", type1[6]);
+		edit.putString("type5_name7", type1[7]);
+		edit.putString("type5_name8", type1[8]);
+		edit.putString("type5_name9", type1[9]);
+		edit.commit();
+	}
+	
+	/** Get the names of the */
+	public static String[] getType6() {
+		String[] names = new String[noteNum];
+		names[0] = sp.getString("type6_name0", "");
+		names[1] = sp.getString("type6_name1", "");
+		names[2] = sp.getString("type6_name2", "");
+		names[3] = sp.getString("type6_name3", "");
+		names[4] = sp.getString("type6_name4", "");
+		names[5] = sp.getString("type6_name5", "");
+		names[6] = sp.getString("type6_name6", "");
+		names[7] = sp.getString("type6_name7", "");
+		names[8] = sp.getString("type6_name8", "");
+		names[9] = sp.getString("type6_name9", "");
+		return names;
+	}
+
+	public static void setType6(String[] type1) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putString("type6_name0", type1[0]);
+		edit.putString("type6_name1", type1[1]);
+		edit.putString("type6_name2", type1[2]);
+		edit.putString("type6_name3", type1[3]);
+		edit.putString("type6_name4", type1[4]);
+		edit.putString("type6_name5", type1[5]);
+		edit.putString("type6_name6", type1[6]);
+		edit.putString("type6_name7", type1[7]);
+		edit.putString("type6_name8", type1[8]);
+		edit.putString("type6_name9", type1[9]);
+		edit.commit();
+	}
+	
+	/** Get the names of the */
+	public static String[] getType7() {
+		String[] names = new String[noteNum];
+		names[0] = sp.getString("type7_name0", "");
+		names[1] = sp.getString("type7_name1", "");
+		names[2] = sp.getString("type7_name2", "");
+		names[3] = sp.getString("type7_name3", "");
+		names[4] = sp.getString("type7_name4", "");
+		names[5] = sp.getString("type7_name5", "");
+		names[6] = sp.getString("type7_name6", "");
+		names[7] = sp.getString("type7_name7", "");
+		names[8] = sp.getString("type7_name8", "");
+		names[9] = sp.getString("type7_name9", "");
+		return names;
+	}
+
+	public static void setType7(String[] type1) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putString("type7_name0", type1[0]);
+		edit.putString("type7_name1", type1[1]);
+		edit.putString("type7_name2", type1[2]);
+		edit.putString("type7_name3", type1[3]);
+		edit.putString("type7_name4", type1[4]);
+		edit.putString("type7_name5", type1[5]);
+		edit.putString("type7_name6", type1[6]);
+		edit.putString("type7_name7", type1[7]);
+		edit.putString("type7_name8", type1[8]);
+		edit.putString("type7_name9", type1[9]);
+		
+		edit.commit();
+	}
+	
+	/** Get the names of the */
+	public static String[] getType8() {
+		String[] names = new String[noteNum];
+		names[0] = sp.getString("type8_name0", "");
+		names[1] = sp.getString("type8_name1", "");
+		names[2] = sp.getString("type8_name2", "");
+		names[3] = sp.getString("type8_name3", "");
+		names[4] = sp.getString("type8_name4", "");
+		names[5] = sp.getString("type8_name5", "");
+		names[6] = sp.getString("type8_name6", "");
+		names[7] = sp.getString("type8_name7", "");
+		names[8] = sp.getString("type8_name8", "");
+		names[9] = sp.getString("type8_name9", "");
+		return names;
+	}
+
+	public static void setType8(String[] type1) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putString("type8_name0", type1[0]);
+		edit.putString("type8_name1", type1[1]);
+		edit.putString("type8_name2", type1[2]);
+		edit.putString("type8_name3", type1[3]);
+		edit.putString("type8_name4", type1[4]);
+		edit.putString("type8_name5", type1[5]);
+		edit.putString("type8_name6", type1[6]);
+		edit.putString("type8_name7", type1[7]);
+		edit.putString("type8_name8", type1[8]);
+		edit.putString("type8_name9", type1[9]);
+		edit.commit();
+	}
 	
 
 

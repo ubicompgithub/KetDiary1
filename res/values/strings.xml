@@ -370,7 +370,7 @@
     </string-array>
 
     <string name="edit">編輯</string>
-    <string name="setting_limit">抱歉！最多只能選擇三項</string>
+    <string name="setting_limit">抱歉！最多只能選擇五項</string>
     <string name="story_test_cancel">下次再做</string>
     <string name="story_test_ok">確定送出</string>
     <string name="title_activity_trigger">新增記事</string>

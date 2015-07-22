@@ -9,6 +9,18 @@
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:background="@drawable/analyse_line" >
+        
+        <TextView
+            android:id="@+id/analysis_counter_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="26.7dp"
+            android:gravity="center"
+            android:text="升級了!"
+            android:textColor="@color/black"
+            android:textSize="@dimen/normal_text_size" 
+            android:visibility="gone"/>
+        
     </RelativeLayout>
     
     <LinearLayout 

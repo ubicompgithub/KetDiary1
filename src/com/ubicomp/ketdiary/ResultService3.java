@@ -16,11 +16,15 @@ import android.widget.Toast;
 
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE3;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothListener;
+import com.ubicomp.ketdiary.color.ColorDetectListener;
 import com.ubicomp.ketdiary.color.TestStripDetection4;
+import com.ubicomp.ketdiary.data.structure.TestDetail;
 import com.ubicomp.ketdiary.db.DatabaseControl;
+import com.ubicomp.ketdiary.db.TestDataParser2;
+import com.ubicomp.ketdiary.fragment.TestFragment;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 
-public class ResultService3 extends Service implements BluetoothListener {
+public class ResultService3 extends Service implements BluetoothListener, ColorDetectListener{
 	
 	private ResultService3 myservice = this;
 	private Context context = App.getContext();
@@ -45,6 +49,17 @@ public class ResultService3 extends Service implements BluetoothListener {
 	
 	private ProgressDialog dialog = null;
 	private boolean first = true;
+	public TestDataParser2 TDP;
+	
+	private int failedState = 0;
+	private float connectionFailRate = 0;
+	private String failedReason = "";
+	private int colorReading = 0;
+	private static final int CONNECT_FAIL = 8;
+	private static final int PIC_STATE  = 9;
+	private static final int PIC_SEND_FAIL = 10;
+	
+	
     @Override  
     public  void  onCreate() {  
         super .onCreate();  
@@ -55,9 +70,10 @@ public class ResultService3 extends Service implements BluetoothListener {
         notification.setLatestEventInfo( this ,  "這是通知的標題" ,  "這是通知的內容" , pendingIntent);  
         startForeground( 1 , notification);  
         
-        testStripDetection = new TestStripDetection4();
+        testStripDetection = new TestStripDetection4(myservice);
         db = new DatabaseControl();
         openSensorMsgTimer = new OpenSensorMsgTimer();
+       
     }  
     
 	private Runnable updateTimer = new Runnable() {
@@ -96,6 +112,7 @@ public class ResultService3 extends Service implements BluetoothListener {
 			
 			if(spentTime < 0){ //想一下時間到要做什麼    跳出不一樣的notification讓他點or直接跳出activity
 				mhandler.removeCallbacks(updateTimer);
+				//goResult();
 				stopSelf();
 			}
 
@@ -117,11 +134,15 @@ public class ResultService3 extends Service implements BluetoothListener {
 		
 		if(ble!=null){
 			isConnect = false;
+			ble.bleWriteState((byte)0x05);
 			ble.bleDisconnect();
 			ble = null;
 		}
 		
 		testStripDetection.sendEmptyMessage(0);
+		
+		
+		//setTestDetail();
 		
 //		Random rand = new Random();
 //		result = rand.nextInt(2); //Random Gen Result
@@ -131,6 +152,24 @@ public class ResultService3 extends Service implements BluetoothListener {
 		
 		stopSelf();
     }
+    
+    private void setTestDetail(){
+    	String cassetteId = TestFragment.testDetail.cassetteId;
+		long ts = PreferenceControl.getUpdateDetectionTimestamp();
+		int firstVoltage = TestFragment.testDetail.firstVoltage;
+		int secondVoltage= TestFragment.testDetail.secondVoltage;
+		int devicePower = TestFragment.testDetail.devicePower;
+		
+		Toast.makeText(myservice, "Check: "+ colorReading, Toast.LENGTH_SHORT).show();
+		Log.i(TAG, "Check: "+ colorReading);
+				
+		TestDetail testDetail = new TestDetail(cassetteId, ts, failedState, firstVoltage,
+				secondVoltage, devicePower, colorReading,
+                connectionFailRate, failedReason);
+		
+		db.insertTestDetail(testDetail);
+    }
+    
     
     private void stop(){
     	
@@ -180,7 +219,7 @@ public class ResultService3 extends Service implements BluetoothListener {
 	    return  super .onStartCommand(intent, flags, startId);  
 	}
 	
-	private class OpenSensorMsgTimer extends CountDownTimer { //五秒鐘之內沒連到會直接fail
+	private class OpenSensorMsgTimer extends CountDownTimer { //20秒鐘之內沒連到會直接fail
 
 		public OpenSensorMsgTimer() {
 			super(20000, 2000);
@@ -188,8 +227,12 @@ public class ResultService3 extends Service implements BluetoothListener {
 
 		@Override
 		public void onFinish() {
+			
+			failedState = CONNECT_FAIL;
+			failedReason = "檢測器未開啟";
 			Toast.makeText(myservice, "請開啟檢測器", Toast.LENGTH_SHORT).show();
-			PreferenceControl.setTestFail();			
+			PreferenceControl.setTestFail();
+			MainActivity.getMainActivity().setResultFail();
 			//stop();	
 		}
 
@@ -204,13 +247,7 @@ public class ResultService3 extends Service implements BluetoothListener {
 	}
 	
 	
-	private void testDialog(){
-		dialog = new ProgressDialog(context);
-		dialog.setMessage("Please Wait...");
-		dialog.setCancelable(false);
-		dialog.show();
-		
-	}
+
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -300,7 +337,7 @@ public class ResultService3 extends Service implements BluetoothListener {
 		
 		blehandler.postDelayed(writeBle, 2000);
 	
-		if(picNum == 2){
+		if(picNum == 1){
 			goResult();
 			Log.i(TAG, "GoResult!");
 		}
@@ -344,7 +381,13 @@ public class ResultService3 extends Service implements BluetoothListener {
 
 	@Override
 	public void bleTakePictureFail(float dropRate) {
-		// TODO Auto-generated method stub
+		
+		failedState = PIC_SEND_FAIL;
+		connectionFailRate = dropRate;
+		
+		Log.i(TAG, "DropRate: " + dropRate);
+		Toast.makeText(this, "Picture Fail, DropRate: " + dropRate, Toast.LENGTH_SHORT).show();
+		blehandler.postDelayed(writeBle, 500);
 		
 	}
 
@@ -352,5 +395,11 @@ public class ResultService3 extends Service implements BluetoothListener {
 	public void imgDetect(Bitmap bitmap) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void colorDetectSuccess(int check) {
+		colorReading = check;
+		setTestDetail();
 	}
 }

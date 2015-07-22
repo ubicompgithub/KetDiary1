@@ -28,8 +28,9 @@ import com.ubicomp.ketdiary.ui.Typefaces;
 
 /**
  * Note after testing
+ * 答對題目 & 一段時間後才換題目
+ * 
  * @author Andy
- *
  */
 public class QuestionDialog{
 	
@@ -62,6 +63,7 @@ public class QuestionDialog{
 	private String[] selection;
 	private DatabaseControl db;
 	private int questionType = 0;
+	private boolean change = true;
 	
 	private static final int[] iconId = {R.drawable.emoji5, R.drawable.emoji2, R.drawable.emoji4,
 		R.drawable.emoji1, R.drawable.emoji3, R.drawable.others_emoji3, R.drawable.others_emoji2,
@@ -152,18 +154,20 @@ public class QuestionDialog{
 	/** show the dialog */
 	public void show(int type) {
 		
-		if(type == 1)
-			selection = settingQuestion2();
-		else
-			selection = settingQuestion();
-		
-		tv_answer1.setText(selection[0]);
-		tv_answer2.setText(selection[1]);
-		tv_answer3.setText(selection[2]);
-		tv_answer4.setText(selection[3]);
-		
-		tv_question.setText(question);
-		
+		if(change){
+			change = false;
+			if(type == 1)
+				selection = settingQuestion2();
+			else
+				selection = settingQuestion();
+			
+			tv_answer1.setText(selection[0]);
+			tv_answer2.setText(selection[1]);
+			tv_answer3.setText(selection[2]);
+			tv_answer4.setText(selection[3]);
+			
+			tv_question.setText(question);
+		}
 		MainActivity.getMainActivity().enableTabAndClick(false);
 		boxLayout.setVisibility(View.VISIBLE);
 
@@ -283,8 +287,9 @@ public class QuestionDialog{
 			if(isCorrect == 0){
 				CustomToast.generateToast(R.string.question_wrong, -1);
 			}
-			else{
+			else{//答對換題目
 				CustomToast.generateToast(R.string.question_correct, addScore);
+				change = true;
 			}
 			
 			PreferenceControl.setPoint(addScore);			

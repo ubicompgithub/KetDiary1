@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ubicomp.ketdiary"
-    android:versionCode="54"
-    android:versionName="1.54" >
+    android:versionCode="56"
+    android:versionName="1.56" >
     
     <uses-sdk android:minSdkVersion="14" />
  	
@@ -166,6 +166,13 @@
         </activity>
         <activity
             android:name=".ModifyActivity"
+            android:label="@string/title_activity_dev"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".SelectActivity"
             android:label="@string/title_activity_dev"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:launchMode="singleTop"
