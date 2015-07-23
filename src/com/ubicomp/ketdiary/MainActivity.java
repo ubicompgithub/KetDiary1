@@ -952,10 +952,13 @@ public class MainActivity extends FragmentActivity {
 	}
 	
 	public void setResultFail(){
-		if(sensorCountDownTimer!=null)
-			sensorCountDownTimer.cancel();
 		
-		PreferenceControl.setCheckResult(false);
+		closeTimers();
+		showResultFail();
+		//animation.stop();
+		//PreferenceControl.setAfterTestState(NoteDialog3.STATE_TEST);
+		//PreferenceControl.setCheckResult(false);
+		
 	}
 
 	public void setTimers() {

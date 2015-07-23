@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE3;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothListener;
 import com.ubicomp.ketdiary.color.ColorDetectListener;
+import com.ubicomp.ketdiary.color.ImageDetection;
 import com.ubicomp.ketdiary.color.TestStripDetection4;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
 import com.ubicomp.ketdiary.db.DatabaseControl;
@@ -50,6 +51,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	private ProgressDialog dialog = null;
 	private boolean first = true;
 	public TestDataParser2 TDP;
+	private ImageDetection imageDetection = null;
 	
 	private int failedState = 0;
 	private float connectionFailRate = 0;
@@ -73,6 +75,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
         testStripDetection = new TestStripDetection4(myservice);
         db = new DatabaseControl();
         openSensorMsgTimer = new OpenSensorMsgTimer();
+        imageDetection = new ImageDetection(this);
        
     }  
     
@@ -107,7 +110,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 				
 				
 				if(!stateSuccess && isConnect)
-		        	ble.bleWriteState((byte)0x06);
+		        	ble.bleWriteState((byte)0x03);
 			}
 			
 			if(spentTime < 0){ //想一下時間到要做什麼    跳出不一樣的notification讓他點or直接跳出activity
@@ -139,7 +142,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 			ble = null;
 		}
 		
-		testStripDetection.sendEmptyMessage(0);
+		//testStripDetection.sendEmptyMessage(0);
 		
 		
 		//setTestDetail();
@@ -375,7 +378,23 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 
 	@Override
 	public void bleTakePictureSuccess(Bitmap bitmap) {
-		// TODO Auto-generated method stub
+		picNum++;
+		Log.i(TAG, "Picture: " + picNum + " Save");
+		Toast.makeText(this, "Picture: " + picNum + " Save", Toast.LENGTH_SHORT).show();
+		
+		if(picNum == 1){
+			imageDetection.roiDetectionOnWhite(bitmap);	
+		}
+		
+		blehandler.postDelayed(writeBle, 2000);
+		//blehandler.postDelayed(writeBle, 2000);
+	
+		if(picNum == 2){
+			colorReading = imageDetection.testStripDetection(bitmap);
+			setTestDetail();
+			goResult();
+			Log.i(TAG, "GoResult!");
+		}
 		
 	}
 
@@ -387,8 +406,9 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		
 		Log.i(TAG, "DropRate: " + dropRate);
 		Toast.makeText(this, "Picture Fail, DropRate: " + dropRate, Toast.LENGTH_SHORT).show();
-		blehandler.postDelayed(writeBle, 500);
-		
+		//blehandler.postDelayed(writeBle, 500);
+		PreferenceControl.setTestFail();
+		MainActivity.getMainActivity().setResultFail();
 	}
 
 	@Override

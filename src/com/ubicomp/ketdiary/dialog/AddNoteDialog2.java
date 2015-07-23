@@ -709,7 +709,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 			
 			ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_CANCEL);
 			
-			testQuestionCaller.writeQuestionFile(day, timeslot, -1, -1, -1, edtext.getText().toString());
+			//testQuestionCaller.writeQuestionFile(day, timeslot, -1, -1, -1, edtext.getText().toString());
 			close();
 			clear();
 			testQuestionCaller.resetView();
