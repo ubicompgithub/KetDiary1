@@ -36,8 +36,10 @@ public class TestStripDetection4 extends Handler{
     private static final String FILE = "Sample";
     private String file_name = null;
     private File file;
-    public TestStripDetection4() {
-    	
+    public float check = 0 ;
+    ColorDetectListener colorDetectListener;
+    public TestStripDetection4(ColorDetectListener colorDetectListener) {
+    	this.colorDetectListener = colorDetectListener;
     }
     
     
@@ -47,7 +49,7 @@ public class TestStripDetection4 extends Handler{
         long ts = PreferenceControl.getUpdateDetectionTimestamp();
         File dir = MainStorage.getMainStorageDirectory();
         mainStorage = new File(dir, String.valueOf(ts));
-        file_name = "PIC_" + ts + "_" + 0 + ".jpg";
+        file_name = "PIC_" + ts + "_" + 0 + ".sob";
         file = new File(mainStorage, file_name);
         imgDetect(null);
     }
@@ -180,6 +182,7 @@ public class TestStripDetection4 extends Handler{
         int result2 = result? 0:1;
         PreferenceControl.setTestResult(result2);
         PreferenceControl.setTestSuccess();
+        colorDetectListener.colorDetectSuccess((int)check);
 
         bmp = Bitmap.createBitmap(matOrigin.cols(), matOrigin.rows(), Bitmap.Config.ARGB_4444);
         Utils.matToBitmap(matOrigin, bmp);
@@ -198,13 +201,14 @@ public class TestStripDetection4 extends Handler{
         int w = image.getWidth();
         int h = image.getHeight();
         Log.i(TAG, "width: " + w + " , height: " + h);
+        check = 0;
 
         final float eps = (float) -0.000001;
         float [] x0 = new float[w];
         float [] diff = new float[w-1];
         float [] pivot = new float[w-2];
         int [] rowNum = new int[]{6, 13, 18};
-        float check = 0;
+        //float check = 0;
 
         for(int i = 0; i < h; i++){
             float maximum = 0;

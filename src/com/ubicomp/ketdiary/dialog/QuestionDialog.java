@@ -28,8 +28,9 @@ import com.ubicomp.ketdiary.ui.Typefaces;
 
 /**
  * Note after testing
+ * 答對題目 & 一段時間後才換題目
+ * 
  * @author Andy
- *
  */
 public class QuestionDialog{
 	
@@ -44,10 +45,11 @@ public class QuestionDialog{
 	private RelativeLayout boxLayout = null;
 	private LinearLayout questionLayout;
 	
-	private String question = "";
-	private String answer = "";
-	private String selectedAnswer = "";
-	
+	private static String question = "";
+	private static String answer = "";
+	private static String selectedAnswer = "";
+	private static String[] selection;
+
 	private RelativeLayout mainLayout;
 	private String[] type_str;
 	
@@ -59,9 +61,12 @@ public class QuestionDialog{
 			digitTypefaceBold;
 	
 	private int select = -1;
-	private String[] selection;
 	private DatabaseControl db;
 	private int questionType = 0;
+	private static boolean change = true;
+	private static boolean change2 = true;
+	private static long last_visit= 0;
+	private static long last_visit2=0;
 	
 	private static final int[] iconId = {R.drawable.emoji5, R.drawable.emoji2, R.drawable.emoji4,
 		R.drawable.emoji1, R.drawable.emoji3, R.drawable.others_emoji3, R.drawable.others_emoji2,
@@ -151,17 +156,32 @@ public class QuestionDialog{
 	
 	/** show the dialog */
 	public void show(int type) {
+			if(System.currentTimeMillis() - last_visit > 10*60*1000){
+				change = true;
+			}
+			if(System.currentTimeMillis() - last_visit2 > 10*60*1000){
+				change2 = true;
+			}
 		
-		if(type == 1)
-			selection = settingQuestion2();
-		else
-			selection = settingQuestion();
-		
+			if(type == 1){
+				if(change2){
+					change2 = false;
+					selection = settingQuestion2();
+				}
+			}
+			else{
+				if(change){
+					change = false;
+					selection = settingQuestion();
+					last_visit = System.currentTimeMillis();
+				}
+			}
+			
 		tv_answer1.setText(selection[0]);
 		tv_answer2.setText(selection[1]);
 		tv_answer3.setText(selection[2]);
 		tv_answer4.setText(selection[3]);
-		
+			
 		tv_question.setText(question);
 		
 		MainActivity.getMainActivity().enableTabAndClick(false);
@@ -283,8 +303,9 @@ public class QuestionDialog{
 			if(isCorrect == 0){
 				CustomToast.generateToast(R.string.question_wrong, -1);
 			}
-			else{
+			else{//答對換題目
 				CustomToast.generateToast(R.string.question_correct, addScore);
+				change = true;
 			}
 			
 			PreferenceControl.setPoint(addScore);			

@@ -162,6 +162,11 @@ public class HttpPostGenerator {
 			imageFiles[i] = new File(mainStorageDir.getPath() + File.separator
 					+ _ts + File.separator + "IMG_" + _ts + "_" + (i + 1)
 					+ ".sob");
+		
+		for (int i = 0; i < picFiles.length; ++i)
+			picFiles[i] = new File(mainStorageDir.getPath() + File.separator
+					+ _ts + File.separator + "PIC_" + _ts + "_" + (i)
+					+ ".sob");
 
 		if (testFile.exists())
 			builder.addPart("file[]", new FileBody(testFile));
@@ -173,6 +178,11 @@ public class HttpPostGenerator {
 				Log.d("image", imageFiles[i].getName());
 			}
 		
+		for (int i = 0; i < picFiles.length; ++i)
+			if (picFiles[i].exists()){
+				builder.addPart("file[]", new FileBody(picFiles[i]));
+				Log.d("Pic", picFiles[i].getName());
+			}
 		
 		httpPost.setEntity(builder.build());
 		return httpPost;

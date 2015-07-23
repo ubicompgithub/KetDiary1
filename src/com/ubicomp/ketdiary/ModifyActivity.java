@@ -77,12 +77,15 @@ public class ModifyActivity extends Activity {
 			int day = testResult[i].getTv().getDay();
 			final long ts = testResult[i].getTv().getTimestamp();
 			final int result = testResult[i].getResult();
+			if(result < 0 || result > 1 )
+				continue;
+			
 			String text = year+"年"+(month+1)+"月"+day+"日"+" 結果: "+RESULT[result];
 			
 			
 			
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle("確定修改結果?");
+			builder.setTitle( year+"年"+(month+1)+"月"+day+"日\n"+"確定修改成 "+ RESULT[result^1]+"?");
 //			builder.setPositiveButton("確定", new ModifyListener(ts, result)); 
 //			builder.setNegativeButton("取消", null);
 			builder.setNegativeButton("確定", new ModifyListener(ts, result)); 

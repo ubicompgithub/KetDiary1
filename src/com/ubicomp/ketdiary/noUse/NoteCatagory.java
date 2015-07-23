@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.db;
+package com.ubicomp.ketdiary.noUse;
 
 import java.util.Vector;
 

@@ -5,7 +5,7 @@ import java.util.Vector;
 
 public class NoteCategory2 {
 	
-	HashMap < Integer, String > dictionary;
+	public static HashMap < Integer, String > dictionary;
 	
 	
 	public NoteCategory2(){

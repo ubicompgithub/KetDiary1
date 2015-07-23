@@ -14,6 +14,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.ubicomp.ketdiary.MainActivity;
+import com.ubicomp.ketdiary.color.ImageDetection;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 
@@ -22,7 +24,7 @@ import com.ubicomp.ketdiary.system.PreferenceControl;
  */
 public class DataTransmission {
     private static final String TAG = "DataTransmission";
-    private static final int maximumPktNum = 80;
+    private static final int maximumPktNum = 120;
 	private static final int timeout = 5000;
 
     private BluetoothListener bluetoothListener = null;
@@ -46,12 +48,14 @@ public class DataTransmission {
 
     private Set<Integer> integerSet;
     
-    private Timer timer;
+    private Timer timer = null;
     private int counter = 0;
 
     public DataTransmission(BluetoothListener bluetoothListener, BluetoothLE3 ble){
     	this.bluetoothListener = bluetoothListener; 
         this.ble = ble;
+		
+		
         tempBuf = new byte [128];
         picBuf = new byte [maximumPktNum][];
         integerSet = new HashSet();
@@ -89,7 +93,7 @@ public class DataTransmission {
                 long ts = PreferenceControl.getUpdateDetectionTimestamp();
 	            File dir = MainStorage.getMainStorageDirectory();
 	            mainStorage = new File(dir, String.valueOf(ts));
-	            String file_name = "PIC_" + ts + "_" + picNum + ".jpg";
+	            String file_name = "PIC_" + ts + "_" + picNum + ".sob";
 	              
 	            picNum ++ ;
 
@@ -148,6 +152,9 @@ public class DataTransmission {
                     recvNum++;
                     bufOffset = 0;
 
+					timer.cancel();
+                    timer = new Timer();
+                    timer.schedule(new TimeoutTask(), timeout);
                     ((BluetoothListener) bluetoothListener).updateProcessRate((float)recvNum*100/pktNum );
                 }else{
                     Log.d(TAG, "Checksum error in ".concat(String.valueOf(tempPktId)).concat("th packet."));
@@ -185,11 +192,14 @@ public class DataTransmission {
                     //ble.bleWriteAck((byte) 0x05);
                     ble.bleWriteState((byte) 0x07);
 					timer.cancel();
+					timer = null;
 
                     ((BluetoothListener) bluetoothListener).bleTakePictureSuccess(bitmap);
-                    Log.i(TAG, bitmap.getHeight() + " " + bitmap.getWidth());
-                    ((BluetoothListener) bluetoothListener).imgDetect(bitmap);
-                    ((BluetoothListener) bluetoothListener).bleTakePictureSuccess();
+
+                    //((BluetoothListener) bluetoothListener).bleTakePictureSuccess(bitmap);
+                   // Log.i(TAG, bitmap.getHeight() + " " + bitmap.getWidth());
+                    //((BluetoothListener) bluetoothListener).imgDetect(bitmap);
+                   // ((BluetoothListener) bluetoothListener).bleTakePictureSuccess();
                     
                     
                     resetParameters();
@@ -215,6 +225,7 @@ public class DataTransmission {
             for(int i = 0; i < remainPktNum; i++){
                 for(;j < pktNum; j++){
                     if(!integerSet.contains(j)){
+						Log.i(TAG, "Lost " + j + " th packet");
                         bytes[i+2] = (byte)(j & 0xFF);
                         j++;
                         break;
@@ -237,14 +248,20 @@ public class DataTransmission {
         }
         integerSet.clear();
     }
+	 public void resetTimeoutTimer(){
+        timer.cancel();
+        timer = new Timer();
+        timer.schedule(new TimeoutTask(), timeout);
+    }
 	class TimeoutTask extends TimerTask{
 
         @Override
         public void run() {
-            Log.i(TAG, "Timeout timer was  fired once.");
+            Log.i(TAG, "Timeout timer was  fired " + counter);
             if(counter < 10){
                 checkPackets();
                 counter++;
+                resetTimeoutTimer();
             }
             else{
                 timer.cancel();

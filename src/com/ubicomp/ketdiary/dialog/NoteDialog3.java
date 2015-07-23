@@ -2,7 +2,10 @@ package com.ubicomp.ketdiary.dialog;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import android.app.Activity;
@@ -28,7 +31,6 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -40,9 +42,11 @@ import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.check.TimeBlock;
 import com.ubicomp.ketdiary.clicklog.ClickLog;
 import com.ubicomp.ketdiary.clicklog.ClickLogId;
+import com.ubicomp.ketdiary.db.NoteCatagory3;
 import com.ubicomp.ketdiary.file.QuestionFile;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.BarButtonGenerator;
+import com.ubicomp.ketdiary.ui.CustomScrollView;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
 
@@ -86,7 +90,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 	
 	private int state;
 	private ChooseItemDialog chooseBox;
-	
+	private NoteCatagory3 noteCategory;
 	
 	//write File
 	private File mainDirectory;
@@ -108,7 +112,8 @@ public class NoteDialog3 implements ChooseItemCaller{
 	private String description;
 	private boolean viewshow = false;
 	
-	private ScrollView sv;
+	private boolean done = false;
+	private CustomScrollView sv;
 	public static final int STATE_TEST = 0;
 	public static final int STATE_NOTE = 1;
 	public static final int STATE_COPE = 2;
@@ -140,7 +145,9 @@ public class NoteDialog3 implements ChooseItemCaller{
 		goResultOnClickListener = new GoResultOnClickListener();
 		goCopingToResultOnClickListener = new GoCopingToResultOnClickListener();
 		cancelGoCopingOnClickListener = new CancelGoCopingOnClickListener();
-	
+		
+		
+		noteCategory = new NoteCatagory3();
 	}
 	
 	protected void setting() {
@@ -156,7 +163,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 		title_layout = (LinearLayout) boxLayout.findViewById(R.id.note_title_layout);
 		main_layout = (LinearLayout) boxLayout.findViewById(R.id.note_main_layout);
 		bottom_layout = (LinearLayout) boxLayout.findViewById(R.id.note_bottom_layout);
-		sv = (ScrollView) boxLayout.findViewById(R.id.note_main_scroll);
+		sv = (CustomScrollView) boxLayout.findViewById(R.id.note_main_scroll);
 		
 		
 		//
@@ -271,6 +278,27 @@ public class NoteDialog3 implements ChooseItemCaller{
 		LinearLayout impact_layout = (LinearLayout) inflater.inflate(
 				R.layout.bar_impact, null);
 		impactSeekBar=(SeekBar)impact_layout.findViewById(R.id.impact_seek_bar);
+		impactSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress,
+					boolean fromUser) {
+				done = true;
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 		TextView impact_title = (TextView)impact_layout.findViewById(R.id.impact_title);
 		impact_title.setTypeface(wordTypefaceBold);
 		
@@ -579,15 +607,72 @@ public class NoteDialog3 implements ChooseItemCaller{
 		//.setOnItemSelectedListener(new SpinnerXMLSelectedListener());
 	}
 	
+	private void SetListItem2(int type){
+		//ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, android.R.layout.simple_list_item_1);
+		items = -1;
+		sp_content.setText(""); //TODO: 假如點到同一個不要清掉
+		//ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, R.layout.my_listitem);
+		String[] type1 = PreferenceControl.getType1();; 
+		switch(type){
+		case 1:
+			type1 = PreferenceControl.getType1();
+			break;
+		case 2:
+			type1 = PreferenceControl.getType2();
+			break;
+		case 3:
+			type1 = PreferenceControl.getType3();
+			break;
+		case 4:
+			type1 = PreferenceControl.getType4();
+			break;
+		case 5:
+			type1 = PreferenceControl.getType5();
+			break;
+		case 6:
+			type1 = PreferenceControl.getType6();
+			break;
+		case 7:
+			type1 = PreferenceControl.getType7();
+			break;
+		case 8:
+			type1 = PreferenceControl.getType8();
+			break;
+	
+		}
+				
+		String[] after = clean(type1);
+		ArrayAdapter adapter = new ArrayAdapter<String>(context, R.layout.my_listitem, after);
+		listView.setAdapter(adapter);
+		listView.setOnItemClickListener(new OnItemClickListener(){
 
+		   @Override
+		   public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+			   TextView c = (TextView) view.findViewById(android.R.id.text1);
+			    String playerChanged = c.getText().toString();
+			    
+			    items = noteCategory.myNewHashMap.get(playerChanged);
+				Log.d(TAG, items+"");
+			    //Toast.makeText(Settings.this,playerChanged, Toast.LENGTH_SHORT).show();  
+			 sp_content.setText(playerChanged);
+			 listView.setVisibility(View.GONE);
+			 viewshow = false;
+		   }
+		   
+		});
+		setListViewHeightBasedOnItems(listView);
+		listView.setVisibility(View.VISIBLE);
+		viewshow = true;
+		sv.smoothScrollTo(0 , (int)convertDpToPixel((float)200));
 		
-	class MyOnLongClickListener implements OnLongClickListener{
-	    public boolean onLongClick(View v){
-	    	//dialog.show();
-	    	return true;
-	    }
+		//.setOnItemSelectedListener(new SpinnerXMLSelectedListener());
 	}
 	
+	 public static String[] clean(final String[] v) {
+		    List<String> list = new ArrayList<String>(Arrays.asList(v));
+		    list.removeAll(Collections.singleton(""));
+		    return list.toArray(new String[list.size()]);
+		}
 	
 	//把所選取的結果送出 
 	class EndOnClickListener implements View.OnClickListener{
@@ -595,7 +680,12 @@ public class NoteDialog3 implements ChooseItemCaller{
 			
 			Log.d(TAG, items+" "+impact);
 			
-			if(state == STATE_NOTE){
+			
+			if(!done){
+				Toast.makeText(context, "確定要送出結果嗎?" ,Toast.LENGTH_SHORT).show();
+				done = true;
+			}
+			else if(state == STATE_NOTE){
 				if(type <= 0 || items < 100){
 					//CustomToastSmall.generateToast(R.string.note_check);
 					Toast.makeText(context, R.string.note_check ,Toast.LENGTH_SHORT).show();
@@ -663,7 +753,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 	//把所選取的結果取消
 	class CancelOnClickListener implements View.OnClickListener{
 		public void onClick(View v){
-			
+			done = true;
 			if(state == STATE_NOTE){
 				//impact = impactSeekBar.getProgress();
 				ClickLog.Log(ClickLogId.TEST_QUESTION_CANCEL);
@@ -689,7 +779,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 	//把所選取的結果取消
 		class CancelGoCopingOnClickListener implements View.OnClickListener{
 			public void onClick(View v){
-				
+				done = true;
 				if(state == STATE_NOTE){
 					//impact = impactSeekBar.getProgress();
 					ClickLog.Log(ClickLogId.TEST_QUESTION_CANCEL);
@@ -713,14 +803,6 @@ public class NoteDialog3 implements ChooseItemCaller{
 	    }
 	}
 	
-	
-	
-	public void onBackPressed() {
-	    //super.onBackPressed(); 
-	    //startActivity(new Intent(that, EventCopeSkillActivity.class));
-	    // Do extra stuff here
-	}
-	
 	private void initTypePager(){
 	    vPager = (ViewPager) center_layout.findViewById(R.id.viewpager);
 	    vPager.setOnPageChangeListener(new MyOnPageChangeListener());
@@ -732,7 +814,6 @@ public class NoteDialog3 implements ChooseItemCaller{
 		TypePageAdapter mAdapter = new TypePageAdapter(aList);		
 		vPager.setAdapter(mAdapter);
 	}
-	
 	
 	public class TypePageAdapter extends PagerAdapter{
 		
@@ -905,8 +986,6 @@ public class NoteDialog3 implements ChooseItemCaller{
 	
 	//監聽頁面切換時間,主要做的是動畫處理,就是移動條的移動
 		public class MyOnPageChangeListener implements OnPageChangeListener {
-
-
 			@Override
 			public void onPageSelected(int index) {
 

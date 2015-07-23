@@ -82,9 +82,9 @@ public class HelpActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
-						// Intent intent = new Intent();
-						// intent.setClass(activity, ManualActivity.class);
-						// startActivity(intent);
+						 Intent intent = new Intent();
+						 intent.setClass(activity, SelectActivity.class);
+						 startActivity(intent);
 					}
 				});
 		mainLayout.addView(manualView);

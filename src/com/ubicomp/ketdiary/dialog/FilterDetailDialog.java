@@ -11,7 +11,7 @@ public class FilterDetailDialog extends Dialog{
     public FilterDetailDialog(Context context) {
         super(context, android.R.style.Theme_Light);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.dialog_diary_detail);
+        setContentView(R.layout.dialog_filter_detail);
     }
 
 }

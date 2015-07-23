@@ -33,7 +33,7 @@ public class PreSettingActivity extends Activity {
 	private EditText voltage1, voltage2, ACountDown, VCountDown, V2CountDown;
 
 	private Button saveButton, exchangeButton, restoreButton, debugButton,
-			restoreVer1Button, dummyDataButton;
+			restoreVer1Button, dummyDataButton, changeButton;
 	private boolean debug;
 	private Activity activity;
 	private static final int MIN_NAME_LENGTH = 3;
@@ -117,7 +117,19 @@ public class PreSettingActivity extends Activity {
 
 		saveButton = (Button) this.findViewById(R.id.uid_OK);
 		saveButton.setOnClickListener(new OKOnclickListener());
+		
+		changeButton = (Button) this.findViewById(R.id.changeNote);
+		changeButton.setOnClickListener(new OnClickListener(){
 
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent();
+				 intent.setClass(activity, SelectActivity.class);
+				 startActivity(intent);					
+			}
+			
+		});
+		
 		versionText = (TextView) this.findViewById(R.id.version);
 
 		lDateCheckBox = (CheckBox) findViewById(R.id.system_lock);

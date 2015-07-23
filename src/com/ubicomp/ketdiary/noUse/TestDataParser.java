@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.db;
+package com.ubicomp.ketdiary.noUse;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,6 +10,7 @@ import android.util.Log;
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.TestResult;
+import com.ubicomp.ketdiary.db.DBControl;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 

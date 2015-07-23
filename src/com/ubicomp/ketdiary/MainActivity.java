@@ -240,7 +240,25 @@ public class MainActivity extends FragmentActivity {
 			fm = getSupportFragmentManager();
 			fragments = new Fragment[3];
 			tabHost.setOnTabChangedListener(new TabChangeListener());
+			
+			
+			
+			//Random Question setting
+			if(!db.randomQuestionDone() && !PreferenceControl.getRandomQustion()){
+			
+			//if(!PreferenceControl.getRandomQustion()){
+				Random rand = new Random();
+				int prob = rand.nextInt(100);
+				if( prob >= 50 ){
+					PreferenceControl.setRandomQustion(true);
+					PreferenceControl.setRandomTs(System.currentTimeMillis());
+				}
+			}
+			else if(PreferenceControl.getRandomDiff(System.currentTimeMillis())){
+					PreferenceControl.setRandomQustion(false);
+			}
 
+			
 			setDefaultTab();
 			//setDefaultTab2();
 			//enableTab(false);
@@ -257,18 +275,7 @@ public class MainActivity extends FragmentActivity {
 			count_down_layout.setOnTouchListener(new CountDownCircleOnTouchListener());
 			
 			
-			//Random Question setting
-			if(!db.randomQuestionDone() && !PreferenceControl.getRandomQustion()){
-				Random rand = new Random();
-				int prob = rand.nextInt(100);
-				if( prob >= 50 ){
-					PreferenceControl.setRandomQustion(true);
-					PreferenceControl.setRandomTs(System.currentTimeMillis());
-				}
-			}
-			else if(PreferenceControl.getRandomDiff(System.currentTimeMillis())){
-					PreferenceControl.setRandomQustion(false);
-			}
+			
 			
 		}
 	}
@@ -941,11 +948,18 @@ public class MainActivity extends FragmentActivity {
 			
 		}
 		else{
-
 		}
-
 	}
 	
+	public void setResultFail(){
+		
+		closeTimers();
+		showResultFail();
+		//animation.stop();
+		//PreferenceControl.setAfterTestState(NoteDialog3.STATE_TEST);
+		//PreferenceControl.setCheckResult(false);
+		
+	}
 
 	public void setTimers() {
 		closeTimers();
