@@ -46,6 +46,7 @@ import com.ubicomp.ketdiary.camera.Tester;
 import com.ubicomp.ketdiary.clicklog.ClickLog;
 import com.ubicomp.ketdiary.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
+import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.db.TestDataParser2;
 import com.ubicomp.ketdiary.dialog.NoteDialog3;
 import com.ubicomp.ketdiary.dialog.TestQuestionCaller2;
@@ -176,6 +177,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	
 	private int state;
 	private int resultState;
+	private DatabaseControl db;
 	//private boolean second_pass=false;
 	
 	// test Detail parameter
@@ -207,6 +209,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private static int CAMERATIMEOUT = PreferenceControl.getVoltageCountDown();
 	private static int CAMERATIMEOUT2 = PreferenceControl.getVoltage2CountDown();
 	
+	private static final int CANTTEST_HOURS = 6*60*60*1000;
 	private static final int TIMEOUT_SECOND = 30;
 	//private static final int CAMERATIMEOUT = 10;
 	private static final int CONFIRM_SECOND = 5;
@@ -256,7 +259,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		changeTabsHandler = new ChangeTabsHandler();
 		test_guide_msg = getResources().getStringArray(R.array.test_guide_msg);
 		//changeTabsHandler.sendEmptyMessage(0);
-		
+		db = new DatabaseControl();
 				
 	}
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -368,6 +371,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	}
 	
 	private class IdleState extends TestState{
+		
+		private boolean canTest = true;
 		@Override
 		public void onStart(){
 			state = IDLE_STATE;
@@ -383,9 +388,20 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			
 			//String styledText = "請點選<font color='#f2a6a3'>開始</font>進行測試";
 			//label_subtitle.setText(Html.fromHtml(styledText), TextView.BufferType.SPANNABLE);
-			
-			label_subtitle.setText("請點選開始進行測試");
-			label_title.setText("測試尚未開始");
+			int todayTestCount = db.getTodayTestCount();
+			Log.i(TAG, "Today Test:" + todayTestCount);
+			if( todayTestCount >=2 && !isDeveloper){
+				long lastDetection = PreferenceControl.getUpdateDetectionTimestamp();
+				if(System.currentTimeMillis() - lastDetection < CANTTEST_HOURS ){
+					label_subtitle.setText("請稍晚再進行測試");
+					label_title.setText("測試尚未開始");
+					canTest = false;
+				}
+			}
+			else{
+				label_subtitle.setText("請點選開始進行測試");
+				label_title.setText("測試尚未開始");
+			}
 			MainActivity.getMainActivity().enableTabAndClick(true);
 			
 			//MainActivity.getMainActivity().setTimers(); //for Test
@@ -394,6 +410,9 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		public void onClick(){
 			
 			ClickLog.Log(ClickLogId.TEST_START_BUTTON);
+			
+			if(!canTest && !isDeveloper)
+				return;
 			
 			first_connect =false;
 			first_voltage =false;

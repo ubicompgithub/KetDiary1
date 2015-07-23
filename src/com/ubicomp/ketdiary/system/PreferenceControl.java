@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import android.app.AlarmManager;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
@@ -21,7 +22,7 @@ import com.ubicomp.ketdiary.db.DatabaseControl;
 public class PreferenceControl {
 
 	private static final SharedPreferences sp = App.getSp();
-	
+	private static final String TAG = "Preference";
 	/* UID
 	 * DeviceId
 	 * sensorId
@@ -197,7 +198,11 @@ public class PreferenceControl {
 	public static void setPoint(int addPoint) {
 		int last_point = getPoint();
 		SharedPreferences.Editor edit = sp.edit();
-		edit.putInt("Point", last_point + addPoint);
+		int point = last_point + addPoint;
+		edit.putInt("Point", point);
+		if(point % Config.COUPON_CREDITS == 0)
+			setCouponChange(true);
+		Log.d(TAG, "point: " + point);
 		edit.commit();
 	}
 	

@@ -50,6 +50,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	
 	private ProgressDialog dialog = null;
 	private boolean first = true;
+	private boolean second = true;
 	public TestDataParser2 TDP;
 	private ImageDetection imageDetection = null;
 	
@@ -91,16 +92,25 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 			
 			notification.setLatestEventInfo( myservice ,  "測試結果倒數" ,  minius+":"+seconds , pendingIntent);  
 	        startForeground( 1 , notification); 
-
 	        
+	        if(first){
+				first = false;
+				if(!isConnect){
+	        		ble.bleConnect();
+	        	}				
+				if(openSensorMsgTimer!=null)
+	        		openSensorMsgTimer.start();
+			}
+	        if(!stateSuccess && isConnect && picNum == 0)
+				ble.bleWriteState((byte)0x03);	
+	
 	        
 			mhandler.postDelayed(this, 1000);
-			
-			
+						
 			if(spentTime < 2*60*1000){   //剩兩分鐘的時候才開始拍照傳照片
 				
-				if(first){
-					first = false;
+				if(second){
+					second = false;
 					if(!isConnect){
 		        		ble.bleConnect();
 		        	}				
@@ -110,7 +120,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 				
 				
 				if(!stateSuccess && isConnect)
-		        	ble.bleWriteState((byte)0x03);
+		        	ble.bleWriteState((byte)0x06);
 			}
 			
 			if(spentTime < 0){ //想一下時間到要做什麼    跳出不一樣的notification讓他點or直接跳出activity
@@ -286,6 +296,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
     @Override
     public void bleDisconnected() {
     	isConnect = false;
+    	stateSuccess = false;
         Log.i(TAG, "BLE disconnected");
         //Toast.makeText(this, "BLE disconnected", Toast.LENGTH_SHORT).show();
         //setState(new FailState("連接中斷"));
@@ -383,13 +394,16 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		Toast.makeText(this, "Picture: " + picNum + " Save", Toast.LENGTH_SHORT).show();
 		
 		if(picNum == 1){
-			imageDetection.roiDetectionOnWhite(bitmap);	
+			imageDetection.roiDetectionOnWhite(bitmap);
+			ble.bleWriteState((byte)0x05);
+			ble.bleDisconnect();
+			return;
 		}
 		
 		blehandler.postDelayed(writeBle, 2000);
 		//blehandler.postDelayed(writeBle, 2000);
 	
-		if(picNum == 2){
+		if(picNum == 3){
 			colorReading = imageDetection.testStripDetection(bitmap);
 			setTestDetail();
 			goResult();
@@ -405,7 +419,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		connectionFailRate = dropRate;
 		
 		Log.i(TAG, "DropRate: " + dropRate);
-		Toast.makeText(this, "Picture Fail, DropRate: " + dropRate, Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this, "Picture Fail, DropRate: " + dropRate, Toast.LENGTH_SHORT).show();
 		//blehandler.postDelayed(writeBle, 500);
 		PreferenceControl.setTestFail();
 		MainActivity.getMainActivity().setResultFail();
