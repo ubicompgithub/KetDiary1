@@ -38,21 +38,34 @@
 	    
 	        <ImageView
 	            android:id="@+id/iv_calendar_dot1"
-	            android:layout_width="match_parent"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:src="@drawable/cell_dot1" />
+	        
+	        <ImageView
+	            android:id="@+id/iv_calendar_dot15"
+	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:layout_weight="1"
 	            android:src="@drawable/cell_dot1" />
 	
 	        <ImageView
 	            android:id="@+id/iv_calendar_dot2"
-	            android:layout_width="match_parent"
+	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:src="@drawable/cell_dot2"
 	            android:layout_weight="1" />
+	        <ImageView
+	            android:id="@+id/iv_calendar_dot25"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:src="@drawable/cell_dot1" />
 	
 	        <ImageView
 	            android:id="@+id/iv_calendar_dot3"
-	            android:layout_width="match_parent"
+	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:layout_weight="1"
 	            android:src="@drawable/cell_dot3"

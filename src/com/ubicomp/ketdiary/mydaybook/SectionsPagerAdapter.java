@@ -133,7 +133,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
         
         View cellView;
         TextView calDateText;
-        ImageView calDot1, calDot2, calDot3, date_result;
+        ImageView calDot1, calDot2, calDot3, date_result, calDot15,calDot25;
         int result;
         NoteAdd[] noteAdds;
         TestResult testResult=null;
@@ -160,10 +160,14 @@ public class SectionsPagerAdapter extends PagerAdapter {
             calDot2 = (ImageView) cellView.findViewById(R.id.iv_calendar_dot2);
             calDot3 = (ImageView) cellView.findViewById(R.id.iv_calendar_dot3);
             date_result = (ImageView) cellView.findViewById(R.id.iv_date_result);
+            calDot15 = (ImageView) cellView.findViewById(R.id.iv_calendar_dot15);
+            calDot25 = (ImageView) cellView.findViewById(R.id.iv_calendar_dot25);
             
             calDot1.setVisibility(View.INVISIBLE);
             calDot2.setVisibility(View.INVISIBLE);
             calDot3.setVisibility(View.INVISIBLE);
+            calDot15.setVisibility(View.INVISIBLE);
+            calDot25.setVisibility(View.INVISIBLE);
             
             cellView.setTag(TAG_CAL_CELL_DAY, mCalendar.get(Calendar.DAY_OF_MONTH));
             cellView.setTag(TAG_CAL_CELL_MONTH, mCalendar.get(Calendar.MONTH));
@@ -236,23 +240,40 @@ public class SectionsPagerAdapter extends PagerAdapter {
             				
             			}
             			if(k>=2){
-            				calDot3.setImageResource(dotId[typedot[0]]);
-            				calDot3.setVisibility(View.VISIBLE);
+//            				calDot3.setImageResource(dotId[typedot[0]]);
+//            				calDot3.setVisibility(View.VISIBLE);
             				calDot2.setImageResource(dotId[typedot[1]]);
             				calDot2.setVisibility(View.VISIBLE);
-            				calDot1.setImageResource(dotId[typedot[2]]);
-            				calDot1.setVisibility(View.VISIBLE);
+//            				calDot1.setImageResource(dotId[typedot[2]]);
+//            				calDot1.setVisibility(View.VISIBLE);
+            				calDot25.setImageResource(dotId[typedot[0]]);
+            				calDot15.setImageResource(dotId[typedot[2]]);
+            				calDot15.setVisibility(View.VISIBLE);
+            				calDot25.setVisibility(View.VISIBLE);
+            				calDot3.setVisibility(View.INVISIBLE);
+            				calDot1.setVisibility(View.INVISIBLE);
+            	            
             			}
             			else if(k==1){
-            				calDot3.setImageResource(dotId[typedot[0]]);
-            				calDot3.setVisibility(View.VISIBLE);
-            				calDot2.setImageResource(dotId[typedot[1]]);
-            				calDot2.setVisibility(View.VISIBLE);
-            				calDot1.setVisibility(View.GONE);
+//            				calDot3.setImageResource(dotId[typedot[0]]);
+//            				calDot3.setVisibility(View.VISIBLE);
+//            				calDot2.setImageResource(dotId[typedot[1]]);
+//            				calDot2.setVisibility(View.INVISIBLE);
+//            				calDot1.setImageResource(dotId[typedot[1]]);
+//            				calDot1.setVisibility(View.VISIBLE);
+            				calDot1.setVisibility(View.INVISIBLE);
+            				calDot2.setVisibility(View.INVISIBLE);
+            				calDot3.setVisibility(View.INVISIBLE);
+            				calDot15.setImageResource(dotId[typedot[0]]);
+            				calDot15.setVisibility(View.VISIBLE);
+            				calDot25.setImageResource(dotId[typedot[1]]);
+            				calDot25.setVisibility(View.VISIBLE);
             			}
             			else if(k==0){
             				calDot2.setImageResource(dotId[typedot[0]]);
             				calDot2.setVisibility(View.VISIBLE);
+            				calDot15.setVisibility(View.INVISIBLE);
+            				calDot25.setVisibility(View.INVISIBLE);
             			}  
             			
             			/*
