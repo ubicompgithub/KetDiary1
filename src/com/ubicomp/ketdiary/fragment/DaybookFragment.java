@@ -113,6 +113,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private static final int THIS_MONTH = Calendar.getInstance().get(Calendar.MONTH);
 	
 	public static int chart_type = 2;
+	public static final int TAG_changedot = -1;
 	private static QuestionDialog questionBox;
 	
 	private LinearLayout chartAreaLayout;
@@ -421,17 +422,42 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
                     int selectedMonth = Integer.valueOf(selectedView.getTag(SectionsPagerAdapter.TAG_CAL_CELL_MONTH).toString());
                     TextView selectedDayTextView = (TextView) selectedView.findViewById(R.id.tv_calendar_date);
                     selectedDayTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-
-                    if(selectedPageMonth == selectedMonth)  // If selected month is exactly current page month
+                    ImageView selectedDayIV = (ImageView) selectedView.findViewById(R.id.iv_date_result);
+                    int changedot = (Integer) selectedView.getTag(TAG_changedot);
+                     // last time dot
+                    if(selectedPageMonth == selectedMonth){  // If selected month is exactly current page month
                     	selectedDayTextView.setTextColor(context.getResources().getColor(R.color.white));
-                    else
+                    	if(changedot == 0)
+                        	selectedDayIV.setImageResource(R.drawable.bigbluedot);
+                        else if (changedot == 1)
+                        	selectedDayIV.setImageResource(R.drawable.bigreddot);
+                        else
+                        	selectedDayIV.setImageResource(R.drawable.biggraydot);
+                    }
+                    else{
+                    	if(changedot == 0)
+                        	selectedDayIV.setImageResource(R.drawable.bigbluedot2);
+                        else if (changedot == 1)
+                        	selectedDayIV.setImageResource(R.drawable.bigreddot2);
+                        else
+                        	selectedDayIV.setImageResource(R.drawable.biggraydot2);
                     	selectedDayTextView.setTextColor(Color.BLACK);
+                    }
                     
                     // Set the new selected day
                     selectedView = thisDayView;
+                    
+                    ImageView selectedDayIV2 = (ImageView) selectedView.findViewById(R.id.iv_date_result);
+                    int changedot2 = (Integer) selectedView.getTag(TAG_changedot);
+                    if(changedot2 == 0)
+                    	selectedDayIV2.setImageResource(R.drawable.bigbluedot2);
+                    else if (changedot2 == 1)
+                    	selectedDayIV2.setImageResource(R.drawable.bigreddot2);
+                    else
+                    	selectedDayIV2.setImageResource(R.drawable.biggraydot2);
                     // This MUST be called. It modifies selectedView instance in mSectionPagerAdapter.
-                    mSectionsPagerAdapter.asignSelecteViewToThisDayView();
-
+                    mSectionsPagerAdapter.asignSelecteViewToThisDayView();                   
+                    
                     TextView newSelectedDayTextView = (TextView) selectedView.findViewById(R.id.tv_calendar_date);
                     newSelectedDayTextView.setTextColor(context.getResources().getColor(R.color.black));
                     newSelectedDayTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
@@ -844,7 +870,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 							result = -1;
 							
 					}
-						
+					diaryItem.setTag(TAG_changedot, result);	
 					if(result == 0)
 						layout.setBackgroundResource(R.drawable.diary_pass);
 					else if(result == 1){

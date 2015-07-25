@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ubicomp.ketdiary.App;
@@ -45,7 +46,8 @@ public class SectionsPagerAdapter extends PagerAdapter {
     public static final int TAG_CAL_CELL_PAGE_MONTH = R.string.TAG_CAL_CELL_PAGE_MONTH;
     public static final int TAG_CAL_CELL_YEAR = R.string.TAG_CAL_CELL_YEAR;
     public static final int TAG_CAL_CELL_TS = R.string.TAG_CAL_CELL_TS;
-    
+    public static final int TAG_changedot = -1;
+    		
     private static final Calendar startDay = PreferenceControl.getStartDate();
     private static final Calendar today = Calendar.getInstance();
     
@@ -134,7 +136,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
         View cellView;
         TextView calDateText;
         ImageView calDot1, calDot2, calDot3, date_result, calDot15,calDot25;
-        int result;
+        int result = -1;
         NoteAdd[] noteAdds;
         TestResult testResult=null;
  
@@ -174,6 +176,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
             cellView.setTag(TAG_CAL_CELL_PAGE_MONTH, pageViewMonth);
             cellView.setTag(TAG_CAL_CELL_YEAR, mCalendar.get(Calendar.YEAR));
             cellView.setTag(TAG_CAL_CELL_TS, mCalendar.getTimeInMillis());
+            
             cellView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -191,12 +194,34 @@ public class SectionsPagerAdapter extends PagerAdapter {
                         selectedDayTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                         selectedDayTextView.setTextColor(context.getResources().getColor(R.color.white));
                         
+                        ImageView selectedDayImageView = (ImageView) selectedView.findViewById(R.id.iv_date_result);
+                        int changdot = (Integer) selectedView.getTag(TAG_changedot);
+                        if(changdot==0)
+                        	selectedDayImageView.setImageResource(R.drawable.bigbluedot);
+                        else if(changdot==1)
+                        	selectedDayImageView.setImageResource(R.drawable.bigreddot);
+                        else
+                        	selectedDayImageView.setImageResource(R.drawable.biggraydot);
+//                
+                        
                         // Set the new selected day
                         selectedView = v;
                         TextView newSelectedDayTextView = (TextView) selectedView.findViewById(R.id.tv_calendar_date);
                         newSelectedDayTextView.setTextColor(context.getResources().getColor(R.color.black));
                         newSelectedDayTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-               
+                        ImageView newselectedDayImageView = (ImageView) selectedView.findViewById(R.id.iv_date_result);
+                        int changdot2 = (Integer) selectedView.getTag(TAG_changedot);
+                        if(changdot2==0)
+                        	newselectedDayImageView.setImageResource(R.drawable.bigbluedot2);
+                        else if(changdot2==1)
+                        	newselectedDayImageView.setImageResource(R.drawable.bigreddot2);
+                        else
+                        	newselectedDayImageView.setImageResource(R.drawable.biggraydot2);
+//                        LinearLayout.LayoutParams newlayoutParams = new LinearLayout.LayoutParams(120, 120);
+//                        newselectedDayImageView.setLayoutParams(newlayoutParams);
+//                        newselectedDayImageView.getLayoutParams().height=(int) convertDpToPixel(39);
+//                        newselectedDayImageView.getLayoutParams().width=(int) convertDpToPixel(39);
+                        //newselectedDayImageView.setImageResource(R.drawable.bigreddot2);
                     }
                     int selectedYear = Integer.valueOf(v.getTag(TAG_CAL_CELL_YEAR).toString());
                     int selectedMonth = Integer.valueOf(v.getTag(TAG_CAL_CELL_MONTH).toString());
@@ -298,18 +323,22 @@ public class SectionsPagerAdapter extends PagerAdapter {
             		}
 
             		testResult = db.getDayTestResult( mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH) );
-            	
+            		result = -1;
             		if(testResult.getTv().getTimestamp() != 0){
             			result = testResult.getResult();
             			if(result == 0)
             				date_result.setImageResource(R.drawable.bigbluedot);
+            				//cellView.setTag(TAG_changedot,result);}
             			else if(result == 1){
             				date_result.setImageResource(R.drawable.bigreddot);
+            				//cellView.setTag(TAG_changedot,result);
             			}
             		}
             		else{
+            			//cellView.setTag(TAG_changedot,result);
             			date_result.setImageResource(R.drawable.biggraydot);
             		}
+            		cellView.setTag(TAG_changedot,result);
             		calDateText.setTextColor(context.getResources().getColor(R.color.white));
             	}
             	else if(mCalendar.getTimeInMillis() < startDay.getTimeInMillis()){
@@ -343,6 +372,14 @@ public class SectionsPagerAdapter extends PagerAdapter {
                     selectedView = cellView;
                     calDateText.setTextColor(context.getResources().getColor(R.color.black));
                     calDateText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                    
+                    ImageView selectedDayIV = (ImageView) selectedView.findViewById(R.id.iv_date_result);
+                    if(result==0)
+                    	selectedDayIV.setImageResource(R.drawable.bigbluedot2);
+                    else if (result == 1)
+                    	selectedDayIV.setImageResource(R.drawable.bigreddot2);
+                    else
+                    	selectedDayIV.setImageResource(R.drawable.biggraydot2);
                 }
             }
             
