@@ -3,13 +3,13 @@
 
     <string-array name="trigger_list">
         <item>負面情緒</item>
-        <item>身體不舒服</item>
+        <item>生理因素</item>
         <item>正面情緒</item>
-        <item>測試控制力</item>
-        <item>誘惑與衝動</item>
-        <item>與他人衝突</item>
-        <item>社交壓力</item>
-        <item>與他人玩樂</item>
+        <item>測試自己控制力</item>
+        <item>衝動、誘惑或轉移注意</item>
+        <item>與他人相處上遇到困難</item>
+        <item>維持社交</item>
+        <item>與他人相聚</item>
         <item>自訂</item>
     </string-array>
     
@@ -105,10 +105,10 @@
     <string name="note_notgood">生理因素</string>
     <string name="note_positive">正面情緒</string>
     <string name="note_selftest">測試自己控制力</string>
-    <string name="note_temptation">誘惑與衝動</string>
-    <string name="note_conflict">與他人相處不愉快</string>
-    <string name="note_social">有人邀你吸Ｋ</string>
-    <string name="note_play">跟朋友聚會</string>
+    <string name="note_temptation">衝動、誘惑或轉移注意</string>
+    <string name="note_conflict">與他人相處上遇到困難</string>
+    <string name="note_social">維持社交</string>
+    <string name="note_play">與他人相聚</string>
     
     <string-array name="item_select">
         <item>請點選類別以選擇</item>

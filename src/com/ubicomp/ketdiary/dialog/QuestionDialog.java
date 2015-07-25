@@ -47,7 +47,7 @@ public class QuestionDialog{
 	
 	private static String question = "";
 	private static String answer = "";
-	private static String selectedAnswer = "";
+	private String selectedAnswer = "";
 	private static String[] selection;
 
 	private RelativeLayout mainLayout;
@@ -177,6 +177,7 @@ public class QuestionDialog{
 				}
 			}
 			
+		selectedAnswer = "" ;
 		tv_answer1.setText(selection[0]);
 		tv_answer2.setText(selection[1]);
 		tv_answer3.setText(selection[2]);

@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.db;
+package com.ubicomp.ketdiary.noUse;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -12,6 +12,7 @@ import android.util.Log;
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.TestResult;
+import com.ubicomp.ketdiary.db.DataUploader;
 
 
 /** 
@@ -150,32 +151,7 @@ public class DBControl {
 		}
 		
 	}
-	
-	// TODO: use sqlite
-	
-	Vector<Datatype.TestDetail> not_uploaded_testdetail = new Vector<Datatype.TestDetail>();
-	Vector<Datatype.Patient> not_uploaded_patient = new Vector<Datatype.Patient>();
-	/**
-	 * Add TestDetail and upload
-	 * @param ttd
-	 */
-	public void addTestResult(Datatype.TestDetail ttd){ 
-		not_uploaded_testdetail.add(ttd);
-		DataUploader.upload();
-	}
-	
-	/**
-	 * Get not upload TestDetail
-	 * @return
-	 * @see DataUploader
-	 */
-	public Vector<Datatype.TestDetail> getNotUploadedTestDetail(){
-		Vector<Datatype.TestDetail> ret = new Vector<Datatype.TestDetail>();
-		for(int lx = 0;lx < not_uploaded_testdetail.size();lx++)
-			ret.add(not_uploaded_testdetail.get(lx));
-		not_uploaded_testdetail.clear();
-		return ret;
-	}
+
 	
 	
 	//Test Result new
@@ -233,25 +209,5 @@ public class DBControl {
 	}
 		
 		
-	/**
-	 * Add Patient and upload
-	 * @param ttd
-	 */
-	public void addPatient(Datatype.Patient p){
-		not_uploaded_patient.add(p);
-		DataUploader.upload();
-	}
-	
-	/**
-	 * Get not upload Patient
-	 * @return
-	 * @see DataUploader
-	 */
-	public Vector<Datatype.Patient> getNotUploadedPatient(){
-		Vector<Datatype.Patient> ret = new Vector<Datatype.Patient>();
-		for(int lx = 0;lx < not_uploaded_patient.size();lx++)
-			ret.add(not_uploaded_patient.get(lx));
-		not_uploaded_patient.clear();
-		return ret;
-	}
+
 }

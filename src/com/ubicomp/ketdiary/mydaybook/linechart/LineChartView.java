@@ -654,6 +654,20 @@ public class LineChartView extends View {
             touchX = x;
             
             cursorLinePos = getCursorPos2(x);
+            switch (checkLineChartType()) {
+            case 0:
+            	if(dataset[cursorLinePos].self_type == 0){
+            		
+            	}
+            	break;
+            case 1:
+            	break;
+            case 2:
+            	break;
+            }
+            
+            
+            
             if (cursorLinePos < 0) {
             	cursorLinePos = 0;
             }

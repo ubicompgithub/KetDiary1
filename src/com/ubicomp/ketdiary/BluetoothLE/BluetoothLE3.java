@@ -31,7 +31,7 @@ import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 
 @SuppressLint("NewApi")
-public class BluetoothLE3 extends BluetoothLE2{
+public class BluetoothLE3 {
 	private static final String TAG = "BluetoothLE";
 
     // Write UUID
@@ -94,7 +94,7 @@ public class BluetoothLE3 extends BluetoothLE2{
 
 
     public BluetoothLE3(BluetoothListener bluetoothListener, String mDeviceName) {
-    	super(bluetoothListener, mDeviceName);
+    	//super(bluetoothListener, mDeviceName);
         mHandler = new Handler();
 
         this.bluetoothListener = bluetoothListener;
@@ -103,7 +103,7 @@ public class BluetoothLE3 extends BluetoothLE2{
         // Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
         if (!MainActivity.getMainActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Toast.makeText(MainActivity.getMainActivity(), "BLE not supported!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(MainActivity.getMainActivity(), "BLE not supported!", Toast.LENGTH_SHORT).show();
             ((BluetoothListener) bluetoothListener).bleNotSupported();
         }
 
@@ -115,7 +115,7 @@ public class BluetoothLE3 extends BluetoothLE2{
 
         // Checks if Bluetooth is supported on the device.
         if (mBluetoothAdapter == null) {
-            Toast.makeText(MainActivity.getMainActivity(), "Bluetooth is not supported!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(MainActivity.getMainActivity(), "Bluetooth is not supported!", Toast.LENGTH_SHORT).show();
             ((BluetoothListener) bluetoothListener).bleNotSupported();
             return;
         }
@@ -502,7 +502,8 @@ public class BluetoothLE3 extends BluetoothLE2{
                 bleScan();
             } else{
                 // User did not enable Bluetooth or an error occured
-                Toast.makeText(MainActivity.getMainActivity(), "Bluetooth did not enable!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.getMainActivity(), "Bluetooth did not enable!", Toast.LENGTH_SHORT).show();
+                Log.i(TAG, "Bluetooth did not enable!");
 //                activity.finish();
             }
         	break;

@@ -61,11 +61,10 @@ import com.ubicomp.ketdiary.ui.Typefaces;
 
 public class TestFragment extends Fragment implements BluetoothListener, CameraCaller, TestQuestionCaller2{
 	
-	private static final String TAG = "BluetoothLE";
+	private static final String TAG = "TEST_PAGE";
 	private static final String TAG2 = "debug";
 	private static final String TAG3 = "-State-";
 	
-	private static final String TAG1 = "TEST_PAGE";
 
 	public Activity activity = null;
 	private TestFragment testFragment;
@@ -123,6 +122,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private ChangeTabsHandler changeTabsHandler;
 	//private ColorResultFileHandler colorResultFileHandler;
 	private QuestionFile questionFile; 
+	private Handler closeHandler = new Handler();
 	
 	/** Sound playing variables */
 	private SoundPool soundPool;
@@ -192,7 +192,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	
 	public static TestDetail testDetail = null;
 	
-	private static final int COUNT_DOWN_SECOND = 5;
+	private static final int COUNT_DOWN_SECOND = 10;
 	private static final int WAIT_SALIVA_SECOND = 7;
 	/*
 	private static final int FIRST_VOLTAGE_THRESHOLD = 25; //之後會是50 跟 40
@@ -246,7 +246,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		msgHandler = new ChangeMsgHandler();
 		resultState = PreferenceControl.getAfterTestState();
 		
-		Log.d(TAG1, debug+" "+isDeveloper);
+		Log.d(TAG, debug+" "+isDeveloper);
 		/*
 		if (soundpool == null) {
 			soundpool = new SoundPool(1, AudioManager.STREAM_MUSIC, 1);
@@ -376,6 +376,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		@Override
 		public void onStart(){
 			state = IDLE_STATE;
+			img_help.setEnabled(true);
 			
 			img_water1.setImageResource(R.drawable.saliva1_no);
 			img_water2.setImageResource(R.drawable.saliva2_no);
@@ -389,8 +390,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			//String styledText = "請點選<font color='#f2a6a3'>開始</font>進行測試";
 			//label_subtitle.setText(Html.fromHtml(styledText), TextView.BufferType.SPANNABLE);
 			int todayTestCount = db.getTodayTestCount();
-			Log.i(TAG, "Today Test:" + todayTestCount);
-			if( todayTestCount >=2 && !isDeveloper){
+			//Log.i(TAG, "Today Test:" + todayTestCount);
+			if( todayTestCount >=2 && !isDeveloper && !debug){
 				long lastDetection = PreferenceControl.getUpdateDetectionTimestamp();
 				if(System.currentTimeMillis() - lastDetection < CANTTEST_HOURS ){
 					label_subtitle.setText("請稍晚再進行測試");
@@ -411,7 +412,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			
 			ClickLog.Log(ClickLogId.TEST_START_BUTTON);
 			
-			if(!canTest && !isDeveloper)
+			if(!canTest && !isDeveloper && !debug)
 				return;
 			
 			first_connect =false;
@@ -437,7 +438,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	}
 	
 	private class FailState extends TestState{
-		private String err_msg;
+		private String err_msg, err_msg2="";
 		private int err_id;
 		/**
 		 * A Fail state with error msg
@@ -445,6 +446,11 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		 */
 		public FailState(String _err_msg){ //TODO set subtitle
 			err_msg = _err_msg;
+		}
+		
+		public FailState(String _err_msg, String _err_msg2){ //TODO set subtitle
+			err_msg = _err_msg;
+			err_msg2= _err_msg2;
 		}
 		
 		public FailState(int _err_id){ //TODO set subtitle
@@ -716,7 +722,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 				ble.bleDisconnect();
 			//DBControl.inst.startTesting();
 			stop();
-			
+			img_help.setEnabled(false);
 			
 			label_title.setText("測試完成!");
 			label_subtitle.setText("");
@@ -727,6 +733,9 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			test_done = true;
 			
 			updateDoneState(0);
+			
+			Intent startIntent =  new  Intent( getActivity() , ResultService3. class );  
+			getActivity().startService(startIntent);
 			
 			PreferenceControl.setLatestTestCompleteTime( (long)System.currentTimeMillis() );
 			PreferenceControl.setCheckResult( true );
@@ -755,8 +764,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			//msgBox.show();
 			
 			//
-			Intent startIntent =  new  Intent( getActivity() , ResultService3. class );  
-			getActivity().startService(startIntent);
+			
 			
 			//startActivity(new Intent(, EventCopeSkillActivity.class));
 			//startActivity(new Intent(activity, NoteActivity.class));
@@ -767,6 +775,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	Runnable runnable=new Runnable(){
 		   @Override
 		   public void run() {
+			   msgBox.initialize();
 			   msgBox.show();
 		   } 
 	};
@@ -854,13 +863,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			ble.bleDisconnect();
 			ble = null;
 		}
-		
-		
-		if (voltageFileHandler != null) {
-			voltageFileHandler.close();
-			voltageFileHandler = null;
-		}
-		
+	
 		if (colorRawFileHandler != null) {
 			colorRawFileHandler.close();
 			colorRawFileHandler = null;
@@ -909,7 +912,20 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			confirmCountDownTimer=null;
 		}
 		
+		closeHandler.postDelayed(closeVoltage, 2000);
+		
+		
 	}
+	private Runnable closeVoltage = new Runnable() {
+		public void run() {
+			closeHandler.removeCallbacks(closeVoltage);
+			if (voltageFileHandler != null) {
+				voltageFileHandler.close();
+				voltageFileHandler = null;
+			}
+			//blehandler.postDelayed(this, 1000);
+		}
+    };
 	
 	public void stopDueToInit() {
 		
@@ -980,18 +996,21 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		//getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		checkDebug(is_debug);//PreferenceControl.isDebugMode());
 		checkPreference();
+		
+		
+		msgBox = new NoteDialog3(testFragment, main_layout);
 		//reset();
 		long curTime = System.currentTimeMillis();
 		long testTime = PreferenceControl.getLatestTestCompleteTime();
 		long pastTime = curTime - testTime;
 		int note_state = PreferenceControl.getAfterTestState();
-		
+		long countTime = ResultService3.spentTime;
 		
 		
 		if(note_state == msgBox.STATE_TEST){
 			setState(new IdleState());
 		}
-		else if(PreferenceControl.getCheckResult() && pastTime < MainActivity.WAIT_RESULT_TIME){ //還沒察看結果且時間還沒到
+		else if(PreferenceControl.getCheckResult() && countTime > 0){ //還沒察看結果且時間還沒到
 			img_btn.setOnClickListener(null);
 			img_btn.setEnabled(false);
 			
@@ -1002,7 +1021,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			else if(note_state == msgBox.STATE_COPE)
 				msgBox.copingSetting();
 		}
-		else if(PreferenceControl.getCheckResult() && pastTime > MainActivity.WAIT_RESULT_TIME){//還沒察看結果且時間到了
+		else if(PreferenceControl.getCheckResult() && countTime <=0){//還沒察看結果且時間到了
 			img_btn.setOnClickListener(null);
 			img_btn.setEnabled(false);
 			msgBox.initialize();
@@ -1029,6 +1048,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		
 		first_connect = false;
 		first_voltage = false;
+		second_voltage = false;
 		in_stage1 = false;
 		test_done = false;
 		camera_initial=false;
@@ -1048,7 +1068,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 
 		PreferenceControl.setUpdateDetectionTimestamp(timestamp);
 		//long ts = PreferenceControl.getUpdateDetectionTimestamp();
-		Log.d(TAG1,""+timestamp);
+		Log.d(TAG,""+timestamp);
 		
 		setStorage();
 		
@@ -1166,28 +1186,6 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			}	
 	}
 	
-	//each state timeout
-	private class TimeoutCountDownTimer extends CountDownTimer {
-		
-		public TimeoutCountDownTimer() {
-			super(TIMEOUT_SECOND*1000, 1000);
-		}
-
-		@Override
-		public void onFinish() {
-			if(is_timeout){
-				failedState = state;
-				setState(new FailState("測試超時"));
-			}
-			
-		}
-
-		@Override
-		public void onTick(long millisUntilFinished) {
-			is_timeout=true;
-		}	
-	}
-	
 	private class ConfirmCountDownTimer extends CountDownTimer {
 		
 		private int ptr = 0;
@@ -1233,7 +1231,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			else{
 				if(voltage < FIRST_VOLTAGE_THRESHOLD)
 					if(collectdata){
-						Toast.makeText(activity, "Collect Data Mode", Toast.LENGTH_SHORT).show();	
+						if(debug)
+							Toast.makeText(activity, "Collect Data Mode", Toast.LENGTH_SHORT).show();	
 					}
 					else{
 						setState(new CameraState());
@@ -1281,6 +1280,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 				in_stage2=true;
 				if( voltage < SECOND_VOLTAGE_THRESHOLD ){
 					img_water3.setImageResource(R.drawable.saliva3_yes);
+					secondVoltage = voltage;
 					setState(new DoneState());
 				}
 				else{
@@ -1312,7 +1312,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
     
     @Override
     public void bleNotSupported() {
-    	  Toast.makeText(activity, "BLE not support", Toast.LENGTH_SHORT).show();
+    	  if(debug)
+    		  Toast.makeText(activity, "BLE not support", Toast.LENGTH_SHORT).show();
     	  failedState = state;
     	  setState(new FailState("裝置不支援"));
 //        this.finish();
@@ -1321,7 +1322,10 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
     @Override
     public void bleConnectionTimeout() {
     	Log.i(TAG, "connect timeout");
-        Toast.makeText(activity, "BLE connection timeout", Toast.LENGTH_SHORT).show();
+    	
+    	if(debug)
+    		Toast.makeText(activity, "BLE connection timeout", Toast.LENGTH_SHORT).show();
+    	
         failedState = state;
         if(!goThroughState)
         	setState(new FailState("連接逾時"));
@@ -1337,7 +1341,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
     @Override
     public void bleDisconnected() {
         Log.i(TAG, "BLE disconnected");
-        Toast.makeText(activity, "BLE disconnected", Toast.LENGTH_SHORT).show();
+        if(debug)
+        	Toast.makeText(activity, "BLE disconnected", Toast.LENGTH_SHORT).show();
         //setState(new FailState("連接中斷"));
         
         is_connect = false;
@@ -1358,13 +1363,15 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
     @Override
     public void bleWriteStateSuccess() {
         Log.i(TAG, "BLE ACTION_DATA_WRITE_SUCCESS");
-        Toast.makeText(activity, "BLE write state success", Toast.LENGTH_SHORT).show();
+        if(debug)
+        	Toast.makeText(activity, "BLE write state success", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void bleWriteStateFail() {
         Log.i(TAG, "BLE ACTION_DATA_WRITE_FAIL");
-        Toast.makeText(activity, "BLE writefstate fail", Toast.LENGTH_SHORT).show();
+        if(debug)
+        	Toast.makeText(activity, "BLE writefstate fail", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -1372,7 +1379,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
         Log.i(TAG, "No test plug");
     	
         if(state != IDLE_STATE && !goThroughState){
-        	Toast.makeText(activity, "No test plug", Toast.LENGTH_SHORT).show();
+        	if(debug)
+        		Toast.makeText(activity, "No test plug", Toast.LENGTH_SHORT).show();
         	failedState = state;
         	setState(new FailState("請將試紙匣插入裝置"));
         }
@@ -1448,7 +1456,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		Bundle data = new Bundle();
 		data.putString("VOLTAGE", str);
 		msg.setData(data);
-		voltageFileHandler.sendMessage(msg);
+		if(voltageFileHandler!=null)
+			voltageFileHandler.sendMessage(msg);
 	}
 
 	@Override
@@ -1575,8 +1584,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		debug = PreferenceControl.isDebugMode();
 		collectdata = PreferenceControl.getCollectData();
 		
-		Log.d(TAG1, "V1: "+FIRST_VOLTAGE_THRESHOLD+" V2: "+SECOND_VOLTAGE_THRESHOLD+" TIMEOUT: "+CAMERATIMEOUT);
-		Log.d(TAG1, "isDeveloper: "+isDeveloper+" debug: "+debug+" Did: "+PreferenceControl.getDeviceId());
+		Log.d(TAG, "V1: "+FIRST_VOLTAGE_THRESHOLD+" V2: "+SECOND_VOLTAGE_THRESHOLD+" TIMEOUT: "+CAMERATIMEOUT);
+		Log.d(TAG, "isDeveloper: "+isDeveloper+" debug: "+debug+" Did: "+PreferenceControl.getDeviceId());
 	}
 	
 	

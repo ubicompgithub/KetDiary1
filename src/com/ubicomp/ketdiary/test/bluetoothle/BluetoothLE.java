@@ -5,7 +5,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import com.ubicomp.ketdiary.App;
-import com.ubicomp.ketdiary.db.DBControl;
+import com.ubicomp.ketdiary.noUse.DBControl;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

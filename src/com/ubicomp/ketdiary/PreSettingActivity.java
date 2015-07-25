@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.ubicomp.ketdiary.db.DatabaseRestore;
 import com.ubicomp.ketdiary.file.ReadDummyData;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.ui.CustomToastSmall;
 
 /**
  * The activity is for developer setting
@@ -316,7 +317,7 @@ public class PreSettingActivity extends Activity {
 				check = false;
 			else {
 				aCount = Integer.valueOf(ACountDown.getText().toString());
-				if (aCount == 0)
+				if (aCount < 180) //至少要三分鐘才能傳回照片
 					check = false;
 			}
 			
@@ -336,7 +337,8 @@ public class PreSettingActivity extends Activity {
 					check = false;
 			}
 			
-			Toast.makeText(activity, String.valueOf(check), Toast.LENGTH_SHORT).show();
+			//Toast.makeText(activity, String.valueOf(check), Toast.LENGTH_SHORT).show();
+			CustomToastSmall.generateToast(String.valueOf(check));
 			
 			if (check) {
 				PreferenceControl.setUID(text);

@@ -29,7 +29,7 @@
     <com.ubicomp.ketdiary.ui.CustomScrollView
         android:id="@+id/note_main_scroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="-15dp"
         android:layout_marginBottom="0dp"
         android:layout_above="@id/note_bottom_layout"

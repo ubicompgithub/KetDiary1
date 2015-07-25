@@ -121,6 +121,7 @@ public class MainActivity extends FragmentActivity {
 	private boolean doubleClickState = false;
 	private long latestClickTime = 0;
 	private boolean testFail = false;
+	private boolean resultServiceRun = false;
 	
 	private int changeClock=0;
 	
@@ -350,20 +351,28 @@ public class MainActivity extends FragmentActivity {
 			return;
 		}*/
 		//showResult();
+		resultServiceRun = PreferenceControl.getResultServiceRun();
 		testFail = PreferenceControl.isTestFail();
 		
 		WAIT_RESULT_TIME = PreferenceControl.getAfterCountDown() * 1000;
+		
 		PreferenceControl.setInApp(true);		
 		boolean inApp = PreferenceControl.getInApp();	
 		Log.d("InApp",String.valueOf(inApp)+"WAIT_TIME: "+ WAIT_RESULT_TIME);
 		
+		
+		boolean serviceRun = PreferenceControl.getResultServiceRun();
+		
 		long curTime = System.currentTimeMillis();
 		long testTime = PreferenceControl.getLatestTestCompleteTime();
 		long pastTime = curTime - testTime;
+		long countTime = ResultService3.spentTime;
+		Log.d(TAG, "RestTime: " + countTime);
+		
 		int state = PreferenceControl.getAfterTestState();
 		Log.d("InApp",String.valueOf(state));
 		
-		if(state == NoteDialog2.STATE_NOTE || state == NoteDialog2.STATE_COPE){
+		if(state == NoteDialog3.STATE_NOTE || state == NoteDialog3.STATE_COPE){
 			enableTabAndClick(false);
 			//Log.d("InApp","Disable click");
 		}
@@ -372,9 +381,9 @@ public class MainActivity extends FragmentActivity {
 		}
 		
 
-		if(PreferenceControl.getCheckResult() && pastTime < WAIT_RESULT_TIME)
+		if(PreferenceControl.getCheckResult() && countTime > 0)
 			setTimers();
-		else if(PreferenceControl.getCheckResult() && pastTime >= WAIT_RESULT_TIME){
+		else if(PreferenceControl.getCheckResult() && countTime <= 0){
 			if(testFail){
 				showResultFail();
 			}
@@ -686,16 +695,6 @@ public class MainActivity extends FragmentActivity {
 	}
 	
 	
-	// add by 
-	public void setNotePage(){
-		ft = fm.beginTransaction();
-		fragments[0] = new NoteFragment();
-		ft.add(android.R.id.tabcontent, fragments[0], tabName[0]);
-		setTabState(tabName[0]);
-		ft.commit();
-	}
-	
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
@@ -768,7 +767,8 @@ public class MainActivity extends FragmentActivity {
 
 		long time = curTime - lastTime;
 		long countTime = WAIT_RESULT_TIME - time;
-		
+		//long countTime = ResultService3.spentTime;
+		Log.i(TAG, "sensorCountDown: "+countTime);
 		isRecovery = false;
 		closeSensorCountDownTimer();
 		
@@ -882,6 +882,8 @@ public class MainActivity extends FragmentActivity {
 		int addScore=0;
 		//NoteAdd noteAdd = ((TestFragment) fragments[0]).TDP.noteAdd;//TODO: set NoteAdd, get NoteAdd
 		
+		PreferenceControl.setCheckResult(false);
+		
 		long timestamp = PreferenceControl.getUpdateDetectionTimestamp();
 		int result = PreferenceControl.getTestResult();//TODO: check if no data
 		int isFilled = PreferenceControl.getIsFilled();
@@ -960,7 +962,18 @@ public class MainActivity extends FragmentActivity {
 		//PreferenceControl.setCheckResult(false);
 		
 	}
-
+	
+	public void setResultSuccess(){
+		
+		closeTimers();
+		setResult();
+		//showResultFail();
+		//animation.stop();
+		//PreferenceControl.setAfterTestState(NoteDialog3.STATE_TEST);
+		//PreferenceControl.setCheckResult(false);
+		
+	}
+	
 	public void setTimers() {
 		closeTimers();
 		setSensorCountDownTimer();

@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.db.DatabaseControl;
@@ -24,6 +25,8 @@ public class DailyService extends Service {
 	 * @param context
 	 *            Application context
 	 */
+	private static final String TAG = "DailyService";
+	
 	public static void startUploadService(Context context) {
 		Intent intent = new Intent(context, DailyService.class);
 		context.startService(intent);
@@ -46,9 +49,11 @@ public class DailyService extends Service {
 		int Date = c.get(Calendar.DAY_OF_MONTH);
 		TestResult testResult = db.getDayTestResult(Year, Month, Date);
 		if(testResult.tv.getTimestamp() == 0){
-			PreferenceControl.setPosition(-1);
+			PreferenceControl.setPosition(-1);	
+			PreferenceControl.setCheckBars(true);
 		}
-		
+				
+		Log.i(TAG, "Enter Daily Service");
 		return Service.START_REDELIVER_INTENT;
 	}
 

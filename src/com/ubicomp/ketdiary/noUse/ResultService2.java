@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary;
+package com.ubicomp.ketdiary.noUse;
 
 import java.util.Random;
 
@@ -14,8 +14,11 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.ubicomp.ketdiary.MainActivity;
+import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE2;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothListener;
+import com.ubicomp.ketdiary.R.drawable;
 import com.ubicomp.ketdiary.color.ColorDetect2;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.db.DatabaseControl;

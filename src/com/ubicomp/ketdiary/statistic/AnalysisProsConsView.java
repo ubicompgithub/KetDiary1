@@ -119,7 +119,8 @@ public class AnalysisProsConsView extends StatisticPageView {
 	
 	private void updateBar(){
 		//int today_situation=19; //pass or fail
-		boolean check = PreferenceControl.getCheckResult();	
+		boolean check = PreferenceControl.getCheckResult();
+		boolean checkBars = PreferenceControl.getCheckBars();
 		int today_situation = PreferenceControl.getPosition();
 		int barWidth = bar.getRight() - bar.getLeft();
 		int positionWidth =currentBar.getRight() - currentBar.getLeft();
@@ -131,9 +132,8 @@ public class AnalysisProsConsView extends StatisticPageView {
 		int width_per_block=maxWidth/21;
 		int nextWidth = width_per_block*today_situation;
 		Log.d(TAG,""+today_situation);
-		if(!check){		
-		}
-		else{
+		
+		if(check || checkBars){
 			int curWidth = width_per_block*PreferenceControl.getLastPosition();
 			if(nextWidth>curWidth){
 				if(nextWidth>=maxWidth){

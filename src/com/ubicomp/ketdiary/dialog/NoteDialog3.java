@@ -14,12 +14,13 @@ import android.graphics.Typeface;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.text.Html;
+import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -47,6 +48,8 @@ import com.ubicomp.ketdiary.file.QuestionFile;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.BarButtonGenerator;
 import com.ubicomp.ketdiary.ui.CustomScrollView;
+import com.ubicomp.ketdiary.ui.CustomToast;
+import com.ubicomp.ketdiary.ui.CustomToastSmall;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
 
@@ -57,7 +60,6 @@ import com.ubicomp.ketdiary.ui.Typefaces;
  */
 public class NoteDialog3 implements ChooseItemCaller{
 	
-	private Activity activity;
 	private NoteDialog3 noteDialog = this;
 	private static final String TAG = "ADD_PAGE";
 	
@@ -87,6 +89,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 	private String[] coping_msg;
 	private String[] knowing_msg;
 	private static int knowing_index=-1;
+	private static int coping_index = 0;
 	
 	private int state;
 	private ChooseItemDialog chooseBox;
@@ -100,7 +103,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 	//Listener
 	private EndOnClickListener endOnClickListener;
 	private GoResultOnClickListener goResultOnClickListener;
-	private GoCopingToResultOnClickListener goCopingToResultOnClickListener;
+	//private GoCopingToResultOnClickListener goCopingToResultOnClickListener;
 	private MyOnPageChangeListener myOnPageChangeListener;
 	private CancelGoCopingOnClickListener cancelGoCopingOnClickListener;
 	
@@ -124,6 +127,10 @@ public class NoteDialog3 implements ChooseItemCaller{
 	private static final Typeface wordTypefaceBold = Typefaces.getWordTypefaceBold();
 	private static final Typeface wordTypeface = Typefaces.getWordTypeface();
 	
+	private static final int[] Coping_list = {R.array.coping_list0,R.array.coping_list1,
+		R.array.coping_list2,R.array.coping_list3,R.array.coping_list4,R.array.coping_list5,
+		R.array.coping_list6,R.array.coping_list7,R.array.coping_list8};
+	
 	public NoteDialog3(TestQuestionCaller2 testQuestionCaller, RelativeLayout mainLayout){
 		
 		this.testQuestionCaller = testQuestionCaller;
@@ -132,8 +139,9 @@ public class NoteDialog3 implements ChooseItemCaller{
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.mainLayout = mainLayout;
 		
-		coping_msg = context.getResources().getStringArray(R.array.coping_list);
+		
 		knowing_msg = context.getResources().getStringArray(R.array.knowing_list);
+		//knowing_msg = (String[])context.getResources().getTextArray(R.array.knowing_list);
 		
 		Random rand = new Random();
 		if( knowing_index < 0 )
@@ -143,7 +151,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 		//view = inflater.inflate(R.layout.fragment_note, container, false);
 		endOnClickListener = new EndOnClickListener();
 		goResultOnClickListener = new GoResultOnClickListener();
-		goCopingToResultOnClickListener = new GoCopingToResultOnClickListener();
+		//goCopingToResultOnClickListener = new GoCopingToResultOnClickListener();
 		cancelGoCopingOnClickListener = new CancelGoCopingOnClickListener();
 		
 		
@@ -153,7 +161,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 	protected void setting() {
 		
 		day = 0;
-		type = -1;
+		type = 0;
 		items = -1;
 		impact = 0 ;
 		description = "";
@@ -399,6 +407,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 		
 		tv_title.setText(R.string.coping_page);
 		
+		coping_msg = context.getResources().getStringArray(Coping_list[type]);
 		Random rand = new Random();
 		int idx = rand.nextInt(coping_msg.length);
 		tv_knowdlege.setText(coping_msg[idx]);
@@ -485,7 +494,8 @@ public class NoteDialog3 implements ChooseItemCaller{
 		//main_layout.removeView(center_layout);
 		center_layout = (LinearLayout) inflater.inflate(R.layout.knowledge, null);
 		tv_knowdlege = (TextView)center_layout.findViewById(R.id.qtip_tv_tips);
-		tv_knowdlege.setText(knowing_msg[knowing_index]); 
+		//tv_knowdlege.setText(knowing_msg[knowing_index]); 
+		tv_knowdlege.setText(Html.fromHtml(knowing_msg[knowing_index]));
 		
 		tv_title = (TextView)center_layout.findViewById(R.id.text_knowing_title);
 		tv_title.setText(R.string.knowledge);
@@ -501,18 +511,14 @@ public class NoteDialog3 implements ChooseItemCaller{
 		//Toast.makeText(context, "倒數結束", Toast.LENGTH_SHORT).show();
 		
 		if(state == STATE_NOTE){
-			Toast.makeText(context, "請完成新增記事以查看檢測結果", Toast.LENGTH_SHORT).show();
-			View bottom = BarButtonGenerator.createTwoButtonView(R.string.cancel, R.string.ok, cancelGoCopingOnClickListener, goCopingToResultOnClickListener);
+			//Toast.makeText(context, "請完成新增記事以查看檢測結果", Toast.LENGTH_SHORT).show();
+			CustomToastSmall.generateToast("請完成新增記事以查看檢測結果");
+			View bottom = BarButtonGenerator.createTwoButtonView(R.string.cancel, R.string.ok, new CancelOnClickListener(), endOnClickListener);
 			bottom_layout.addView(bottom);
 		}
-		else if(state == STATE_COPE){
-			Toast.makeText(context, "請點選以查看檢測結果", Toast.LENGTH_SHORT).show();
-			note_title.setText(R.string.test_done);
-			View bottom = BarButtonGenerator.createOneButtonView( R.string.go_result, goResultOnClickListener );
-			bottom_layout.addView(bottom);
-		}
-		else if(state == STATE_KNOW){
-			Toast.makeText(context, "請點選以查看檢測結果", Toast.LENGTH_SHORT).show();
+		else if(state == STATE_COPE || state == STATE_KNOW){
+			//Toast.makeText(context, "請點選以查看檢測結果", Toast.LENGTH_SHORT).show();
+			CustomToastSmall.generateToast("請點選以查看檢測結果");
 			note_title.setText(R.string.test_done);
 			View bottom = BarButtonGenerator.createOneButtonView( R.string.go_result, goResultOnClickListener );
 			bottom_layout.addView(bottom);
@@ -596,14 +602,11 @@ public class NoteDialog3 implements ChooseItemCaller{
 			 sp_content.setText(playerChanged);
 			 listView.setVisibility(View.GONE);
 			 
-		   }
-		   
+		   }		   
 		});
 		setListViewHeightBasedOnItems(listView);
-		listView.setVisibility(View.VISIBLE);
-		
-		sv.smoothScrollTo(0 , 600);
-		
+		listView.setVisibility(View.VISIBLE);		
+		sv.smoothScrollTo(0 , 600);		
 		//.setOnItemSelectedListener(new SpinnerXMLSelectedListener());
 	}
 	
@@ -681,28 +684,35 @@ public class NoteDialog3 implements ChooseItemCaller{
 			Log.d(TAG, items+" "+impact);
 			
 			
-			if(!done){
-				Toast.makeText(context, "確定要送出結果嗎?" ,Toast.LENGTH_SHORT).show();
-				done = true;
-			}
-			else if(state == STATE_NOTE){
+			
+			if(state == STATE_NOTE){
 				if(type <= 0 || items < 100){
 					//CustomToastSmall.generateToast(R.string.note_check);
-					Toast.makeText(context, R.string.note_check ,Toast.LENGTH_SHORT).show();
+					//Toast.makeText(context, R.string.note_check ,Toast.LENGTH_SHORT).show();
+					CustomToastSmall.generateToast(R.string.note_check);
 				}
 				else{
 					if(listView.getVisibility() == View.VISIBLE){
-						Toast.makeText(context, "請選擇項目再送出", Toast.LENGTH_SHORT).show();
+						//Toast.makeText(context, "請選擇項目再送出", Toast.LENGTH_SHORT).show();
+						CustomToastSmall.generateToast("請選擇項目再送出");
 						listView.setVisibility(View.GONE);
 					}
 					else{
+						if(!done){
+							//Toast.makeText(context, "確定要送出結果嗎?" ,Toast.LENGTH_SHORT).show();
+							CustomToastSmall.generateToast("確定要送出結果嗎?");
+							done = true;
+						}
 						ClickLog.Log(ClickLogId.TEST_QUESTION_SEND);
 						
 						PreferenceControl.setIsFilled(1);
 						impact = impactSeekBar.getProgress();
 						testQuestionCaller.writeQuestionFile(day, timeslot, type, items, impact, edtext.getText().toString());
-				
 						
+						boolean testFail = PreferenceControl.isTestFail();
+						if(!testFail){
+							copingSettingToResult();
+						}
 						copingSetting();
 					}
 				}
@@ -716,39 +726,39 @@ public class NoteDialog3 implements ChooseItemCaller{
 				knowing_index++;
 				if(knowing_index>=knowing_msg.length)
 					knowing_index-=knowing_msg.length;
-				tv_knowdlege.setText(knowing_msg[knowing_index]);
+				tv_knowdlege.setText(Html.fromHtml(knowing_msg[knowing_index]));
 				//tv_knowdlege.setText(DBTip.inst.getTip());
 			}
 	    }
 	}
 	
-	class GoCopingToResultOnClickListener implements View.OnClickListener{
-		public void onClick(View v){
-			Log.d(TAG, items+" "+impact);
-			
-			if(state == STATE_NOTE){
-				if(type <= 0 || items < 100){
-					//CustomToastSmall.generateToast(R.string.note_check);
-					Toast.makeText(context, R.string.note_check ,Toast.LENGTH_SHORT).show();
-				}
-				else{
-					if(listView.getVisibility() == View.VISIBLE){
-						Toast.makeText(context, "請選擇項目再送出", Toast.LENGTH_SHORT).show();
-						listView.setVisibility(View.GONE);
-					}
-					else{
-						ClickLog.Log(ClickLogId.TEST_QUESTION_SEND);
-						
-						PreferenceControl.setIsFilled(1);
-						impact = impactSeekBar.getProgress();
-						testQuestionCaller.writeQuestionFile(day, timeslot, type, items, impact, edtext.getText().toString());
-						
-						copingSettingToResult();
-					}
-				}
-			}
-	    }
-	}
+//	class GoCopingToResultOnClickListener implements View.OnClickListener{
+//		public void onClick(View v){
+//			Log.d(TAG, items+" "+impact);
+//			
+//			if(state == STATE_NOTE){
+//				if(type <= 0 || items < 100){
+//					//CustomToastSmall.generateToast(R.string.note_check);
+//					Toast.makeText(context, R.string.note_check ,Toast.LENGTH_SHORT).show();
+//				}
+//				else{
+//					if(listView.getVisibility() == View.VISIBLE){
+//						Toast.makeText(context, "請選擇項目再送出", Toast.LENGTH_SHORT).show();
+//						listView.setVisibility(View.GONE);
+//					}
+//					else{
+//						ClickLog.Log(ClickLogId.TEST_QUESTION_SEND);
+//						
+//						PreferenceControl.setIsFilled(1);
+//						impact = impactSeekBar.getProgress();
+//						testQuestionCaller.writeQuestionFile(day, timeslot, type, items, impact, edtext.getText().toString());
+//						
+//						copingSettingToResult();
+//					}
+//				}
+//			}
+//	    }
+//	}
 	
 	//把所選取的結果取消
 	class CancelOnClickListener implements View.OnClickListener{
@@ -760,7 +770,12 @@ public class NoteDialog3 implements ChooseItemCaller{
 				testQuestionCaller.writeQuestionFile(day, timeslot, -1, -1, -1, edtext.getText().toString());
 				
 				PreferenceControl.setIsFilled(0);
+				type = 0;
 				
+				boolean testFail = PreferenceControl.isTestFail();
+				if(!testFail){
+					copingSettingToResult();
+				}
 				copingSetting();
 				//questionFile.write(0, 0, 0);
 				//startActivity(new Intent(that, EventCopeSkillActivity.class));
@@ -770,7 +785,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 				knowing_index--;
 				if(knowing_index<0)
 					knowing_index+=knowing_msg.length;
-				tv_knowdlege.setText(knowing_msg[knowing_index]);
+				tv_knowdlege.setText(Html.fromHtml(knowing_msg[knowing_index]));
 				//tv_knowdlege.setText(DBTip.inst.getTip());
 			}
 		}
@@ -786,7 +801,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 					testQuestionCaller.writeQuestionFile(day, timeslot, -1, -1, -1, edtext.getText().toString());
 					
 					PreferenceControl.setIsFilled(0);
-					
+					type = 0;
 					copingSettingToResult();
 					//questionFile.write(0, 0, 0);
 					//startActivity(new Intent(that, EventCopeSkillActivity.class));
@@ -892,64 +907,72 @@ public class NoteDialog3 implements ChooseItemCaller{
 		        	iv_cry.setImageResource(R.drawable.emoji5_pressed);
 		        	typetext.setText(R.string.note_negative);
 		        	
-		        	SetListItem(R.array.note_negative);
+		        	//SetListItem(R.array.note_negative);
 	        		type = 1;
+	        		SetListItem2(type);
 	        		break;
 		        case R.id.vts_iv_not_good:
 		        	resetView();
 		        	iv_not_good.setImageResource(R.drawable.emoji2_pressed);
 		        	typetext.setText(R.string.note_notgood);
 		        	
-		        	SetListItem(R.array.note_notgood);
+		        	//SetListItem(R.array.note_notgood);
 		        	type = 2;
+		        	SetListItem2(type);
 			        break;
 		        case R.id.vts_iv_smile:
 		        	resetView();
 		        	iv_smile.setImageResource(R.drawable.emoji4_pressed);
 		        	typetext.setText(R.string.note_positive);
 		        	
-		        	SetListItem(R.array.note_positive);
+		        	//SetListItem(R.array.note_positive);
 		        	type = 3;
+		        	SetListItem2(type);
 		        	break;
 		        case R.id.vts_iv_try:
 		        	resetView();
 		        	iv_try.setImageResource(R.drawable.emoji1_pressed);
 		        	typetext.setText(R.string.note_selftest);
 		        	
-		        	SetListItem(R.array.note_selftest);
-		        	type = 4; 
+		        	//SetListItem(R.array.note_selftest);
+		        	type = 4;
+		        	SetListItem2(type);
 		        	break;
 		        case R.id.vts_iv_urge:
 		        	resetView();
 		        	iv_urge.setImageResource(R.drawable.emoji3_pressed);
 		        	typetext.setText(R.string.note_temptation);
 		        	
-		        	SetListItem(R.array.note_temptation);
+		        	//SetListItem(R.array.note_temptation);
 		        	type = 5;
-		        	break;
-		        case R.id.vts_iv_playing:
-		        	resetView();
-		        	iv_playing.setImageResource(R.drawable.others_emoji2_pressed);
-		        	typetext.setText(R.string.note_play);
-		        	
-		        	SetListItem(R.array.note_play);
-		        	type = 6;
-		        	break;
-		        case R.id.vts_iv_social:
-		        	resetView();
-		        	iv_social.setImageResource(R.drawable.others_emoji1_oressed);
-		        	typetext.setText(R.string.note_social);
-		        	
-		        	SetListItem(R.array.note_social);
-		        	type = 7;
+		        	SetListItem2(type);
 		        	break;
 		        case R.id.vts_iv_conflict:
 		        	resetView();
 		        	iv_conflict.setImageResource(R.drawable.others_emoji3_pressed);
 		        	typetext.setText(R.string.note_conflict);
 		        	
-		        	SetListItem(R.array.note_conflict);
+		        	//SetListItem(R.array.note_conflict);
+		        	type = 6;
+		        	SetListItem2(type);
+		        	break;
+		        case R.id.vts_iv_social:
+		        	resetView();
+		        	iv_social.setImageResource(R.drawable.others_emoji1_oressed);
+		        	typetext.setText(R.string.note_social);
+		        	
+		        	//SetListItem(R.array.note_social);
+		        	type = 7;
+		        	SetListItem2(type);
+		        	break;
+		        case R.id.vts_iv_playing:
+		        	resetView();
+		        	iv_playing.setImageResource(R.drawable.others_emoji2_pressed);
+		        	typetext.setText(R.string.note_play);
+		        	
+		        	//SetListItem(R.array.note_play);
 		        	type = 8;
+		        	SetListItem2(type);
 		        	break;
 		        	
 		        }
@@ -1071,6 +1094,10 @@ public class NoteDialog3 implements ChooseItemCaller{
 		@Override
 		public void resetView(int type, int select) {
 			setEnabledAll(boxLayout, true);
+			edtext.setEnabled(true);
+			edtext.setInputType(InputType.TYPE_CLASS_TEXT);
+			edtext.setFocusable(true);
+			edtext.setFocusableInTouchMode(true);
 			if(select == -1) //什麼都沒選
 				return;
 			

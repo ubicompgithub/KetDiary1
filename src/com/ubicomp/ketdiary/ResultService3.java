@@ -22,8 +22,10 @@ import com.ubicomp.ketdiary.color.TestStripDetection4;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.db.TestDataParser2;
+import com.ubicomp.ketdiary.dialog.NoteDialog3;
 import com.ubicomp.ketdiary.fragment.TestFragment;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.ui.CustomToastSmall;
 
 public class ResultService3 extends Service implements BluetoothListener, ColorDetectListener{
 	
@@ -47,6 +49,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	private int picNum = 0;
 	private TestStripDetection4 testStripDetection;
 	private OpenSensorMsgTimer openSensorMsgTimer;
+	private final ConnectSensorTimer connectSensorTimer = new ConnectSensorTimer();
 	
 	private ProgressDialog dialog = null;
 	private boolean first = true;
@@ -58,9 +61,16 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	private float connectionFailRate = 0;
 	private String failedReason = "";
 	private int colorReading = 0;
-	private static final int CONNECT_FAIL = 8;
-	private static final int PIC_STATE  = 9;
+	private static final int REGULAR_CONNECT_FAIL = 8;
+	private static final int CONNECT_FAIL  = 9;
 	private static final int PIC_SEND_FAIL = 10;
+	
+	private boolean testSuccess = false;
+	private int regular_connect = 0;
+	private boolean connect = false;
+	private boolean debug = PreferenceControl.isDebugMode();
+	
+	public static long spentTime = PreferenceControl.getAfterCountDown()*1000;
 	
 	
     @Override  
@@ -76,70 +86,79 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
         testStripDetection = new TestStripDetection4(myservice);
         db = new DatabaseControl();
         openSensorMsgTimer = new OpenSensorMsgTimer();
+        //connectSensorTimer =  ;
         imageDetection = new ImageDetection(this);
-       
+        Log.d(TAG,  "MyService onCreate" );
     }  
     
 	private Runnable updateTimer = new Runnable() {
 		public void run() {
 
-			long spentTime = System.currentTimeMillis() - PreferenceControl.getLatestTestCompleteTime();
+			long passTime = System.currentTimeMillis() - PreferenceControl.getLatestTestCompleteTime();
 			
-			spentTime = timeout - spentTime;
+			spentTime = timeout - passTime;
 			
 			long minius = (spentTime/1000)/60;
 			long seconds = (spentTime/1000) % 60;
 			
 			notification.setLatestEventInfo( myservice ,  "測試結果倒數" ,  minius+":"+seconds , pendingIntent);  
 	        startForeground( 1 , notification); 
+	        mhandler.postDelayed(this, 1000);
 	        
-	        if(first){
-				first = false;
-				if(!isConnect){
-	        		ble.bleConnect();
-	        	}				
-				if(openSensorMsgTimer!=null)
-	        		openSensorMsgTimer.start();
-			}
-	        if(!stateSuccess && isConnect && picNum == 0)
-				ble.bleWriteState((byte)0x03);	
-	
-	        
-			mhandler.postDelayed(this, 1000);
+	        if(spentTime > 2*60*1000){
+	        	
+	        	if(seconds == 0){
+	        		if(connectSensorTimer != null)
+	        			//connectSensorTimer.cancel();
+	        			Log.i(TAG, "second = 0");
+	        			connect = false;
+	        			connectSensorTimer.start();
+	        	}
+		        if(first){
 						
-			if(spentTime < 2*60*1000){   //剩兩分鐘的時候才開始拍照傳照片
-				
-				if(second){
-					second = false;
-					if(!isConnect){
-		        		ble.bleConnect();
-		        	}				
-					if(openSensorMsgTimer!=null)
-		        		openSensorMsgTimer.start();
+						if(!isConnect){
+			        		ble.bleConnect();
+			        		first = false;
+			        	}				
+						if(openSensorMsgTimer!=null)
+			        		openSensorMsgTimer.start();
+					}
+			        if(!stateSuccess && isConnect && picNum == 0)
+						ble.bleWriteState((byte)0x03);	
+		        }
+		        			
+				if(spentTime < 2*60*1000){   //剩兩分鐘的時候才開始拍照傳照片
+					
+					if(second){					
+						if(!isConnect){
+			        		ble.bleConnect();
+			        		second = false;
+			        	}				
+						if(openSensorMsgTimer!=null)
+			        		openSensorMsgTimer.start();
+					}
+					
+					
+					if(!stateSuccess && isConnect)
+			        	ble.bleWriteState((byte)0x06);
 				}
-				
-				
-				if(!stateSuccess && isConnect)
-		        	ble.bleWriteState((byte)0x06);
-			}
 			
-			if(spentTime < 0){ //想一下時間到要做什麼    跳出不一樣的notification讓他點or直接跳出activity
-				mhandler.removeCallbacks(updateTimer);
-				//goResult();
-				stopSelf();
-			}
+				if(spentTime < 0){ //想一下時間到要做什麼    跳出不一樣的notification讓他點or直接跳出activity
+					mhandler.removeCallbacks(updateTimer);
+					//goResult();
+					stopSelf();
+				}
 
 		}
     };
     
-    private void goResult(){
+    private void goResultSuccess(){   //檢測成功的話
     	notification.defaults = Notification.DEFAULT_ALL;
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 		notification.setLatestEventInfo( myservice , "檢測倒數結束", "前往測試結果", pendingIntent);
 		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 	
-		boolean inApp = PreferenceControl.getInApp();
-	
+		boolean inApp = PreferenceControl.getInApp();	
 		Log.d("InApp",String.valueOf(inApp));
 		if(!inApp)
 			notificationManager.notify(0, notification);
@@ -152,11 +171,14 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 			ble = null;
 		}
 		
-		//testStripDetection.sendEmptyMessage(0);
-		
-		
-		//setTestDetail();
-		
+		failedReason = "檢測成功";
+		setTestDetail();
+		PreferenceControl.setCheckBars(true);
+		PreferenceControl.setTestSuccess();
+		testSuccess = true;
+		//MainActivity.getMainActivity().setResultSuccess();
+		//testStripDetection.sendEmptyMessage(0);	
+		//setTestDetail();		
 //		Random rand = new Random();
 //		result = rand.nextInt(2); //Random Gen Result
 //		//test_msg.setText(test_guide_msg[idx]);
@@ -173,7 +195,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		int secondVoltage= TestFragment.testDetail.secondVoltage;
 		int devicePower = TestFragment.testDetail.devicePower;
 		
-		Toast.makeText(myservice, "Check: "+ colorReading, Toast.LENGTH_SHORT).show();
+		//Toast.makeText(myservice, "Check: "+ colorReading, Toast.LENGTH_SHORT).show();
 		Log.i(TAG, "Check: "+ colorReading);
 				
 		TestDetail testDetail = new TestDetail(cassetteId, ts, failedState, firstVoltage,
@@ -183,15 +205,6 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		db.insertTestDetail(testDetail);
     }
     
-    
-    private void stop(){
-    	
-    	
-    	mhandler.removeCallbacks(updateTimer);
-    	stopSelf();
-    }
-
-
 	@Override
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
@@ -200,7 +213,15 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	
 	@Override  
     public void onDestroy() {  
-        super.onDestroy();  
+        super.onDestroy();
+        
+        spentTime = 0;
+        
+        if(connectSensorTimer!=null){
+        	connectSensorTimer.cancel();
+        	//connectSensorTimer=null;
+		}
+        
         if(openSensorMsgTimer!=null){
 			openSensorMsgTimer.cancel();
 			openSensorMsgTimer=null;
@@ -208,14 +229,22 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
         if(ble!= null){
         	ble.bleDisconnect();
         	ble = null;
-        }      	
+        }
+        
+        PreferenceControl.setResultServiceRun(false);
+//        if(!testSuccess){
+//        	boolean inApp = PreferenceControl.getInApp();
+//			if(inApp)
+//        	MainActivity.getMainActivity().setResultFail();
+//        }
     }  
 	
 	/**Use startService to call ResultService*/
 	public int onStartCommand(Intent intent, int flags, int startId) {
-				
-		//testDialog();
-		//testStripDetection.sendEmptyMessage(0);
+		
+				spentTime = PreferenceControl.getAfterCountDown()*1000;
+		
+				PreferenceControl.setResultServiceRun(true);
 	        	Log.d(TAG,  "onStartCommand() executed" ); 
 	        	if(ble == null ) {
 	    			ble = new BluetoothLE3( myservice , PreferenceControl.getDeviceId());	
@@ -227,7 +256,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	            stateSuccess = false;
 	            startTime = System.currentTimeMillis();
 	          
-	            mhandler.postDelayed(updateTimer, 1000);
+	            mhandler.postDelayed(updateTimer, 1);
   
 	    return  super .onStartCommand(intent, flags, startId);  
 	}
@@ -242,30 +271,114 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		public void onFinish() {
 			
 			failedState = CONNECT_FAIL;
-			failedReason = "檢測器未開啟";
+			failedReason = "檢測器未開啟 - Take picture";
 			Toast.makeText(myservice, "請開啟檢測器", Toast.LENGTH_SHORT).show();
-			PreferenceControl.setTestFail();
-			MainActivity.getMainActivity().setResultFail();
+			
+			setTestFail();
+//			PreferenceControl.setTestFail();
+//			setTestDetail();
+//			boolean inApp = PreferenceControl.getInApp();
+//			if(inApp)
+//				MainActivity.getMainActivity().setResultFail();
+//			myservice.stopSelf();
 			//stop();	
 		}
 
 		@Override
 		public void onTick(long millisUntilFinished) {
+			Log.d(TAG, "Timer: "+ millisUntilFinished);
 			if(!isConnect){
         		ble.bleConnect();
 			}
 			
-			Toast.makeText(myservice, "請開啟檢測器", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(myservice, "請開啟檢測器", Toast.LENGTH_SHORT).show();
 		}
 	}
 	
+	private class ConnectSensorTimer extends CountDownTimer { //Regular connect
+		
+		//private boolean connect = false;
+		
+		public ConnectSensorTimer() {
+			super(20000, 2000);
+		}
+
+		@Override
+		public void onFinish() {		
+			failedState = REGULAR_CONNECT_FAIL;
+			failedReason = "檢測器未開啟- Regular connect";
+			Toast.makeText(myservice, "請開啟檢測器", Toast.LENGTH_SHORT).show();
+			setTestFail();
+//			PreferenceControl.setTestFail();
+//			setTestDetail();
+//			boolean inApp = PreferenceControl.getInApp();
+//			if(inApp)
+//				MainActivity.getMainActivity().setResultFail();
+//			myservice.stopSelf();
+			//stop();	
+		}
+
+		@Override
+		public void onTick(long millisUntilFinished) {  //連接在斷掉
+			Log.d(TAG, "Timer: "+ millisUntilFinished);
+			if(!isConnect){
+				if(ble!=null){
+					ble.bleConnect();
+					connect = true;
+					Log.i(TAG, "Regular Connect: " + regular_connect);
+				}
+			}
+			if(isConnect && connect){
+				regular_connect++;
+				if(ble!=null)
+					ble.bleDisconnect();				
+			}
+			//Toast.makeText(myservice, "請開啟檢測器", Toast.LENGTH_SHORT).show();
+		}
+	}
 	
+	private void setTestFail(){
+		PreferenceControl.setTestFail();
+		PreferenceControl.setAfterTestState(NoteDialog3.STATE_TEST);
+		spentTime = 0;
+		mhandler.removeCallbacks(updateTimer);
+		if(connectSensorTimer!=null){
+        	connectSensorTimer.cancel();
+        	//connectSensorTimer=null;
+		}        
+        if(openSensorMsgTimer!=null){
+			openSensorMsgTimer.cancel();
+			openSensorMsgTimer=null;
+        }
+        if(ble!= null){
+        	ble.bleDisconnect();
+        	ble = null;
+        }
+        
+		
+		setTestDetail();
+		boolean inApp = PreferenceControl.getInApp();
+		if(inApp)
+			MainActivity.getMainActivity().setResultFail();
+		
+		notification.defaults = Notification.DEFAULT_ALL;
+		notification.flags |= Notification.FLAG_AUTO_CANCEL;
+		notification.setLatestEventInfo( myservice , "檢測失敗", "回到測試頁重測", pendingIntent);
+		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+	
+		Log.d("InApp",String.valueOf(inApp));
+		if(!inApp)
+			notificationManager.notify(0, notification);
+		
+		myservice.stopSelf();	
+	}
 
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
-		ble.onBleActivityResult(requestCode, resultCode, data);
+		if(ble!=null)
+			ble.onBleActivityResult(requestCode, resultCode, data);
 	}
 
     @Override
@@ -277,7 +390,10 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
     @Override
     public void bleConnectionTimeout() {
     	Log.i(TAG, "connect timeout");
-        //Toast.makeText(this, "BLE connection timeout", Toast.LENGTH_SHORT).show();
+    	if(debug){
+    		//Toast.makeText(this, "請開啟檢測器", Toast.LENGTH_SHORT).show();
+    		CustomToastSmall.generateToast("請開啟檢測器");
+    	}
 
     }
 
@@ -285,7 +401,8 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
     public void bleConnected() {
     	isConnect = true;
         Log.i(TAG, "BLE connected");
-        Toast.makeText(this, "BLE connected", Toast.LENGTH_SHORT).show();
+        if(debug)
+        	Toast.makeText(this, "BLE connected", Toast.LENGTH_SHORT).show();
         if(openSensorMsgTimer!=null){
 			openSensorMsgTimer.cancel();
 			openSensorMsgTimer=null;
@@ -298,6 +415,8 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
     	isConnect = false;
     	stateSuccess = false;
         Log.i(TAG, "BLE disconnected");
+        if(connectSensorTimer != null)
+			connectSensorTimer.cancel();
         //Toast.makeText(this, "BLE disconnected", Toast.LENGTH_SHORT).show();
         //setState(new FailState("連接中斷"));
         
@@ -344,17 +463,17 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 
 	@Override
 	public void bleTakePictureSuccess() {
-		picNum++;
-		Log.i(TAG, "Picture: " + picNum + " Save");
-		Toast.makeText(this, "Picture: " + picNum + " Save", Toast.LENGTH_SHORT).show();
-		
-		
-		blehandler.postDelayed(writeBle, 2000);
-	
-		if(picNum == 1){
-			goResult();
-			Log.i(TAG, "GoResult!");
-		}
+//		picNum++;
+//		Log.i(TAG, "Picture: " + picNum + " Save");
+//		Toast.makeText(this, "Picture: " + picNum + " Save", Toast.LENGTH_SHORT).show();
+//		
+//		
+//		blehandler.postDelayed(writeBle, 2000);
+//	
+//		if(picNum == 1){
+//			goResultSuccess();
+//			Log.i(TAG, "GoResult!");
+//		}
 		
 	}
 	
@@ -395,8 +514,10 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		
 		if(picNum == 1){
 			imageDetection.roiDetectionOnWhite(bitmap);
-			ble.bleWriteState((byte)0x05);
-			ble.bleDisconnect();
+			if(ble!=null){
+				ble.bleWriteState((byte)0x04);
+				ble.bleDisconnect();
+			}
 			return;
 		}
 		
@@ -405,8 +526,9 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	
 		if(picNum == 3){
 			colorReading = imageDetection.testStripDetection(bitmap);
-			setTestDetail();
-			goResult();
+			
+			goResultSuccess();
+			
 			Log.i(TAG, "GoResult!");
 		}
 		
@@ -417,12 +539,11 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		
 		failedState = PIC_SEND_FAIL;
 		connectionFailRate = dropRate;
-		
+		failedReason = "照片傳送失敗";
 		Log.i(TAG, "DropRate: " + dropRate);
-		//Toast.makeText(this, "Picture Fail, DropRate: " + dropRate, Toast.LENGTH_SHORT).show();
-		//blehandler.postDelayed(writeBle, 500);
-		PreferenceControl.setTestFail();
-		MainActivity.getMainActivity().setResultFail();
+		
+		setTestFail();
+		
 	}
 
 	@Override

@@ -29,7 +29,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@+id/diary_detail_image1"
-                android:text="負面情緒"
+                android:text="@string/note_negative"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/text_gray3" />
             
@@ -53,7 +53,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@+id/diary_detail_image2"
-                android:text="生理因素"
+                android:text="@string/note_notgood"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/text_gray3" />
             
@@ -77,7 +77,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@+id/diary_detail_image3"
-                android:text="正面情緒"
+                android:text="@string/note_positive"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/text_gray3" />
             
@@ -101,7 +101,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@+id/diary_detail_image4"
-                android:text="測試自己控制力"
+                android:text="@string/note_selftest"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/text_gray3" />
             
@@ -125,7 +125,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@+id/diary_detail_image5"
-                android:text="衝動和誘惑"
+                android:text="@string/note_temptation"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/text_gray3" />
             
@@ -149,7 +149,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@+id/diary_detail_image6"
-                android:text="與他人相處產生摩擦"
+                android:text="@string/note_conflict"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/text_gray3" />
             
@@ -173,7 +173,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@+id/diary_detail_image7"
-                android:text="社交壓力"
+                android:text="@string/note_social"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/text_gray3" />
             
@@ -197,7 +197,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@+id/diary_detail_image8"
-                android:text="與他人玩樂"
+                android:text="@string/note_play"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/text_gray3" />
             
