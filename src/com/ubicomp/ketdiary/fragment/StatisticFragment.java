@@ -31,6 +31,7 @@ import android.widget.ScrollView;
 import com.ubicomp.ketdiary.CopingActivity;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.ResultService3;
 import com.ubicomp.ketdiary.clicklog.ClickLog;
 import com.ubicomp.ketdiary.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.data.structure.Rank;
@@ -132,15 +133,16 @@ public class StatisticFragment extends Fragment implements ShowRadarChart, Quest
 		long curTime = System.currentTimeMillis();
 		long testTime = PreferenceControl.getLatestTestCompleteTime();
 		long pastTime = curTime - testTime;
+		long restTime = ResultService3.spentTime;
 		boolean testFail = PreferenceControl.isTestFail();	
 		
 		if(testFail){
 			
 		}
-		else if( PreferenceControl.getCheckResult() && pastTime >= MainActivity.WAIT_RESULT_TIME){
+		else if( PreferenceControl.getCheckResult() && restTime <= 0){
 			MainActivity.getMainActivity().checkResultAddPoint();
 		}
-		else if ( PreferenceControl.getCheckResult() && pastTime < MainActivity.WAIT_RESULT_TIME ){
+		else if ( PreferenceControl.getCheckResult() && restTime > 0 ){
 		}
 		else{
 			//CustomToast.generateToast(R.string.after_test_pass, 2);

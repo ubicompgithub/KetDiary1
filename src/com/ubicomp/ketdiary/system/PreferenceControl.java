@@ -174,6 +174,26 @@ public class PreferenceControl {
 		edit.commit();
 	}
 	
+	public static boolean getResultServiceRun() {
+		return sp.getBoolean("resultServiceRun", false);
+	}
+
+	public static void setResultServiceRun(boolean run) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putBoolean("resultServiceRun", run);
+		edit.commit();
+	}
+	
+	public static boolean getCheckBars() {
+		return sp.getBoolean("checkBars", false);
+	}
+
+	public static void setCheckBars(boolean checkBars) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putBoolean("checkBars", checkBars);
+		edit.commit();
+	}
+	
 	
 	public static boolean getInApp() {
 		return sp.getBoolean("inApp", true);
@@ -200,8 +220,8 @@ public class PreferenceControl {
 		SharedPreferences.Editor edit = sp.edit();
 		int point = last_point + addPoint;
 		edit.putInt("Point", point);
-		if(point % Config.COUPON_CREDITS == 0)
-			setCouponChange(true);
+//		if(point % Config.COUPON_CREDITS == 0)
+//			setCouponChange(true);
 		Log.d(TAG, "point: " + point);
 		edit.commit();
 	}
@@ -278,7 +298,7 @@ public class PreferenceControl {
 	}
 	
 	public static int getAfterCountDown() {
-		return sp.getInt("AfterCountDown", 10);
+		return sp.getInt("AfterCountDown", 720);
 	}
 	
 	public static void setAfterCountDown(int afterCountDown) {

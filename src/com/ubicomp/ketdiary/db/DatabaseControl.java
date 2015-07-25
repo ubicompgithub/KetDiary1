@@ -1329,6 +1329,45 @@ public class DatabaseControl {
 
 	
 	// TestDetail
+	
+	/**
+	 * This method is used for the latest result detection
+	 * 
+	 * @return Detection. If there are no Detection, return a dummy data.
+	 * @see ubicomp.soberdiary.data.structure.Detection
+	 *
+	 */
+	
+	public TestDetail getLatestTestDetail() {
+		synchronized (sqlLock) {
+			db = dbHelper.getReadableDatabase();
+			String sql = "SELECT * FROM TestDetail ORDER BY ts DESC LIMIT 1";
+			Cursor cursor = db.rawQuery(sql, null);
+			if (!cursor.moveToFirst()) {
+				cursor.close();
+				db.close();
+				return new TestDetail("", 0, 0, 0, 0, 0, 0, 0, "");
+			}
+
+			long ts = cursor.getLong(5);
+			String cassetteId = cursor.getString(1) ;
+			int failedState = cursor.getInt(7);
+			int firstVoltage = cursor.getInt(8);
+			int secondVoltage = cursor.getInt(9);
+			int devicePower = cursor.getInt(10);
+			int colorReading = cursor.getInt(11);
+			float connectionFailRate = cursor.getFloat(12);
+			String failedReason = cursor.getString(13);
+
+			TestDetail testDetail = new TestDetail(cassetteId, ts, failedState, firstVoltage,
+					secondVoltage, devicePower, colorReading,
+	                connectionFailRate, failedReason);
+
+			cursor.close();
+			db.close();
+			return testDetail;
+		}
+	}
 
 		/**
 		 * Insert a TestDetail recorded detailed information of breath condition

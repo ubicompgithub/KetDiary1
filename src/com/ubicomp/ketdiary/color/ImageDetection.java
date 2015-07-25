@@ -22,7 +22,7 @@ import com.ubicomp.ketdiary.system.PreferenceControl;
  * Created by larry on 15/7/22.
  */
 public class ImageDetection {
-    private static final String TAG = "BluetoothLE";
+    private static final String TAG = "ImageDetetion";
 
     private static final int roiXmin = 80;
     private static final int roiXmax = 240;
@@ -344,7 +344,7 @@ public class ImageDetection {
         
         int result2 = check > 0 ? 0:1;
         PreferenceControl.setTestResult(result2);
-        PreferenceControl.setTestSuccess();
+        
         
         
         return (int)check;

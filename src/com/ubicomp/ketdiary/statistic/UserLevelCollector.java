@@ -68,7 +68,7 @@ public class UserLevelCollector {
 					.handleResponse(httpResponse);
 			int httpStatusCode = httpResponse.getStatusLine().getStatusCode();
 			
-			Log.d(TAG, responseString);
+			//Log.d(TAG, responseString);
 			
 			if (responseString != null && httpStatusCode == HttpStatus.SC_OK) {
 				Rank[] ranks = parse(responseString);

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ubicomp.ketdiary"
-    android:versionCode="58"
-    android:versionName="1.58" >
+    android:versionCode="59"
+    android:versionName="1.59" >
     
     <uses-sdk android:minSdkVersion="14" />
  	
@@ -81,9 +81,10 @@
         </receiver>
         <service android:name=".AlarmService" />
         <service android:name=".UploadService" />
-        <service android:name=".ResultService" />
-        <service android:name=".ResultService2" />
+        <service android:name="com.ubicomp.ketdiary.noUse.ResultService" />
+        <service android:name="com.ubicomp.ketdiary.noUse.ResultService2" />
         <service android:name=".ResultService3" />
+        <service android:name=".DailyService" />
         <service
             android:name=".BluetoothLE.BluetoothLeService"
             android:enabled="true" >

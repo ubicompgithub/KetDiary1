@@ -450,41 +450,6 @@ public class AnalysisRankView extends StatisticPageView {
 
 	}
 
-	private ArrayList<Double> calculateRank() {
-		ArrayList<Double> result = new ArrayList<Double>();
-		Rank[] ranks = db.getAllRanks();
-		if (ranks == null) {
-			result.add(0.1);
-			result.add(0.1);
-			result.add(0.1);
-			result.add(0.1);
-			return result;
-		}
-		String uid = PreferenceControl.getUID();
-		int test = 0, note = 0, question = 0, coping = 0;
-		for (int i = 0; i < ranks.length; ++i) {
-			if (ranks[i].getUid().equals(uid)) {
-				test = ranks[i].getTest();
-				note = ranks[i].getNote();
-				question = ranks[i].getQuestion();
-				coping = ranks[i].getCoping();
-				break;
-			}
-		}
-
-		double test_r, advice_r, manage_r, story_r;
-		test_r = (double) ((double) test) / 600.0;
-		advice_r = (double) ((double) note) / 600.0;
-		manage_r = (double) ((double) question) / 700.0;
-		story_r = (double) ((double) coping) / 600.0;
-
-		result.add(test_r);
-		result.add(advice_r);
-		result.add(manage_r);
-		result.add(story_r);
-
-		return result;
-	}
 
 	private class PointerHandler extends Handler {
 		@Override

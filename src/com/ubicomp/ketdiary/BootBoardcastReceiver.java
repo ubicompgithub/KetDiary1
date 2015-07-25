@@ -147,12 +147,7 @@ public class BootBoardcastReceiver extends BroadcastReceiver {
 				.getSystemService(Context.ALARM_SERVICE);
 		
 		Calendar c = Calendar.getInstance();
-		int cur_year = c.get(Calendar.YEAR);
-		int cur_month = c.get(Calendar.MONTH);
-		int cur_date = c.get(Calendar.DAY_OF_MONTH);
-		int cur_hour = c.get(Calendar.HOUR_OF_DAY);
-		
-		c.set(Calendar.HOUR_OF_DAY, 0);
+		c.set(Calendar.HOUR_OF_DAY, 1);
 		
 		Intent check_intent = new Intent();
 		check_intent.setClass(context, AlarmReceiver.class);
@@ -162,7 +157,11 @@ public class BootBoardcastReceiver extends BroadcastReceiver {
 				requestCodeDailyEvent, check_intent,
 				PendingIntent.FLAG_CANCEL_CURRENT);
 		alarm.cancel(pending2);
-		alarm.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pending2);
+		alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+				c.getTimeInMillis(),
+				AlarmManager.INTERVAL_DAY, pending2);
+
+		//alarm.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pending2);
 		
 	}
 }

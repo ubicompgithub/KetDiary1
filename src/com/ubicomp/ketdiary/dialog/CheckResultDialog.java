@@ -7,14 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.TextView;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.data.structure.TestDetail;
+import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.system.PreferenceControl;
-import com.ubicomp.ketdiary.ui.CustomToast;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
 
@@ -37,6 +38,7 @@ public class CheckResultDialog{
 	
 	private RelativeLayout mainLayout;
 	private boolean testFail;
+	private DatabaseControl db;
 	
 	private TextView checkOK, checkCancel, checkHelp;
 	/** @see Typefaces */
@@ -57,6 +59,8 @@ public class CheckResultDialog{
 		digitTypeface = Typefaces.getDigitTypeface();
 		digitTypefaceBold = Typefaces.getDigitTypefaceBold();
 		
+		db = new DatabaseControl();
+		
 	    setting();
 	    mainLayout.addView(boxLayout);
 
@@ -65,7 +69,7 @@ public class CheckResultDialog{
 	protected void setting() {
 		
 		boxLayout = (RelativeLayout) inflater.inflate(
-				R.layout.dialog_end_animation, null);
+				R.layout.dialog_end_animation2, null);
 		boxLayout.setVisibility(View.INVISIBLE);
 		
 		checkOK = (TextView) boxLayout.findViewById(R.id.anim_ok_button);
@@ -90,9 +94,19 @@ public class CheckResultDialog{
 	/** Initialize the dialog */
 	public void initialize() {
 		//RelativeLayout.LayoutParams boxParam = (RelativeLayout.LayoutParams) boxLayout.getLayoutParams();
+		TestDetail testDetail = db.getLatestTestDetail();
+		int failType = testDetail.getFailedState();
 		testFail = PreferenceControl.isTestFail();
 		if(testFail){
-			checkHelp.setText("測試失敗,回到檢測頁重測?");
+			if(failType == 8 || failType == 9){
+				checkHelp.setText("測試未成功，記錄無上傳。\n\n" +
+						"（請保持檢測器開啟，且將檢測器置於與手機鄰近的地方。）\n\n" +
+						"立即回到測試頁面？");
+				
+			}
+			else{
+				checkHelp.setText("測試失敗,回到檢測頁重測?");
+			}
 		}
 		
 		RelativeLayout.LayoutParams boxParam = (LayoutParams) boxLayout

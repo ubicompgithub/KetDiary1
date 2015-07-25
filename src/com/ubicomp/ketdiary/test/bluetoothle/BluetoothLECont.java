@@ -3,7 +3,7 @@ package com.ubicomp.ketdiary.test.bluetoothle;
 import android.app.Activity;
 import android.os.CountDownTimer;
 
-import com.ubicomp.ketdiary.db.DBControl;
+import com.ubicomp.ketdiary.noUse.DBControl;
 
 /**
  * 10 mins client part, should be a background service.

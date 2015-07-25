@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary;
+package com.ubicomp.ketdiary.noUse;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -10,6 +10,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.ubicomp.ketdiary.MainActivity;
+import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.R.drawable;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 
 public class ResultService extends Service{

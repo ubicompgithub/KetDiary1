@@ -175,8 +175,8 @@ public class DetailChart {
 			case TYPE_TEST:
 				title.setText(R.string.radar_label0_full);
 
-				len = Math.min(rank.getTestTimes() * total_len / 100, total_len);
-				idx = Math.min(rank.getTestTimes() * 3 / 100,
+				len = Math.min(rank.getTestTimes() * total_len / 200, total_len);
+				idx = Math.min(rank.getTestTimes() * 3 / 200,
 						detectionComment.length - 1);
 				params[0].width = len;
 				subtitles[0].setText(R.string.radar_label0_0);
