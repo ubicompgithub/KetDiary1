@@ -674,7 +674,7 @@ public class CopingActivity extends Activity {
         dialog.setContentView(R.layout.dialog);
         TextView dialogText = (TextView) dialog.findViewById(R.id.dialog_text);
         dialogText.setText(textResource);
-        dialogText.setTextColor(getResources().getColor(R.color.text_gray3));
+        dialogText.setTextColor(getResources().getColor(R.color.dark_gray));
         
         dialog.show();
          
@@ -702,7 +702,7 @@ public class CopingActivity extends Activity {
         dialog.setContentView(R.layout.dialog);
         TextView dialogText = (TextView) dialog.findViewById(R.id.dialog_text);
         dialogText.setText(textResource);
-        dialogText.setTextColor(getResources().getColor(R.color.text_gray3));
+        dialogText.setTextColor(getResources().getColor(R.color.dark_gray));
         
         dialog.show();
          
