@@ -25,7 +25,7 @@ import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.CustomToast;
 
-public class ResultService2 extends Service implements BluetoothListener {
+public class ResultService2 extends Service {
 	
 	private ResultService2 myservice = this;
 	
@@ -57,7 +57,7 @@ public class ResultService2 extends Service implements BluetoothListener {
         
         
         if(ble == null) {
-			ble = new BluetoothLE2( myservice , PreferenceControl.getDeviceId());
+			//ble = new BluetoothLE2( myservice , PreferenceControl.getDeviceId());
 			ble.bleConnect();
 			
         }
@@ -184,160 +184,4 @@ public class ResultService2 extends Service implements BluetoothListener {
 
 	}
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		ble.onBleActivityResult(requestCode, resultCode, data);
-	}
-
-    @Override
-    public void bleNotSupported() {
-    	  //Toast.makeText(this, "BLE not support", Toast.LENGTH_SHORT).show();
-//        this.finish();
-    }
-
-    @Override
-    public void bleConnectionTimeout() {
-    	Log.i(TAG, "connect timeout");
-        //Toast.makeText(this, "BLE connection timeout", Toast.LENGTH_SHORT).show();
-
-    }
-
-    @Override
-    public void bleConnected() {
-    	isConnect = true;
-        Log.i(TAG, "BLE connected");
-        //Toast.makeText(this, "BLE connected", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void bleDisconnected() {
-    	isConnect = false;
-        Log.i(TAG, "BLE disconnected");
-        //Toast.makeText(this, "BLE disconnected", Toast.LENGTH_SHORT).show();
-        //setState(new FailState("連接中斷"));
-        
-    }
-
-    @Override
-    public void bleWriteStateSuccess() {
-        Log.i(TAG, "BLE ACTION_DATA_WRITE_SUCCESS");
-        //Toast.makeText(this, "BLE write state success", Toast.LENGTH_SHORT).show();
-        stateSuccess = true;
-    }
-
-    @Override
-    public void bleWriteStateFail() {
-        Log.i(TAG, "BLE ACTION_DATA_WRITE_FAIL");
-        //Toast.makeText(this, "BLE writefstate fail", Toast.LENGTH_SHORT).show();
-        stateSuccess = false;
-    }
-
-    @Override
-    public void bleNoPlug() {
-        Log.i(TAG, "No test plug");
-       //Toast.makeText(this, "No test plug", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void blePlugInserted(byte[] plugId) {
-        //Log.i(TAG, "Test plug is inserted");
-    
-    }
-
-
-    @Override
-    public void bleColorReadings(byte[] colorReadings) {
-    	String feature, feature2;
-    	String str1 ="";
-    	String str2 ="";
-    	int[] color = new int[4];
-    	for(int i=0; i<8; i+=2){
-    		//color[i/2] = colorReadings[i]+colorReadings[i+1]*256;
-    		
-    		color[i/2] = ((colorReadings[i+1] & 0xFF) << 8) | (colorReadings[i] & 0xFF);
-    		str1 = str1+ " " + String.valueOf(color[i/2]);
-    	}
-    	//ColorDetect2.colorDetect(color);
-    	//feature = ColorDetect2.colorDetect2(color);
-    	result = ColorDetect2.colorDetect(color);
-    	//writeToColorRawFile(str1+"\n");
-    	//writeToColorRawFile(feature+"\n");
-    	//writeToColorRawFile(str1+"\n");
-    	
-    	int[] color2 = new int[4];
-    	for(int i=8; i<16; i+=2){
-    		//color2[(i-8)/2] = colorReadings[i]+colorReadings[i+1]*256;
-    		color2[(i-8)/2] = ((colorReadings[i+1] & 0xFF) << 8) | (colorReadings[i] & 0xFF);
-    		str2 = str2+ " " + String.valueOf(color2[(i-8)/2]);
-    	}
-    	
-    	//feature2 = ColorDetect2.colorDetect2(color2);
-    	//writeToVoltageFile(feature2+"\n");	
-    	
-    	//showDebug(">First:"+str1+" Second:"+str2);
-    	Log.i(TAG, "First: "+str1);
-    	Log.i(TAG, "Second: "+str2);
-    	
-        //Log.i(TAG, "Color sensor readings");
-    }
-    
-
-
-	@Override
-	public void bleElectrodeAdcReading(byte header, byte[] adcReading) {
-		Log.i(TAG, "State: "+String.valueOf(header));
-		
-	}
-
-	@Override
-	public void bleTakePictureSuccess() {
-		picNum++;
-		Log.i(TAG, "Picture: " + picNum + " Save");
-		Toast.makeText(this, "Picture: " + picNum + " Save", Toast.LENGTH_SHORT).show();
-		ble.bleWriteState((byte)0x06);
-		ble.bleWriteState((byte)0x06);
-		ble.bleWriteState((byte)0x06);
-		ble.bleWriteState((byte)0x06);
-		
-	}
-
-	@Override
-	public void updateProcessRate(float rate) {
-		// TODO Auto-generated method stub
-		Toast.makeText(this, String.valueOf(rate).concat(" %"), Toast.LENGTH_SHORT).show();
-		
-	}
-
-	@Override
-	public void clearProcesssRate() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-	@Override
-	public void displayCurrentId(String id) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void bleTakePictureSuccess(Bitmap bitmap) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void bleTakePictureFail(float dropRate) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void imgDetect(Bitmap bitmap) {
-		// TODO Auto-generated method stub
-		
-	}
 }

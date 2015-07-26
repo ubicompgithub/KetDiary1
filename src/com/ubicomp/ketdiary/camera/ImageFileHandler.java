@@ -1,10 +1,12 @@
 	package com.ubicomp.ketdiary.camera;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
-import com.ubicomp.ketdiary.camera.CameraRecorder;
-
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -55,8 +57,14 @@ public class ImageFileHandler extends Handler {
 		file = new File(directory, file_name);
 		byte[] img = msg.getData().getByteArray("Img");
 		try {
-			writer = new FileOutputStream(file);
-			writer.write(img);
+			 writer = new FileOutputStream(file);
+			 BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
+             bmpFactoryOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;
+             ByteArrayInputStream inputStream = new ByteArrayInputStream(img);
+             Bitmap bitmap = BitmapFactory.decodeStream(inputStream, null, bmpFactoryOptions);
+             bitmap.compress(CompressFormat.JPEG, 30, writer);
+           			
+			//writer.write(img);
 			writer.close();
 		} catch (Exception e) {
 			Log.d(TAG, "FAIL TO OPEN");
@@ -65,7 +73,13 @@ public class ImageFileHandler extends Handler {
 			} catch (Exception e1) {
 			}
 			writer = null;
+		} finally {
+			try {
+				writer.close();
+			} catch (Exception e1) {
+			}
 		}
+		
 		
 		//if(count)
 		//recorder.closeSuccess();

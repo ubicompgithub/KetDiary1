@@ -188,7 +188,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private int devicePower;
 	private int colorReading;
 	private float connectionFailRate;
-	private String failedReason; 
+	private String failedReason;
+	private String hardwareVersion = "";
 	
 	public static TestDetail testDetail = null;
 	
@@ -431,9 +432,6 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 				setState(new ConnState());
 			}
 			
-			/*
-			start_test = true;
-			setState(new ConnState());*/
 		}
 	}
 	
@@ -463,7 +461,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			
 			testDetail = new TestDetail(cassetteId, timestamp, failedState, firstVoltage,
 					secondVoltage, devicePower, colorReading,
-	                connectionFailRate, failedReason);
+	                connectionFailRate, failedReason, hardwareVersion);
 			
 			
 //			if( TDP!= null ){
@@ -505,7 +503,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			img_btn.setEnabled(false);
 			label_btn.setText("");
 			label_subtitle.setText("");
-			label_title.setText("準備中....");
+			label_title.setText("檢測器準備中....");
 			
 			startConnection();
 			if(goThroughState){
@@ -543,7 +541,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			img_btn.setEnabled(false);
 			
 			if(ble != null)
-				ble.bleWriteState((byte)0x02);
+				ble.bleWriteState((byte)0x0A);
 			
 			//if(	testCountDownTimer == null )
 			testCountDownTimer = new TestCountDownTimer(COUNT_DOWN_SECOND);
@@ -576,7 +574,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 
 			label_btn.setText("");
 			label_subtitle.setText("請將臉對準中央，並吐口水於管中");
-			label_title.setText("請吐口水");
+			label_title.setText("已可開始測試");
 			Random rand = new Random();
 			int idx = rand.nextInt(test_guide_msg.length);
 			test_msg.setText(test_guide_msg[idx]);
@@ -642,7 +640,6 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	
 	private class NotEnoughSavilaState extends TestState{
 
-		private boolean move_to_init = false;
 		@Override
 		public void onStart(){
 			
@@ -656,21 +653,9 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			
 			cameraCountDownTimer = new CameraCountDownTimer(CAMERATIMEOUT2);
 			cameraCountDownTimer.start();
-			
-			/*if(	timeoutCountDownTimer==null	)
-				timeoutCountDownTimer = new TimeoutCountDownTimer();
-			timeoutCountDownTimer.start();*/
-			
 		}
 		@Override
 		public void onClick(){
-			//move_to_init = true;
-			/*is_timeout = false;
-			
-			if(	timeoutCountDownTimer!=null	)
-				timeoutCountDownTimer.cancel();
-			
-			setState(new Stage2State());*/
 		}
 		public void onExit(){
 			if(	cameraCountDownTimer!=null	)
@@ -746,7 +731,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			
 			testDetail = new TestDetail(cassetteId, timestamp, failedState, firstVoltage,
 					secondVoltage, devicePower, colorReading,
-	                connectionFailRate, failedReason);
+	                connectionFailRate, failedReason, hardwareVersion);
 			
 			/*
 			try {
@@ -809,8 +794,8 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		voltageFileHandler = new VoltageFileHandler(mainDirectory,
 				String.valueOf(timestamp));
 		
-		colorRawFileHandler = new ColorRawFileHandler(mainDirectory,
-				String.valueOf(timestamp));
+//		colorRawFileHandler = new ColorRawFileHandler(mainDirectory,
+//				String.valueOf(timestamp));
 		
 		imgFileHandler = new ImageFileHandler(mainDirectory,
 				String.valueOf(timestamp));
@@ -865,7 +850,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		}
 	
 		if (colorRawFileHandler != null) {
-			colorRawFileHandler.close();
+			//colorRawFileHandler.close();
 			colorRawFileHandler = null;
 		}
 		
@@ -997,7 +982,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		checkDebug(is_debug);//PreferenceControl.isDebugMode());
 		checkPreference();
 		
-		
+		boolean resultServiceRun = PreferenceControl.getResultServiceRun();
 		msgBox = new NoteDialog3(testFragment, main_layout);
 		//reset();
 		long curTime = System.currentTimeMillis();
@@ -1215,6 +1200,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 
 		private static final int SECOND_FIX = 1300;
 		private long prevSecond = 99;
+		private boolean writeState = false;
 
 		public TestCountDownTimer(long second) {
 			super(second * SECOND_FIX, 100);
@@ -1246,9 +1232,18 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 
 		@Override
 		public void onTick(long millisUntilFinished) {
+			
+			if(millisUntilFinished < 8000){
+				if(ble != null && !writeState){
+					ble.bleWriteState((byte)0x02);
+					writeState = true;
+				}
+			}
+			
 			long displaySecond = millisUntilFinished / SECOND_FIX;
 			if (displaySecond < prevSecond) {
 				
+				Log.i(TAG, hardwareVersion+"");
 				
 				soundPool.play(count_down_audio_id, 0.6f, 0.6f, 0, 0, 1.0F);
 				label_btn.setText(String.valueOf(displaySecond));
@@ -1395,14 +1390,6 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
         if( state == CONN_STATE )
         	updateInitState(Tester._BT);
         
-        /*)
-        if(!first_connect){
-        	Toast.makeText(this, "Test plug is inserted", Toast.LENGTH_SHORT).show();
-        	
-        	if(camera_initial)
-        		setState(new FiveSecondState());
-        	first_connect=true;
-        }*/
         
     }
 
@@ -1661,16 +1648,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		
 		
 	}
-	@Override
-	public void bleTakePictureSuccess() {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void updateProcessRate(float rate) {
-		// TODO Auto-generated method stub
-		
-	}
+
 	@Override
 	public void clearProcesssRate() {
 		// TODO Auto-generated method stub
@@ -1693,6 +1671,29 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	}
 	@Override
 	public void imgDetect(Bitmap bitmap) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void PictureRetransmit(int count) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void displayHardwareVersion(String version) {
+		hardwareVersion = version;
+		
+		Log.i(TAG, "Display Hardware Version " + version);
+		showDebug("Display Hardware Version " + version);
+		
+	}
+	@Override
+	public void updateProcessRate(String rate) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void writeDebug(String msg) {
 		// TODO Auto-generated method stub
 		
 	}

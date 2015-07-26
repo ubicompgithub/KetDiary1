@@ -15,6 +15,7 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.ubicomp.ketdiary.MainActivity;
+import com.ubicomp.ketdiary.ResultService3;
 import com.ubicomp.ketdiary.color.ImageDetection;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.system.PreferenceControl;
@@ -25,7 +26,7 @@ import com.ubicomp.ketdiary.system.PreferenceControl;
 public class DataTransmission {
     private static final String TAG = "DataTransmission";
     private static final int maximumPktNum = 120;
-	private static final int timeout = 5000;
+	private static final int timeout = 10 *1000;
 
     private BluetoothListener bluetoothListener = null;
     private BluetoothLE3 ble = null;
@@ -44,7 +45,7 @@ public class DataTransmission {
     private int bufOffset = 0;
     private boolean picInfoPktRecv = false;
     
-    private int picNum = 0;
+    private int picNum = 10;
 
     private Set<Integer> integerSet;
     
@@ -90,22 +91,6 @@ public class DataTransmission {
                 Log.d(TAG, "Total packets:".concat(String.valueOf(pktNum)));
                 Log.d(TAG, "Last packet size:".concat(String.valueOf(lastPktSize)));
 
-                long ts = PreferenceControl.getUpdateDetectionTimestamp();
-	            File dir = MainStorage.getMainStorageDirectory();
-	            mainStorage = new File(dir, String.valueOf(ts));
-	            String file_name = "PIC_" + ts + "_" + picNum + ".sob";
-	              
-	            picNum ++ ;
-
-                //Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-
-                file = new File(mainStorage, file_name);
-                try {
-                    fos = new FileOutputStream(file, true);
-                } catch (IOException e) {
-                    Log.d(TAG, "FAIL TO OPEN");
-                    fos = null;
-                }
             }
             else{
                 ble.bleWriteAck((byte) 0x05);
@@ -119,8 +104,11 @@ public class DataTransmission {
                 tempPktId = seqNum/8;
             }
 
-            if(integerSet.contains(tempPktId))
-                return;
+            if(integerSet.contains(tempPktId)){
+            	Log.i(TAG, tempPktId + "has been receive repeatedly");
+            	return;
+            }
+                
 
             if( bufOffset/16 != seqNum %8) {
                 Log.d(TAG, "Packet is recieved.".concat(String.valueOf(bufOffset / 16)).concat(String.valueOf(seqNum % 8)));
@@ -155,7 +143,7 @@ public class DataTransmission {
 					timer.cancel();
                     timer = new Timer();
                     timer.schedule(new TimeoutTask(), timeout);
-                    ((BluetoothListener) bluetoothListener).updateProcessRate((float)recvNum*100/pktNum );
+                    ((BluetoothListener) bluetoothListener).updateProcessRate(""+(float)recvNum*100/pktNum +"%  "+ tempPktId);
                 }else{
                     Log.d(TAG, "Checksum error in ".concat(String.valueOf(tempPktId)).concat("th packet."));
                     bufOffset = 0;
@@ -167,12 +155,11 @@ public class DataTransmission {
     public void checkPackets(){
         Log.i(TAG, "Dropout rate: " + (float) (pktNum - recvNum)*100/ pktNum + "%");
         if(recvNum == pktNum){
-            try {
+
                 int currentIdx = 0;
                 byte [] pictureBytes = new byte [(pktNum-1) * 122 + (lastPktSize - 6)];
                 for(int i = 0; i < pktNum; i++) {
                     System.arraycopy(picBuf[i], 0, pictureBytes, currentIdx, picBuf[i].length);
-                    fos.write(picBuf[i]);
                     currentIdx += picBuf[i].length;
                 }
 
@@ -186,31 +173,22 @@ public class DataTransmission {
 
 
                 picInfoPktRecv = false;
+                ble.bleWriteState((byte) 0x07);
+                
+//                byte [] bytes = new byte [20];
+//                bytes[0] = (byte)0xA3;
+//                bytes[1] = (byte)(2 & 0xFF);
+//                bytes[2] = (byte)(2);
+//                bytes[3] = (byte)(14);
+//                ble.bleWriteData(bytes);
+                
+                
+                timer.cancel();
+				timer = null;
 
-                try {
-                    fos.close();
-                    //ble.bleWriteAck((byte) 0x05);
-                    ble.bleWriteState((byte) 0x07);
-					timer.cancel();
-					timer = null;
+                ((BluetoothListener) bluetoothListener).bleTakePictureSuccess(bitmap);                  
+                resetParameters();
 
-                    ((BluetoothListener) bluetoothListener).bleTakePictureSuccess(bitmap);
-
-                    //((BluetoothListener) bluetoothListener).bleTakePictureSuccess(bitmap);
-                   // Log.i(TAG, bitmap.getHeight() + " " + bitmap.getWidth());
-                    //((BluetoothListener) bluetoothListener).imgDetect(bitmap);
-                   // ((BluetoothListener) bluetoothListener).bleTakePictureSuccess();
-                    
-                    
-                    resetParameters();
-                    
-
-                } catch (IOException e2) {
-                    e2.printStackTrace();
-                }
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
 
         }
         else{
@@ -232,7 +210,8 @@ public class DataTransmission {
                     }
                 }
             }
-
+            
+            ((BluetoothListener) bluetoothListener).clearProcesssRate();  
             ble.bleWriteData(bytes);
         }
     }
@@ -259,9 +238,12 @@ public class DataTransmission {
         public void run() {
             Log.i(TAG, "Timeout timer was  fired " + counter);
             if(counter < 10){
-                checkPackets();
-                counter++;
-                resetTimeoutTimer();
+            	if(ResultService3.isConnect){
+	                checkPackets();
+	                ((BluetoothListener) bluetoothListener).PictureRetransmit(counter);
+	                counter++;
+	                resetTimeoutTimer();
+            	}
             }
             else{
                 timer.cancel();

@@ -92,6 +92,9 @@ public class MainActivity extends FragmentActivity {
 	private ImageView loading_page, animationImg;
 	private LoadingPageTimer loadingPageTimer;
 	private Handler loadingHandler = new LoadingHandler();
+	public Handler resultFailHandler = new ResultFailHandler();
+	
+	
 	private AnimationDrawable animation;
 
 	private CustomMenu menu;
@@ -380,7 +383,9 @@ public class MainActivity extends FragmentActivity {
 			clickable = true;
 		}
 		
-
+		if(!resultServiceRun){
+			enableTabAndClick(true);
+		}
 		if(PreferenceControl.getCheckResult() && countTime > 0)
 			setTimers();
 		else if(PreferenceControl.getCheckResult() && countTime <= 0){
@@ -961,6 +966,11 @@ public class MainActivity extends FragmentActivity {
 		//PreferenceControl.setAfterTestState(NoteDialog3.STATE_TEST);
 		//PreferenceControl.setCheckResult(false);
 		
+	}
+	private class ResultFailHandler extends Handler {
+		public void handleMessage(Message msg) {
+			setResultFail();
+		}
 	}
 	
 	public void setResultSuccess(){

@@ -11,10 +11,11 @@ public class TestDetail {
 	public int colorReading;
 	public float connectionFailRate;
 	public String failedReason;
+	public String hardwareVersion;
 
 	public TestDetail(String cassetteId, long tv, int failedState,int firstVoltage,
 					int secondVoltage, int devicePower, int colorReading,
-	                float connectionFailRate, String failedReason) {
+	                float connectionFailRate, String failedReason, String hardwareVersion) {
 		this.cassetteId=cassetteId;
 		this.tv = TimeValue.generate(tv);
 		this.failedState= failedState;
@@ -24,6 +25,7 @@ public class TestDetail {
 		this.colorReading=colorReading;
 		this.connectionFailRate=connectionFailRate;
 		this.failedReason=failedReason;
+		this.hardwareVersion = hardwareVersion;
 	}
 	
 	@Override
@@ -86,5 +88,9 @@ public class TestDetail {
 	
 	public String getFailedReason() {
 		return failedReason;
+	}
+	
+	public String getHardwareVersion() {
+		return hardwareVersion;
 	}
 }

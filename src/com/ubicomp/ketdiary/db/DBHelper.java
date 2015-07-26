@@ -13,7 +13,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 	/* SQLiteOpenHelper. need to migrate with */
 	private static final String DATABASE_NAME = "rehabdiary";
-	private static final int DB_VERSION = 10;
+	private static final int DB_VERSION = 11;
 
 	/**
 	 * Constructor
@@ -63,7 +63,8 @@ public class DBHelper extends SQLiteOpenHelper {
 				+ " failedState INTEGER NOT NULL," + " firstVoltage INTEGER NOT NULL,"
 				+ " secondVoltage INTEGER NOT NULL," + " devicePower INTEGER NOT NULL, "
 				+ " colorReading INTEGER NOT NULL, "+ " connectionFailRate FLOAT, " 
-				+ " failedReason CHAR[255], " 
+				+ " failedReason CHAR[255], "
+				+ " hardwareVersion CHAR[255], "
 				+ " upload INTEGER NOT NULL DEFAULT 0" + ")");
 		
 		db.execSQL("CREATE TABLE Ranking (" + " user_id CHAR[255] PRIMERY KEY,"
@@ -112,6 +113,13 @@ public class DBHelper extends SQLiteOpenHelper {
 				+ " upload INTEGER NOT NULL DEFAULT 0,"
 				+ " testSuccess INTEGER NOT NULL DEFAULT 0,"
 				+ " hasData INTEGER NOT NULL DEFAULT 0" + ")");
+		
+		db.execSQL("CREATE TABLE Cassette ("
+				+ " id INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ " ts INTEGER NOT NULL,"
+				+ " cassetteId CHAR[255] NOT NULL,"
+				+ " isUsed INTEGER NOT NULL,"
+				+ " upload INTEGER NOT NULL DEFAULT 0)");
 
 
 	}
@@ -120,8 +128,6 @@ public class DBHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int old_ver, int new_ver) {
 		
 		db.execSQL("DROP TABLE IF EXISTS TestDetail");
-		db.execSQL("DROP TABLE IF EXISTS CopingSkill");
-		db.execSQL("DROP TABLE IF EXISTS Ranking");
 		
 		db.execSQL("CREATE TABLE TestDetail ("
 				+ " id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -131,40 +137,10 @@ public class DBHelper extends SQLiteOpenHelper {
 				+ " failedState INTEGER NOT NULL," + " firstVoltage INTEGER NOT NULL,"
 				+ " secondVoltage INTEGER NOT NULL," + " devicePower INTEGER NOT NULL, "
 				+ " colorReading INTEGER NOT NULL, "+ " connectionFailRate FLOAT, " 
-				+ " failedReason CHAR[255], " 
+				+ " failedReason CHAR[255], "
+				+ " hardwareVersion CHAR[255], "
 				+ " upload INTEGER NOT NULL DEFAULT 0" + ")");
 				
-		db.execSQL("CREATE TABLE CopingSkill ("
-				+ " id INTEGER PRIMARY KEY AUTOINCREMENT,"
-				+ " year INTEGER NOT NULL," + " month INTEGER NOT NULL,"
-				+ " day INTEGER NOT NULL," + " ts INTEGER NOT NULL,"
-				+ " week INTEGER NOT NULL," + " timeSlot INTEGER NOT NULL,"
-				+ " skillType INTEGER NOT NULL,"
-				+ " skillSelect INTEGER NOT NULL DEFAULT 0,"
-				+ " recreation CHAR[255] NOT NULL,"
-				+ " score INTEGER NOT NULL,"
-				+ " upload INTEGER NOT NULL DEFAULT 0" + ")");
-		
-		db.execSQL("CREATE TABLE Ranking (" + " user_id CHAR[255] PRIMERY KEY,"
-				+ " total_score INTEGER NOT NULL,"
-				+ " test_score INTEGER NOT NULL  DEFAULT 0,"
-				+ " note_score INTEGER NOT NULL  DEFAULT 0,"
-				+ " question_score INTEGER NOT NULL  DEFAULT 0,"
-				+ " coping_score INTEGER NOT NULL  DEFAULT 0,"
-				
-				+ " times_score INTEGER NOT NULL  DEFAULT 0,"
-				+ " pass_score INTEGER NOT NULL  DEFAULT 0,"
-				+ " normalQ_score INTEGER NOT NULL  DEFAULT 0,"
-				+ " randomQ_score INTEGER NOT NULL  DEFAULT 0"+")");
-		
-		
-		db.execSQL("CREATE TABLE ExchangeHistory ("
-				+ " id INTEGER PRIMARY KEY AUTOINCREMENT,"
-				+ " ts INTEGER NOT NULL,"
-				+ " exchangeCounter INTEGER NOT NULL,"
-				+ " upload INTEGER NOT NULL DEFAULT 0,"
-				+ " testSuccess INTEGER NOT NULL DEFAULT 0,"
-				+ " hasData INTEGER NOT NULL DEFAULT 0" + ")");
 		
 	}
 

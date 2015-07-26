@@ -656,6 +656,10 @@ public class LineChartView extends View {
             cursorLinePos = getCursorPos2(x);
             switch (checkLineChartType()) {
             case 0:
+//            	int index = cursorLinePos;
+//            	while()
+            	
+            	
             	if(dataset[cursorLinePos].self_type == 0){
             		
             	}
@@ -664,10 +668,7 @@ public class LineChartView extends View {
             	break;
             case 2:
             	break;
-            }
-            
-            
-            
+            }        
             if (cursorLinePos < 0) {
             	cursorLinePos = 0;
             }

@@ -1,5 +1,8 @@
 package com.ubicomp.ketdiary.color;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Vector;
 
 import org.opencv.android.Utils;
@@ -9,13 +12,10 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.ubicomp.ketdiary.MainActivity;
-import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE3;
-import com.ubicomp.ketdiary.BluetoothLE.BluetoothListener;
+import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 
 /**
@@ -39,10 +39,22 @@ public class ImageDetection {
     private int Xmax = roiXmax;
     private int Ymin = roiYmin;
     private int Ymax = roiYmax;
-
+    
+    private File mainStorage = null;
+    private int picNum = 1;
+    private long ts;
+    private FileOutputStream out = null;
+    private FileOutputStream out2 = null;
     ColorDetectListener colorDetectListener;
     public ImageDetection(ColorDetectListener colorDetectListener){
     	this.colorDetectListener = colorDetectListener;
+    	
+    	ts = PreferenceControl.getUpdateDetectionTimestamp();
+        File dir = MainStorage.getMainStorageDirectory();
+        mainStorage = new File(dir, String.valueOf(ts));
+        
+       
+          
     }
 
     public void roiDetectionOnWhite(Bitmap bitmap){
@@ -98,7 +110,26 @@ public class ImageDetection {
 
         Bitmap bmp = Bitmap.createBitmap(matOrigin.cols(), matOrigin.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(matOrigin, bmp);
-
+        
+        String file_name = "PIC_" + ts + "_" + 0 + ".sob";
+        File file = new File(mainStorage, file_name);
+        
+        try {
+            out = new FileOutputStream(file, true);
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        //Log.i(TAG, matOrigin.dump());
         //((BluetoothListener) activity).setImgPreview(bmp);
 
     }
@@ -341,6 +372,33 @@ public class ImageDetection {
             }
         }
         Log.i(TAG, "Check: " + String.valueOf(check));
+        
+        String file_name = "PIC_" + ts + "_" + 1 + ".sob";
+        String file_name2= "PIC_" + ts + "_" + 2 + ".sob";
+        File file = new File(mainStorage, file_name);
+        File file2 = new File(mainStorage, file_name2);
+        
+        try {
+            out = new FileOutputStream(file, true);
+            roiBmp.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out2 = new FileOutputStream(file2, true);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out2); 
+            // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+                if (out2 != null) {
+                    out2.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         
         int result2 = check > 0 ? 0:1;
         PreferenceControl.setTestResult(result2);

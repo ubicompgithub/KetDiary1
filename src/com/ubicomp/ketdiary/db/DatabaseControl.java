@@ -1346,7 +1346,7 @@ public class DatabaseControl {
 			if (!cursor.moveToFirst()) {
 				cursor.close();
 				db.close();
-				return new TestDetail("", 0, 0, 0, 0, 0, 0, 0, "");
+				return new TestDetail("", 0, 0, 0, 0, 0, 0, 0, "", "");
 			}
 
 			long ts = cursor.getLong(5);
@@ -1358,10 +1358,11 @@ public class DatabaseControl {
 			int colorReading = cursor.getInt(11);
 			float connectionFailRate = cursor.getFloat(12);
 			String failedReason = cursor.getString(13);
+			String hardwareVersion = cursor.getString(14);
 
 			TestDetail testDetail = new TestDetail(cassetteId, ts, failedState, firstVoltage,
 					secondVoltage, devicePower, colorReading,
-	                connectionFailRate, failedReason);
+	                connectionFailRate, failedReason, hardwareVersion);
 
 			cursor.close();
 			db.close();
@@ -1400,6 +1401,7 @@ public class DatabaseControl {
 					content.put("connectionFailRate",
 							data.getConnectionFailRate());
 					content.put("failedReason", data.getFailedReason());
+					content.put("hardwareVersion", data.getHardwareVersion());
 					db.insert("TestDetail", null, content);
 				}
 				cursor.close();
@@ -1442,10 +1444,11 @@ public class DatabaseControl {
 					int colorReading = cursor.getInt(11);
 					float connectionFailRate = cursor.getFloat(12);
 					String failedReason = cursor.getString(13);
+					String hardwardVersion = cursor.getString(14);
 
 					data[i] = new TestDetail(cassetteId, ts, failedState, firstVoltage,
 							secondVoltage, devicePower, colorReading,
-			                connectionFailRate, failedReason);
+			                connectionFailRate, failedReason, hardwardVersion);
 				}
 				cursor.close();
 				db.close();

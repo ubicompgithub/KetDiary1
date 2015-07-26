@@ -73,6 +73,7 @@ public class CameraRecorder {
 		List<Size> list = params.getSupportedPictureSizes();
 		Point bestSize = getBestSize(list);
 		params.setPictureSize(bestSize.x, bestSize.y);
+		//params.setJpegQuality(30);
 		try {
 			camera.setParameters(params);
 		} catch (Exception e) {

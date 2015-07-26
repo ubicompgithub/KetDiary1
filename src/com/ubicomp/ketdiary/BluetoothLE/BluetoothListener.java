@@ -44,8 +44,6 @@ public interface BluetoothListener {
     void bleColorReadings(byte[] colorReadings);
     
     // Add by Larry
-    /* Take picture successfully*/
-    void bleTakePictureSuccess();
     
     /* Take picture successfully*/
     void bleTakePictureSuccess(Bitmap bitmap);
@@ -54,15 +52,21 @@ public interface BluetoothListener {
     void bleTakePictureFail(float dropRate);
 
     /* Update process rate*/
-    void updateProcessRate(float rate);
+    void updateProcessRate(String rate);
 
     /* Clear process rate*/
     void clearProcesssRate();
     
+    /* Retransmit*/
+    void PictureRetransmit(int count);
 
     /* Show image preview*/
     void imgDetect(Bitmap bitmap);
 
     /* Display current saliva Id*/
     void displayCurrentId(String id);
+    
+    void displayHardwareVersion(String version);
+    
+    void writeDebug(String msg);
 }

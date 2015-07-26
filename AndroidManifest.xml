@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ubicomp.ketdiary"
-    android:versionCode="59"
-    android:versionName="1.59" >
+    android:versionCode="60"
+    android:versionName="1.60" >
     
     <uses-sdk android:minSdkVersion="14" />
  	
@@ -105,7 +105,7 @@
         </activity>
         
         <activity
-            android:name=".BluetoothLE.MainActivity2"
+            android:name="com.ubicomp.ketdiary.noUse.MainActivity2"
             android:label="@string/title_activity_dev"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" >

@@ -374,6 +374,11 @@ public class NoteDialog3 implements ChooseItemCaller{
 	public void copingSetting(){
 		//boxLayout = (RelativeLayout) inflater.inflate(R.layout.activity_qtip, null);
 		//mainLayout.addView(boxLayout);
+		
+		boolean testFail = PreferenceControl.isTestFail();
+		boolean runService = PreferenceControl.getResultServiceRun();
+		
+		
 		ClickLog.Log(ClickLogId.TEST_COPE_ENTER);
 		state = STATE_COPE;
 		PreferenceControl.setAfterTestState(STATE_COPE);
@@ -393,8 +398,14 @@ public class NoteDialog3 implements ChooseItemCaller{
 	    
 	    note_title.setTypeface(wordTypefaceBold);
 	    note_title.setTextColor(context.getResources().getColor(R.color.text_gray2));
-	    note_title.setText(R.string.countdown);
-
+	    
+	    if(!testFail && !runService){
+	    	note_title.setText(R.string.test_done);
+	    }
+	    else{
+	    	note_title.setText(R.string.countdown);
+	    }
+	      
 		title_layout.addView(layout);
 		
 		
@@ -413,7 +424,14 @@ public class NoteDialog3 implements ChooseItemCaller{
 		tv_knowdlege.setText(coping_msg[idx]);
 		main_layout.addView(center_layout);
 		
-		View bottom = BarButtonGenerator.createOneButtonView( R.string.Iknow, endOnClickListener );
+		
+		View bottom;
+		if(!testFail && !runService){
+			bottom = BarButtonGenerator.createOneButtonView( R.string.go_result, goResultOnClickListener );
+		}
+		else{
+			bottom = BarButtonGenerator.createOneButtonView( R.string.Iknow, endOnClickListener );
+		}
 		bottom_layout.addView(bottom);
 		
 	}
@@ -452,6 +470,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 		
 		tv_title.setText(R.string.coping_page);
 		
+		coping_msg = context.getResources().getStringArray(Coping_list[type]);
 		Random rand = new Random();
 		int idx = rand.nextInt(coping_msg.length);
 		tv_knowdlege.setText(coping_msg[idx]);
@@ -489,7 +508,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 		//View title = BarButtonGenerator.createWaitingTitle();
 		//title_layout.addView(title);
 		
-		View bottom = BarButtonGenerator.createTwoButtonView(R.string.last, R.string.next, new CancelOnClickListener(), endOnClickListener);
+		View bottom = BarButtonGenerator.createTwoButtonView(R.string.last, R.string.next_one, new CancelOnClickListener(), endOnClickListener);
 		bottom_layout.addView(bottom);
 		//main_layout.removeView(center_layout);
 		center_layout = (LinearLayout) inflater.inflate(R.layout.knowledge, null);
@@ -518,28 +537,12 @@ public class NoteDialog3 implements ChooseItemCaller{
 		}
 		else if(state == STATE_COPE || state == STATE_KNOW){
 			//Toast.makeText(context, "請點選以查看檢測結果", Toast.LENGTH_SHORT).show();
-			CustomToastSmall.generateToast("請點選以查看檢測結果");
+			CustomToastSmall.generateToast("請點選以查看檢測結果");	
 			note_title.setText(R.string.test_done);
 			View bottom = BarButtonGenerator.createOneButtonView( R.string.go_result, goResultOnClickListener );
 			bottom_layout.addView(bottom);
 		}
 	
-	}
-	
-	public void testSetting(){
-		
-		title_layout.removeAllViews();
-		main_layout.removeAllViews();
-		bottom_layout.removeAllViews();
-		
-
-		//main_layout.removeView(center_layout);
-		center_layout = (LinearLayout) inflater.inflate(R.layout.bar_impact, null);
-		//tv_knowdlege = (TextView)center_layout.findViewById(R.id.qtip_tv_tips);
-		//tv_knowdlege.setText(DBTip.inst.getTip());
-		main_layout.addView(center_layout);
-		
-		//main_layout.getLayoutParams().height = center_layout.getLayoutParams().height;
 	}
 	
 	/** Initialize the dialog */
@@ -558,11 +561,6 @@ public class NoteDialog3 implements ChooseItemCaller{
 		
 		MainActivity.getMainActivity().enableTabAndClick(false);
 		boxLayout.setVisibility(View.VISIBLE);
-		
-		//chooseBox = new ChooseItemDialog(boxLayout, 1);
-		//chooseBox.initialize();
-		//chooseBox.show();
-		
 	
 	}
 	
@@ -709,11 +707,15 @@ public class NoteDialog3 implements ChooseItemCaller{
 						impact = impactSeekBar.getProgress();
 						testQuestionCaller.writeQuestionFile(day, timeslot, type, items, impact, edtext.getText().toString());
 						
-						boolean testFail = PreferenceControl.isTestFail();
-						if(!testFail){
-							copingSettingToResult();
-						}
 						copingSetting();
+						
+//						boolean testFail = PreferenceControl.isTestFail();
+//						if(!testFail){
+//							copingSettingToResult();
+//						}
+//						else{
+//							copingSetting();
+//						}
 					}
 				}
 			}
@@ -772,11 +774,15 @@ public class NoteDialog3 implements ChooseItemCaller{
 				PreferenceControl.setIsFilled(0);
 				type = 0;
 				
-				boolean testFail = PreferenceControl.isTestFail();
-				if(!testFail){
-					copingSettingToResult();
-				}
 				copingSetting();
+				
+//				boolean testFail = PreferenceControl.isTestFail();
+//				if(!testFail){
+//					copingSettingToResult();
+//				}
+//				else{
+//					copingSetting();
+//				}
 				//questionFile.write(0, 0, 0);
 				//startActivity(new Intent(that, EventCopeSkillActivity.class));
 			}

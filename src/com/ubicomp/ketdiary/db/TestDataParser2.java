@@ -231,11 +231,11 @@ public class TestDataParser2 {
 	
 	public void startTestDetail(String cassetteId, int failedState,int firstVoltage,
 			int secondVoltage, int devicePower, int colorReading,
-            float connectionFailRate, String failedReason) {
+            float connectionFailRate, String failedReason, String hardwareVersion) {
 		
 		TestDetail testDetail = new TestDetail(cassetteId, ts, failedState, firstVoltage,
 				secondVoltage, devicePower, colorReading,
-                connectionFailRate, failedReason);
+                connectionFailRate, failedReason, hardwareVersion);
 		
 		db.insertTestDetail(testDetail);
 

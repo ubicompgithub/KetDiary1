@@ -208,6 +208,15 @@ public class HttpPostGenerator {
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getConnectionFailRate())));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getFailedReason())));
 		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getTv().getWeek())));
+		nvps.add(new BasicNameValuePair("data[]", String.valueOf(data.getHardwareVersion())));
+		PackageInfo pinfo;
+		try {
+			pinfo = App.getContext().getPackageManager()
+					.getPackageInfo(App.getContext().getPackageName(), 0);
+			String versionName = pinfo.versionName;
+			nvps.add(new BasicNameValuePair("data[]", versionName));
+		} catch (NameNotFoundException e) {
+		}
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 		} catch (UnsupportedEncodingException e) {}
