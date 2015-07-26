@@ -48,12 +48,13 @@ import com.ubicomp.ketdiary.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.db.TestDataParser2;
-import com.ubicomp.ketdiary.dialog.NoteDialog3;
+import com.ubicomp.ketdiary.dialog.NoteDialog4;
 import com.ubicomp.ketdiary.dialog.TestQuestionCaller2;
 import com.ubicomp.ketdiary.file.ColorRawFileHandler;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.QuestionFile;
 import com.ubicomp.ketdiary.file.VoltageFileHandler;
+import com.ubicomp.ketdiary.noUse.NoteDialog3;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.LoadingDialogControl;
 import com.ubicomp.ketdiary.ui.ScaleOnTouchListener;
@@ -100,7 +101,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	private final boolean[] DONE_PROGRESS = { false, false, false };
 	
 	public TestDataParser2 TDP;
-	public NoteDialog3 msgBox = null;
+	public NoteDialog4 msgBox = null;
 	
 	/** Camare variables */
 	//private Camera mCamera = null;
@@ -321,7 +322,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			}
 		});
 		
-		msgBox = new NoteDialog3(testFragment, main_layout);
+		msgBox = new NoteDialog4(testFragment, main_layout);
 		
 
 		img_help.setOnClickListener(new View.OnClickListener(){
@@ -983,7 +984,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		checkPreference();
 		
 		boolean resultServiceRun = PreferenceControl.getResultServiceRun();
-		msgBox = new NoteDialog3(testFragment, main_layout);
+		msgBox = new NoteDialog4(testFragment, main_layout);
 		//reset();
 		long curTime = System.currentTimeMillis();
 		long testTime = PreferenceControl.getLatestTestCompleteTime();

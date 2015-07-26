@@ -468,7 +468,7 @@ public class PreferenceControl {
 	public static int getCoupon(){
 		int point = getPoint();
 		int usedScore = getUsedCounter();
-		int coupon = (point-usedScore)/10;
+		int coupon = (point-usedScore)/Config.COUPON_CREDITS;
 		return coupon;
 	}
 	

@@ -26,6 +26,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.system.PreferenceControl;
@@ -91,19 +92,21 @@ public class BluetoothLE3 {
     boolean picInfoPktRecv = false;
     boolean picDataRecvDone = true;
     private int picNum = 0;
+    private Context context;
     
     public int hardware_state = -1; 
     
     public BluetoothLE3(BluetoothListener bluetoothListener, String mDeviceName) {
     	//super(bluetoothListener, mDeviceName);
         mHandler = new Handler();
-
+        context = App.getContext();
+        
         this.bluetoothListener = bluetoothListener;
         this.mDeviceName = mDeviceName;
 
         // Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
-        if (!MainActivity.getMainActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+        if (!context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
             //Toast.makeText(MainActivity.getMainActivity(), "BLE not supported!", Toast.LENGTH_SHORT).show();
             ((BluetoothListener) bluetoothListener).bleNotSupported();
         }
@@ -111,7 +114,7 @@ public class BluetoothLE3 {
         // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
         // BluetoothAdapter through BluetoothManager.
         final BluetoothManager bluetoothManager =
-                (BluetoothManager) MainActivity.getMainActivity().getSystemService(Context.BLUETOOTH_SERVICE);
+                (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
 
         // Checks if Bluetooth is supported on the device.
@@ -226,8 +229,8 @@ public class BluetoothLE3 {
     };
 
     private void unbindBleService() {
-    	MainActivity.getMainActivity().unbindService(mServiceConnection);
-    	MainActivity.getMainActivity().unregisterReceiver(mGattUpdateReceiver);
+    	context.unbindService(mServiceConnection);
+    	context.unregisterReceiver(mGattUpdateReceiver);
         deviceScanned = false;
     }
 
@@ -352,8 +355,8 @@ public class BluetoothLE3 {
 
                         Intent gattServiceIntent = new Intent(MainActivity.getMainActivity(), BluetoothLeService.class);
 
-                        MainActivity.getMainActivity().bindService(gattServiceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
-                        MainActivity.getMainActivity().registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+                        context.bindService(gattServiceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+                        context.registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
                         mBluetoothAdapter.stopLeScan(mLeScanCallback);
                     }
                 }

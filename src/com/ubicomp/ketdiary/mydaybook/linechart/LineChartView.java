@@ -658,8 +658,7 @@ public class LineChartView extends View {
             case 0:
 //            	int index = cursorLinePos;
 //            	while()
-            	
-            	
+            	          	
             	if(dataset[cursorLinePos].self_type == 0){
             		
             	}

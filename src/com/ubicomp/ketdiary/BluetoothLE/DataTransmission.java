@@ -94,8 +94,7 @@ public class DataTransmission {
             }
             else{
                 ble.bleWriteAck((byte) 0x05);
-				timer = new Timer();
-                timer.schedule(new TimeoutTask(), timeout);
+                resetTimeoutTimer();
                 counter = 0;
             }
         }
@@ -140,10 +139,10 @@ public class DataTransmission {
                     recvNum++;
                     bufOffset = 0;
 
-					timer.cancel();
-                    timer = new Timer();
-                    timer.schedule(new TimeoutTask(), timeout);
-                    ((BluetoothListener) bluetoothListener).updateProcessRate(""+(float)recvNum*100/pktNum +"%  "+ tempPktId);
+                    resetTimeoutTimer();
+                    
+                    
+                    ((BluetoothListener) bluetoothListener).updateProcessRate(""+(float)recvNum*100/pktNum +"%  p: "+ tempPktId);
                 }else{
                     Log.d(TAG, "Checksum error in ".concat(String.valueOf(tempPktId)).concat("th packet."));
                     bufOffset = 0;
@@ -165,31 +164,22 @@ public class DataTransmission {
 
                 BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
                 bmpFactoryOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;
-
-                ByteArrayInputStream inputStream = new ByteArrayInputStream(pictureBytes);
-                
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(pictureBytes);               
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream, null, bmpFactoryOptions);
                 bufOffset = 0;
 
-
                 picInfoPktRecv = false;
                 ble.bleWriteState((byte) 0x07);
-                
-//                byte [] bytes = new byte [20];
-//                bytes[0] = (byte)0xA3;
-//                bytes[1] = (byte)(2 & 0xFF);
-//                bytes[2] = (byte)(2);
-//                bytes[3] = (byte)(14);
-//                ble.bleWriteData(bytes);
-                
-                
-                timer.cancel();
-				timer = null;
+                         
+                if(timer!= null){
+                	timer.cancel();
+                	timer = null;
+                }
 
                 ((BluetoothListener) bluetoothListener).bleTakePictureSuccess(bitmap);                  
                 resetParameters();
-
-
+                
+                return;
         }
         else{
             int remainPktNum = pktNum - recvNum;
@@ -228,7 +218,10 @@ public class DataTransmission {
         integerSet.clear();
     }
 	 public void resetTimeoutTimer(){
-        timer.cancel();
+		if(timer != null){
+			timer.cancel();
+			timer = null;
+		}
         timer = new Timer();
         timer.schedule(new TimeoutTask(), timeout);
     }
@@ -246,7 +239,10 @@ public class DataTransmission {
             	}
             }
             else{
-                timer.cancel();
+            	if(timer!=null){
+            		timer.cancel();
+            		timer = null;
+            	}
                 ((BluetoothListener) bluetoothListener).bleTakePictureFail((float) (pktNum - recvNum) / pktNum);
             }
         }

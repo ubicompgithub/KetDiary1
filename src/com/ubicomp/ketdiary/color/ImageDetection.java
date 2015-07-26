@@ -112,11 +112,15 @@ public class ImageDetection {
         Utils.matToBitmap(matOrigin, bmp);
         
         String file_name = "PIC_" + ts + "_" + 0 + ".sob";
+        String file_name2 = "PIC_" + ts + "_" + 1 + ".sob";
         File file = new File(mainStorage, file_name);
-        
+        File file2 = new File(mainStorage, file_name2);
         try {
             out = new FileOutputStream(file, true);
-            bmp.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out2 = new FileOutputStream(file2, true);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out2); 
+            // bmp is your Bitmap instance
             // PNG is a lossless format, the compression factor (100) is ignored
         } catch (Exception e) {
             e.printStackTrace();
@@ -125,15 +129,162 @@ public class ImageDetection {
                 if (out != null) {
                     out.close();
                 }
+                if (out2 != null) {
+                    out2.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        
         //Log.i(TAG, matOrigin.dump());
         //((BluetoothListener) activity).setImgPreview(bmp);
 
     }
 
+ 
+
+    public int testStripDetection(Bitmap bitmap){
+        Bitmap roiBmp = Bitmap.createBitmap(bitmap, roiXmin + Xmin + 3, roiYmin + Ymin + 3, Xmax - Xmin - 6, Ymax -Ymin-6);
+        int w = roiBmp.getWidth();
+        int h = roiBmp.getHeight();
+        Log.i(TAG, "width: " + w + " , height: " + h);
+
+        final float eps = (float) -0.000001;
+        float [] x0 = new float[w];
+        float [] diff = new float[w-1];
+        float [] pivot = new float[w-2];
+        float check = 0;
+
+        for(int i = 0; i < h; i++){
+            float maximum = 0;
+            float minimum = 255;
+            float sum = 0;
+            Vector vector = new Vector();
+            for (int j = 0; j < w; j++) {
+                //int pixel = image.getRGB(j, rowNum[i]);
+                int pixel = roiBmp.getPixel(j, i);
+                int value = 255 - ((pixel >> 16) & 0xff);
+                x0[j] = value;
+                sum += x0[j];
+
+                if( j > 0 ){
+                    diff[j-1] = x0[j] - x0[j-1];
+                    if (diff[j-1] == 0)
+                        diff[j-1] = eps;
+                }
+
+                if( j > 1 ){
+                    pivot[j-2] = diff[j-2] * diff[j-1];
+                    if( pivot[j-2] < 0 && diff[j-2] > 0 ){
+                        vector.add(j-1);
+                    }
+                }
+
+                if(x0[j] > maximum)
+                    maximum = x0[j];
+
+                if(x0[j] < minimum)
+                    minimum = x0[j];
+
+            }
+            if( (maximum - minimum) < 50 )
+                continue;
+
+//            Log.i(TAG, "Vector size: " + vector.size());
+
+            float average = sum/w;
+            float sel = (maximum-minimum)/4;
+            boolean isFoundRef = false;
+            int refIdx = 0;
+            Log.i(TAG, "Sel: " + String.valueOf(sel));
+
+            for(int k= 0; k < vector.size(); k++){
+                int idx = (Integer) vector.get(k);
+
+//                if(x0[idx] == maximum){
+//                    Log.i(TAG, "Maximum in Id:" + idx);
+//                    isFoundRef = true;
+//                    refIdx = idx;
+//                    if(k == vector.size()-1){
+//                        check -= 1;
+//                    }
+//                }
+
+                if( idx > 25 && idx < 40){
+                    if( x0[idx] - average > sel){
+                        Log.i(TAG, "Reference in Id:" + idx);
+                        isFoundRef = true;
+                        refIdx = idx;
+                        if(k == vector.size()-1){
+                            check -= 1;
+                        }
+                    }
+                }
+
+
+                else if(isFoundRef == true) {
+                    if(x0[idx] - average > sel){
+//                        Log.i(TAG, String.valueOf((int) vector.get(k)));
+                        if(idx > 5 && idx < w-6){
+                            if( (idx - refIdx) > 35 && (idx - refIdx) < 45){
+                                if(x0[idx] - x0[idx-5] > sel/3 && x0[idx] - x0[idx+5] > sel/3){
+                                    //System.out.println(idx);
+                                    check += 5;
+                                }
+                                else{
+                                    check -= 1;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    else if(k == vector.size()-1){
+                        check -= 1;
+                    }
+                }
+                else if( k == vector.size()-1){
+                    Log.i(TAG, "No maximum found!");
+                }
+            }
+        }
+        Log.i(TAG, "Check: " + String.valueOf(check));
+        
+        String file_name = "PIC_" + ts + "_" + 2 + ".sob";
+        String file_name2= "PIC_" + ts + "_" + 3 + ".sob";
+        File file = new File(mainStorage, file_name);
+        File file2 = new File(mainStorage, file_name2);
+        
+        try {
+            out = new FileOutputStream(file, true);
+            roiBmp.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out2 = new FileOutputStream(file2, true);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out2); 
+            // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+                if (out2 != null) {
+                    out2.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        int result2 = check > 0 ? 0:1;
+        PreferenceControl.setTestResult(result2);
+        
+        
+        
+        return (int)check;
+    }
+    
     public boolean roiDetection(Bitmap bitmap){
 
         boolean result = false;
@@ -265,146 +416,5 @@ public class ImageDetection {
 
         //((BluetoothListener) activity).setImgPreview(bmp);
         return result;
-    }
-
-    public int testStripDetection(Bitmap bitmap){
-        Bitmap roiBmp = Bitmap.createBitmap(bitmap, roiXmin + Xmin + 3, roiYmin + Ymin + 3, Xmax - Xmin - 6, Ymax -Ymin-6);
-        int w = roiBmp.getWidth();
-        int h = roiBmp.getHeight();
-        Log.i(TAG, "width: " + w + " , height: " + h);
-
-        final float eps = (float) -0.000001;
-        float [] x0 = new float[w];
-        float [] diff = new float[w-1];
-        float [] pivot = new float[w-2];
-        float check = 0;
-
-        for(int i = 0; i < h; i++){
-            float maximum = 0;
-            float minimum = 255;
-            float sum = 0;
-            Vector vector = new Vector();
-            for (int j = 0; j < w; j++) {
-                //int pixel = image.getRGB(j, rowNum[i]);
-                int pixel = roiBmp.getPixel(j, i);
-                int value = 255 - ((pixel >> 16) & 0xff);
-                x0[j] = value;
-                sum += x0[j];
-
-                if( j > 0 ){
-                    diff[j-1] = x0[j] - x0[j-1];
-                    if (diff[j-1] == 0)
-                        diff[j-1] = eps;
-                }
-
-                if( j > 1 ){
-                    pivot[j-2] = diff[j-2] * diff[j-1];
-                    if( pivot[j-2] < 0 && diff[j-2] > 0 ){
-                        vector.add(j-1);
-                    }
-                }
-
-                if(x0[j] > maximum)
-                    maximum = x0[j];
-
-                if(x0[j] < minimum)
-                    minimum = x0[j];
-
-            }
-            if( (maximum - minimum) < 50 )
-                continue;
-
-//            Log.i(TAG, "Vector size: " + vector.size());
-
-            float average = sum/w;
-            float sel = (maximum-minimum)/4;
-            boolean isFoundRef = false;
-            int refIdx = 0;
-            Log.i(TAG, "Sel: " + String.valueOf(sel));
-
-            for(int k= 0; k < vector.size(); k++){
-                int idx = (Integer) vector.get(k);
-
-//                if(x0[idx] == maximum){
-//                    Log.i(TAG, "Maximum in Id:" + idx);
-//                    isFoundRef = true;
-//                    refIdx = idx;
-//                    if(k == vector.size()-1){
-//                        check -= 1;
-//                    }
-//                }
-
-                if( idx > 25 && idx < 40){
-                    if( x0[idx] - average > sel){
-                        Log.i(TAG, "Reference in Id:" + idx);
-                        isFoundRef = true;
-                        refIdx = idx;
-                        if(k == vector.size()-1){
-                            check -= 1;
-                        }
-                    }
-                }
-
-
-                else if(isFoundRef == true) {
-                    if(x0[idx] - average > sel){
-//                        Log.i(TAG, String.valueOf((int) vector.get(k)));
-                        if(idx > 5 && idx < w-6){
-                            if( (idx - refIdx) > 35 && (idx - refIdx) < 45){
-                                if(x0[idx] - x0[idx-5] > sel/3 && x0[idx] - x0[idx+5] > sel/3){
-                                    //System.out.println(idx);
-                                    check += 5;
-                                }
-                                else{
-                                    check -= 1;
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    else if(k == vector.size()-1){
-                        check -= 1;
-                    }
-                }
-                else if( k == vector.size()-1){
-                    Log.i(TAG, "No maximum found!");
-                }
-            }
-        }
-        Log.i(TAG, "Check: " + String.valueOf(check));
-        
-        String file_name = "PIC_" + ts + "_" + 1 + ".sob";
-        String file_name2= "PIC_" + ts + "_" + 2 + ".sob";
-        File file = new File(mainStorage, file_name);
-        File file2 = new File(mainStorage, file_name2);
-        
-        try {
-            out = new FileOutputStream(file, true);
-            roiBmp.compress(Bitmap.CompressFormat.PNG, 100, out);
-            out2 = new FileOutputStream(file2, true);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out2); 
-            // bmp is your Bitmap instance
-            // PNG is a lossless format, the compression factor (100) is ignored
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-                if (out2 != null) {
-                    out2.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        
-        int result2 = check > 0 ? 0:1;
-        PreferenceControl.setTestResult(result2);
-        
-        
-        
-        return (int)check;
     }
 }

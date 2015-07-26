@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.dialog;
+package com.ubicomp.ketdiary.noUse;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -44,6 +44,9 @@ import com.ubicomp.ketdiary.check.TimeBlock;
 import com.ubicomp.ketdiary.clicklog.ClickLog;
 import com.ubicomp.ketdiary.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.db.NoteCatagory3;
+import com.ubicomp.ketdiary.dialog.ChooseItemCaller;
+import com.ubicomp.ketdiary.dialog.ChooseItemDialog;
+import com.ubicomp.ketdiary.dialog.TestQuestionCaller2;
 import com.ubicomp.ketdiary.file.QuestionFile;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.BarButtonGenerator;
@@ -698,7 +701,7 @@ public class NoteDialog3 implements ChooseItemCaller{
 					else{
 						if(!done){
 							//Toast.makeText(context, "確定要送出結果嗎?" ,Toast.LENGTH_SHORT).show();
-							CustomToastSmall.generateToast("確定要送出結果嗎?");
+							CustomToastSmall.generateToast("確定選擇完畢嗎?");
 							done = true;
 						}
 						ClickLog.Log(ClickLogId.TEST_QUESTION_SEND);
