@@ -86,5 +86,5 @@
     <dimen name="rec_X_offset">8.33dp</dimen>
     <dimen name="cur_X_offset">4dp</dimen>
     <dimen name="legend_height">13.33dp</dimen>
-    <dimen name="legend_width">116.67dp</dimen>
+    <dimen name="legend_width">130dp</dimen>
 </resources>
