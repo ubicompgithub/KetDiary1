@@ -579,7 +579,7 @@ public class LineChartView extends View {
     
     public Bitmap getLocalBitmap(Context con, int resourceId){
         InputStream inputStream = con.getResources().openRawResource(resourceId);
-        return BitmapFactory.decodeStream(inputStream, null, getBitmapOptions(2));
+        return BitmapFactory.decodeStream(inputStream, null, getBitmapOptions(1));
     }
     
     public BitmapFactory.Options getBitmapOptions(int scale){
