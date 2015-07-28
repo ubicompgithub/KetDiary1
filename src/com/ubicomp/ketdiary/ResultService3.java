@@ -22,7 +22,6 @@ import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE3;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothListener;
 import com.ubicomp.ketdiary.color.ColorDetectListener;
 import com.ubicomp.ketdiary.color.ImageDetection;
-import com.ubicomp.ketdiary.color.TestStripDetection4;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.db.TestDataParser2;
@@ -31,6 +30,7 @@ import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.PicFileHandler;
 import com.ubicomp.ketdiary.fragment.TestFragment2;
 import com.ubicomp.ketdiary.noUse.NoteDialog3;
+import com.ubicomp.ketdiary.noUse.TestStripDetection4;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.CustomToastSmall;
 
@@ -112,7 +112,6 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	    
 	    
 		initVariable();
-		
 		state = BEGIN_STATE;
 		PreferenceControl.setResultServiceRun(true);
 	    Log.d(TAG,  "onStartCommand() executed" );       
@@ -123,7 +122,8 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	
 	private void initVariable(){
 		
-		spentTime = PreferenceControl.getAfterCountDown()*1000;
+		timeout = PreferenceControl.getAfterCountDown()*1000;
+		spentTime = timeout;
 		isConnect = false;
 		first = true;
 		second = true;
@@ -178,6 +178,9 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 				    if(!stateSuccess && isConnect && picNum == 0){
 				    	writeToColorRawFile("Write State : 0x03");
 						ble.bleWriteState((byte)0x03);
+				    }
+				    if(spentTime < 8*60*1000){
+				    	setTestFail();			    	
 				    }
 	        	}
 	        	else{
@@ -315,6 +318,8 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	
 	private void stop(){
 		
+		mhandler.removeCallbacks(updateTimer);
+		
 		if(connectSensorTimer!=null){
         	connectSensorTimer.cancel();
         	//connectSensorTimer=null;
@@ -421,28 +426,10 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		
 		
 		writeToColorRawFile("Test Fail: "+ failedReason);
+		stop();
 		
 		spentTime = 0;
-		mhandler.removeCallbacks(updateTimer);
-		if(connectSensorTimer!=null){
-        	connectSensorTimer.cancel();
-        	//connectSensorTimer=null;
-		}        
-        if(openSensorMsgTimer!=null){
-			openSensorMsgTimer.cancel();
-			openSensorMsgTimer=null;
-        }
-        if(ble!= null){
-        	active_disconnect = true;
-        	ble.bleDisconnect();
-        	ble = null;
-        }
-        
-        if(colorRawFileHandler != null){
-        	colorRawFileHandler.close();
-        	colorRawFileHandler = null;
-        }
-		
+
 		setTestDetail();
 		boolean inApp = PreferenceControl.getInApp();
 		if(inApp){
@@ -633,7 +620,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 			return;
 		}
 		else if(picNum == 2){
-			colorReading = imageDetection.testStripDetection(bitmap);
+			colorReading = imageDetection.testStripDetection2(bitmap);
 			blehandler.postDelayed(writeBle, 2000);
 		}
 		else if(picNum == 3){

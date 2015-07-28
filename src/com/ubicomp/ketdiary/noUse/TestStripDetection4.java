@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.ubicomp.ketdiary.color;
+package com.ubicomp.ketdiary.noUse;
 
 import java.io.File;
 import java.util.Vector;
@@ -21,6 +21,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.ubicomp.ketdiary.color.ColorDetectListener;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 //import org.opencv.highgui.Highgui;

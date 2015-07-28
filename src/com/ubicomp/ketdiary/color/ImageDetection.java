@@ -33,6 +33,9 @@ public class ImageDetection {
     private static final int defaultXmax = 135;
     private static final int defaultYmin = 20;
     private static final int defaultYmax = 50;
+    
+    private static final int lowerBound = 30;
+    private static final int upperBound = 40;
 
 
     private int Xmin = roiXmin;
@@ -74,12 +77,12 @@ public class ImageDetection {
         int xSum = 0;
         int ySum = 0;
         int count = 0;
-
+        int white_threshold = 230;
         for(int i = 0; i < h; i++){
             for (int j = 0; j < w; j++) {
                 int pixel = roiBmp.getPixel(j, i);
                 int value = ((pixel >> 16) & 0xff);
-                if (value > 250) {
+                if (value > white_threshold) {
                     xSum += j;
                     ySum += i;
                     count++;
@@ -284,6 +287,183 @@ public class ImageDetection {
         
         return (int)check;
     }
+    
+    public int testStripDetection2(Bitmap bitmap){
+        Bitmap roiBmp = Bitmap.createBitmap(bitmap, roiXmin + Xmin + 3, roiYmin + Ymin + 3, Xmax - Xmin - 6, Ymax -Ymin-6);
+        int w = roiBmp.getWidth();
+        int h = roiBmp.getHeight();
+        Log.i(TAG, "width: " + w + " , height: " + h);
+
+        final float eps = (float) -0.000001;
+        float [] x0 = new float[w];
+        float [] diff = new float[w-1];
+        float [] pivot = new float[w-2];
+        float check = 0;
+
+        for(int i = 0; i < h; i++){
+            float maximum = 0;
+            float minimum = 255;
+            float sumAll= 0;
+            float sumAfter50 = 0;
+            float maximumAfter50 = 0;
+            float minimumAfter50 = 255;
+            Vector vector = new Vector();
+            for (int j = 0; j < w; j++) {
+                //int pixel = image.getRGB(j, i);
+                int pixel = roiBmp.getPixel(j, i);
+                int value = 255 - ((pixel >> 16) & 0xff);
+                //System.out.print(value + " ");
+                x0[j] = value;
+                sumAll += x0[j];
+                if(j >= 50){
+                    sumAfter50 += x0[j];
+                }
+
+                if( j > 0 ){
+                    diff[j-1] = x0[j] - x0[j-1];
+                    if (diff[j-1] == 0)
+                        diff[j-1] = eps;
+                }
+
+                if( j > 1 ){
+                    pivot[j-2] = diff[j-2] * diff[j-1];
+                    if( pivot[j-2] < 0 && diff[j-2] > 0 ){
+                        vector.add(j-1);
+                    }
+                }
+
+                if(x0[j] > maximum)
+                    maximum = x0[j];
+
+                if(x0[j] < minimum)
+                    minimum = x0[j];
+
+                if(j >= 50){
+                    if(x0[j] > maximumAfter50)
+                        maximumAfter50 = x0[j];
+
+                    if(x0[j] < minimumAfter50)
+                        minimumAfter50 = x0[j];
+                }
+
+            }
+            //System.out.println("");
+            if( (maximum - minimum) < 50 )
+                continue;
+
+
+            float avgAll = sumAll /w;
+            float avgAfter50 = sumAfter50 /(w-50);
+            float sel = (maximum-minimum)/5;
+            float selAfter50 = (maximumAfter50-minimumAfter50)/5;
+            float refCandidate = 0;
+            boolean isFoundRef = false;
+            int refIdx = 0;
+            float secondMaximal = 0;
+            int secondIdx = 0;
+
+//            Log.i(TAG, "Avg: " + String.valueOf(avgAll));
+//            Log.i(TAG, "AvgAfter50: " + String.valueOf(avgAfter50));
+//            Log.i(TAG, "Sel: " + String.valueOf(sel));
+//            Log.i(TAG, "SelAfter50: " + String.valueOf(selAfter50));
+
+            Vector candidateVector = new Vector();
+            for(int k= 0; k < vector.size(); k++){
+                int idx = (Integer)vector.get(k);
+
+                if( idx > 25 && idx <= 40){
+                    if( x0[idx] - avgAll > sel){
+                        candidateVector.add(idx);
+//                        Log.i(TAG, "Reference in Id:" + idx);
+                    }
+                }
+                else if(idx > 40 && isFoundRef == false) {
+                    for(int m = 0; m < candidateVector.size(); m++){
+                        int tempIdx = (Integer)candidateVector.get(m);
+                        if( x0[tempIdx] > refCandidate){
+                            refCandidate = x0[tempIdx];
+                            refIdx = tempIdx;
+                        }
+                    }
+                    if(refIdx == 0){
+                        check -= 1;
+                        break;
+                    }
+//                    Log.i(TAG, ("Maximum in Idx" + refIdx);
+                    isFoundRef = true;
+                }
+
+                else if(idx > 50 && isFoundRef == true) {
+                    if(x0[idx] - avgAfter50 > selAfter50){
+                        //System.out.println(vector.get(k));
+                        if(secondMaximal < x0[idx]){
+                            secondMaximal = x0[idx];
+                            secondIdx = idx;
+                        }
+                    }
+                }
+
+                if(k == vector.size()-1){
+                    if(secondIdx != 0 && (secondIdx - refIdx) > lowerBound && (secondIdx - refIdx) < upperBound){
+//                        Log.i(TAG, "Second: " + idx);
+                        check += 4;
+                    }
+                    else{
+//                        Log.i(TAG, "Failed: " + secondIdx);
+                        check -= 1;
+                    }
+                }
+
+            }
+        }
+        Log.i(TAG, "Check: " + String.valueOf(check));
+        
+        String file_name = "PIC_" + ts + "_" + 2 + ".sob";
+        String file_name2= "PIC_" + ts + "_" + 3 + ".sob";
+        File file = new File(mainStorage, file_name);
+        File file2 = new File(mainStorage, file_name2);
+        
+        try {
+            out = new FileOutputStream(file, true);
+            roiBmp.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out2 = new FileOutputStream(file2, true);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out2); 
+            // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+                if (out2 != null) {
+                    out2.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        int result2 = check > 0 ? 0:1;
+        PreferenceControl.setTestResult(result2);
+        
+        return (int)check;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     public boolean roiDetection(Bitmap bitmap){
 

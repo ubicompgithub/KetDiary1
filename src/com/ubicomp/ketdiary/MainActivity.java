@@ -38,7 +38,6 @@ import android.widget.TextView;
 
 import com.ubicomp.ketdiary.clicklog.ClickLog;
 import com.ubicomp.ketdiary.clicklog.ClickLogId;
-import com.ubicomp.ketdiary.color.TestStripDetection3;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.dialog.CheckResultDialog;
@@ -46,6 +45,7 @@ import com.ubicomp.ketdiary.fragment.DaybookFragment;
 import com.ubicomp.ketdiary.fragment.StatisticFragment;
 import com.ubicomp.ketdiary.fragment.TestFragment2;
 import com.ubicomp.ketdiary.noUse.NoteDialog3;
+import com.ubicomp.ketdiary.noUse.TestStripDetection3;
 import com.ubicomp.ketdiary.system.Config;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.CustomMenu;

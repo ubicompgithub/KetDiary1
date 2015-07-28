@@ -195,7 +195,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	public static TestDetail testDetail = null;
 	
 	private static final int COUNT_DOWN_SECOND = 10;
-	private static final int WAIT_SALIVA_SECOND = 120;
+	private static final int WAIT_SALIVA_SECOND = 160;
 	private static final int DEBUG_SPEED_UP_SECOND = 0;
 
 	
@@ -649,7 +649,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			//label_btn.setText("繼續");
 			label_subtitle.setText("請在10秒內再吐一口水");
 			label_title.setText("口水量不足");
-			
+			ble.bleWriteState((byte) 0x02);
 			
 			cameraCountDownTimer = new CameraCountDownTimer(CAMERATIMEOUT2);
 			cameraCountDownTimer.start();
@@ -1150,7 +1150,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 
 			@Override
 			public void onTick(long millisUntilFinished) {
-				if(millisUntilFinished < (80-DEBUG_SPEED_UP_SECOND)*1000){					
+				if(state == CAMERA_STATE && millisUntilFinished < (40-DEBUG_SPEED_UP_SECOND)*1000){					
 					state = DRAW_STATE;
 				}	
 				if(first && first_voltage){
@@ -1176,7 +1176,9 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 						label_title.setText("口水量已足夠");
 						label_subtitle.setText("");
 						img_water3.setImageResource(R.drawable.saliva3_yes);
-						setState(new DoneState());
+						secondVoltage = voltage;
+						setState(new RunState());
+						//setState(new DoneState());
 						second = false;
 					}
 					else if(!second_voltage){
@@ -1307,19 +1309,21 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		public void onTick(long millisUntilFinished) {
 			
 			if(first && voltage < SECOND_VOLTAGE_THRESHOLD ){
+				first = false;
 				img_water3.setImageResource(R.drawable.saliva3_yes);
 				secondVoltage = voltage;
-				setState(new DoneState());
-				first = false;
+				setState(new DoneState());	
+			}
+			else{
+				//cameraRunHandler.sendEmptyMessage(0);
+				if(ptr >= ELECTRODE_RESOURCE.length){
+					ptr %= ELECTRODE_RESOURCE.length;
+				}
+				
+				img_ac.setImageResource(ELECTRODE_RESOURCE[ptr++]);		
+				label_subtitle.setText("請等待" + (millisUntilFinished)/1000 + "秒");			
 			}
 			
-			//cameraRunHandler.sendEmptyMessage(0);
-			if(ptr >= ELECTRODE_RESOURCE.length){
-				ptr %= ELECTRODE_RESOURCE.length;
-			}
-			
-			img_ac.setImageResource(ELECTRODE_RESOURCE[ptr++]);		
-			label_subtitle.setText("請等待" + (millisUntilFinished)/1000 + "秒");
 		}
 	}
   
