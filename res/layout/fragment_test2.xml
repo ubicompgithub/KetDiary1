@@ -116,6 +116,15 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="20dp">
         
+        <ImageView
+    	    android:id="@+id/iv_draw_cassette"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_centerHorizontal="true"
+    	    android:src="@drawable/draw_cassette"
+    	    android:visibility="invisible"
+    	    android:layout_above="@+id/tv_subtitle"/>
+        
     	<LinearLayout
     	    android:id="@+id/water_layout"
     	    android:layout_width="wrap_content"

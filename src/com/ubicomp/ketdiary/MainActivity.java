@@ -44,10 +44,8 @@ import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.dialog.CheckResultDialog;
 import com.ubicomp.ketdiary.fragment.DaybookFragment;
 import com.ubicomp.ketdiary.fragment.StatisticFragment;
-import com.ubicomp.ketdiary.fragment.TestFragment;
-import com.ubicomp.ketdiary.noUse.NoteDialog2;
+import com.ubicomp.ketdiary.fragment.TestFragment2;
 import com.ubicomp.ketdiary.noUse.NoteDialog3;
-import com.ubicomp.ketdiary.noUse.NoteFragment;
 import com.ubicomp.ketdiary.system.Config;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.CustomMenu;
@@ -461,24 +459,12 @@ public class MainActivity extends FragmentActivity {
 
 	private void setDefaultTab() {
 		ft = fm.beginTransaction();
-		fragments[0] = new TestFragment();
+		fragments[0] = new TestFragment2();
 		ft.add(android.R.id.tabcontent, fragments[0], tabName[0]);
 		setTabState(tabName[0]);
 
 		customTabs[1].showHighlight(PreferenceControl.getCouponChange());
 		customTabs[2].showHighlight(PreferenceControl.getRandomQustion());
-
-		ft.commit();
-	}
-	
-	private void setDefaultTab2() {
-		ft = fm.beginTransaction();
-		fragments[2] = new DaybookFragment();
-		ft.add(android.R.id.tabcontent, fragments[2], tabName[2]);
-		setTabState(tabName[2]);
-
-		//customTabs[1].showHighlight(PreferenceControl.getCouponChange());
-		//customTabs[2].showHighlight(PreferenceControl.getPageChange());
 
 		ft.commit();
 	}
@@ -544,7 +530,7 @@ public class MainActivity extends FragmentActivity {
 					if (fragments[i] == null) {
 						switch (i) {
 						case 0:
-							fragments[i] = new TestFragment();
+							fragments[i] = new TestFragment2();
 							break;
 						case 1:
 							fragments[i] = new StatisticFragment();
@@ -822,7 +808,7 @@ public class MainActivity extends FragmentActivity {
 				if (tabHost.getCurrentTab() == 0 && fragments[0] != null
 						&& fragments[0].isAdded()) {
 					soundpool.play(timer_sound_id, 1f, 1f, 0, 0, 1f);
-					((TestFragment) fragments[0]).msgBox.setResult();
+					((TestFragment2) fragments[0]).msgBox.setResult();
 					//((TestFragment) fragments[0]).setState(TestFragment.STATE_INIT);
 					//((TestFragment) fragments[0]).enableStartButton(true);
 				}
@@ -870,7 +856,7 @@ public class MainActivity extends FragmentActivity {
 		
 		if (tabHost.getCurrentTab() == 0 && fragments[0] != null
 				&& fragments[0].isAdded()) {
-			((TestFragment) fragments[0]).msgBox.setResult();
+			((TestFragment2) fragments[0]).msgBox.setResult();
 		}
 		else if(tabHost.getCurrentTab() == 1 && fragments[1] != null
 				&& fragments[1].isAdded()){			
