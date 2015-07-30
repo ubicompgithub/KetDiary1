@@ -288,7 +288,7 @@ public class PreferenceControl {
 	}
 	
 	public static int getVoltag2() {
-		return sp.getInt("Voltage2", 60);
+		return sp.getInt("Voltage2", 120);
 	}
 	
 	public static void setVoltage2(int voltage2) {
@@ -298,7 +298,7 @@ public class PreferenceControl {
 	}
 	
 	public static int getAfterCountDown() {
-		return sp.getInt("AfterCountDown", 720);
+		return sp.getInt("AfterCountDown", 600);
 	}
 	
 	public static void setAfterCountDown(int afterCountDown) {

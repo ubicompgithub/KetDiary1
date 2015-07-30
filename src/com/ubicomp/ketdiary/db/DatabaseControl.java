@@ -12,6 +12,7 @@ import android.util.Log;
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.check.StartDateCheck;
 import com.ubicomp.ketdiary.check.WeekNumCheck;
+import com.ubicomp.ketdiary.data.structure.Cassette;
 import com.ubicomp.ketdiary.data.structure.CopingSkill;
 import com.ubicomp.ketdiary.data.structure.ExchangeHistory;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
@@ -1326,6 +1327,53 @@ public class DatabaseControl {
 		}
 	}
 	
+	
+	
+	//Cassette
+	/**
+	 * Truncate the RankingShort table
+	 * 
+	 * @see ubicomp.soberdiary.data.structure.Cassette
+	 */
+	public void clearCassette() {
+		synchronized (sqlLock) {
+			db = dbHelper.getWritableDatabase();
+			String sql = "DELETE  FROM Cassette";
+			db.execSQL(sql);
+			db.close();
+		}
+	}
+
+	/**
+	 * Update the Rank in a short period
+	 * 
+	 * @param data
+	 *            Updated Rank in a short period
+	 * @see ubicomp.soberdiary.data.structure.Rank
+	 */
+	public void updateCassette(Cassette data) {
+		synchronized (sqlLock) {
+			db = dbHelper.getWritableDatabase();
+			String sql = "SELECT * FROM Cassette WHERE cassetteId = '"
+					+ data.getCassetteId() + "'";
+			Cursor cursor = db.rawQuery(sql, null);
+			if (cursor.getCount() == 0) {
+				ContentValues content = new ContentValues();
+				content.put("ts", data.getTv().getTimestamp());
+				content.put("cassetteId", data.getCassetteId());
+				content.put("isUsed", data.getisUsed());
+				db.insert("Cassette", null, content);
+			} else {
+				sql = "UPDATE Cassette SET" + " ts = "
+						+ data.getTv().getTimestamp() + "," + " isUsed "
+						+ data.getisUsed() + " WHERE cassetteId = " 
+						+ "'"+ data.getCassetteId() + "'";
+				db.execSQL(sql);
+			}
+			cursor.close();
+			db.close();
+		}
+	}
 
 	
 	// TestDetail

@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -26,8 +27,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver.OnScrollChangedListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -53,6 +56,7 @@ import com.ubicomp.ketdiary.dialog.QuestionCaller;
 import com.ubicomp.ketdiary.dialog.QuestionDialog2;
 import com.ubicomp.ketdiary.dialog.TestQuestionCaller2;
 import com.ubicomp.ketdiary.file.QuestionFile;
+import com.ubicomp.ketdiary.mydaybook.LineChartData;
 import com.ubicomp.ketdiary.mydaybook.SectionsPagerAdapter;
 import com.ubicomp.ketdiary.mydaybook.linechart.ChartCaller;
 import com.ubicomp.ketdiary.mydaybook.linechart.LineChartTitle;
@@ -83,9 +87,10 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private ViewPager mViewPager;
 	private LinearLayout diaryList, boxesLayout, drawerContent, caltoggleLayout, charttoggleLayout;
 	private RelativeLayout upperBarContent;
-	private TextView titleText, backToTodayText;
+	private TextView titleText, backToTodayText, linechart_bar_month;
 	private View diaryItem;
 	private static ScrollView sv;
+	private HorizontalScrollView sv_linechart;
 	private int filter_count = 0;
 	private AnimationDrawable animation;
 
@@ -137,7 +142,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private static final String[] timeslot = {"上午", "下午", "晚上"};
 	private static final String[] monthName = {"一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"};
 	
-	
+	private LineChartData[] dataset = null;
 	private int sustainMonth = PreferenceControl.getSustainMonth();
 	private Calendar startDay = PreferenceControl.getStartDate();
 	private int startMonth = startDay.get(Calendar.MONTH)+1;
@@ -199,6 +204,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		diaryList = (LinearLayout) view.findViewById(R.id.item);
 		
 		sv = (ScrollView)view.findViewById(R.id.diary_view);
+		
 		//LayoutInflater inflater = LayoutInflater.from(context);
 		calendarView = (View) inflater.inflate(R.layout.calendar_main, null);
 		calendarBar = (View) inflater.inflate(R.layout.calendar_upperbar, null);
@@ -242,7 +248,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	    calendarIcon = (ImageView) lineChartBar.findViewById(R.id.back_to_calendar);
 	    toggle_linechart = (ImageView) lineChartBar.findViewById(R.id.toggle_linechart);
 	    charttoggleLayout = (LinearLayout) lineChartBar.findViewById(R.id.toggle_layout);
-	    
+	    linechart_bar_month = (TextView)lineChartBar.findViewById(R.id.month_text_chart);
 	    
 	    addButton = (ImageView) view.findViewById(R.id.add_button);
 	    
@@ -300,6 +306,25 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		
 		lineChart = (LineChartView) lineChartView.findViewById(R.id.lineChart);
 		lineChart.setWidth();
+		sv_linechart = (HorizontalScrollView) lineChartView.findViewById(R.id.line_chart_scroll);
+		sv_linechart.getViewTreeObserver().addOnScrollChangedListener(new OnScrollChangedListener(){
+
+			@Override
+			public void onScrollChanged() {
+				
+				int scrollX = sv_linechart.getScrollX(); //for horizontalScrollView
+				dataset = lineChart.getLineChartData();
+				int pos = lineChart.getCursorPos2(scrollX);
+				if(pos > 0 && pos < lineChart.numOfDays){
+					if(dataset!=null){
+						linechart_bar_month.setText( (dataset[pos].getMonth()+1)  + "月");
+					}
+				}
+				
+				Log.i(TAG, "Scroll X: "+ scrollX);
+			}
+			
+		});
 //        lineChart.requestLayout();
 //        lineChart.getLayoutParams().width = 2200;
         
@@ -308,6 +333,8 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
         chartAreaLayout = (LinearLayout) lineChartView.findViewById(R.id.linechart_tabs);
         chartAreaLayout.setBackgroundResource(R.drawable.linechart_bg);
 	
+        
+        
 		linechartIcon.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -1620,7 +1647,22 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		randomButton.setVisibility(View.GONE);
 	}
 		
+	public class DataInitTask extends AsyncTask<Void, Void, Void> {
 
+		@Override
+		protected Void doInBackground(Void... params) {
+			
+			//settingBars();
+			//checkHasRecorder();
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+
+
+		}
+	}
 
 
 

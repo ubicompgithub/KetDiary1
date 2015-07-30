@@ -67,6 +67,16 @@ public class ServerUrl {
 	}
 	
 	/**
+	 * URL for update Cassette ID
+	 * 
+	 * @return url
+	 */
+	public static String SERVER_URL_CASSETTE() {
+		final String URL = "test/cassette.php";
+		return SERVER_URL + URL;
+	}
+	
+	/**
 	 * URL for inserting table ExchangeHistory
 	 * 
 	 * @return url

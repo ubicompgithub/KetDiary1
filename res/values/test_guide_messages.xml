@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="test_guide_msg">
-        <item>飲酒過量，有礙健康</item>
-        <item>飲酒過量，害人害己</item>
-        <item>半杯茶，贏過一壺酒</item>
-        <item>應酬不喝酒，健康才長久</item>
-        <item>健康人生，減速前進\n酒色財氣，禁止通行</item>
-        <item>酒不入口，健康不用愁</item>
-        <item>遠離酒，健康久久</item>
-        <item>要安全別喝酒！</item>
         <item>有志不在年高\n無志空長百歲</item>
         <item>積極就是比別人多走一步</item>
         <item>凡事不可\n真的變成不可能</item>

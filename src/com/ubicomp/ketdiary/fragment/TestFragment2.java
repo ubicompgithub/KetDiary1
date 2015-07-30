@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -54,7 +55,6 @@ import com.ubicomp.ketdiary.file.ColorRawFileHandler;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.QuestionFile;
 import com.ubicomp.ketdiary.file.VoltageFileHandler;
-import com.ubicomp.ketdiary.noUse.NoteDialog3;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.LoadingDialogControl;
 import com.ubicomp.ketdiary.ui.ScaleOnTouchListener;
@@ -226,11 +226,6 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		activity = this.getActivity();
 		testFragment = this;
 		
-		//format = new DecimalFormat();
-		//format.setMaximumIntegerDigits(1);
-		//format.setMinimumIntegerDigits(1);
-		//format.setMinimumFractionDigits(2);
-		//format.setMaximumFractionDigits(2);
 		digitTypefaceBold = Typefaces.getDigitTypefaceBold();
 		wordTypefaceBold = Typefaces.getWordTypefaceBold();
 		
@@ -973,7 +968,8 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		super.onResume();
 		ClickLog.Log(ClickLogId.TEST_ENTER);
 		// dismiss sleep
-		//getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		
 		checkDebug(is_debug);//PreferenceControl.isDebugMode());
 		checkPreference();
 		

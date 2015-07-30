@@ -81,7 +81,7 @@ public class LineChartView extends View {
     private int mode = 0;  
     private int cursorLinePos = 0;
     private int initHeight;
-    private static int numOfDays = 0;
+    public static int numOfDays = 0;
     private int lastNoteAddNum = 0;
     private boolean drawBackground = true;
 
@@ -104,7 +104,6 @@ public class LineChartView extends View {
         initDataset();
         //setChartData3();
         //initBitmap();
-        
         
         
     	Log.d("drawDate", "numOfDays:"+numOfDays);
@@ -283,6 +282,7 @@ public class LineChartView extends View {
         return true;    	
     }
     
+    
     public void setZoomMode() {
     	if (mode == NONE) {
     		mode = ZOOM1;
@@ -314,6 +314,7 @@ public class LineChartView extends View {
    	
     	}
     }
+    
     
     @Override
     protected void onDraw(Canvas canvas) {
@@ -524,6 +525,9 @@ public class LineChartView extends View {
       }
     }
 	
+	public LineChartData[] getLineChartData(){
+		return dataset;
+	}
  
     private int checkLineChartType () {
     	//return MainActivity.getChartType();
@@ -622,6 +626,7 @@ public class LineChartView extends View {
          public boolean onScroll(MotionEvent e1, MotionEvent e2,
                  float distanceX, float distanceY) {
     		 
+    		 Log.i(TAG, "X: " + distanceX + " Y: "+ distanceY);
     		 ClickLog.Log(ClickLogId.DAYBOOK_CHART_SCROLL);
     		 
              return false;
