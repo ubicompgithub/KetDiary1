@@ -17,6 +17,7 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.R;
@@ -127,13 +128,19 @@ public class SectionsPagerAdapter extends PagerAdapter {
         Calendar mCalendar = Calendar.getInstance();
         int maxDaysOfWeek = mCalendar.getMaximum(Calendar.DAY_OF_WEEK);
         mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+
+        mCalendar.set(Calendar.DAY_OF_MONTH, 1);
         
+        // 如果使用者可以使用超過一年會有問題！例如閏年跟非閏年的二月就有所不同，必須跟著調整年份
         mCalendar.set(Calendar.MONTH, pageViewMonth);
         int maxWeeksOfMonth = mCalendar.getActualMaximum(Calendar.WEEK_OF_MONTH);
 
-        mCalendar.set(Calendar.DAY_OF_MONTH, 1);
-
-        mCalendar.add(Calendar.DAY_OF_MONTH, -(mCalendar.get(Calendar.DAY_OF_WEEK)-2));
+        // Our first day of week is Monday, but "Calendar.SUNDAY" is still 1 not 7,
+        // so we need to deal with the special situation that first of month is Sunday.
+        if(mCalendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)  // If the first day of the month is Sunday
+            mCalendar.add(Calendar.DAY_OF_MONTH, -6);
+        else
+            mCalendar.add(Calendar.DAY_OF_MONTH, -(mCalendar.get(Calendar.DAY_OF_WEEK)-2));
         TimeValue tv = TimeValue.generate(mCalendar.getTimeInMillis());
         
         View cellView;
@@ -142,7 +149,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
         int result = -1;
         NoteAdd[] noteAdds;
         TestResult testResult=null;
- 
+
         for (int i=0;i<maxWeeksOfMonth*maxDaysOfWeek;++i){
             
             cellView = inflater.inflate(R.layout.calendar_cell, null, false);
@@ -150,6 +157,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
             // Set the invisible days(dummy days before 1st day of that month)
             if (mCalendar.get(Calendar.MONTH) != pageViewMonth){
                 glCalendar[position].addView(cellView);
+
                 cellView.setVisibility(View.INVISIBLE);
                 mCalendar.add(Calendar.DAY_OF_MONTH, 1);
                 
