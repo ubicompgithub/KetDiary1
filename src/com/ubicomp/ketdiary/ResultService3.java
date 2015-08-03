@@ -42,6 +42,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	public  static  final  String TAG =  "MyService" ;  
 	private Handler mhandler = new Handler();
 	private Handler blehandler = new Handler();
+	private Handler stophandler = new Handler();
 	
 	private long startTime;
 	private static long timeout = MainActivity.getMainActivity().WAIT_RESULT_TIME; //1*60*1000;//10*60*1000;
@@ -237,7 +238,14 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	        	if(spentTime < 0){
 					goResultSuccess();
 				}
-	        }   			
+	        }
+	        
+	        if( spentTime < 0 ){
+	        	boolean isfail = PreferenceControl.isTestFail();
+	        	if( isfail ){
+	        		setTestFail();
+	        	}
+	        }
 		}
     };
     
@@ -286,20 +294,22 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
     
     
     private void setTestDetail(){
-    	String cassetteId = TestFragment2.testDetail.cassetteId;
-		long ts = PreferenceControl.getUpdateDetectionTimestamp();
-		int firstVoltage = TestFragment2.testDetail.firstVoltage;
-		int secondVoltage= TestFragment2.testDetail.secondVoltage;
-		int devicePower = TestFragment2.testDetail.devicePower;
-		String hardwardVersion = TestFragment2.testDetail.hardwareVersion;
-		//Toast.makeText(myservice, "Check: "+ colorReading, Toast.LENGTH_SHORT).show();
-		Log.i(TAG, "Check: "+ colorReading);
-				
-		TestDetail testDetail = new TestDetail(cassetteId, ts, failedState, firstVoltage,
-				secondVoltage, devicePower, colorReading,
-                connectionFailRate, failedReason, hardwardVersion);
-		
-		db.insertTestDetail(testDetail);
+    	if(TestFragment2.testDetail!=null){
+	    	String cassetteId = TestFragment2.testDetail.cassetteId;
+			long ts = PreferenceControl.getUpdateDetectionTimestamp();
+			int firstVoltage = TestFragment2.testDetail.firstVoltage;
+			int secondVoltage= TestFragment2.testDetail.secondVoltage;
+			int devicePower = TestFragment2.testDetail.devicePower;
+			String hardwardVersion = TestFragment2.testDetail.hardwareVersion;
+			//Toast.makeText(myservice, "Check: "+ colorReading, Toast.LENGTH_SHORT).show();
+			Log.i(TAG, "Check: "+ colorReading);
+					
+			TestDetail testDetail = new TestDetail(cassetteId, ts, failedState, firstVoltage,
+					secondVoltage, devicePower, colorReading,
+	                connectionFailRate, failedReason, hardwardVersion);
+			
+			db.insertTestDetail(testDetail);
+    	}
     }
     
 	@Override
@@ -313,11 +323,18 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
              
         spentTime = 0;
         writeToColorRawFile("ResultService Close");
-        
-        stop();
+        Log.d(TAG, "OnDestroy Call");
+        stophandler.postDelayed(stopThread, 2000);
+        //stop();
         
         super.onDestroy();
     }
+	
+	private Runnable stopThread = new Runnable() {
+		public void run() {
+			stop();
+		}
+	};
 	
 	private void stop(){
 		
@@ -349,10 +366,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
         }
         
         PreferenceControl.setResultServiceRun(false);
-		
-		
-		
-		
+	
 	}
 	
 	
@@ -449,7 +463,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		if(!inApp)
 			notificationManager.notify(0, notification);
 		
-		stop();
+		//stop();
 		stopForeground(true);
 		stopSelf();	
 	}
@@ -698,7 +712,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	@Override
 	public void writeDebug(String msg) {
 		Log.i(TAG, "Msg: " + msg);
-		writeToColorRawFile(msg);
+		//writeToColorRawFile(msg);
 	}
 
 	@Override

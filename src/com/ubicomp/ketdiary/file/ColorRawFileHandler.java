@@ -67,6 +67,7 @@ public class ColorRawFileHandler extends Handler {
 		if (writer != null) {
 			try {
 				writer.write(str);
+				writer.flush();
 			} catch (IOException e) {
 				Log.d(TAG, "FAIL TO WRITE");
 			}

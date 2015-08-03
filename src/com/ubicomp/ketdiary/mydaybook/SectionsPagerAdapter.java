@@ -339,6 +339,8 @@ public class SectionsPagerAdapter extends PagerAdapter {
     }
     public void updateCalendar(){
     	for(int ii = 0; ii < glCalendar.length; ii++){
+    		if(glCalendar[ii] == null)
+    			continue;
 	    	for(int i = 0 ; i < glCalendar[ii].getChildCount(); i++){
 	    		View cellView = glCalendar[ii].getChildAt(i);
 	    		NoteAdd[] noteAdds = (NoteAdd[]) cellView.getTag(TAG_ADDNOTE);

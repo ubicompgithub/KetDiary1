@@ -6,6 +6,7 @@ import java.util.Random;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -32,6 +33,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.HelpActivity;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
@@ -179,6 +181,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	private int state;
 	private int resultState;
 	private DatabaseControl db;
+	private Context context;
 	//private boolean second_pass=false;
 	
 	// test Detail parameter
@@ -237,6 +240,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		msgHandler = new ChangeMsgHandler();
 		resultState = PreferenceControl.getAfterTestState();
 		
+		context = App.getContext();
 		Log.d(TAG, debug+" "+isDeveloper);
 		/*
 		if (soundpool == null) {
@@ -737,8 +741,8 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			handler.postDelayed(runnable, 1000);
 			//msgBox.show();
 			
-			Intent startIntent =  new  Intent( getActivity() , ResultService3.class );  
-			getActivity().startService(startIntent);
+			Intent startIntent =  new  Intent( context , ResultService3.class );  
+			context.startService(startIntent);
 			
 			//startActivity(new Intent(, EventCopeSkillActivity.class));
 			//startActivity(new Intent(activity, NoteActivity.class));
