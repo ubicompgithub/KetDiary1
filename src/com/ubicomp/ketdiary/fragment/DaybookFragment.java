@@ -116,7 +116,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	
 	private static final int THIS_MONTH = Calendar.getInstance().get(Calendar.MONTH);
 	
-	public static int chart_type = 2;
+	public static int chart_type = 2; // 0:自我狀態 1:人際互動 3:綜合分析
 	public static final int TAG_changedot = -1;
 	private static QuestionDialog2 questionBox;
 	
