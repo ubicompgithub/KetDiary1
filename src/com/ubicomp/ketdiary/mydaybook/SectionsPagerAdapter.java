@@ -136,7 +136,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
         int maxWeeksOfMonth = mCalendar.getActualMaximum(Calendar.WEEK_OF_MONTH);
 
         // Our first day of week is Monday, but "Calendar.SUNDAY" is still 1 not 7,
-        // so we need to deal with the special situation that first of month is Sunday.
+        // so we need to deal with the special situation that first day of month is Sunday.
         if(mCalendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)  // If the first day of the month is Sunday
             mCalendar.add(Calendar.DAY_OF_MONTH, -6);
         else
@@ -295,7 +295,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
                     cellView.setOnClickListener(null);
             	}
             }
-                        
+            
             // Initialize the selected view on current day
             if (mCalendar.get(Calendar.DAY_OF_MONTH) == THIS_DAY && mCalendar.get(Calendar.MONTH) == THIS_MONTH) {
                 thisDayView = cellView;

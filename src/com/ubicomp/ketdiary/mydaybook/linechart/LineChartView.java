@@ -213,6 +213,7 @@ public class LineChartView extends View {
     		testResult = db.getDayTestResult(year, month, day);    		
     		result = testResult.getResult();
     		
+            // 自我狀態
     		noteAdd = db.getDayNoteAddbyCategory(year, month, day, 0);
     		if(noteAdd!= null){
     			for(int j=0; j<noteAdd.length; j++){
@@ -230,6 +231,7 @@ public class LineChartView extends View {
     			//	self_type = noteAdd[0].getType();
     		}
     		count = 0;
+            // 人際互動
     		noteAdd = db.getDayNoteAddbyCategory(year, month, day, 1);
     		if(noteAdd!= null){
     			for(int j=0; j<noteAdd.length; j++){
@@ -616,7 +618,12 @@ public class LineChartView extends View {
     	float xWidth = (getWidth() - getPaddingLeft() - getPaddingRight()) / numOfDays;
     	int temp = (int) Math.round(x/xWidth); 
     	return temp;*/
+
     	int posX = (int) ((x - offsetX - getPaddingLeft())/unit_scale);
+        if( posX < 0 )
+            posX = 0;
+        else if( posX >= numOfDays )
+            posX = numOfDays - 1;
     	return posX;
     }
     
@@ -656,37 +663,118 @@ public class LineChartView extends View {
             
             ClickLog.Log(ClickLogId.DAYBOOK_CHART_TAP);
             
-            touchX = x;
-            
-            cursorLinePos = getCursorPos2(x);
-            switch (checkLineChartType()) {
+            int tempCursorLinePos = getCursorPos2(x);
+
+            // Set the cursor line position
+            int offset, self_type, nearbyIdx;
+            boolean isFindANeighbor = false;
+
+            switch(checkLineChartType()){
             case 0:
-//            	int index = cursorLinePos;
-//            	while()
-            	          	
-            	if(dataset[cursorLinePos].self_type == 0){
-            		
-            	}
-            	break;
+                for(int i = 0; i < 11; i++) {
+                    offset = (int)(i+1)/2;
+
+                    if( i % 2 == 0 ){
+                        if( tempCursorLinePos + offset < numOfDays - 1 )
+                            nearbyIdx = tempCursorLinePos + offset;
+                        else
+                            nearbyIdx = numOfDays - 1;
+                    }
+                    else{
+                        if( tempCursorLinePos - offset > 0 )
+                            nearbyIdx = tempCursorLinePos - offset;
+                        else
+                            nearbyIdx = 0;
+                    }
+
+                    if( dataset[nearbyIdx].self_type > 0 ){
+                        tempCursorLinePos = nearbyIdx;
+                        isFindANeighbor = true;
+                        break;
+                    }
+                }
+                if(isFindANeighbor == true) {
+                    cursorLinePos = tempCursorLinePos;
+                }
+                break;
             case 1:
-            	break;
+                for(int i = 0; i < 11; i++) {
+                    offset = (int)(i+1)/2;
+
+                    if( i % 2 == 0 ){
+                        if( tempCursorLinePos + offset < numOfDays - 1 )
+                            nearbyIdx = tempCursorLinePos + offset;
+                        else
+                            nearbyIdx = numOfDays - 1;
+                    }
+                    else{
+                        if( tempCursorLinePos - offset > 0 )
+                            nearbyIdx = tempCursorLinePos - offset;
+                        else
+                            nearbyIdx = 0;
+                    }
+
+                    if( dataset[nearbyIdx].other_type > 0 ){
+                        tempCursorLinePos = nearbyIdx;
+                        isFindANeighbor = true;
+                        break;
+                    }
+                }
+                if(isFindANeighbor == true) {
+                    cursorLinePos = tempCursorLinePos;
+                }
+                break;
             case 2:
-            	break;
-            }        
-            if (cursorLinePos < 0) {
-            	cursorLinePos = 0;
+                for(int i = 0; i < 11; i++) {
+                    offset = (int)(i+1)/2;
+
+                    if( i % 2 == 0 ){
+                        if( tempCursorLinePos + offset < numOfDays - 1 )
+                            nearbyIdx = tempCursorLinePos + offset;
+                        else
+                            nearbyIdx = numOfDays - 1;
+                    }
+                    else{
+                        if( tempCursorLinePos - offset > 0 )
+                            nearbyIdx = tempCursorLinePos - offset;
+                        else
+                            nearbyIdx = 0;
+                    }
+
+                    if( dataset[nearbyIdx].self_type > 0 || dataset[nearbyIdx].other_type > 0 ){
+                        tempCursorLinePos = nearbyIdx;
+                        isFindANeighbor = true;
+                        break;
+                    }
+                }
+                if(isFindANeighbor == true) {
+                    cursorLinePos = tempCursorLinePos;
+                }
+                break;
             }
-            else if(cursorLinePos >= numOfDays){
-            	cursorLinePos = numOfDays - 1;
-            }
-            else{
-            	int year = Calendar.getInstance().get(Calendar.YEAR);
-            	int month = dataset[cursorLinePos].getMonth();
-            	int day = dataset[cursorLinePos].getDay();
+
+            int year = Calendar.getInstance().get(Calendar.YEAR);
+            int month = dataset[cursorLinePos].getMonth();
+            int day = dataset[cursorLinePos].getDay();
+            
+            DaybookFragment.scrolltoItem(year, month, day);
+
+
+            // Set the cursor line position By Victor
+            // if (cursorLinePos < 0) {
+            // 	cursorLinePos = 0;
+            // }
+            // else if(cursorLinePos >= numOfDays){
+            // 	cursorLinePos = numOfDays - 1;
+            // }
+            // else{
+            // 	int year = Calendar.getInstance().get(Calendar.YEAR);
+            // 	int month = dataset[cursorLinePos].getMonth();
+            // 	int day = dataset[cursorLinePos].getDay();
             	
-            	DaybookFragment.scrolltoItem(year, month, day);
+            // 	DaybookFragment.scrolltoItem(year, month, day);
             	
-            }
+            // }
             
             
             invalidate();
