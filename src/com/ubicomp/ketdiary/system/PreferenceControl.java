@@ -277,8 +277,18 @@ public class PreferenceControl {
 	}
 	
 	
+	public static int getPowerNotEnough() {
+		return sp.getInt("PowerNotEnough", 0);
+	}
+	
+	public static void setPowerNotEnough(int power_notenough) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putInt("PowerNotEnough", power_notenough);
+		edit.commit();
+	}
+	
 	public static int getVoltag1() {
-		return sp.getInt("Voltage1", 75);
+		return sp.getInt("Voltage1", 100);
 	}
 	
 	public static void setVoltage1(int voltage1) {
@@ -308,7 +318,7 @@ public class PreferenceControl {
 	}
 	
 	public static int getVoltageCountDown() {
-		return sp.getInt("VoltageCountDown", 40);
+		return sp.getInt("VoltageCountDown", 80);
 	}
 	
 	public static void setVoltageCountDown(int voltageCountDown) {
@@ -318,7 +328,7 @@ public class PreferenceControl {
 	}
 	
 	public static int getVoltage2CountDown() {
-		return sp.getInt("Voltage2CountDown", 80);
+		return sp.getInt("Voltage2CountDown", 120);
 	}
 	
 	public static void setVoltage2CountDown(int voltageCountDown) {

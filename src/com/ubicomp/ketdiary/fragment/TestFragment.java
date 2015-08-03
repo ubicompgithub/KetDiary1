@@ -1655,11 +1655,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 		// TODO Auto-generated method stub
 		
 	}
-	@Override
-	public void displayCurrentId(String id) {
-		// TODO Auto-generated method stub
-		
-	}
+
 	@Override
 	public void bleTakePictureSuccess(Bitmap bitmap) {
 		// TODO Auto-generated method stub
@@ -1695,6 +1691,12 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 	}
 	@Override
 	public void writeDebug(String msg) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void displayCurrentId(String id, int hardwareState,
+			int power_notenough) {
 		// TODO Auto-generated method stub
 		
 	}

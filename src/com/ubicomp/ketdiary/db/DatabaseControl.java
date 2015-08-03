@@ -1329,7 +1329,40 @@ public class DatabaseControl {
 	
 	
 	
+	
+	
 	//Cassette
+	public void insertCassette(String cassette_id ){
+		db = dbHelper.getWritableDatabase();
+		ContentValues content = new ContentValues();
+		content.put("cassetteId", cassette_id);
+		content.put("isUsed", 1);
+		content.put("ts", 0);
+		db.insert("Cassette", null, content);
+		db.close();
+		return ;
+			
+	}
+	
+	public boolean checkCassette(String cassette_id){
+		synchronized (sqlLock) {
+			db = dbHelper.getWritableDatabase();
+			String sql = "SELECT * FROM Cassette WHERE cassetteId = '"
+					+ cassette_id + "'" + " AND isUsed = 1";
+			Cursor cursor = db.rawQuery(sql, null);
+			boolean check;
+			if (cursor.getCount() == 0) {
+				check = true;
+			}
+			else{
+				check = false;
+			}
+			cursor.close();
+			db.close();
+			return check;
+		}
+	}
+	
 	/**
 	 * Truncate the RankingShort table
 	 * 
@@ -1365,7 +1398,7 @@ public class DatabaseControl {
 				db.insert("Cassette", null, content);
 			} else {
 				sql = "UPDATE Cassette SET" + " ts = "
-						+ data.getTv().getTimestamp() + "," + " isUsed "
+						+ data.getTv().getTimestamp() + "," + " isUsed = "
 						+ data.getisUsed() + " WHERE cassetteId = " 
 						+ "'"+ data.getCassetteId() + "'";
 				db.execSQL(sql);

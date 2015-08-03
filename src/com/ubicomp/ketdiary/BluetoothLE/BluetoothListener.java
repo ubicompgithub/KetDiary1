@@ -64,7 +64,7 @@ public interface BluetoothListener {
     void imgDetect(Bitmap bitmap);
 
     /* Display current saliva Id*/
-    void displayCurrentId(String id);
+    void displayCurrentId(String id, int hardwareState, int power_notenough);
     
     void displayHardwareVersion(String version);
     
