@@ -6,13 +6,17 @@ import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 
+import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -28,6 +32,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
@@ -38,6 +45,7 @@ import android.widget.TextView;
 
 import com.ubicomp.ketdiary.clicklog.ClickLog;
 import com.ubicomp.ketdiary.clicklog.ClickLogId;
+import com.ubicomp.ketdiary.data.structure.Cassette;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.dialog.CheckResultDialog;
@@ -46,6 +54,7 @@ import com.ubicomp.ketdiary.fragment.StatisticFragment;
 import com.ubicomp.ketdiary.fragment.TestFragment2;
 import com.ubicomp.ketdiary.noUse.NoteDialog3;
 import com.ubicomp.ketdiary.noUse.TestStripDetection3;
+import com.ubicomp.ketdiary.statistic.CassetteIDCollector;
 import com.ubicomp.ketdiary.system.Config;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.CustomMenu;
@@ -91,7 +100,7 @@ public class MainActivity extends FragmentActivity {
 	private LoadingPageTimer loadingPageTimer;
 	private Handler loadingHandler = new LoadingHandler();
 	public Handler resultFailHandler = new ResultFailHandler();
-	
+	//private UpdateCassetteTask updateTask;
 	
 	private AnimationDrawable animation;
 
@@ -333,6 +342,10 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	protected void onStart() {
 		UploadService.startUploadService(this);
+		
+		UpdateCassetteTask updateTask = new UpdateCassetteTask();
+		updateTask.execute();
+		
 		super.onStart();
 	}
 
@@ -345,6 +358,9 @@ public class MainActivity extends FragmentActivity {
             Log.d(TAG, "OpenCV library found inside package. Using it!");
             mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
         }
+		
+		
+		
 		/*if (LockCheck.check()) {
 			Intent lock_intent = new Intent(this, LockedActivity.class);
 			startActivity(lock_intent);
@@ -730,8 +746,8 @@ public class MainActivity extends FragmentActivity {
 				return true;
 			} else {
 				if (clickable) {
-					if (tabHost.getCurrentTab() == 2 && fragments[2] != null
-							&& fragments[2].isAdded()) {
+					if (tabHost.getCurrentTab() == 2 && fragments[2] != null  //讓第三頁的新增記事按back可以關掉
+							&& fragments[2].isAdded()) { 
 						if(((DaybookFragment) fragments[2]).isNotePageShow){
 							((DaybookFragment) fragments[2]).notePage.close();
 							((DaybookFragment) fragments[2]).notePage.clear();
@@ -906,6 +922,10 @@ public class MainActivity extends FragmentActivity {
 			PreferenceControl.setPosition(1);
 		}
 		
+		if(PreferenceControl.getPowerNotEnough() == 1){
+			generateDialog("電量不足，請將檢測器充電");
+		}
+		
 		
 		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		notificationManager.cancel(0); //做完檢測才把Notification關掉
@@ -980,7 +1000,57 @@ public class MainActivity extends FragmentActivity {
 		count_down_layout.setVisibility(View.GONE);
 		closeSensorCountDownTimer();
 	}
+	
+	private Cassette[] cassettes;
+	private CassetteIDCollector cassetteCollector;
 
+	private class UpdateCassetteTask extends AsyncTask<Void, Void, Void> {
+
+		@Override
+		protected Void doInBackground(Void... arg0) {
+			cassetteCollector = new CassetteIDCollector(mainActivity);
+			cassettes = cassetteCollector.update();
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			if (cassettes == null ) {
+				return;
+			}
+
+			for (int i = 0; i < cassettes.length; ++i)
+				db.updateCassette(cassettes[i]);
+		}
+
+	}
+	private void generateDialog(String textResource){
+		// Create custom dialog object
+        final Dialog dialog = new Dialog(this);
+        
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        //dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        
+        dialog.setContentView(R.layout.dialog);
+        TextView dialogText = (TextView) dialog.findViewById(R.id.dialog_text);
+        dialogText.setText(textResource);
+        dialogText.setTextColor(getResources().getColor(R.color.dark_gray));
+        
+        dialog.show();
+         
+        TextView dialogOKButton = (TextView) dialog.findViewById(R.id.ok_button);
+        dialogOKButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                dialog.dismiss();
+                
+            }
+        });
+        //dialogOKButton.setOnClickListener(new EndOnClickListener() );
+	}
 
 	
 }

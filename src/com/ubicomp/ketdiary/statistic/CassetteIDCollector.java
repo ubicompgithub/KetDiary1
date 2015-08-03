@@ -16,10 +16,10 @@ import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpConnectionParams;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.data.structure.Cassette;
-import com.ubicomp.ketdiary.data.structure.Rank;
 import com.ubicomp.ketdiary.db.ServerUrl;
 
 public class CassetteIDCollector {
@@ -66,14 +66,20 @@ public class CassetteIDCollector {
 					.handleResponse(httpResponse);
 			int httpStatusCode = httpResponse.getStatusLine().getStatusCode();
 			
-			//Log.d(TAG, responseString);
+			
 			
 			if (responseString != null && httpStatusCode == HttpStatus.SC_OK) {
+				Log.d(TAG, responseString);
 				Cassette[] cassettes = parse(responseString);
+				
+				if(cassettes == null){
+					Log.d(TAG, "parse null");
+				}
 				return cassettes;
 			}
 
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		return null;
@@ -83,31 +89,26 @@ public class CassetteIDCollector {
 		if (response == null)
 			return null;
 		response = response.substring(2, response.length() - 2);
+		//Log.d(TAG, "response: "+ response);
 		String[] tmp = response.split("],");
 		if (tmp.length == 0)
 			return null;
 		Cassette[] cassettes = new Cassette[tmp.length];
 		for (int i = 0; i < tmp.length; ++i) {
+			Log.d(TAG, "tmp: "+ tmp[i]);
+			
 			if (tmp[i].charAt(0) == '[')
 				tmp[i] = tmp[i].substring(1, tmp[i].length());
 
 			String[] items = tmp[i].split(",");
-			String uid = items[0].substring(1, items[0].length() - 1);
-			int level;
-			if (items[1].equals("null"))
-				level = 0;
-			else
-				level = Integer.valueOf(items[1]);
-			int test = Integer.valueOf(items[2]);
-			int note = Integer.valueOf(items[3]);
-			int question = Integer.valueOf(items[4]);
-			int coping = Integer.valueOf(items[5]);
-			int[] additionals = new int[4];
-			for (int j = 0; j < additionals.length; ++j)
-				additionals[j] = Integer.valueOf(items[5+j]);
+			String cassetteId = items[0].substring(1, items[0].length() - 1);			
+			//Log.d(TAG, "items: "+ items[0] + " "+ items[1]);
+			//String cassetteId = items[0];
+			int isUpload = Integer.valueOf(items[1]);
 
+			Log.d(TAG, "ID: " + cassetteId + "Upload: "+ isUpload);
 			//ranks[i] = new Rank(uid, level, test, note, question, coping, additionals);
-			cassettes[i] = new Cassette(0, 1, "");
+			cassettes[i] = new Cassette(0, isUpload, cassetteId);
 		}
 
 		return cassettes;

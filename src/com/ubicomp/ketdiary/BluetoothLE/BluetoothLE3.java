@@ -94,7 +94,8 @@ public class BluetoothLE3 {
     private int picNum = 0;
     private Context context;
     
-    public int hardware_state = -1; 
+    public int hardware_state = -1;
+    protected int power_notenough;
     
     public BluetoothLE3(BluetoothListener bluetoothListener, String mDeviceName) {
     	//super(bluetoothListener, mDeviceName);
@@ -148,7 +149,7 @@ public class BluetoothLE3 {
 	    }
 	};
 
-
+	
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -210,13 +211,19 @@ public class BluetoothLE3 {
                 }
                 else if (data[0] == (byte)0xFB){
                     long temp = (data[4] & 0xFF) + (data[3] & 0xFF)*256 + (data[2] & 0xFF)*256*256 + (data[1] & 0xFF)*256*256*256;
-                    ((BluetoothListener) bluetoothListener).displayCurrentId(String.valueOf(temp));
-                    
-                    byte[] plugId = new byte[data.length-1];
-                    System.arraycopy(data, 1, plugId, 0, data.length - 1);
-                    ((BluetoothListener) bluetoothListener).blePlugInserted(plugId);
-                    
                     hardware_state = (int)data[5];
+                    power_notenough = (int)data[6];
+                    
+                    ((BluetoothListener) bluetoothListener).displayCurrentId(String.valueOf(temp), hardware_state, power_notenough);
+                    
+//                    byte[] plugId = new byte[data.length-1];
+//                    System.arraycopy(data, 1, plugId, 0, data.length - 1);
+//                    ((BluetoothListener) bluetoothListener).blePlugInserted(plugId);
+                                     
+                }
+                else if(data[0] == (byte)0xBB){
+                	int voltage = (data[1] & 0xFF) + (data[2] & 0xFF)*256;
+                	((BluetoothListener) bluetoothListener).writeDebug("Voltage: " + voltage);
                 }
                 else if(data[0] == (byte)0xDD){
                 	((BluetoothListener) bluetoothListener).displayHardwareVersion(""+(int)data[1]);

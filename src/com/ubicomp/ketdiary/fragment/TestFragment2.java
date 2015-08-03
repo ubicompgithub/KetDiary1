@@ -456,17 +456,17 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 //						secondVoltage, devicePower, colorReading,
 //		                connectionFailRate, failedReason);
 //			}
-			
+			img_face.setVisibility(View.INVISIBLE);
 			test_msg.setText("");
 			label_btn.setText("確認");
-			label_subtitle.setText("");
+			label_subtitle.setText(err_msg2);
 			label_title.setText(err_msg);
 			img_btn.setEnabled(true);
 			
 			water_layout.setVisibility(View.INVISIBLE);
 			img_cassette.setVisibility(View.INVISIBLE);
 			//cameraLayout.setVisibility(View.INVISIBLE);
-			cameraRecorder.pause();//TODO: Camera Resource Release
+			cameraRecorder.pause();
 			
 			stopDueToInit();
 			MainActivity.getMainActivity().enableTabAndClick(true);
@@ -572,6 +572,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			//ble.bleWriteState((byte)3);
 			
 			//img_face.setVisibility(View.VISIBLE);
+			//img_face.bringToFront();
 			cameraCountDownTimer = new CameraCountDownTimer(CAMERATIMEOUT - DEBUG_SPEED_UP_SECOND);
 			cameraCountDownTimer.start();
 			
@@ -710,7 +711,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			label_subtitle.setText("");
 			water_layout.setVisibility(View.VISIBLE);
 			img_water3.setImageResource(R.drawable.saliva3_yes);
-			
+			img_face.setVisibility(View.INVISIBLE);
 			
 			test_done = true;
 			
@@ -1052,7 +1053,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		cameraRecorder = new CameraRecorder(this, imgFileHandler);
 		cameraRunHandler = new CameraRunHandler(cameraRecorder);
 		
-		
+		PreferenceControl.setPowerNotEnough(0);
 
 		//prev_drawable_time = -1;
 
@@ -1121,7 +1122,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 					setState(new RunState());
 				}
 				else{
-					if(state == CAMERA_STATE || state == DRAW_STATE){
+					if(state == CAMERA_STATE || state == DRAW_STATE){ //80秒時, 如果第一個電極沒導通就fail
 						if(first_voltage == false){				
 							failedState = state;
 							setState(new FailState("測試超時"));
@@ -1131,14 +1132,16 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 						}
 					}
 					else if (state == NOTENOUGH_STATE){ // 判斷第二個電極是否通過
-						if(voltage < SECOND_VOLTAGE_THRESHOLD){
-							secondVoltage = voltage;
-							setState(new RunState());
-						}
-						else{
-							failedState = state;
-							setState(new FailState("測試失敗,請更換試紙匣後重試"));
-						}
+						secondVoltage = voltage;
+						setState(new RunState());
+//						if(voltage < SECOND_VOLTAGE_THRESHOLD){
+//							secondVoltage = voltage;
+//							setState(new RunState());
+//						}
+//						else{
+//							failedState = state;
+//							setState(new FailState("測試失敗,請更換試紙匣後重試"));
+//						}
 					}
 				}
 				//cameraRecorder.closeSuccess();
@@ -1146,17 +1149,33 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 
 			@Override
 			public void onTick(long millisUntilFinished) {
-				if(state == CAMERA_STATE && millisUntilFinished < (40-DEBUG_SPEED_UP_SECOND)*1000){					
-					state = DRAW_STATE;
-				}	
-				if(first && first_voltage){
-					img_cassette.setVisibility(View.VISIBLE);
-					water_layout.setVisibility(View.INVISIBLE);
-					label_subtitle.setText("吐完足量口水後，請抽掉檔片");
-					label_title.setText("測試進行中，請稍後");
-					first = false;
-				}
+//				if(state == CAMERA_STATE && millisUntilFinished < (40-DEBUG_SPEED_UP_SECOND)*1000){					
+//					state = DRAW_STATE;
+//					img_cassette.setVisibility(View.VISIBLE);
+//					water_layout.setVisibility(View.INVISIBLE);
+//					label_subtitle.setText("吐完足量口水後，請抽掉檔片");
+//					label_title.setText("測試進行中，請稍後");
+//					first = false;	
+//				}	
+//				else if(first && first_voltage){
+//					img_cassette.setVisibility(View.VISIBLE);
+//					water_layout.setVisibility(View.INVISIBLE);
+//					label_subtitle.setText("吐完足量口水後，請抽掉檔片");
+//					label_title.setText("測試進行中，請稍後");
+//					first = false;
+//					state = DRAW_STATE;
+//				}
+								
 				if(state == CAMERA_STATE){
+					if( millisUntilFinished < (40-DEBUG_SPEED_UP_SECOND)*1000 || (first && first_voltage)) {
+						img_cassette.setVisibility(View.VISIBLE);
+						water_layout.setVisibility(View.INVISIBLE);
+						label_subtitle.setText("吐完足量口水後，請抽掉檔片");
+						label_title.setText("測試進行中，請稍後");
+						first = false;					
+						state = DRAW_STATE;				
+					}
+					
 					if(count % 5 == 0)
 						cameraRunHandler.sendEmptyMessage(0);		
 				}
@@ -1293,6 +1312,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 					secondVoltage = voltage;
 					setState(new DoneState());
 					first = false;
+					return;
 				}
 				else if(voltage > SECOND_VOLTAGE_THRESHOLD){
 					setState(new NotEnoughSavilaState() );
@@ -1308,9 +1328,10 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 				first = false;
 				img_water3.setImageResource(R.drawable.saliva3_yes);
 				secondVoltage = voltage;
-				setState(new DoneState());	
+				setState(new DoneState());
+				return;
 			}
-			else{
+			else if(first){
 				//cameraRunHandler.sendEmptyMessage(0);
 				if(ptr >= ELECTRODE_RESOURCE.length){
 					ptr %= ELECTRODE_RESOURCE.length;
@@ -1410,18 +1431,6 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
         }
     }
 
-    @Override
-    public void blePlugInserted(byte[] plugId) {
-        //Log.i(TAG, "Test plug is inserted");
-        ble_pluginserted = true;
-        cassetteId = "tmp_id"; //TODO: set cassetteId in here.
-        //check ID here
-        if( state == CONN_STATE )
-        	updateInitState(Tester._BT);
-        
-        
-    }
-
 
     @Override
     public void bleColorReadings(byte[] colorReadings) {
@@ -1495,8 +1504,8 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		writeToVoltageFile(str3+"\n");
 		
 		
-		if(state == CAMERA_STATE && voltage > FIRST_VOLTAGE_THRESHOLD ){
-			state = DRAW_STATE; 
+		if(voltage > FIRST_VOLTAGE_THRESHOLD && (state == CAMERA_STATE || state == DRAW_STATE )){
+			//state = DRAW_STATE; 
 			firstVoltage = voltage;
 			img_water1.setImageResource(R.drawable.saliva1_yes);
 			img_water2.setImageResource(R.drawable.saliva2_yes);
@@ -1507,6 +1516,62 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			//setState(new DoneState());
 			second_voltage=true;
 		}
+	}
+	
+    @Override
+    public void blePlugInserted(byte[] plugId) {
+        //Log.i(TAG, "Test plug is inserted");
+        ble_pluginserted = true;
+        cassetteId = "saliva_1438268769608"; //TODO: set cassetteId in here.
+        
+        Log.i(TAG, "plugId: " + plugId);
+        
+        cassetteId = "tmpId";
+        boolean check = db.checkCassette(cassetteId);
+        
+        
+        Log.i(TAG, "cassetteId: " + cassetteId + " " + check);
+        if( !check ){
+        	
+        	setState(new FailState("試紙匣已用過，請更換試紙匣"));
+        	
+        }
+        //check ID here
+        if( state == CONN_STATE )
+        	updateInitState(Tester._BT);
+        
+        
+    }
+	
+	@Override
+	public void displayCurrentId(String id , int hardwareState, int power_notenough) {
+		ble_pluginserted = true;
+		
+		
+		if(state == FIVESECOND_STATE){
+			//power_notenough = 1;
+			if(power_notenough == 1)
+				setState(new FailState("檢測器電量不足", "請將檢測器充電"));
+		}
+		
+        //cassetteId = "saliva_1438268769608"; //TODO: set cassetteId in here.
+        
+        Log.i(TAG, "plugId: " + id + " power: " + power_notenough);
+        
+        cassetteId = "tmpId";
+        boolean check = db.checkCassette(cassetteId);
+        
+        
+        Log.i(TAG, "cassetteId: " + cassetteId + " " + check);
+        if( !check ){
+        	
+        	setState(new FailState("試紙匣已用過，請更換試紙匣"));
+        	
+        }
+        //check ID here
+        if( state == CONN_STATE )
+        	updateInitState(Tester._BT);
+		
 	}
 	
 	
@@ -1682,11 +1747,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		// TODO Auto-generated method stub
 		
 	}
-	@Override
-	public void displayCurrentId(String id) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 	@Override
 	public void bleTakePictureSuccess(Bitmap bitmap) {
 		// TODO Auto-generated method stub

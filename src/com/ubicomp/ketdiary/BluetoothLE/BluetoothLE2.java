@@ -130,6 +130,8 @@ public class BluetoothLE2 {
 	    }
 	};
 
+	protected int hardware_state;
+	protected int power_notenough;
 
     private final BroadcastReceiver mGattUpdateReceiver = new BroadcastReceiver() {
         @Override
@@ -185,9 +187,18 @@ public class BluetoothLE2 {
                      break;
                  case (byte)0xFB:
                      Log.i(TAG, "----0xFB----");
-                     byte[] plugId = new byte[data.length-1];
-                     System.arraycopy(data, 1, plugId, 0, data.length - 1);
-                     ((BluetoothListener) bluetoothListener).blePlugInserted(plugId);
+//                     byte[] plugId = new byte[data.length-1];
+//                     System.arraycopy(data, 1, plugId, 0, data.length - 1);
+//                     ((BluetoothListener) bluetoothListener).blePlugInserted(plugId);
+                     
+                     long temp = (data[4] & 0xFF) + (data[3] & 0xFF)*256 + (data[2] & 0xFF)*256*256 + (data[1] & 0xFF)*256*256*256;
+                     
+                     hardware_state = (int)data[5];
+                     power_notenough = (int)data[6];
+                     ((BluetoothListener) bluetoothListener).displayCurrentId(String.valueOf(temp), hardware_state, power_notenough);
+                     
+                     
+                                          
                      break;
                  case (byte)0xFC:
                  case (byte)0xFD:

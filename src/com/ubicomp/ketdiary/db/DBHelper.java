@@ -13,7 +13,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 	/* SQLiteOpenHelper. need to migrate with */
 	private static final String DATABASE_NAME = "rehabdiary";
-	private static final int DB_VERSION = 11;
+	private static final int DB_VERSION = 12;
 
 	/**
 	 * Constructor
@@ -140,6 +140,13 @@ public class DBHelper extends SQLiteOpenHelper {
 				+ " failedReason CHAR[255], "
 				+ " hardwareVersion CHAR[255], "
 				+ " upload INTEGER NOT NULL DEFAULT 0" + ")");
+		
+		db.execSQL("CREATE TABLE Cassette ("
+				+ " id INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ " ts INTEGER NOT NULL,"
+				+ " cassetteId CHAR[255] NOT NULL,"
+				+ " isUsed INTEGER NOT NULL,"
+				+ " upload INTEGER NOT NULL DEFAULT 0)");
 				
 		
 	}
