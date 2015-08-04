@@ -574,9 +574,9 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			
 			water_layout.setVisibility(View.VISIBLE);
 			//ble.bleWriteState((byte)3);
-			
-			//img_face.setVisibility(View.VISIBLE);
 			//img_face.bringToFront();
+			img_face.setVisibility(View.VISIBLE);
+			
 			cameraCountDownTimer = new CameraCountDownTimer(CAMERATIMEOUT - DEBUG_SPEED_UP_SECOND);
 			cameraCountDownTimer.start();
 			
