@@ -114,7 +114,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	    
 		initVariable();
 		state = BEGIN_STATE;
-		writeToColorRawFile("State = " + state);
+		writeToColorRawFile("Service Start, State = " + state);
 		PreferenceControl.setResultServiceRun(true);
 	    Log.d(TAG,  "onStartCommand() executed" );       
 	    mhandler.postDelayed(updateTimer, 1000);
@@ -188,7 +188,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	        	}
 	        }
 	        else if(state == FRAME_STATE){
-	        	if(spentTime < 2*60*1000 ){
+	        	if(spentTime < 5*60*1000 ){
 	        		setTestFail();
 	        	}
 	        }
@@ -303,13 +303,13 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 			String hardwardVersion = TestFragment2.testDetail.hardwareVersion;
 			//Toast.makeText(myservice, "Check: "+ colorReading, Toast.LENGTH_SHORT).show();
 			Log.i(TAG, "Check: "+ colorReading);
-					
+			
+			failedState = state;
 			TestDetail testDetail = new TestDetail(cassetteId, ts, failedState, firstVoltage,
 					secondVoltage, devicePower, colorReading,
 	                connectionFailRate, failedReason, hardwardVersion);
 			
-			db.insertTestDetail(testDetail);
-			
+			db.insertTestDetail(testDetail);	
 			db.insertCassette(cassetteId);
     	}
     }
@@ -568,12 +568,18 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
         	Toast.makeText(this, "BLE writefstate fail", Toast.LENGTH_SHORT).show();
         stateSuccess = false;
     }
-
+    
+    private boolean noplug = false;
     @Override
     public void bleNoPlug() {
+    	
         Log.i(TAG, "No test plug");
         writeToColorRawFile("No test plug");
-        setTestFail();
+        failedReason = "試紙匣被拔出";
+        if(!noplug){
+        	setTestFail();
+        	noplug = true;
+        }
         
        //Toast.makeText(this, "No test plug", Toast.LENGTH_SHORT).show();
     }

@@ -96,10 +96,14 @@ public class CheckResultDialog{
 		//RelativeLayout.LayoutParams boxParam = (RelativeLayout.LayoutParams) boxLayout.getLayoutParams();
 		TestDetail testDetail = db.getLatestTestDetail();
 		int failType = testDetail.getFailedState();
+		String failedReason = testDetail.getFailedReason();
 		testFail = PreferenceControl.isTestFail();
 		if(testFail){
 			if(failType == 8 || failType == 9){
 				checkHelp.setText(R.string.result_fail);			
+			}
+			else if(failedReason.equals("無法判斷檢測結果")){
+				checkHelp.setText("無法判斷檢測結果,回到檢測頁重測?");
 			}
 			else{
 				checkHelp.setText("測試失敗,回到檢測頁重測?");

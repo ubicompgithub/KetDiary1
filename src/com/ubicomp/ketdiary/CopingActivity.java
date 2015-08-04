@@ -83,13 +83,18 @@ public class CopingActivity extends Activity {
 	private int skillType = -1, skillSelect = -1;
 	private String send_recreation = "";
 	
+	//relax
 	private static final int SELECT_BREATH = 0;
 	private static final int SELECT_WALK = 1;
 	private static final int SELECT_STRETCH = 2;
 	private static final int SELECT_MUSIC = 3;
+	
+	//life coping
 	private static final int SELECT_LEAVE = 4;
 	private static final int SELECT_TOLD = 5;
 	private static final int SELECT_CD = 6;
+	
+	//information
 	private static final int SELECT_POSITIVE = 7;
 	private static final int SELECT_POISON = 8;
 	private static final int SELECT_SUGGESTION = 9;
@@ -223,6 +228,7 @@ public class CopingActivity extends Activity {
 			listDownImg[3].setVisibility(View.VISIBLE);
 
 		listVisible[3] = true;
+		skillType = 3;
 	}
 
 	private void foldInfoView(){

@@ -67,7 +67,14 @@ public class SectionsPagerAdapter extends PagerAdapter {
     	R.drawable.dot_color6, R.drawable.dot_color7, R.drawable.dot_color8
     };
     
-    private static final int[] dotId = { 0, R.drawable.cell_dot1, R.drawable.cell_dot2,
+    private static final int[] dotId = { 0, R.drawable.filter_color1, R.drawable.filter_color2,
+    	R.drawable.filter_color3, R.drawable.filter_color4, R.drawable.filter_color5,
+    	R.drawable.filter_color6, R.drawable.filter_color7, R.drawable.filter_color8
+    };
+    
+    
+    //original dot
+    private static final int[] dotId3 = { 0, R.drawable.cell_dot1, R.drawable.cell_dot2,
     	R.drawable.cell_dot3, R.drawable.cell_dot4, R.drawable.cell_dot5,
     	R.drawable.cell_dot6, R.drawable.cell_dot7, R.drawable.cell_dot8
     };
@@ -425,9 +432,9 @@ public class SectionsPagerAdapter extends PagerAdapter {
 			calDot1.setVisibility(View.INVISIBLE);
 			calDot2.setVisibility(View.INVISIBLE);
 			calDot3.setVisibility(View.INVISIBLE);
-			calDot15.setImageResource(dotId[typedot[0]]);
+			calDot15.setImageResource(dotId[typedot[1]]);
 			calDot15.setVisibility(View.VISIBLE);
-			calDot25.setImageResource(dotId[typedot[1]]);
+			calDot25.setImageResource(dotId[typedot[0]]);
 			calDot25.setVisibility(View.VISIBLE);
 		}
 		else if(k==0){
