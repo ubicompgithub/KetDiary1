@@ -99,10 +99,7 @@ public class CheckResultDialog{
 		testFail = PreferenceControl.isTestFail();
 		if(testFail){
 			if(failType == 8 || failType == 9){
-				checkHelp.setText("測試未成功，記錄無上傳。\n\n" +
-						"（請保持檢測器開啟，且將檢測器置於與手機鄰近的地方。）\n\n" +
-						"立即回到測試頁面？");
-				
+				checkHelp.setText(R.string.result_fail);			
 			}
 			else{
 				checkHelp.setText("測試失敗,回到檢測頁重測?");

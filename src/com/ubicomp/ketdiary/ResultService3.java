@@ -87,7 +87,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	private boolean connect = false;
 	private boolean debug = PreferenceControl.isDebugMode();
 	
-	public static long spentTime = PreferenceControl.getAfterCountDown()*1000;
+	public static long spentTime ;
 	private ColorRawFileHandler colorRawFileHandler;
 	private File mainDirectory = null;
 	private long ts;
@@ -309,6 +309,8 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	                connectionFailRate, failedReason, hardwardVersion);
 			
 			db.insertTestDetail(testDetail);
+			
+			db.insertCassette(cassetteId);
     	}
     }
     
@@ -326,7 +328,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
         Log.d(TAG, "OnDestroy Call");
         stophandler.postDelayed(stopThread, 2000);
         //stop();
-        
+        PreferenceControl.setResultServiceRun(false);
         super.onDestroy();
     }
 	
@@ -365,7 +367,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
         	picFileHandler = null;
         }
         
-        PreferenceControl.setResultServiceRun(false);
+        
 	
 	}
 	

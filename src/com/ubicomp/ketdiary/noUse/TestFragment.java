@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.fragment;
+package com.ubicomp.ketdiary.noUse;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -54,7 +54,6 @@ import com.ubicomp.ketdiary.file.ColorRawFileHandler;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.QuestionFile;
 import com.ubicomp.ketdiary.file.VoltageFileHandler;
-import com.ubicomp.ketdiary.noUse.NoteDialog3;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.LoadingDialogControl;
 import com.ubicomp.ketdiary.ui.ScaleOnTouchListener;
