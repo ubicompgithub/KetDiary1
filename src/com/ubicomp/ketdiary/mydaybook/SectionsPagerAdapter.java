@@ -79,13 +79,13 @@ public class SectionsPagerAdapter extends PagerAdapter {
         
         db = new DatabaseControl();
         sustainMonth = PreferenceControl.getSustainMonth();
-        isPageViewInitialized = new boolean[sustainMonth];
-        glCalendar = new GridLayout[sustainMonth];
+        isPageViewInitialized = new boolean[pageViewList.length];
+        glCalendar = new GridLayout[pageViewList.length];
     }
 	
 	@Override
 	public int getCount() {
-		return sustainMonth;
+		return pageViewList.length;
 	}
 	
 	@Override
@@ -352,9 +352,9 @@ public class SectionsPagerAdapter extends PagerAdapter {
     }
     
     public void updateRecentDay(){
-    	int num = glCalendar[sustainMonth-1].getChildCount();
+    	int num = glCalendar[pageViewList.length-1].getChildCount();
     	for(int i = 0; i<num ; i++){
-    		View cellView = glCalendar[sustainMonth-1].getChildAt(i);
+    		View cellView = glCalendar[pageViewList.length-1].getChildAt(i);
     		if(cellView.getVisibility() != View.INVISIBLE){
     			int year = (Integer) cellView.getTag(TAG_CAL_CELL_YEAR);
     			int month = (Integer) cellView.getTag(TAG_CAL_CELL_MONTH);

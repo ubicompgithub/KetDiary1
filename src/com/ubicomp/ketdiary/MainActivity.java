@@ -401,7 +401,7 @@ public class MainActivity extends FragmentActivity {
 			enableTabAndClick(true);
 		}
 		if(PreferenceControl.getCheckResult() && countTime > 0)
-			setTimers();
+			setTimers2();
 		else if(PreferenceControl.getCheckResult() && countTime <= 0){
 			if(testFail){
 				showResultFail();
@@ -794,6 +794,35 @@ public class MainActivity extends FragmentActivity {
 			
 		
 	}
+	
+	private void setSensorCountDownTimer2() {
+		long lastTime = PreferenceControl.getLatestTestCompleteTime();
+		long curTime = System.currentTimeMillis();
+		boolean debug = PreferenceControl.isDebugMode();
+		boolean testFail = PreferenceControl.isTestFail();
+
+		long time = curTime - lastTime;
+		//long countTime = WAIT_RESULT_TIME - time;
+		long countTime = ResultService3.spentTime;
+		Log.i(TAG, "sensorCountDown: "+countTime);
+		isRecovery = false;
+		closeSensorCountDownTimer();
+		
+		sensorCountDownTimer = new SensorCountDownTimer(countTime);
+		//sensorCountDownTimer = new SensorCountDownTimer( Math.min(waitTime, waitTime-time) );
+		sensorCountDownTimer.start();
+			
+			
+			/*
+			else {
+				isRecovery = true;
+				long test_gap_time = TEST_GAP_DURATION - time;
+				sensorCountDownTimer = new SensorCountDownTimer(Math.min(
+						test_gap_time, TEST_GAP_DURATION));
+			}*/
+			
+		
+	}
 
 	private void closeSensorCountDownTimer() {
 		if (sensorCountDownTimer != null) {
@@ -993,6 +1022,12 @@ public class MainActivity extends FragmentActivity {
 	public void setTimers() {
 		closeTimers();
 		setSensorCountDownTimer();
+		
+	}
+	
+	public void setTimers2() {
+		closeTimers();
+		setSensorCountDownTimer2();
 		
 	}
 

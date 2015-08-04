@@ -62,8 +62,8 @@ public class StatisticDayView extends StatisticPageView {
 	private final static int[] typeId = {0, R.drawable.statistic_note_negative,
 		R.drawable.statistic_note_physical, R.drawable.statistic_note_positive, 
 		R.drawable.statistic_note_selftest, R.drawable.statistic_note_temptation,
-		R.drawable.statistic_note_conflic, R.drawable.statistic_note_play, 
-	 	R.drawable.statistic_note_social};
+		R.drawable.statistic_note_conflic, R.drawable.statistic_note_social, 
+	 	R.drawable.statistic_note_play};
 
 	/*private final static int[] emotionId = { R.drawable.emotion_0,
 			R.drawable.emotion_1, R.drawable.emotion_2, R.drawable.emotion_3,

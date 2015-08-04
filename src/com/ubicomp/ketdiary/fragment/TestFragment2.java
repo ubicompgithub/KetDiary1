@@ -185,7 +185,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	//private boolean second_pass=false;
 	
 	// test Detail parameter
-	private String cassetteId ="";
+	public static String cassetteId ="";
 	private int failedState;
 	private int firstVoltage;
 	private int secondVoltage;
@@ -196,6 +196,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	private String hardwareVersion = "";
 	
 	public static TestDetail testDetail = null;
+	
 	
 	private static final int COUNT_DOWN_SECOND = 10;
 	private static final int WAIT_SALIVA_SECOND = 160;
@@ -454,6 +455,10 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 					secondVoltage, devicePower, colorReading,
 	                connectionFailRate, failedReason, hardwareVersion);
 			
+			db.insertTestDetail(testDetail);
+			if(failedState >= 4){
+				db.insertCassette(cassetteId);
+			}
 			
 //			if( TDP!= null ){
 //				TDP.startTestDetail(cassetteId, failedState, firstVoltage,
@@ -1562,12 +1567,12 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
         
         Log.i(TAG, "plugId: " + id + " power: " + power_notenough);
         
-        cassetteId = "tmpId";
+        cassetteId = id;
         boolean check = db.checkCassette(cassetteId);
         
         
         Log.i(TAG, "cassetteId: " + cassetteId + " " + check);
-        if( !check ){
+        if( !check && !debug){
         	
         	setState(new FailState("試紙匣已用過，請更換試紙匣"));
         	
