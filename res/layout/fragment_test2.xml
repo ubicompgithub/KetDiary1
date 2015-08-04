@@ -57,14 +57,7 @@
                 android:layout_gravity="center"
                 android:src="@drawable/button_start_test2" />
 
-            <ImageView
-                android:id="@+id/test_face"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:scaleType="center"
-                android:src="@drawable/test_face"
-                android:visibility="invisible" />
+            
 
             <TextView
                 android:id="@+id/tv_btn"
@@ -105,7 +98,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="invisible" />
-
+        
+        <FrameLayout
+            android:id="@+id/test_start_layout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" >
+        <ImageView
+                android:id="@+id/test_face"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="center"
+                android:src="@drawable/test_face"
+                android:visibility="invisible" />   
+		</FrameLayout>
     </FrameLayout>
     
     <RelativeLayout
