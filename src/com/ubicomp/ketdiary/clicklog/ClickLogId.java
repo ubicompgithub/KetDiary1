@@ -15,7 +15,6 @@ public class ClickLogId {
 	public final static long ABOUT_CALL_OK = 300000; // 00300000;
 	public final static long ABOUT_CALL_CANCEL = 400000; // 00400000;
 	public final static long ABOUT_WEBSITE = 500000; // 00500000;
-
 	
 	//Setting Activity
 	public final static long SETTING_ENTER = 1000000; // 01000000;
@@ -45,6 +44,14 @@ public class ClickLogId {
 	public final static long TEST_KOWING_NEXT = 12300000;
 	public final static long TEST_KOWING_LAST = 12400000;
 	public final static long TEST_CHECKING_RESULT = 12500000;
+	
+	//8/5 add
+	public final static long TEST_NOTE_SCROLL_SELF = 12600000;
+	public final static long TEST_NOTE_SCROLL_OTHER = 12610000;
+	public final static long TEST_NOTE_CLICK_SELF = 12620000;
+	public final static long TEST_NOTE_CLICK_OTHER = 12630000;
+	
+	public final static long TEST_NOTE_SELECT_DATE = 12700000;
 	
 //	public final static long TEST_ADDITIONAL_QUESTION_CANCEL = 12000000;
 //	public final static long TEST_ADDITIONAL_QUESTION_SEND = 12100000;

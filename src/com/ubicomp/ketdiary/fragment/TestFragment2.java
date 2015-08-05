@@ -849,6 +849,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		
 		if(ble!=null){
 			//is_connect = false;
+			
 			ble.bleDisconnect();
 			ble = null;
 		}
@@ -934,7 +935,8 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			
 			//while(!is_connect)
 			//while(is_connect)
-			ble.bleDisconnect(); // 原本註解
+			ble.bleWriteState((byte)0x05);
+			//ble.bleDisconnect(); // 原本註解
 			//is_connect = false;
 			//ble = null; 
 		}

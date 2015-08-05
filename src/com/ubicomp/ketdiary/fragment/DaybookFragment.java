@@ -230,7 +230,9 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 
 		mViewPager = (ViewPager) view.findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);	
-	
+		
+		
+		
 		backToTodayText = (TextView) view.findViewById(R.id.back_to_today);
 		backToTodayText.setText(Integer.toString(Calendar.getInstance().get(Calendar.DAY_OF_MONTH)));
 		
@@ -270,30 +272,31 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	    
 	   
 	    filterAll.setOnClickListener(new FilterListener());
-		 filter1.setOnClickListener(new FilterListener());
-		    filter2.setOnClickListener(new FilterListener());
-		    filter3.setOnClickListener(new FilterListener());
-		    filter4.setOnClickListener(new FilterListener());
-		    filter5.setOnClickListener(new FilterListener());
-		    filter6.setOnClickListener(new FilterListener());
-		    filter7.setOnClickListener(new FilterListener());
-		    filter8.setOnClickListener(new FilterListener());	
+		filter1.setOnClickListener(new FilterListener());
+		filter2.setOnClickListener(new FilterListener());
+		filter3.setOnClickListener(new FilterListener());
+		filter4.setOnClickListener(new FilterListener());
+		filter5.setOnClickListener(new FilterListener());
+		filter6.setOnClickListener(new FilterListener());
+		filter7.setOnClickListener(new FilterListener());
+		filter8.setOnClickListener(new FilterListener());	
 			
-		    filterAll.setOnLongClickListener(new FilterLongClickListener());
-		    filter1.setOnLongClickListener(new FilterLongClickListener());
-		    filter2.setOnLongClickListener(new FilterLongClickListener());
-		    filter3.setOnLongClickListener(new FilterLongClickListener());
-		    filter4.setOnLongClickListener(new FilterLongClickListener());
-		    filter5.setOnLongClickListener(new FilterLongClickListener());
-		    filter6.setOnLongClickListener(new FilterLongClickListener());
-		    filter7.setOnLongClickListener(new FilterLongClickListener());
-		    filter8.setOnLongClickListener(new FilterLongClickListener());
+		filterAll.setOnLongClickListener(new FilterLongClickListener());
+		filter1.setOnLongClickListener(new FilterLongClickListener());
+		filter2.setOnLongClickListener(new FilterLongClickListener());
+		filter3.setOnLongClickListener(new FilterLongClickListener());
+		filter4.setOnLongClickListener(new FilterLongClickListener());
+		filter5.setOnLongClickListener(new FilterLongClickListener());
+		filter6.setOnLongClickListener(new FilterLongClickListener());
+		filter7.setOnLongClickListener(new FilterLongClickListener());
+		filter8.setOnLongClickListener(new FilterLongClickListener());
 	    //updateDiaryHandler.sendEmptyMessage(0);//showDiary();
 				
 		drawer.toggle();
 		
 		mViewPager.setCurrentItem(THIS_MONTH + 1 - startMonth);
 		titleText.setText( (THIS_MONTH + 1)  + "月");
+		linechart_bar_month.setText( (THIS_MONTH + 1)  + "月");
 		//titleText.setTypeface(wordTypefaceBold);
 		
 		charttoggleLayout.setOnClickListener(new ToggleListener() );
@@ -645,8 +648,11 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			
 			//updateDiaryHandler.sendEmptyMessage(0);//showDiary();			
 			
-//			updateTask = new LoadDiaryTask();
-//			updateTask.execute(Calendar.getInstance().get(Calendar.MONTH));
+			if(sustainMonth == 1){
+				updateTask = new LoadDiaryTask();
+				updateTask.execute(Calendar.getInstance().get(Calendar.MONTH));
+			}
+
 			
 			updateCalendarHandler.sendEmptyMessage(currentPageIdx);//updateCalendarView(currentPageIdx);
 			updateFilterButton();
@@ -981,9 +987,11 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	}
 	private void addDairy(){
 		diaryList.removeAllViews();
-		for(int i=0; i<diaryItem2.length; i++){
-			if(diaryItem2[i]!=null)
-				diaryList.addView(diaryItem2[i]);
+		if(diaryItem2!=null){
+			for(int i=0; i<diaryItem2.length; i++){
+				if(diaryItem2[i]!=null)
+					diaryList.addView(diaryItem2[i]);
+			}
 		}
 		sv.fullScroll(View.FOCUS_DOWN);
 	}

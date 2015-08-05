@@ -226,7 +226,7 @@ public class AboutActivity extends Activity {
 		aboutText.setText(helpSpannable);
 
 		inflater = LayoutInflater.from(this);
-		//callLayout = (RelativeLayout) inflater.inflate(R.layout.dialog_callout_check, null);
+		callLayout = (RelativeLayout) inflater.inflate(R.layout.dialog_callout_check, null);
 		initializeCallCheckDialog();
 
 		phone_number.setOnClickListener(new CallCheckOnClickListener());
@@ -237,13 +237,13 @@ public class AboutActivity extends Activity {
 	/** Initialize the dialog to check if the user call out to the developer */
 	private void initializeCallCheckDialog() {
 
-		//callOK = (TextView) callLayout.findViewById(R.id.call_ok_button);
-		//callCancel = (TextView) callLayout.findViewById(R.id.call_cancel_button);
-		//callHelp = (TextView) callLayout.findViewById(R.id.call_help);
+		callOK = (TextView) callLayout.findViewById(R.id.call_ok_button);
+		callCancel = (TextView) callLayout.findViewById(R.id.call_cancel_button);
+		callHelp = (TextView) callLayout.findViewById(R.id.call_help);
 
-		//callHelp.setTypeface(wordTypefaceBold);
-		//callOK.setTypeface(wordTypefaceBold);
-		//callCancel.setTypeface(wordTypefaceBold);
+		callHelp.setTypeface(wordTypefaceBold);
+		callOK.setTypeface(wordTypefaceBold);
+		callCancel.setTypeface(wordTypefaceBold);
 	}
 
 	/** OnClickListener for clicking and showing call check dialog */

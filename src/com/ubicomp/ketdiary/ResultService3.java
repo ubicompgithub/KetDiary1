@@ -337,8 +337,8 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	//获取电源锁，保持该服务在屏幕熄灭时仍然获取CPU时，保持运行
 	private void acquireWakeLock(){
 		if (null == wakeLock){
-			PowerManager pm = (PowerManager)this.getSystemService(Context.POWER_SERVICE);
-			wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK|PowerManager.ON_AFTER_RELEASE, "PostLocationService");
+			PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
+			wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK|PowerManager.ON_AFTER_RELEASE, "ResultService3");
 			if (null != wakeLock){
 				wakeLock.acquire();
 			}
@@ -440,6 +440,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	private class ConnectSensorTimer extends CountDownTimer { //Regular connect
 		
 		//private boolean connect = false;
+		private int count = 0;
 		
 		public ConnectSensorTimer() {
 			super(20000, 2000);
@@ -464,11 +465,15 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 				}
 			}
 			else if(isConnect && connect){
-				regular_connect++;
-				if(ble!=null){
-					active_disconnect = true;
-					ble.bleDisconnect();
-					writeToColorRawFile("Regular DisConnect: " + regular_connect);
+				count++;
+				if(count > 3){
+					regular_connect++;
+					if(ble!=null){
+						active_disconnect = true;
+						ble.bleDisconnect();
+						writeToColorRawFile("Regular DisConnect: " + regular_connect);
+					}
+					count = 0;
 				}
 			}
 			//Toast.makeText(myservice, "請開啟檢測器", Toast.LENGTH_SHORT).show();
@@ -526,7 +531,6 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
     	Log.i(TAG, "connect timeout");
     	writeToColorRawFile("connect timeout");
     	if(debug && !isConnect){
-    		//Toast.makeText(this, "請開啟檢測器", Toast.LENGTH_SHORT).show();
     		CustomToastSmall.generateToast("請開啟檢測器");
     	}
 

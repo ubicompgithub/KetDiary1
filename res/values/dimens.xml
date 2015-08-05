@@ -87,4 +87,6 @@
     <dimen name="cur_X_offset">4dp</dimen>
     <dimen name="legend_height">11.33dp</dimen>
     <dimen name="legend_width">154.67dp</dimen>
+    
+    <dimen name="window_width">320dp</dimen>
 </resources>

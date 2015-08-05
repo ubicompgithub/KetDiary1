@@ -53,6 +53,7 @@ public class LineChartView extends View {
     private static final int cur_X_offset = resource.getDimensionPixelSize(R.dimen.cur_X_offset);//12;
     private static final int legend_height =resource.getDimensionPixelSize(R.dimen.legend_height);//40;
     private static final int legend_width = resource.getDimensionPixelSize(R.dimen.legend_width);//350;
+    private static final int window_width = resource.getDimensionPixelSize(R.dimen.window_width);//480dp;
     
     private static float range; 
     private static float touchX;
@@ -110,8 +111,12 @@ public class LineChartView extends View {
     }
 	public void setWidth(){
 		this.requestLayout();
-		//this.getLayoutParams().width = (int) (numOfDays*rec_width);	
-		this.getLayoutParams().width = (int) getXPos2(numOfDays);
+		//this.getLayoutParams().width = (int) (numOfDays*rec_width);
+		int width = (int) getXPos2(numOfDays);
+		if(width < window_width)
+			this.getLayoutParams().width = window_width;
+		else
+			this.getLayoutParams().width = width;
 	}
 	
 	private void initBitmap(){

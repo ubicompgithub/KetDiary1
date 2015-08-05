@@ -130,7 +130,8 @@
     	    android:layout_centerHorizontal="true"
     	    android:src="@drawable/draw_cassette"
     	    android:visibility="invisible"
-    	    android:layout_above="@+id/tv_subtitle"/>
+    	    android:layout_above="@+id/tv_subtitle"
+    	    android:layout_marginBottom="10dp"/>
         
     	<LinearLayout
     	    android:id="@+id/water_layout"
