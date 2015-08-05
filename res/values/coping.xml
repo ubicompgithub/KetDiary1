@@ -65,7 +65,7 @@
     </string-array>
     
     <string-array name="knowing_list">
-        <item>愷他命屬中樞神經抑制劑，副作用包括心搏過速、血壓上升</item>
+        <item><![CDATA[愷他命屬中樞神經抑制劑<br>，<font color=#f2a6a3>副作用</font>包括心搏過速、血壓上升]]></item>
         <item>愷他命副作用包括震顫、肌肉緊張而呈強直性、陣攣性運動</item>
         <item>研究顯示濫用愷他命，會罹患慢性間質性膀胱炎</item>
         <item>濫用愷他命會使膀胱容量變小，產生頻尿、小便疼痛、血尿、下腹部疼痛等症狀</item>

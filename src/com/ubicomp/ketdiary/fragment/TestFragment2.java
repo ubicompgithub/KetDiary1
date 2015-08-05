@@ -6,6 +6,7 @@ import java.util.Random;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -1065,6 +1066,9 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	private void reset() {
 		
 		acquireWakeLock();
+		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager.cancel(0); //做完檢測才把Notification關掉
+		
 		first_voltage = false;
 		second_voltage = false;
 		first = true;
