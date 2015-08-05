@@ -246,7 +246,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
                     int selectedYear = Integer.valueOf(v.getTag(TAG_CAL_CELL_YEAR).toString());
                     int selectedMonth = Integer.valueOf(v.getTag(TAG_CAL_CELL_MONTH).toString());
                     int selectedDay = Integer.valueOf(v.getTag(TAG_CAL_CELL_DAY).toString());
-                    DaybookFragment.scrolltoItem(selectedYear, selectedMonth, selectedDay);
+                    DaybookFragment.scrolltoItem2(selectedYear, selectedMonth, selectedDay);
                     
                     // sv.smoothScrollTo(0 , 270*(Integer.parseInt(parsed_date[0])+4)-1350-900);
                 }

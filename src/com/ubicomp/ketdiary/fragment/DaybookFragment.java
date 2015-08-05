@@ -85,7 +85,8 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private ViewPager mViewPager;
-	private LinearLayout diaryList, boxesLayout, drawerContent, caltoggleLayout, charttoggleLayout;
+	private static LinearLayout diaryList;
+	private LinearLayout boxesLayout, drawerContent, caltoggleLayout, charttoggleLayout;
 	private RelativeLayout upperBarContent;
 	private TextView titleText, backToTodayText, linechart_bar_month;
 	private View diaryItem;
@@ -120,6 +121,10 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	
 	public static int chart_type = 2; // 0:自我狀態 1:人際互動 3:綜合分析
 	public static final int TAG_changedot = -1;
+	private static final int TAG_LIST_YEAR = R.string.TAG_LIST_YEAR;
+	private static final int TAG_LIST_MONTH = R.string.TAG_LIST_MONTH;
+	private static final int TAG_LIST_DAY = R.string.TAG_LIST_DAY;
+	
 	private static QuestionDialog2 questionBox;
 	
 	private LinearLayout chartAreaLayout;
@@ -304,7 +309,36 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		//toggle_linechart.setOnClickListener(new ToggleListener());
 		toggle.setOnClickListener(new ToggleListener());
 		//titleText.setOnClickListener(new ToggleListener());
-		
+		sv.getViewTreeObserver().addOnScrollChangedListener(new OnScrollChangedListener(){
+			
+			private int last_scrollY = 0;
+			@Override
+			public void onScrollChanged() {
+				
+				int scrollY = sv.getScrollY(); //for horizontalScrollView
+				if(scrollY == last_scrollY){
+					return;
+				}
+				int index = scrollY/(int)convertDpToPixel(125);
+				
+				int allNum = diaryList.getChildCount();
+				int j=0;
+				for(int i=0; i<allNum; i++){
+					if(diaryList.getChildAt(i).getVisibility() == View.GONE)
+						continue;
+					j++;
+					if(j == index){
+						int month = (Integer)diaryList.getChildAt(i).getTag(TAG_LIST_MONTH);
+						Log.i(TAG, "Month: " + (month+1));
+						titleText.setText( (month + 1)  + "月");
+						linechart_bar_month.setText( (month + 1)  + "月");
+					}	
+				}				
+				last_scrollY = scrollY;
+				Log.i(TAG, "Scroll Y: "+ scrollY);
+			}
+			
+		});
 		
 		//for ( int i = 0; i < 9; i++ ) { filterList.add(i);} 
 		
@@ -314,11 +348,15 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		lineChart.setWidth();
 		sv_linechart = (HorizontalScrollView) lineChartView.findViewById(R.id.line_chart_scroll);
 		sv_linechart.getViewTreeObserver().addOnScrollChangedListener(new OnScrollChangedListener(){
-
+			
+			private int last_scrollX = 0 ;
 			@Override
 			public void onScrollChanged() {
 				
 				int scrollX = sv_linechart.getScrollX(); //for horizontalScrollView
+				if(scrollX == last_scrollX){
+					return;
+				}
 				dataset = lineChart.getLineChartData();
 				int pos = lineChart.getCursorPos2(scrollX);
 				if(pos > 0 && pos < lineChart.numOfDays){
@@ -326,7 +364,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 						linechart_bar_month.setText( (dataset[pos].getMonth()+1)  + "月");
 					}
 				}
-				
+				last_scrollX = scrollX;
 				Log.i(TAG, "Scroll X: "+ scrollX);
 			}
 			
@@ -437,8 +475,8 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 				titleText.setText( (startMonth + currentPageIdx) + "月");
 				
 				
-				updateTask = new LoadDiaryTask();
-				updateTask.execute(startMonth + currentPageIdx-1);
+//				updateTask = new LoadDiaryTask();
+//				updateTask.execute(startMonth + currentPageIdx-1);
 				
 				//updateDiaryHandler.sendEmptyMessage(startMonth + currentPageIdx-1);
 			}
@@ -648,7 +686,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			
 			//updateDiaryHandler.sendEmptyMessage(0);//showDiary();			
 			
-			if(sustainMonth == 1){
+			if(sustainMonth >= 1){
 				updateTask = new LoadDiaryTask();
 				updateTask.execute(Calendar.getInstance().get(Calendar.MONTH));
 			}
@@ -901,9 +939,10 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 				
 				int date = noteAdds[i].getRecordTv().getDay();
 				int month = noteAdds[i].getRecordTv().getMonth();
-				if(month != title_month){
-					continue;
-				}
+				
+//				if(month != title_month){
+//					continue;
+//				}
 				int year = noteAdds[i].getRecordTv().getYear();
 				//LayoutInflater inflater = LayoutInflater.from(context);
 				diaryItem2[i] = inflater.inflate(R.layout.diary_item, null);
@@ -917,6 +956,10 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 				//TextView description_txt = (TextView) diaryItem.findViewById(R.id.diary_description);
 				TextView impact_word = (TextView) diaryItem2[i].findViewById(R.id.diary_impact_word);
 				TextView impact_txt = (TextView) diaryItem2[i].findViewById(R.id.diary_impact);
+				
+				diaryItem2[i].setTag(TAG_LIST_YEAR, year);
+				diaryItem2[i].setTag(TAG_LIST_MONTH, month);
+				diaryItem2[i].setTag(TAG_LIST_DAY, date);
 				
 				date_num.setTypeface(wordTypefaceBold);
 				week_num.setTypeface(wordTypefaceBold);
@@ -964,7 +1007,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 				type_img.setImageResource(typeId[type]);
 			
 			
-			date_num.setText(""+ date + "號");
+			date_num.setText((month+1)+"月"+ date + "號");
 			week_num.setText(dayOfWeek[ dayOfweek ]);
 			timeslot_num.setText(timeslot[ slot ] );
 
@@ -1299,6 +1342,8 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	
 	
 	private void addDrawerContent(int id){
+		//0805 add
+		titleText.setText( (startMonth + currentPageIdx) + "月");
 		
 		Log.d(TAG, "chart_type: "+chart_type);
 		setArrow(true);
@@ -1796,7 +1841,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 				mViewPager.setCurrentItem(pageIdx);
 		}
 	}
-	public static void scrolltoItem(int year, int month, int day){
+	public static void scrolltoItem(int year, int month, int day){ // old version
 		
 		if(noteAdds == null)
 			return;
@@ -1811,6 +1856,25 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 				sv.smoothScrollTo(0 , (int)convertDpToPixel(125)*(i-2));				
 			}		
 		}
+	}
+	
+	public static void scrolltoItem2(int year, int month, int day) {
+			
+		int allNum = diaryList.getChildCount();
+		int j=0;
+		for(int i=0; i<allNum; i++){
+			View item = diaryList.getChildAt(i);
+			if(item.getVisibility() == View.GONE)
+				continue;
+			j++;
+			int y = (Integer)item.getTag(TAG_LIST_YEAR);
+			int m = (Integer)item.getTag(TAG_LIST_MONTH);
+			int d = (Integer)item.getTag(TAG_LIST_DAY);
+			if(y == year && m == month && d == day){
+				sv.smoothScrollTo(0 , (int)convertDpToPixel(125)*(j-3));	
+			}	
+		}				
+		
 	}
 
 

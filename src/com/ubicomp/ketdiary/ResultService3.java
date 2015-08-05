@@ -98,6 +98,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	private long seconds;
 	private boolean active_disconnect = false;
 	
+	
 	private Calendar today = Calendar.getInstance(); 
 	
     @Override  
@@ -173,6 +174,12 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 			
 			notification.setLatestEventInfo( myservice ,  "測試結果倒數" ,  minutes+":"+seconds , pendingIntent);  
 	        startForeground( 1 , notification); 
+	        
+	        
+	        if(seconds == 30){
+	        	writeToColorRawFile("State: " + state);
+	        }
+	        
 	        mhandler.postDelayed(this, 1000);
 	        if(state == BEGIN_STATE){
 	        	if(spentTime > 2*60*1000 && spentTime > 8*60*1000){                  //最晚兩分鐘前要把第一張照拍好

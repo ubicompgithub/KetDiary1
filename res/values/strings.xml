@@ -413,6 +413,10 @@
 	<string name="TAG_CAL_CELL_NOTEADD">tag_cal_cell_noteadd</string>
 	<string name="TAG_CAL_CELL_CHANGE">tag_cal_cell_change</string>
 	
+	<string name="TAG_LIST_YEAR">tag_list_year</string>
+	<string name="TAG_LIST_MONTH">tag_list_month</string>
+	<string name="TAG_LIST_DAY">tag_list_day</string>
+	
     <string name="help_page">更多</string>
     <string name="result_fail">測試未成功，記錄無上傳。\n\n（請保持檢測器開啟，並置於與手機鄰近的地方。）\n\n立即回到測試頁面？</string>
 

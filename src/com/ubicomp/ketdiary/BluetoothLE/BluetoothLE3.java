@@ -214,8 +214,15 @@ public class BluetoothLE3 {
                     hardware_state = (int)data[5];
                     power_notenough = (int)data[6];
                     
+                    int debug1 = (data[7] & 0xFF) + (data[8]&0xFF) * 256;
+                    int debug2 = (data[8] & 0xFF) + (data[9]&0xFF) * 256;
+                    int voltage = (data[10] & 0xFF) + (data[11]&0xFF) * 256;
+                    
                     ((BluetoothListener) bluetoothListener).displayCurrentId(String.valueOf(temp), hardware_state, power_notenough);
                     
+                    
+                    
+                    ((BluetoothListener) bluetoothListener).writeDebug("Device Debug: "+ hardware_state + " " + debug1+" "+debug2+" voltage: "+voltage);
 //                    byte[] plugId = new byte[data.length-1];
 //                    System.arraycopy(data, 1, plugId, 0, data.length - 1);
 //                    ((BluetoothListener) bluetoothListener).blePlugInserted(plugId);

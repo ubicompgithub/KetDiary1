@@ -762,7 +762,7 @@ public class LineChartView extends View {
             int month = dataset[cursorLinePos].getMonth();
             int day = dataset[cursorLinePos].getDay();
             
-            DaybookFragment.scrolltoItem(year, month, day);
+            DaybookFragment.scrolltoItem2(year, month, day);
 
 
             // Set the cursor line position By Victor
