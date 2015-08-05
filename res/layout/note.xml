@@ -35,6 +35,7 @@
         android:layout_above="@id/note_bottom_layout"
         android:layout_below="@id/note_title_layout"
         android:background="@color/white"
+        android:fillViewport="true"
         android:fadeScrollbars="false" >
 
         <LinearLayout

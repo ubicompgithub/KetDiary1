@@ -1,6 +1,7 @@
 package com.ubicomp.ketdiary;
 
 import java.io.File;
+import java.util.Calendar;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -15,6 +16,8 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -52,7 +55,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	private BluetoothLE3 ble = null;
 	private boolean stateSuccess = false;
 	public static boolean isConnect = false;
-	private int state;
+	private static int state;
 	
 	private int result= -1;
 	private DatabaseControl db;
@@ -95,12 +98,17 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	private long seconds;
 	private boolean active_disconnect = false;
 	
+	private Calendar today = Calendar.getInstance(); 
+	
     @Override  
     public  void onCreate() {  
         super.onCreate();  
         
+        acquireWakeLock();
         writeToColorRawFile("Service OnCreate");
-        Log.d(TAG,  "MyService onCreate" ); 
+        Log.d(TAG,  "MyService onCreate" );
+        if(debug)
+        	CustomToastSmall.generateToast("Service Start!");
     }
     /**Use startService to call ResultService*/
 	public int onStartCommand(Intent intent, int flags, int startId) {
@@ -112,8 +120,9 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	    startForeground( 1 , notification);
 	    
 	    
+	        	
+	    state = BEGIN_STATE;   	
 		initVariable();
-		state = BEGIN_STATE;
 		writeToColorRawFile("Service Start, State = " + state);
 		PreferenceControl.setResultServiceRun(true);
 	    Log.d(TAG,  "onStartCommand() executed" );       
@@ -131,6 +140,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		second = true;
 		connect = false;
 		regular_connect = 0;
+		picNum = 0;
 		active_disconnect = false;
 		debug = PreferenceControl.isDebugMode();
 		testStripDetection = new TestStripDetection4(myservice);
@@ -165,7 +175,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	        startForeground( 1 , notification); 
 	        mhandler.postDelayed(this, 1000);
 	        if(state == BEGIN_STATE){
-	        	if(spentTime > 2*60*1000 && spentTime > 8*60*1000){                  //最晚三分鐘前要把第一張照拍好
+	        	if(spentTime > 2*60*1000 && spentTime > 8*60*1000){                  //最晚兩分鐘前要把第一張照拍好
 		        	
 		        	if(first){                                                   									
 						if(openSensorMsgTimer!=null){
@@ -184,12 +194,13 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 
 	        	}
 	        	else{
-	        		setTestFail();
+
+	        		setTestFail("過曝照片未傳完");
 	        	}
 	        }
 	        else if(state == FRAME_STATE){
 	        	if(spentTime < 5*60*1000 ){
-	        		setTestFail();
+	        		setTestFail("過曝照片未傳完2");
 	        	}
 	        }
 	        else if(state == REGULAR_STATE){
@@ -204,6 +215,9 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		        				connectSensorTimer.cancel();
 		        				connectSensorTimer.start();
 		        			}
+		        	}
+		        	else if(picNum == 0){
+		        		setTestFail("過曝照片未傳成功");
 		        	}
 	        	}
 	        	else if(spentTime < 2*60*1000 ){
@@ -231,7 +245,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 					}
 				}
 	        	else if(picNum == 0){
-	        		setTestFail();
+	        		setTestFail("無過曝照片");
 	        	}	        	
 	        }
 	        else if(state == SUCCESS_STATE){
@@ -243,7 +257,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	        if( spentTime < 0 ){
 	        	boolean isfail = PreferenceControl.isTestFail();
 	        	if( isfail ){
-	        		setTestFail();
+	        		setTestFail("檢測照片接收失敗");
 	        	}
 	        }
 		}
@@ -316,16 +330,40 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
     
 	@Override
 	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
+	private WakeLock wakeLock = null;
+	//获取电源锁，保持该服务在屏幕熄灭时仍然获取CPU时，保持运行
+	private void acquireWakeLock(){
+		if (null == wakeLock){
+			PowerManager pm = (PowerManager)this.getSystemService(Context.POWER_SERVICE);
+			wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK|PowerManager.ON_AFTER_RELEASE, "PostLocationService");
+			if (null != wakeLock){
+				wakeLock.acquire();
+			}
+		}
+	}
+	
+	//释放设备电源锁
+	private void releaseWakeLock(){
+		if (null != wakeLock){
+			wakeLock.release();
+			wakeLock = null;
+		}
+	}
+	
 	
 	@Override  
     public void onDestroy() {  
              
         spentTime = 0;
+        releaseWakeLock();
+        
         writeToColorRawFile("ResultService Close");
         Log.d(TAG, "OnDestroy Call");
+        if(debug)
+        	CustomToastSmall.generateToast("Service Stop!");
         stophandler.postDelayed(stopThread, 2000);
         //stop();
         PreferenceControl.setResultServiceRun(false);
@@ -353,8 +391,9 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		}
         if(ble!= null){
         	active_disconnect = true;
+        	ble.bleWriteState((byte)0x05);
         	writeToColorRawFile("send disconnect");
-        	ble.bleDisconnect();
+        	//ble.bleDisconnect();
         	ble = null;
         }
         if(colorRawFileHandler != null){
@@ -366,9 +405,8 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
         	//picFileHandler.removeMessages(0);
         	picFileHandler = null;
         }
-        
-        
-	
+              
+        spentTime = 0;
 	}
 	
 	
@@ -383,10 +421,9 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		public void onFinish() {
 			
 			failedState = CONNECT_FAIL;
-			failedReason = "檢測器未開啟 - Take picture";
 			Toast.makeText(myservice, "請開啟檢測器", Toast.LENGTH_SHORT).show();
 			
-			setTestFail();
+			setTestFail("檢測器未開啟 - Take picture");
 		}
 
 		@Override
@@ -411,9 +448,8 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		@Override
 		public void onFinish() {		
 			failedState = REGULAR_CONNECT_FAIL;
-			failedReason = "檢測器未開啟- Regular connect";
 			Toast.makeText(myservice, "請開啟檢測器", Toast.LENGTH_SHORT).show();
-			setTestFail();
+			setTestFail("檢測器未開啟- Regular connect");
 		}
 
 		@Override
@@ -439,11 +475,11 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		}
 	}
 	
-	private void setTestFail(){
+	private void setTestFail(String reason){
 		PreferenceControl.setTestFail();
 		PreferenceControl.setAfterTestState(NoteDialog3.STATE_TEST);
 		
-		
+		failedReason = reason;
 		writeToColorRawFile("Test Fail: "+ failedReason);
 		
 		
@@ -551,6 +587,9 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
         
         if(ble != null)
         	writeToColorRawFile("BLE ACTION_DATA_WRITE_SUCCESS :" +  ble.hardware_state);
+        if(debug){
+        	CustomToastSmall.generateToast("BLE write state success");
+        }
         //Toast.makeText(this, "BLE write state success", Toast.LENGTH_SHORT).show();
         stateSuccess = true;
         
@@ -575,9 +614,9 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
     	
         Log.i(TAG, "No test plug");
         writeToColorRawFile("No test plug");
-        failedReason = "試紙匣被拔出";
+
         if(!noplug){
-        	setTestFail();
+        	setTestFail("試紙匣被拔出");
         	noplug = true;
         }
         
@@ -653,8 +692,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 			
 			if(colorReading  == -1000){
 				Log.i(TAG, "Reading: " + colorReading);
-				failedReason = "無法判斷檢測結果";
-				setTestFail();
+				setTestFail("無法判斷檢測結果");
 			}
 			else{
 				
@@ -675,7 +713,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	protected void writeToColorRawFile(String str) {
 		Message msg = new Message();
 		Bundle data = new Bundle();
-		data.putString("COLOR", minutes+":"+seconds+"\t" + str+ "\n");
+		data.putString("COLOR", today.get(Calendar.MINUTE) + "分 " +minutes+":"+seconds+"\t" + str+ "\n");
 		msg.setData(data);
 		if(colorRawFileHandler!= null)
 			colorRawFileHandler.sendMessage(msg);
@@ -686,10 +724,9 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		
 		failedState = PIC_SEND_FAIL;
 		connectionFailRate = dropRate;
-		failedReason = "照片傳送失敗";
 		Log.i(TAG, "DropRate: " + dropRate);
 		writeToColorRawFile("Picture sending fail: "+dropRate);
-		setTestFail();	
+		setTestFail("照片傳送失敗");	
 	}
 
 	@Override

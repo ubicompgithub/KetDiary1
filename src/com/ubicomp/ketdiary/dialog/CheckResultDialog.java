@@ -105,6 +105,9 @@ public class CheckResultDialog{
 			else if(failedReason.equals("無法判斷檢測結果")){
 				checkHelp.setText("無法判斷檢測結果,回到檢測頁重測?");
 			}
+			else if(failedReason.equals("試紙匣被拔出")){
+				checkHelp.setText("檢測過程中請勿抽出試紙匣,回到檢測頁重測?");
+			}
 			else{
 				checkHelp.setText("測試失敗,回到檢測頁重測?");
 			}

@@ -68,7 +68,7 @@ import com.ubicomp.ketdiary.ui.Typefaces;
  * Main activity of KetDiary. This activity contains the three functions -
  * test, statistic, and storytelling.
  * 
- * @author Andy Chen
+ * @author AndyChen
  */
 public class MainActivity extends FragmentActivity {
 	
@@ -858,7 +858,13 @@ public class MainActivity extends FragmentActivity {
 					//((TestFragment) fragments[0]).enableStartButton(true);
 				}
 				else if(tabHost.getCurrentTab() == 1 && fragments[1] != null
-						&& fragments[1].isAdded()){				
+						&& fragments[1].isAdded()){
+					
+					ft = fm.beginTransaction(); //TODO: add by Andy 8/4
+					ft.detach(fragments[1]);
+					ft.attach(fragments[1]);
+					ft.commit();
+					
 					checkResultAddPoint();
 				}
 				else{
@@ -881,7 +887,7 @@ public class MainActivity extends FragmentActivity {
 				animation.start();
 			}
 			else{
-				count_down_text.setText(String.valueOf(time));//TODO:分跟秒要不一樣
+				count_down_text.setText(String.valueOf(time));
 				count_down_label.setText("\"");
 				animationImg.setImageResource(R.anim.animation_clock);
 				animation = (AnimationDrawable) animationImg.getDrawable();
