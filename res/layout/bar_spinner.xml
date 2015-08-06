@@ -42,7 +42,7 @@
         android:id="@+id/item_listview"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:background="@drawable/note_spinner"
+        android:background="@drawable/note_spinner2"
         android:divider="@drawable/list_divider"
         android:dividerHeight="1dp"
         android:visibility="gone" >

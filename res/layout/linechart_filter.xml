@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:clickable="true"
-    android:background="@drawable/filter_bg">    
+    android:background="@drawable/filter_bg2">    
         <ImageView
 	        android:id="@+id/filter_all"
 	        android:layout_width="30dp"

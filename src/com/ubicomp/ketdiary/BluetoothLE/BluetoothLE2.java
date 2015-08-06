@@ -192,6 +192,7 @@ public class BluetoothLE2 {
 //                     ((BluetoothListener) bluetoothListener).blePlugInserted(plugId);
                      
                      long temp = (data[4] & 0xFF) + (data[3] & 0xFF)*256 + (data[2] & 0xFF)*256*256 + (data[1] & 0xFF)*256*256*256;
+                     //int temp = (data[1] & 0xFF) + (data[2] & 0xFF)*256 + (data[3] & 0xFF)*256*256 + (data[4] & 0xFF)*256*256*256;
                      
                      hardware_state = (int)data[5];
                      power_notenough = (int)data[6];

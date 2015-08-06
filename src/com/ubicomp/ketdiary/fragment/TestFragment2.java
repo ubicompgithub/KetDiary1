@@ -61,6 +61,7 @@ import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.QuestionFile;
 import com.ubicomp.ketdiary.file.VoltageFileHandler;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.ui.CustomToastSmall;
 import com.ubicomp.ketdiary.ui.LoadingDialogControl;
 import com.ubicomp.ketdiary.ui.ScaleOnTouchListener;
 import com.ubicomp.ketdiary.ui.Typefaces;
@@ -71,7 +72,6 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	private static final String TAG2 = "debug";
 	private static final String TAG3 = "-State-";
 	
-
 	public Activity activity = null;
 	private TestFragment2 testFragment;
 	private View view;
@@ -976,7 +976,9 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	
 	public void onPause() {
 		ClickLog.Log(ClickLogId.TEST_LEAVE);
-		stop();
+		
+		stopDueToInit();
+		//stop();
 		super.onPause();
 	}
 	
@@ -1298,8 +1300,10 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			else{
 				if(voltage < FIRST_VOLTAGE_THRESHOLD)
 					if(collectdata){
-						if(debug)
-							Toast.makeText(activity, "Collect Data Mode", Toast.LENGTH_SHORT).show();	
+						if(debug){
+							//Toast.makeText(activity, "Collect Data Mode", Toast.LENGTH_SHORT).show();
+							CustomToastSmall.generateToast("Collect Data Mode");
+						}
 					}
 					else{
 						setState(new CameraState());
@@ -1403,8 +1407,10 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
     
     @Override
     public void bleNotSupported() {
-    	  if(debug)
-    		  Toast.makeText(activity, "BLE not support", Toast.LENGTH_SHORT).show();
+    	  if(debug){
+    		  //Toast.makeText(activity, "BLE not support", Toast.LENGTH_SHORT).show();
+    		  CustomToastSmall.generateToast("BLE not support");
+    	  }
     	  failedState = state;
     	  setState(new FailState("裝置不支援"));
 //        this.finish();
@@ -1414,8 +1420,10 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
     public void bleConnectionTimeout() {
     	Log.i(TAG, "connect timeout");
     	
-    	if(debug)
-    		Toast.makeText(activity, "BLE connection timeout", Toast.LENGTH_SHORT).show();
+    	if(debug){
+    		//Toast.makeText(activity, "BLE connection timeout", Toast.LENGTH_SHORT).show();
+    		CustomToastSmall.generateToast("BLE connection timeout");
+    	}
     	
         failedState = state;
         if(!goThroughState)
@@ -1566,25 +1574,25 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	
     @Override
     public void blePlugInserted(byte[] plugId) {
-        //Log.i(TAG, "Test plug is inserted");
-        ble_pluginserted = true;
-        cassetteId = "saliva_1438268769608"; //TODO: set cassetteId in here.
-        
-        Log.i(TAG, "plugId: " + plugId);
-        
-        cassetteId = "tmpId";
-        boolean check = db.checkCassette(cassetteId);
-        
-        
-        Log.i(TAG, "cassetteId: " + cassetteId + " " + check);
-        if( !check ){
-        	
-        	setState(new FailState("試紙匣已用過，請更換試紙匣"));
-        	
-        }
-        //check ID here
-        if( state == CONN_STATE )
-        	updateInitState(Tester._BT);
+//        //Log.i(TAG, "Test plug is inserted");
+//        ble_pluginserted = true;
+//        cassetteId = "saliva_1438268769608"; //TODO: set cassetteId in here.
+//        
+//        Log.i(TAG, "plugId: " + plugId);
+//        
+//        cassetteId = "tmpId";
+//        boolean check = db.checkCassette(cassetteId);
+//        
+//        
+//        Log.i(TAG, "cassetteId: " + cassetteId + " " + check);
+//        if( !check ){
+//        	
+//        	setState(new FailState("試紙匣已用過，請更換試紙匣"));
+//        	
+//        }
+//        //check ID here
+//        if( state == CONN_STATE )
+//        	updateInitState(Tester._BT);
         
         
     }
@@ -1604,7 +1612,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
         
         Log.i(TAG, "plugId: " + id + " power: " + power_notenough);
         
-        cassetteId = id;
+        cassetteId = "saliva_"+id;
         boolean check = db.checkCassette(cassetteId);
         
         
