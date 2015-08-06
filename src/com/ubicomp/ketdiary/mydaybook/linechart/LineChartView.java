@@ -671,7 +671,7 @@ public class LineChartView extends View {
             int tempCursorLinePos = getCursorPos2(x);
 
             // Set the cursor line position
-            int offset, self_type, nearbyIdx;
+            int offset, self_type, nearbyIdx, nearbySelfType, nearbyOtherType;
             boolean isFindANeighbor = false;
 
             switch(checkLineChartType()){
@@ -692,7 +692,8 @@ public class LineChartView extends View {
                             nearbyIdx = 0;
                     }
 
-                    if( dataset[nearbyIdx].self_type > 0 ){
+                    nearbySelfType = dataset[nearbyIdx].self_type;
+                    if( (nearbySelfType > 0) && drawTheDotOrNot(nearbySelfType) ){
                         tempCursorLinePos = nearbyIdx;
                         isFindANeighbor = true;
                         break;
@@ -718,8 +719,9 @@ public class LineChartView extends View {
                         else
                             nearbyIdx = 0;
                     }
-
-                    if( dataset[nearbyIdx].other_type > 0 ){
+                    
+                    nearbyOtherType = dataset[nearbyIdx].other_type;
+                    if( (nearbyOtherType > 0) && drawTheDotOrNot(nearbyOtherType) ){
                         tempCursorLinePos = nearbyIdx;
                         isFindANeighbor = true;
                         break;
@@ -746,7 +748,10 @@ public class LineChartView extends View {
                             nearbyIdx = 0;
                     }
 
-                    if( dataset[nearbyIdx].self_type > 0 || dataset[nearbyIdx].other_type > 0 ){
+                    nearbySelfType = dataset[nearbyIdx].self_type;
+                    nearbyOtherType = dataset[nearbyIdx].other_type;
+                    if( ( (dataset[nearbyIdx].self_type > 0) && (drawTheDotOrNot(nearbySelfType)) )
+                        || ( (dataset[nearbyIdx].other_type > 0) && (drawTheDotOrNot(nearbyOtherType)) ) ){
                         tempCursorLinePos = nearbyIdx;
                         isFindANeighbor = true;
                         break;
@@ -763,24 +768,6 @@ public class LineChartView extends View {
             int day = dataset[cursorLinePos].getDay();
             
             DaybookFragment.scrolltoItem2(year, month, day);
-
-
-            // Set the cursor line position By Victor
-            // if (cursorLinePos < 0) {
-            // 	cursorLinePos = 0;
-            // }
-            // else if(cursorLinePos >= numOfDays){
-            // 	cursorLinePos = numOfDays - 1;
-            // }
-            // else{
-            // 	int year = Calendar.getInstance().get(Calendar.YEAR);
-            // 	int month = dataset[cursorLinePos].getMonth();
-            // 	int day = dataset[cursorLinePos].getDay();
-            	
-            // 	DaybookFragment.scrolltoItem(year, month, day);
-            	
-            // }
-            
             
             invalidate();
             return true;
