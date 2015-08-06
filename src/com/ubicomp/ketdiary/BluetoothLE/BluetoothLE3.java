@@ -215,8 +215,8 @@ public class BluetoothLE3 {
                     power_notenough = (int)data[6];
                     
                     int debug1 = (data[7] & 0xFF) + (data[8]&0xFF) * 256;
-                    int debug2 = (data[8] & 0xFF) + (data[9]&0xFF) * 256;
-                    int voltage = (data[10] & 0xFF) + (data[11]&0xFF) * 256;
+                    int debug2 = (data[9] & 0xFF) + (data[10]&0xFF) * 256;
+                    int voltage = (data[11] & 0xFF) + (data[12]&0xFF) * 256;
                     
                     ((BluetoothListener) bluetoothListener).displayCurrentId(String.valueOf(temp), hardware_state, power_notenough);
                     

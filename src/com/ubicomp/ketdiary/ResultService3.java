@@ -568,6 +568,9 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
     	isConnect = false;
     	stateSuccess = false;
         Log.i(TAG, "BLE disconnected");
+//        if(state == BEGIN_STATE)
+//    		first = true;
+        
         if(ble!=null)
         	writeToColorRawFile("BLE disconnected :" + ble.hardware_state);
         if(connectSensorTimer != null)
@@ -575,8 +578,10 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
         
         if(!active_disconnect){
         	writeToColorRawFile("passive disconnect");
-//        	if(openSensorMsgTimer!=null)
-//        		openSensorMsgTimer.start();
+        	if(state == BEGIN_STATE || state == FRAME_STATE){
+	        	if(openSensorMsgTimer!=null)
+	        		openSensorMsgTimer.start();
+        	}
         }
         else{
         	writeToColorRawFile("active disconnect");
@@ -768,7 +773,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	@Override
 	public void writeDebug(String msg) {
 		Log.i(TAG, "Msg: " + msg);
-		//writeToColorRawFile(msg);
+		writeToColorRawFile(msg);
 	}
 
 	@Override
