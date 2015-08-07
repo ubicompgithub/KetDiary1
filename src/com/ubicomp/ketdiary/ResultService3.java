@@ -113,14 +113,12 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
     }
     /**Use startService to call ResultService*/
 	public int onStartCommand(Intent intent, int flags, int startId) {
-	    notification =  new  Notification(R.drawable.k_noti_logo, "有通知到來" , System.currentTimeMillis());  
+	    notification =  new  Notification(R.drawable.k_logo, "有通知到來" , System.currentTimeMillis());  
 	    Intent notificationIntent =  new  Intent( this , MainActivity.class );  
 	    pendingIntent = PendingIntent.getActivity( this ,  0 ,  
 	            notificationIntent,  0 );  
 	    notification.setLatestEventInfo( this ,  "這是通知的標題" ,  "這是通知的內容" , pendingIntent);  
 	    startForeground( 1 , notification);
-	    
-	    
 	        	
 	    state = BEGIN_STATE;   	
 		initVariable();

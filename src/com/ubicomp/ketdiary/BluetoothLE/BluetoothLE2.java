@@ -196,7 +196,7 @@ public class BluetoothLE2 {
                      
                      hardware_state = (int)data[5];
                      power_notenough = (int)data[6];
-                     ((BluetoothListener) bluetoothListener).displayCurrentId(String.valueOf(temp), hardware_state, power_notenough);
+                     ((BluetoothListener) bluetoothListener).displayCurrentId(String.format("%05d", temp), hardware_state, power_notenough);
                      
                      
                                           

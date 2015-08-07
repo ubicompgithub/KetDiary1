@@ -314,23 +314,23 @@ public class NoteDialog4 implements ChooseItemCaller{
 		main_layout.addView(impact_layout);
 		main_layout.addView(discription_layout);
 		
-		center_layout.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				listView.setVisibility(View.GONE);
-			}
-			
-		});
-		
-		main_layout.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				listView.setVisibility(View.GONE);
-			}
-			
-		});
+//		center_layout.setOnClickListener(new OnClickListener(){
+//
+//			@Override
+//			public void onClick(View v) {
+//				listView.setVisibility(View.GONE);
+//			}
+//			
+//		});
+//		
+//		main_layout.setOnClickListener(new OnClickListener(){
+//
+//			@Override
+//			public void onClick(View v) {
+//				listView.setVisibility(View.GONE);
+//			}
+//			
+//		});
 		
 		//main_layout.addView(bottom);
 		bottom_layout.addView(bottom);

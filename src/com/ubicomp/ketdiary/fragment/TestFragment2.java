@@ -25,7 +25,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -34,7 +33,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.HelpActivity;
@@ -908,6 +906,81 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		
 		
 	}
+	
+	public void stop2() { 
+		
+		img_face.setVisibility(View.INVISIBLE);
+		water_layout.setVisibility(View.INVISIBLE);
+		img_cassette.setVisibility(View.INVISIBLE);
+		
+		if (cameraRecorder != null)
+			cameraRecorder.close();
+		
+		//first_connect = false;
+		//first_voltage = false;
+		//in_stage1 = false;
+		//test_done = false;
+		
+		if(ble!=null){
+			//is_connect = false;
+			ble.bleWriteState((byte)0x01);
+			//ble.bleDisconnect();
+			//ble = null;
+		}
+	
+		if (colorRawFileHandler != null) {
+			//colorRawFileHandler.close();
+			colorRawFileHandler = null;
+		}
+		
+		if (msgHandler != null) {
+			msgHandler.removeMessages(0);
+		}
+		if (cameraInitHandler != null)
+			cameraInitHandler.removeMessages(0);
+		
+		if (cameraRunHandler != null)
+			cameraRunHandler.removeMessages(0);
+		
+		
+		if (changeTabsHandler != null) {
+			changeTabsHandler.removeMessages(0);
+		}
+		
+		if (cameraCountDownTimer!= null){
+			cameraCountDownTimer.cancel();
+			cameraCountDownTimer = null;
+		}
+		
+		if (timeoutCountDownTimer!= null){
+			timeoutCountDownTimer.cancel();
+			timeoutCountDownTimer = null;
+		}
+		
+		if (salivaCountDownTimer!= null){
+			salivaCountDownTimer.cancel();
+			salivaCountDownTimer = null;
+		}
+		
+		if (testCountDownTimer != null) {
+			testCountDownTimer.cancel();
+			testCountDownTimer = null;
+		}
+		if (openSensorMsgTimer != null){
+			openSensorMsgTimer.cancel();
+			openSensorMsgTimer=null;
+		}
+		
+		if (confirmCountDownTimer != null){
+			confirmCountDownTimer.cancel();
+			confirmCountDownTimer=null;
+		}
+		
+		releaseWakeLock();
+		closeHandler.postDelayed(closeVoltage, 2000);
+		
+		
+	}
 	private Runnable closeVoltage = new Runnable() {
 		public void run() {
 			closeHandler.removeCallbacks(closeVoltage);
@@ -915,11 +988,20 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 				voltageFileHandler.close();
 				voltageFileHandler = null;
 			}
+			if(ble!=null){
+				//is_connect = false;
+				//ble.bleWriteState((byte)0x01);
+				ble.bleDisconnect();
+				ble = null;
+			}
 			//blehandler.postDelayed(this, 1000);
 		}
     };
 	
 	public void stopDueToInit() {
+		
+		img_face.setVisibility(View.INVISIBLE);
+		water_layout.setVisibility(View.INVISIBLE);
 		
 		if (cameraRecorder != null)
 			cameraRecorder.close();
@@ -936,7 +1018,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			
 			//while(!is_connect)
 			//while(is_connect)
-			ble.bleWriteState((byte)0x05);
+			ble.bleWriteState((byte)0x01);
 			//ble.bleDisconnect(); // 原本註解
 			//is_connect = false;
 			//ble = null; 
@@ -977,10 +1059,19 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	public void onPause() {
 		ClickLog.Log(ClickLogId.TEST_LEAVE);
 		
-		stopDueToInit();
-		//stop();
+		//stopDueToInit();
+		stop2();
 		super.onPause();
 	}
+	
+//	public void onStop(){
+//		//ClickLog.Log(ClickLogId.TEST_LEAVE);
+//		
+//		stop();
+//		//stopDueToInit();
+//		//stop();
+//		super.onStop();
+//	}
 	
 	private WakeLock wakeLock = null;
 	//获取电源锁，保持该服务在屏幕熄灭时仍然获取CPU时，保持运行
@@ -1284,6 +1375,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		private static final int SECOND_FIX = 1300;
 		private long prevSecond = 99;
 		private boolean writeState = false;
+		
 
 		public TestCountDownTimer(long second) {
 			super(second * SECOND_FIX, 100);
@@ -1342,6 +1434,8 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		
 		private int ptr=0;
 		private boolean first = true;
+		Random rand = new Random();
+		int count = 0;
 
 		public SalivaCountDownTimer() {
 			super( (WAIT_SALIVA_SECOND-DEBUG_SPEED_UP_SECOND)*1000, 1000);
@@ -1373,6 +1467,11 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 
 		@Override
 		public void onTick(long millisUntilFinished) {
+			if(count % 10 == 0){
+				int idx = rand.nextInt(test_guide_msg.length);
+				test_msg.setText(test_guide_msg[idx]);
+			}
+			count++;
 			
 			if(first && voltage < SECOND_VOLTAGE_THRESHOLD ){
 				first = false;
@@ -1440,8 +1539,10 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
     @Override
     public void bleDisconnected() {
         Log.i(TAG, "BLE disconnected");
-        if(debug)
-        	Toast.makeText(activity, "BLE disconnected", Toast.LENGTH_SHORT).show();
+        if(debug){
+        	//Toast.makeText(activity, "BLE disconnected", Toast.LENGTH_SHORT).show();
+        	CustomToastSmall.generateToast("BLE disconnected");
+        }
         //setState(new FailState("連接中斷"));
         
         is_connect = false;
@@ -1462,15 +1563,19 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
     @Override
     public void bleWriteStateSuccess() {
         Log.i(TAG, "BLE ACTION_DATA_WRITE_SUCCESS");
-        if(debug)
-        	Toast.makeText(activity, "BLE write state success", Toast.LENGTH_SHORT).show();
+        if(debug){
+        	//Toast.makeText(activity, "BLE write state success", Toast.LENGTH_SHORT).show();
+        	CustomToastSmall.generateToast("BLE write state success");
+        }
     }
 
     @Override
     public void bleWriteStateFail() {
         Log.i(TAG, "BLE ACTION_DATA_WRITE_FAIL");
-        if(debug)
-        	Toast.makeText(activity, "BLE writefstate fail", Toast.LENGTH_SHORT).show();
+        if(debug){
+        	//Toast.makeText(activity, "BLE writefstate fail", Toast.LENGTH_SHORT).show();
+        	CustomToastSmall.generateToast("BLE writefstate fail");
+        }
     }
 
     @Override
@@ -1478,8 +1583,10 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
         Log.i(TAG, "No test plug");
     	
         if(state != IDLE_STATE && !goThroughState){
-        	if(debug)
-        		Toast.makeText(activity, "No test plug", Toast.LENGTH_SHORT).show();
+        	if(debug){
+        		//Toast.makeText(activity, "No test plug", Toast.LENGTH_SHORT).show();
+        		CustomToastSmall.generateToast("No test plug");
+        	}
         	failedState = state;
         	setState(new FailState("請將試紙匣插入裝置"));
         }
@@ -1561,6 +1668,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		if(voltage > FIRST_VOLTAGE_THRESHOLD && (state == CAMERA_STATE || state == DRAW_STATE )){
 			//state = DRAW_STATE; 
 			firstVoltage = voltage;
+			water_layout.setVisibility(View.INVISIBLE);
 			img_water1.setImageResource(R.drawable.saliva1_yes);
 			img_water2.setImageResource(R.drawable.saliva2_yes);
 			//setState(new Stage2State());
@@ -1612,7 +1720,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
         
         Log.i(TAG, "plugId: " + id + " power: " + power_notenough);
         
-        cassetteId = "saliva_"+id;
+        cassetteId = "CT_"+id;
         boolean check = db.checkCassette(cassetteId);
         
         
