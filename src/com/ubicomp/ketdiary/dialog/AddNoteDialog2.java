@@ -19,9 +19,12 @@ import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.View.OnLongClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -186,33 +189,19 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		timeslot_txt= (TextView)title.findViewById(R.id.note_tx_timeslot);
 		
 		checkAndSetTimeSlot();
-		
-		
-		
+			
 		title_txt.setTypeface(wordTypefaceBold);
 		date_txt.setTypeface(wordTypefaceBold);
 		timeslot_txt.setTypeface(wordTypefaceBold);
 		
-//		title_txt.setOnClickListener(new OnClickListener(){
-//			
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				//ReadDummyData ddd = new ReadDummyData(activity);
-//				//ddd.execute();
-//			}
-//			
-//		});
 		
 		date_layout.setOnClickListener(new OnClickListener(){
 			
 
 			@Override
 			public void onClick(View v) {
-				//title_layout.setEnabled(false);
-				//main_layout.setEnabled(false);
-				//bottom_layout.setEnabled(false);
-				//boxLayout.setEnabled(false);
+				
+				ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_SELECT_DATE);
 				listView.setVisibility(View.GONE);
 				setEnabledAll(boxLayout, false);
 				
@@ -228,6 +217,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 
 			@Override
 			public void onClick(View v) {
+				ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_SELECT_SLOT);
 				listView.setVisibility(View.GONE);
 				setEnabledAll(boxLayout, false);
 				chooseBox = new ChooseItemDialog(addNoteDialog,boxLayout, 2, day);
@@ -303,19 +293,16 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
+				ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_IMPACT);
 				done = true;
 			}
 
 			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
-				
+			public void onStartTrackingTouch(SeekBar seekBar) {				
 			}
 
 			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
-				
+			public void onStopTrackingTouch(SeekBar seekBar) {				
 			}
 			
 		});
@@ -330,6 +317,28 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		dec_title.setText("補充說明：");
 		dec_title.setTypeface(wordTypefaceBold);
 		edtext = (EditText)discription_layout.findViewById(R.id.description_content);
+//		edtext.setOnFocusChangeListener(new OnFocusChangeListener() {
+//
+//		    @Override
+//		    public void onFocusChange(View v, boolean hasFocus) {
+//		        if (hasFocus) {
+//		        // Always use a TextKeyListener when clearing a TextView to prevent android
+//		        // warnings in the log
+//		        	Log.i(TAG, "EditText");
+//		        	ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_DESCRIPTION);
+//		        }
+//		    }
+//		});
+		edtext.setOnTouchListener(new OnTouchListener() {
+		    @Override
+		    public boolean onTouch(View v, MotionEvent event) {
+		        if (event.getAction() == MotionEvent.ACTION_UP) {
+		        	Log.i(TAG, "EditText");
+		        	ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_DESCRIPTION);
+		        }
+		        return false;
+		    }
+		});
 		
 		//Bottom View
 		View bottom = BarButtonGenerator.createTwoButtonView(R.string.cancel, R.string.ok, new CancelOnClickListener(), endOnClickListener);
@@ -583,6 +592,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 	}
 	
 	private void SetListItem2(int type){
+		ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_SELECT_TYPE + type);
 		//ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, android.R.layout.simple_list_item_1);
 		items = -1;
 		sp_content.setText(""); //TODO: 假如點到同一個不要清掉
@@ -623,6 +633,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 
 		   @Override
 		   public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+			   ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_SELECT_ITEM);
 			   TextView c = (TextView) view.findViewById(android.R.id.text1);
 			    String playerChanged = c.getText().toString();
 			    
@@ -647,14 +658,6 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		    list.removeAll(Collections.singleton(""));
 		    return list.toArray(new String[list.size()]);
 		}
-	
-
-	class MyOnLongClickListener implements OnLongClickListener{
-	    public boolean onLongClick(View v){
-	    	//dialog.show();
-	    	return true;
-	    }
-	}
 	
 	
 	//把所選取的結果送出 
@@ -943,11 +946,13 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 			vPager.setCurrentItem(index);
 			switch(index){
 			case 0:
+				ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_CLICK_SELF);
 				text_self.setTextColor(resource.getColor(R.color.blue));
 				text_other.setTextColor(resource.getColor(R.color.text_gray3));
 				iv_self_others_bar.setImageResource(R.drawable.note_slide_line1);
 				break;
 			case 1:
+				ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_CLICK_OTHER);
 				text_self.setTextColor(resource.getColor(R.color.text_gray3));
 				text_other.setTextColor(resource.getColor(R.color.blue));
 				iv_self_others_bar.setImageResource(R.drawable.note_slide_line2);
@@ -968,11 +973,13 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 
 				switch (index) {
 				case 0:
+					ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_SCROLL_SELF);
 					text_self.setTextColor(resource.getColor(R.color.blue));
 					text_other.setTextColor(resource.getColor(R.color.text_gray3));
 					iv_self_others_bar.setImageResource(R.drawable.note_slide_line1);
 					break;
 				case 1:
+					ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_SCROLL_SELF);
 					text_self.setTextColor(resource.getColor(R.color.text_gray3));
 					text_other.setTextColor(resource.getColor(R.color.blue));
 					iv_self_others_bar.setImageResource(R.drawable.note_slide_line2);

@@ -246,7 +246,7 @@ public class QuestionDialog2 {
 		/**Cancel and dismiss the check check dialog*/
 		public void onClick(View v) {
 			
-			ClickLog.Log(ClickLogId.STATISTIC_QUESTIONTEST_CONFIRM);
+			ClickLog.Log(ClickLogId.DAYBOOK_RANDOMTEST_CONFIRM);
 			
 			long ts = System.currentTimeMillis();
 			int isCorrect = 0;
@@ -291,7 +291,7 @@ public class QuestionDialog2 {
 		@Override
 		/**Calling out*/
 		public void onClick(View v) {
-			ClickLog.Log(ClickLogId.STATISTIC_QUESTIONTEST_CANCEL);
+			ClickLog.Log(ClickLogId.DAYBOOK_RANDOMTEST_CANCEL);
 			
 			MainActivity.getMainActivity().enableTabAndClick(true);
         	close();
@@ -306,21 +306,25 @@ public class QuestionDialog2 {
 			resetAllImage();
 			switch (v.getId()){
 			case R.id.question_answer1_layout:
+				ClickLog.Log(ClickLogId.DAYBOOK_RANDOMTEST_SELECT_A);
 				radio1.setImageResource(R.drawable.radio_node_select);
 				selectedAnswer = selection[0];
 				select = 0;
 				break;
 			case R.id.question_answer2_layout:
+				ClickLog.Log(ClickLogId.DAYBOOK_RANDOMTEST_SELECT_B);
 				radio2.setImageResource(R.drawable.radio_node_select);
 				selectedAnswer = selection[1];
 				select = 1;
 				break;
 			case R.id.question_answer3_layout:
+				ClickLog.Log(ClickLogId.DAYBOOK_RANDOMTEST_SELECT_C);
 				radio3.setImageResource(R.drawable.radio_node_select);
 				selectedAnswer = selection[2];
 				select = 2;
 				break;
 			case R.id.question_answer4_layout:
+				ClickLog.Log(ClickLogId.DAYBOOK_RANDOMTEST_SELECT_D);
 				radio4.setImageResource(R.drawable.radio_node_select);
 				selectedAnswer = selection[3];
 				select = 3;

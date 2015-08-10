@@ -1,6 +1,5 @@
 package com.ubicomp.ketdiary.dialog;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -8,7 +7,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v4.view.PagerAdapter;
@@ -19,13 +17,15 @@ import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,9 +33,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
@@ -44,11 +42,9 @@ import com.ubicomp.ketdiary.check.TimeBlock;
 import com.ubicomp.ketdiary.clicklog.ClickLog;
 import com.ubicomp.ketdiary.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.db.NoteCatagory3;
-import com.ubicomp.ketdiary.file.QuestionFile;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.BarButtonGenerator;
 import com.ubicomp.ketdiary.ui.CustomScrollView;
-import com.ubicomp.ketdiary.ui.CustomToast;
 import com.ubicomp.ketdiary.ui.CustomToastSmall;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
@@ -191,6 +187,8 @@ public class NoteDialog4 implements ChooseItemCaller{
 				//main_layout.setEnabled(false);
 				//bottom_layout.setEnabled(false);
 				//boxLayout.setEnabled(false);
+				
+				ClickLog.Log(ClickLogId.TEST_NOTE_SELECT_DATE);
 				setEnabledAll(boxLayout, false);
 				
 				chooseBox = new ChooseItemDialog(noteDialog, boxLayout, 1, day);
@@ -205,6 +203,8 @@ public class NoteDialog4 implements ChooseItemCaller{
 
 			@Override
 			public void onClick(View v) {
+				ClickLog.Log(ClickLogId.TEST_NOTE_SELECT_SLOT);
+				
 				setEnabledAll(boxLayout, false);
 				chooseBox = new ChooseItemDialog(noteDialog, boxLayout, 2, day);
 				chooseBox.initialize();
@@ -278,6 +278,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
 				done = true;
+				ClickLog.Log(ClickLogId.TEST_NOTE_IMPACT);
 			}
 
 			@Override
@@ -304,6 +305,28 @@ public class NoteDialog4 implements ChooseItemCaller{
 		dec_title.setText("補充說明：");
 		dec_title.setTypeface(wordTypefaceBold);
 		edtext = (EditText)discription_layout.findViewById(R.id.description_content);
+//		edtext.setOnFocusChangeListener(new OnFocusChangeListener() {
+//
+//		    @Override
+//		    public void onFocusChange(View v, boolean hasFocus) {
+//		        if (hasFocus) {
+//		        // Always use a TextKeyListener when clearing a TextView to prevent android
+//		        // warnings in the log
+//		        	Log.i(TAG, "EditText");
+//		        	ClickLog.Log(ClickLogId.TEST_NOTE_DESCRIPTION);
+//		        }
+//		    }
+//		});
+		edtext.setOnTouchListener(new OnTouchListener() {
+		    @Override
+		    public boolean onTouch(View v, MotionEvent event) {
+		        if (event.getAction() == MotionEvent.ACTION_UP) {
+		        	Log.i(TAG, "EditText");
+		        	ClickLog.Log(ClickLogId.TEST_NOTE_DESCRIPTION);
+		        }
+		        return false;
+		    }
+		});
 		
 		//Bottom View
 		View bottom = BarButtonGenerator.createTwoButtonView(R.string.cancel, R.string.ok, new CancelOnClickListener(), endOnClickListener);
@@ -407,7 +430,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 		coping_msg = context.getResources().getStringArray(Coping_list[type]);
 		Random rand = new Random();
 		int idx = rand.nextInt(coping_msg.length);
-		tv_knowdlege.setText(coping_msg[idx]);
+		tv_knowdlege.setText(Html.fromHtml(coping_msg[idx]));
 		main_layout.addView(center_layout);
 		
 		
@@ -521,6 +544,8 @@ public class NoteDialog4 implements ChooseItemCaller{
 	
 	private void SetListItem2(int type){
 		//ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, android.R.layout.simple_list_item_1);
+		ClickLog.Log(ClickLogId.TEST_NOTE_SELECT_TYPE + type);
+		
 		items = -1;
 		sp_content.setText(""); //TODO: 假如點到同一個不要清掉
 		//ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, R.layout.my_listitem);
@@ -560,6 +585,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 
 		   @Override
 		   public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+			   ClickLog.Log(ClickLogId.TEST_NOTE_SELECT_ITEM);
 			   TextView c = (TextView) view.findViewById(android.R.id.text1);
 			    String playerChanged = c.getText().toString();
 			    
@@ -609,13 +635,15 @@ public class NoteDialog4 implements ChooseItemCaller{
 							CustomToastSmall.generateToast("確定選擇完畢嗎?");
 							done = true;
 						}
-						ClickLog.Log(ClickLogId.TEST_QUESTION_SEND);
-						
-						PreferenceControl.setIsFilled(1);
-						impact = impactSeekBar.getProgress();
-						testQuestionCaller.writeQuestionFile(day, timeslot, type, items, impact, edtext.getText().toString());
-						
-						copingSetting();
+						else{
+							ClickLog.Log(ClickLogId.TEST_QUESTION_SEND);
+							
+							PreferenceControl.setIsFilled(1);
+							impact = impactSeekBar.getProgress();
+							testQuestionCaller.writeQuestionFile(day, timeslot, type, items, impact, edtext.getText().toString());
+							
+							copingSetting();
+						}
 						
 //						boolean testFail = PreferenceControl.isTestFail();
 //						if(!testFail){
@@ -860,11 +888,13 @@ public class NoteDialog4 implements ChooseItemCaller{
 			vPager.setCurrentItem(index);
 			switch(index){
 			case 0:
+				ClickLog.Log(ClickLogId.TEST_NOTE_CLICK_SELF);
 				text_self.setTextColor(context.getResources().getColor(R.color.blue));
 				text_other.setTextColor(context.getResources().getColor(R.color.text_gray3));
 				iv_self_others_bar.setImageResource(R.drawable.note_slide_line1);
 				break;
 			case 1:
+				ClickLog.Log(ClickLogId.TEST_NOTE_CLICK_OTHER);
 				text_self.setTextColor(context.getResources().getColor(R.color.text_gray3));
 				text_other.setTextColor(context.getResources().getColor(R.color.blue));
 				iv_self_others_bar.setImageResource(R.drawable.note_slide_line2);
@@ -883,11 +913,13 @@ public class NoteDialog4 implements ChooseItemCaller{
 
 				switch (index) {
 				case 0:
+					ClickLog.Log(ClickLogId.TEST_NOTE_SCROLL_SELF);
 					text_self.setTextColor(context.getResources().getColor(R.color.blue));
 					text_other.setTextColor(context.getResources().getColor(R.color.text_gray3));
 					iv_self_others_bar.setImageResource(R.drawable.note_slide_line1);
 					break;
 				case 1:
+					ClickLog.Log(ClickLogId.TEST_NOTE_SCROLL_OTHER);
 					text_self.setTextColor(context.getResources().getColor(R.color.text_gray3));
 					text_other.setTextColor(context.getResources().getColor(R.color.blue));
 					iv_self_others_bar.setImageResource(R.drawable.note_slide_line2);

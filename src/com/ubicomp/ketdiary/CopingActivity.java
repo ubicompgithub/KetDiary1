@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -626,7 +627,7 @@ public class CopingActivity extends Activity {
 						String[] tmp = activity.getResources().getStringArray(R.array.knowing_list);
 						Random rand = new Random();
 						int idx = rand.nextInt(tmp.length);
-						generateDialog(tmp[idx]);
+						generateDialog2(tmp[idx]);
 						skillSelect = SELECT_POISON;
 					}
 
@@ -708,6 +709,34 @@ public class CopingActivity extends Activity {
         dialog.setContentView(R.layout.dialog);
         TextView dialogText = (TextView) dialog.findViewById(R.id.dialog_text);
         dialogText.setText(textResource);
+        dialogText.setTextColor(getResources().getColor(R.color.dark_gray));
+        
+        dialog.show();
+         
+        TextView dialogOKButton = (TextView) dialog.findViewById(R.id.ok_button);
+        /*dialogOKButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                dialog.dismiss();
+                
+            }
+        });*/
+        dialogOKButton.setOnClickListener(new EndOnClickListener() );
+	}
+	
+	private void generateDialog2(String textResource){
+		// Create custom dialog object
+        final Dialog dialog = new Dialog(activity);
+        
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+        //dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        
+        dialog.setContentView(R.layout.dialog);
+        TextView dialogText = (TextView) dialog.findViewById(R.id.dialog_text);
+        dialogText.setText(Html.fromHtml(textResource));
         dialogText.setTextColor(getResources().getColor(R.color.dark_gray));
         
         dialog.show();

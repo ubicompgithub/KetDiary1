@@ -28,7 +28,7 @@ public class ClickLogId {
 	//Test Fragment
 	public final static long TEST_ENTER = 10000000;
 	public final static long TEST_LEAVE = 10010000;
-	public final static long TEST_TUTORIAL_BUTTON = 10200000;
+	public final static long TEST_HELP_BUTTON = 10200000;
 	public final static long TEST_START_BUTTON = 10300000;
 	public final static long TEST_END_BUTTON = 10400000;
 	
@@ -45,13 +45,20 @@ public class ClickLogId {
 	public final static long TEST_KOWING_LAST = 12400000;
 	public final static long TEST_CHECKING_RESULT = 12500000;
 	
-	//8/5 add
+	//8/5 add //TODO:
 	public final static long TEST_NOTE_SCROLL_SELF = 12600000;
 	public final static long TEST_NOTE_SCROLL_OTHER = 12610000;
 	public final static long TEST_NOTE_CLICK_SELF = 12620000;
 	public final static long TEST_NOTE_CLICK_OTHER = 12630000;
 	
 	public final static long TEST_NOTE_SELECT_DATE = 12700000;
+	public final static long TEST_NOTE_SELECT_SLOT = 12710000;
+	
+	public final static long TEST_NOTE_SELECT_TYPE = 12800000;
+	public final static long TEST_NOTE_SELECT_ITEM = 12810000;
+	
+	public final static long TEST_NOTE_IMPACT = 12900000;
+	public final static long TEST_NOTE_DESCRIPTION = 12910000;
 	
 //	public final static long TEST_ADDITIONAL_QUESTION_CANCEL = 12000000;
 //	public final static long TEST_ADDITIONAL_QUESTION_SEND = 12100000;
@@ -72,32 +79,37 @@ public class ClickLogId {
 	public final static long STATISTIC_WEEK = 20110000;
 	public final static long STATISTIC_ANALYSIS = 20200000;
 	public final static long STATISTIC_COPING_BUTTON = 20300000;
+	
 	public final static long STATISTIC_QUESTIONTEST_BUTTON = 20400000;
 	public final static long STATISTIC_QUESTIONTEST_CONFIRM = 20410000;
 	public final static long STATISTIC_QUESTIONTEST_CANCEL = 20420000;
 	
+	public final static long STATISTIC_QUESTIONTEST_SELECT_A = 20500000;
+	public final static long STATISTIC_QUESTIONTEST_SELECT_B = 20510000;
+	public final static long STATISTIC_QUESTIONTEST_SELECT_C = 20520000;
+	public final static long STATISTIC_QUESTIONTEST_SELECT_D = 20530000;
 	
 	public final static long STATISTIC_RADAR_CHART_OPEN = 22000000;
 	public final static long STATISTIC_RADAR_CHART_CLOSE = 22100000;
 	public final static long STATISTIC_DETAIL_CHART_OPEN = 22200000;
 	public final static long STATISTIC_DETAIL_CHART_CLOSE = 22300000;
 	
-	public final static long STATISTIC_QUESTION_EXIT = 20400000;
-	public final static long STATISTIC_QUESTION_BREATH = 20500000;
-	public final static long STATISTIC_QUESTION_CALL_CHECK = 20600000;
-	public final static long STATISTIC_QUESTION_CALL_OK = 20700000;
-	public final static long STATISTIC_QUESTION_CLOSE = 20800000;
-	public final static long STATISTIC_QUESTION_EMOTIONDIY = 20900000;
-	public final static long STATISTIC_QUESTION_END = 21000000;
-	public final static long STATISTIC_QUESTION_FAMILY = 21100000;
-	public final static long STATISTIC_QUESTION_HOME = 21200000;
-	public final static long STATISTIC_QUESTION_HOTLINE = 21300000;
-	public final static long STATISTIC_QUESTION_INSPIRE = 21400000;
-	public final static long STATISTIC_QUESTION_READING = 21500000;
-	public final static long STATISTIC_QUESTION_SELFHELP = 21600000;
-	public final static long STATISTIC_QUESTION_SITUATION = 21700000;
-	public final static long STATISTIC_QUESTION_SOCIAL = 21800000;
-	public final static long STATISTIC_QUESTION_TRYAGAIN = 21900000;
+//	public final static long STATISTIC_QUESTION_EXIT = 20400000;
+//	public final static long STATISTIC_QUESTION_BREATH = 20500000;
+//	public final static long STATISTIC_QUESTION_CALL_CHECK = 20600000;
+//	public final static long STATISTIC_QUESTION_CALL_OK = 20700000;
+//	public final static long STATISTIC_QUESTION_CLOSE = 20800000;
+//	public final static long STATISTIC_QUESTION_EMOTIONDIY = 20900000;
+//	public final static long STATISTIC_QUESTION_END = 21000000;
+//	public final static long STATISTIC_QUESTION_FAMILY = 21100000;
+//	public final static long STATISTIC_QUESTION_HOME = 21200000;
+//	public final static long STATISTIC_QUESTION_HOTLINE = 21300000;
+//	public final static long STATISTIC_QUESTION_INSPIRE = 21400000;
+//	public final static long STATISTIC_QUESTION_READING = 21500000;
+//	public final static long STATISTIC_QUESTION_SELFHELP = 21600000;
+//	public final static long STATISTIC_QUESTION_SITUATION = 21700000;
+//	public final static long STATISTIC_QUESTION_SOCIAL = 21800000;
+//	public final static long STATISTIC_QUESTION_TRYAGAIN = 21900000;
 
 	
 
@@ -126,10 +138,15 @@ public class ClickLogId {
 	public final static long DAYBOOK_RANDOMTEST_CONFIRM = 30710000;
 	public final static long DAYBOOK_RANDOMTEST_CANCEL = 30720000;
 	
-	public final static long DAYBOOK_FILTER_BUTTON = 30800000;
-	public final static long DAYBOOK_FILTER = 30900000;
-	public final static long DAYBOOK_TOGGLE = 31000000;
-	public final static long DAYBOOK_FILTER_LONGCLICK = 31000000;
+	public final static long DAYBOOK_RANDOMTEST_SELECT_A = 30800000;
+	public final static long DAYBOOK_RANDOMTEST_SELECT_B = 30810000;
+	public final static long DAYBOOK_RANDOMTEST_SELECT_C = 30820000;
+	public final static long DAYBOOK_RANDOMTEST_SELECT_D = 30830000;
+	
+	public final static long DAYBOOK_FILTER_BUTTON = 30900000;
+	public final static long DAYBOOK_FILTER = 30910000;
+	public final static long DAYBOOK_TOGGLE = 30920000;
+	public final static long DAYBOOK_FILTER_LONGCLICK = 30930000;
 //	public final static long DAYBOOK_RECORD_REC = 30900000;
 //	public final static long DAYBOOK_RECORD_PAUSE_REC = 30910000;
 //	public final static long DAYBOOK_RECORD_PLAY = 31000000;
@@ -143,6 +160,21 @@ public class ClickLogId {
 	public final static long DAYBOOK_ADDNOTE_CANCEL = 31420000;
 	public final static long DAYBOOK_ADDNOTE_ENTER = 31430000;
 	public final static long DAYBOOK_ADDNOTE_LEAVE = 31440000;
+	
+	//8/5 add //TODO:
+	public final static long DAYBOOK_ADDNOTE_SCROLL_SELF = 31500000;
+	public final static long DAYBOOK_ADDNOTE_SCROLL_OTHER = 31510000;
+	public final static long DAYBOOK_ADDNOTE_CLICK_SELF = 31520000;
+	public final static long DAYBOOK_ADDNOTE_CLICK_OTHER = 31530000;
+	
+	public final static long DAYBOOK_ADDNOTE_SELECT_DATE = 31600000;
+	public final static long DAYBOOK_ADDNOTE_SELECT_SLOT = 31610000;
+	
+	public final static long DAYBOOK_ADDNOTE_SELECT_TYPE = 31700000;
+	public final static long DAYBOOK_ADDNOTE_SELECT_ITEM = 31710000;
+	
+	public final static long DAYBOOK_ADDNOTE_IMPACT = 31800000;
+	public final static long DAYBOOK_ADDNOTE_DESCRIPTION = 31810000;
 	//public final static long DAYBOOK_READ_OK = 31400000;
 	//public final static long DAYBOOK_READ_CANCEL = 31500000;
 	
@@ -172,10 +204,10 @@ public class ClickLogId {
 //	public final static long EMOTION_MANAGE_HISTORY_LEAVE = 55010000;
 //	public final static long EMOTION_MANAGE_HISTORY_SELECT = 55100000;
 //
-//	public final static long TUTORIAL_ENTER = 60000000;
-//	public final static long TUTORIAL_LEAVE = 60010000;
-//	public final static long TUTORIAL_NEXT = 60100000;
-//	public final static long TUTORIAL_REPLAY = 60200000;
+	public final static long TUTORIAL_ENTER = 60000000;
+	public final static long TUTORIAL_LEAVE = 60010000;
+	public final static long TUTORIAL_NEXT = 60100000;
+	public final static long TUTORIAL_REPLAY = 60200000;
 
 	public final static long DAYBOOK_TEST_ENTER = 70000000;
 	public final static long DAYBOOK_TEST_LEAVE = 70010000;

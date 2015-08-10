@@ -328,7 +328,7 @@ public class TestFragment extends Fragment implements BluetoothListener, CameraC
 			@Override
 			public void onClick(View v) {
 				
-				ClickLog.Log(ClickLogId.TEST_TUTORIAL_BUTTON);
+				//ClickLog.Log(ClickLogId.TEST_TUTORIAL_BUTTON);
 				
 				Intent intent = new Intent();
 				intent.setClass(activity, HelpActivity.class); // tmp modify

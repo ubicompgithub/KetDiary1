@@ -46,6 +46,7 @@ import android.widget.TextView;
 import com.ubicomp.ketdiary.clicklog.ClickLog;
 import com.ubicomp.ketdiary.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.data.structure.Cassette;
+import com.ubicomp.ketdiary.data.structure.TestDetail;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.dialog.CheckResultDialog;
@@ -929,8 +930,9 @@ public class MainActivity extends FragmentActivity {
 		long timestamp = PreferenceControl.getUpdateDetectionTimestamp();
 		int result = PreferenceControl.getTestResult();//TODO: check if no data
 		int isFilled = PreferenceControl.getIsFilled();
-				
-		TestResult testResult = new TestResult(result, timestamp, "tmp_id",	1, isFilled, 0, 0);
+		TestDetail testDetail = db.getLatestTestDetail();
+		
+		TestResult testResult = new TestResult(result, timestamp, testDetail.getCassetteId(),	1, isFilled, 0, 0);
 		
 		if(db.getTodayTestCount() == 1){
 			addScore = db.insertTestResult(testResult, true);

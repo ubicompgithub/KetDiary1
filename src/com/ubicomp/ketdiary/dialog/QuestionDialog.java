@@ -388,21 +388,25 @@ public class QuestionDialog{
 			resetAllImage();
 			switch (v.getId()){
 			case R.id.question_answer1_layout:
+				ClickLog.Log(ClickLogId.STATISTIC_QUESTIONTEST_SELECT_A);
 				radio1.setImageResource(R.drawable.radio_node_select);
 				selectedAnswer = selection[0];
 				select = 0;
 				break;
 			case R.id.question_answer2_layout:
+				ClickLog.Log(ClickLogId.STATISTIC_QUESTIONTEST_SELECT_B);
 				radio2.setImageResource(R.drawable.radio_node_select);
 				selectedAnswer = selection[1];
 				select = 1;
 				break;
 			case R.id.question_answer3_layout:
+				ClickLog.Log(ClickLogId.STATISTIC_QUESTIONTEST_SELECT_C);
 				radio3.setImageResource(R.drawable.radio_node_select);
 				selectedAnswer = selection[2];
 				select = 2;
 				break;
 			case R.id.question_answer4_layout:
+				ClickLog.Log(ClickLogId.STATISTIC_QUESTIONTEST_SELECT_D);
 				radio4.setImageResource(R.drawable.radio_node_select);
 				selectedAnswer = selection[3];
 				select = 3;

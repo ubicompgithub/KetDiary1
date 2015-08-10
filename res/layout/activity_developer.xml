@@ -1,0 +1,50 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DeveloperActivity" >
+
+    <EditText
+        android:id="@+id/developer_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="5dp"
+        android:background="@drawable/setting_edit_bg"
+        android:ems="20"
+        android:inputType="textPassword"
+        android:paddingBottom="3dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="3dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/small_title_size" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/developer_edit"
+        android:layout_centerHorizontal="true"
+        android:text="Please enter the password"
+        android:textColor="@color/white"
+        android:textSize="@dimen/normal_title_size" />
+
+    <Button
+        android:id="@+id/developer_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/developer_edit"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/setting_button"
+        android:paddingBottom="3dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="3dp"
+        android:text="Enter"
+        android:textColor="@color/white"
+        android:textSize="@dimen/normal_title_size" />
+
+</RelativeLayout>

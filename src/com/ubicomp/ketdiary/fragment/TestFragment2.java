@@ -47,6 +47,7 @@ import com.ubicomp.ketdiary.camera.CameraRecorder;
 import com.ubicomp.ketdiary.camera.CameraRunHandler;
 import com.ubicomp.ketdiary.camera.ImageFileHandler;
 import com.ubicomp.ketdiary.camera.Tester;
+import com.ubicomp.ketdiary.check.DefaultCheck;
 import com.ubicomp.ketdiary.clicklog.ClickLog;
 import com.ubicomp.ketdiary.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
@@ -148,9 +149,10 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	/** Sound id*/
 	private int count_down_audio_id;
 	private int preview_audio_id;
+	private int supply_audio_id;
 	
-	private static SoundPool soundpool;
-	private static int soundId;
+//	private static SoundPool soundpool;
+//	private static int soundId;
 	
 	private TestState CertainState = null;
 	private BluetoothLE2 ble = null;
@@ -238,6 +240,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 5);
 		count_down_audio_id = soundPool.load(activity, R.raw.short_beep, 1); 
 		preview_audio_id = soundPool.load(activity, R.raw.din_ding, 1);
+		supply_audio_id = soundPool.load(activity, R.raw.supply, 1);
 		
 		msgHandler = new ChangeMsgHandler();
 		resultState = PreferenceControl.getAfterTestState();
@@ -324,7 +327,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			@Override
 			public void onClick(View v) {
 				
-				ClickLog.Log(ClickLogId.TEST_TUTORIAL_BUTTON);
+				ClickLog.Log(ClickLogId.TEST_HELP_BUTTON);
 				
 				Intent intent = new Intent();
 				intent.setClass(activity, HelpActivity.class); // tmp modify
@@ -411,6 +414,11 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			
 			if(!canTest && !isDeveloper && !debug)
 				return;
+			
+			if (DefaultCheck.check()) {
+				CustomToastSmall.generateToast(R.string.default_forbidden);
+				return;
+			}
 			
 			ble_pluginserted =false;
 			MainActivity.getMainActivity().enableTabAndClick(false);
@@ -651,6 +659,8 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			
 			state = NOTENOUGH_STATE;
 			
+			
+			soundPool.play(supply_audio_id, 1.0F, 1.0F, 0, 0, 1.0F);
 			img_btn.setEnabled(false);
 			//label_btn.setText("繼續");
 			label_subtitle.setText("請在10秒內再吐一口水");
@@ -1709,7 +1719,6 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	public void displayCurrentId(String id , int hardwareState, int power_notenough) {
 		ble_pluginserted = true;
 		
-		
 		if(state == FIVESECOND_STATE){
 			//power_notenough = 1;
 			if(power_notenough == 1)
@@ -1725,7 +1734,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
         
         
         Log.i(TAG, "cassetteId: " + cassetteId + " " + check);
-        if( !check && !debug){
+        if( (!check  || cassetteId.equals("CT_-0001")) && !debug ){
         	
         	setState(new FailState("試紙匣已用過，請更換試紙匣"));
         	

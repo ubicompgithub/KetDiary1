@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	
-    <string name="app_name">戒K小幫手</string>
+    <string name="app_name">恢復日記</string>
     
     <string name="loading">載入中</string>
     <string name="brac">酒精濃度</string>
@@ -220,7 +220,7 @@
     <string name="default_recreation_2">慢跑</string>
     <string name="default_recreation_3">打球</string>
     <string name="default_goal_good"> 機車</string>
-    <string name="default_forbidden">您不是本實驗參加者，因此無法使用吹氣功能</string>
+    <string name="default_forbidden">您不是本實驗參加者，因此無法使用檢測功能</string>
     <string name="open_gps">請將位置資訊服務相關功能開啟</string>
     <string name="check_do_not_keep_activities">您已開啟“不要保留活動”且未啟用“位置資訊服務”。\n建議您至“設定->開發人員選項”下取消勾選“不要保留活動”。\n本次測試將不會回報您的位置</string>
     <string name="email"><u>ubicomplab.ntu@gmail.com</u></string>
@@ -238,8 +238,8 @@
     
     <string name="radar_label0">自我\n檢測</string>
     <string name="radar_label0_full">自我檢測功能　完成度</string>
-    <string name="radar_label0_0">檢測次數</string>
-    <string name="radar_label0_1">檢測通過</string>
+    <string name="radar_label0_0">是否常做檢測</string>
+    <string name="radar_label0_1">是否常通過檢測</string>
     
     <string name="radar_label1">應對\n技巧</string>
     <string name="radar_label1_full">應對技巧功能　完成度</string>
@@ -250,35 +250,44 @@
     <string name="radar_label2_0">一般問答</string>
     <string name="radar_label2_1">隨機式問答</string>
     
-    <string name="radar_label3">記事\n表現</string>
-    <string name="radar_label3_full">記事表現功能　完成度</string>
-    <string name="radar_label3_0">記事表現</string>
+    <string name="radar_label3">事件\n紀錄</string>
+    <string name="radar_label3_full">事件紀錄功能　完成度</string>
+    <string name="radar_label3_0">事件紀錄</string>
 
     <string name="score">分</string>
 
-    <string-array name="radar_0">
+    <string-array name="radar_0_0">
         <item>每天進行口水檢測，是成功的第一步</item>
         <item>幸福，從拒絕愷他命開始</item>
         <item>表現優秀，請繼續加油！</item>
     </string-array>
-    <string-array name="radar_1_0">
-        <item>可點擊\'！\'按鈕學習應對技巧</item>
+    <string-array name="radar_0_1">
+        <item>進行口水檢測，開始記錄停止使用愷他命</item>
+        <item>持續通過口水檢測，證明自己有能力拒絕愷他命</item>
         <item>表現優秀，請繼續加油！</item>
     </string-array>
-    <string-array name="radar_2_0">
+    
+    <string-array name="radar_1_0">
+        <item>可點擊\'！\'按鈕學習應對技巧</item>
+        <item>開始培養應對技巧，來處理生活中會遇到的誘因！</item>
+        <item>表現優秀，請繼續加油！</item>
+    </string-array>
+    
+     <string-array name="radar_2_0">
         <item>點擊\'自我測驗\'，測試一下自己</item>
-        <item>每日隨機出現問題</item>
+        <item>常常回答問題，來確定自己是否了解愷他命的危害</item>
         <item>表現優秀，請繼續加油！</item>
     </string-array>
     
     <string-array name="radar_2_1">
-        <item>每日隨機出現問題</item>
-        <item>可隨時留下心情供自己日後思索</item>
+        <item>當打開活動記錄頁面，別忘了按下閃爍的星星回答問題</item>
+        <item>每天都會隨機出現問題，讓自己能透過回答問題了解自己</item>
         <item>表現優秀，請繼續加油！</item>
     </string-array>
     
     <string-array name="radar_3_0">
         <item>別忘了每天記下發生的事喔！</item>
+        <item>可隨時留下心情供自己日後思索！</item>
         <item>表現優秀，請繼續加油！</item>
     </string-array>
     

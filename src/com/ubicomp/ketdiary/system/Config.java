@@ -38,7 +38,7 @@ public class Config {
 
 	// PWD
 	/** Password to enter the developer setting mode */
-	public static final String PASSWORD = "ubicomp2014";
+	public static final String PASSWORD = "rehab_2015";
 
 	// GCM
 	/** GCM sender ID */

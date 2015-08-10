@@ -1147,7 +1147,7 @@ public class DatabaseControl {
 			int coping = cursor.getInt(5);
 			int[] additionals = new int[4];
 			for (int j = 0; j < additionals.length; ++j)
-				additionals[j] = cursor.getInt(5 + j);
+				additionals[j] = cursor.getInt(6 + j);
 			Rank rank = new Rank(uid, score, test, note, question, coping, additionals);
 			cursor.close();
 			db.close();

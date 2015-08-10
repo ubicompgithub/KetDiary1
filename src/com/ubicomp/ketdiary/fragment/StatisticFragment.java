@@ -412,23 +412,23 @@ public class StatisticFragment extends Fragment implements ShowRadarChart, Quest
 		for (int i = 0; i < ranks.length; ++i) {
 			if (ranks[i].getUid().equals(uid)) {
 				test = ranks[i].getTest();
-				note = ranks[i].getNote();
-				question = ranks[i].getQuestion();
 				coping = ranks[i].getCoping();
+				question = ranks[i].getQuestion();
+				note = ranks[i].getNote();
 				break;
 			}
 		}
 
-		double test_r, advice_r, manage_r, story_r;
+		double test_r, coping_r, question_r, note_r;
 		test_r = (double) ((double) test) / 200.0;
-		advice_r = (double) ((double) note) / 300.0;
-		manage_r = (double) ((double) question) / 600.0;
-		story_r = (double) ((double) coping) / 300.0;
+		coping_r = (double) ((double) coping) / 300.0;
+		question_r = (double) ((double) question) / 500.0;
+		note_r = (double) ((double) note) / 300.0;
 
 		result.add(test_r);
-		result.add(advice_r);
-		result.add(manage_r);
-		result.add(story_r);
+		result.add(coping_r);
+		result.add(question_r);
+		result.add(note_r);
 
 		return result;
 	}

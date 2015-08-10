@@ -68,7 +68,7 @@ public class UserLevelCollector {
 					.handleResponse(httpResponse);
 			int httpStatusCode = httpResponse.getStatusLine().getStatusCode();
 			
-			//Log.d(TAG, responseString);
+			Log.d(TAG, responseString);
 			
 			if (responseString != null && httpStatusCode == HttpStatus.SC_OK) {
 				Rank[] ranks = parse(responseString);
@@ -149,8 +149,11 @@ public class UserLevelCollector {
 			int coping = Integer.valueOf(items[5]);
 			int[] additionals = new int[4];
 			for (int j = 0; j < additionals.length; ++j)
-				additionals[j] = Integer.valueOf(items[5+j]);
-
+				additionals[j] = Integer.valueOf(items[6+j]);
+			
+			Log.i(TAG, uid+" "+level+" "+test+" "+note+" "+question+" "+coping+" "+additionals[0]
+					+" "+additionals[1]+" "+additionals[2]+" "+additionals[3]);
+			
 			ranks[i] = new Rank(uid, level, test, note, question, coping, additionals);
 
 		}

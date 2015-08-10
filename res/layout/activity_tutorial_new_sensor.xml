@@ -1,0 +1,91 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tutorial_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/tutorial_background"
+    android:splitMotionEvents="false"
+    tools:context=".TutorialActivity" >
+
+    <TextView
+        android:id="@+id/tutorial_step"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:text="1"
+        android:textColor="@color/lite_gray"
+        android:textSize="@dimen/xlarge_title_size" />
+
+    <TextView
+        android:id="@+id/tutorial_notify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tutorial_step"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/tutorial_next"
+        android:textColor="@color/lite_gray"
+        android:textSize="@dimen/large_text_size" />
+
+    <ImageView
+        android:id="@+id/tutorial_sensor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tutorial_notify"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/tutorial_help"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tutorial_sensor"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="36dp"
+        android:text="@string/tutorial_step1"
+        android:textColor="@color/lite_gray"
+        android:textSize="@dimen/large_text_size" />
+
+    <ImageView
+        android:id="@+id/tutorial_tab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop" />
+
+    <ImageView
+        android:id="@+id/tutorial_replay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:id="@+id/tutorial_arrow1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tutorial_sensor"
+        android:layout_marginLeft="-30dp"
+        android:layout_marginTop="180dp"
+        android:layout_toRightOf="@+id/tutorial_sensor" />
+
+    <ImageView
+        android:id="@+id/tutorial_arrow2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tutorial_tab"
+        android:layout_toLeftOf="@+id/tutorial_help" />
+
+    <ImageView
+        android:id="@+id/tutorial_arrow3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tutorial_sensor"
+        android:layout_toRightOf="@+id/tutorial_sensor"
+        android:layout_marginTop="65dp"
+        android:layout_marginLeft="5dp" />
+
+</RelativeLayout>

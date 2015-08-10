@@ -83,7 +83,7 @@ public class HelpActivity extends Activity {
 					@Override
 					public void onClick(View v) {
 						 Intent intent = new Intent();
-						 intent.setClass(activity, SelectActivity.class);
+						 intent.setClass(activity, TutorialActivity.class);
 						 startActivity(intent);
 					}
 				});

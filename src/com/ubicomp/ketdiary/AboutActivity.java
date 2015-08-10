@@ -104,8 +104,17 @@ public class AboutActivity extends Activity {
 					++hiddenState;
 				else if (hiddenState == 4) {
 					//Intent newIntent = new Intent(activity,DevActivity.class);
-					Intent newIntent = new Intent(activity,PreSettingActivity.class);
-					activity.startActivity(newIntent);
+					boolean debug = PreferenceControl.isDebugMode();
+					
+					if(debug){
+						Intent newIntent = new Intent(activity,PreSettingActivity.class);
+						activity.startActivity(newIntent);
+					}
+					else{
+						Intent newIntent = new Intent(activity,DeveloperActivity.class);
+						activity.startActivity(newIntent);
+					}
+					
 				} else
 					hiddenState = 0;
 				return false;

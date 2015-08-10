@@ -3,6 +3,7 @@ package com.ubicomp.ketdiary.color;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Vector;
 
 import org.opencv.android.Utils;
@@ -39,19 +40,22 @@ public class ImageDetection {
     
     private static final int WHITE_THRESHOLD = 200;
     private static final int VALID_THRESHOLD = -15;
-    private static final int MINIMAL_EFFECTIVE_RANGE = 50;
+    private static final int MINIMAL_EFFECTIVE_RANGE = 20;
     
     private static final int LBOUND_EFFECTIVE_GRAYSCALE = 40;
     private static final float NO_LINE_PENALTY = 1;
     
     private static final int LBOUND_FIRST_LINE_RANGE = 20;
     private static final int UBOUND_FIRST_LINE_RANGE = 40;
+    private static final int SELECTIVITY_CONST = 3; 
     
     private static final int FIRST_LINE_UNFOUND_PENALTY = 1;
     private static final int SECOND_LINE_UNFOUND_PENALTY = 1;
     private static final int FOUND_REWARD = 4;
+    private static final int ALLOWED_TEST_LINE_WIDTH = 2;
     
     private static final int DETECT_THRESHOLD = 20;
+    
     
     private static final float eps = (float) -0.000001;
     
@@ -61,7 +65,7 @@ public class ImageDetection {
     private int ymax = ROI_Y_MAX;
     
     private File mainStorage = null;
-    private int picNum = 1;
+    private int picNum = 2;
     private long ts;
     private FileOutputStream out = null;
     private FileOutputStream out2 = null;
@@ -166,6 +170,7 @@ public class ImageDetection {
         int width = roiBmp.getWidth();
         int height = roiBmp.getHeight();
         int middle = width/2;
+        int halfHeight = height / 2;
         Log.i(TAG, "width: " + width + " , height: " + height);
 
         Mat matROI = new Mat();
@@ -177,6 +182,8 @@ public class ImageDetection {
         float [] pivot = new float[width-2];
         float validatity = 0;
         float check = 0;
+        
+        HashMap testLineVoteMap = new HashMap();
 
         for(int i = 0; i < height; i++){
             float maximum = 0;
@@ -238,6 +245,13 @@ public class ImageDetection {
             float avgAfterMiddle = sumAfterMiddle /middle;
             float sel = (maximum-minimum)/4;
             float selAfterMiddle = (maximumAfterMiddle-minimumAfterMiddle)/4;
+            if(i < halfHeight){
+                selAfterMiddle = (maximumAfterMiddle-minimumAfterMiddle)/SELECTIVITY_CONST;
+            }
+            else{
+                selAfterMiddle = (maximumAfterMiddle-minimumAfterMiddle)/(SELECTIVITY_CONST+2);
+            }
+            
             float refCandidate = 0;
             boolean isFoundRef = false;
             int refIdx = 0;
@@ -297,9 +311,17 @@ public class ImageDetection {
                 if (k == vector.size() - 1) {
                     if (secondIdx != 0 && (secondIdx - refIdx) > LBOUND_BETWEEN_LINE && (secondIdx - refIdx) < UBOUND_BETWEEN_LINE) {
                         Log.i(TAG, "Second: " + secondIdx);
+                        
+                        int value = 1;
+                        if(testLineVoteMap.containsKey(secondIdx) == true){
+                            value = (Integer) testLineVoteMap.get(secondIdx);
+                            value++;
+                        }
+                        testLineVoteMap.put(secondIdx, value);
+                        
                         Point point = new Point(secondIdx, i);
                         Imgproc.circle(matROI, point, 1, new Scalar(0, 0, 255), 1);
-                        check += FOUND_REWARD;
+                        //check += FOUND_REWARD;
                     } else {
                         Log.i(TAG, "Failed" );
                         check -= SECOND_LINE_UNFOUND_PENALTY;
@@ -308,19 +330,41 @@ public class ImageDetection {
                 }
             }
         }
+            
+        if (!testLineVoteMap.isEmpty()){
+
+            int maxSecondIdx = 0;
+            int tempMaxSecondIdxNum = 0;
+            for (Object key : testLineVoteMap.keySet()) {
+                int value = (Integer)testLineVoteMap.get(key);
+                if( value > tempMaxSecondIdxNum){
+                    tempMaxSecondIdxNum = value;
+                    maxSecondIdx = (Integer) key;
+                }
+                Log.i(TAG, key + " : " + testLineVoteMap.get(key));
+            }
+
+            for (Object key : testLineVoteMap.keySet()) {
+                int candidateIdx = (Integer) key;
+                if( Math.abs(candidateIdx - maxSecondIdx) <= ALLOWED_TEST_LINE_WIDTH) {
+                    int value = (Integer) testLineVoteMap.get(key);
+                    check += (value * FOUND_REWARD);
+                }
+            }
+        }
 
         Log.i(TAG, "Validatity: " + String.valueOf(validatity));
         if(validatity < VALID_THRESHOLD)
             check = -1000;
         else{
-        	int result2 = check > DETECT_THRESHOLD ? 0:1;
-        	PreferenceControl.setTestResult(result2);
+//        	int result2 = check > DETECT_THRESHOLD ? 0:1;
+//        	PreferenceControl.setTestResult(result2);
         }
 	    Log.i(TAG, "Check: " + String.valueOf(check));
 	        
-        String file_name = "PIC_" + ts + "_" + 2 + ".sob";
-        String file_name2= "PIC_" + ts + "_" + 3 + ".sob";
-        String file_name3= "PIC_" + ts + "_" + 4 + ".sob";
+        String file_name = "PIC_" + ts + "_" + picNum++ + ".sob";
+        String file_name2= "PIC_" + ts + "_" + picNum++ + ".sob";
+        String file_name3= "PIC_" + ts + "_" + picNum++ + ".sob";
         File file = new File(mainStorage, file_name);
         File file2 = new File(mainStorage, file_name2);
         File file3 = new File(mainStorage, file_name3);
@@ -399,183 +443,183 @@ public class ImageDetection {
 
  
     
-    public int testStripDetection2(Bitmap bitmap){
-        Bitmap roiBmp = Bitmap.createBitmap(bitmap, ROI_X_MIN + xmin + 3, ROI_Y_MIN + ymin + 3, xmax - xmin - 6, ymax -ymin-6);
-        int width = roiBmp.getWidth();
-        int height = roiBmp.getHeight();
-        Log.i(TAG, "width: " + width + " , height: " + height);
-        
-        int half_width = width/2;
-        
-        final float eps = (float) -0.000001;
-        float [] x0 = new float[width];
-        float [] diff = new float[width-1];
-        float [] pivot = new float[width-2];
-        float check = 0;
-        float validatity = 0;
-        
-        for(int i = 0; i < height; i++){
-            float maximum = 0;
-            float minimum = 255;
-            float sumAll= 0;
-            float sumAfterMiddle = 0;
-            float maximumAfterMiddle = 0;
-            float minimumAfterMiddle = 255;
-            Vector vector = new Vector();
-            for (int j = 0; j < width; j++) {
-                //int pixel = image.getRGB(j, i);
-                int pixel = roiBmp.getPixel(j, i);
-                int value = 255 - ((pixel >> 16) & 0xff);
-                //System.out.print(value + " ");
-                x0[j] = value;
-                sumAll += x0[j];
-                if(j >= half_width){
-                    sumAfterMiddle += x0[j];
-                }
-
-                if( j > 0 ){
-                    diff[j-1] = x0[j] - x0[j-1];
-                    if (diff[j-1] == 0)
-                        diff[j-1] = eps;
-                }
-
-                if( j > 1 ){
-                    pivot[j-2] = diff[j-2] * diff[j-1];
-                    if( pivot[j-2] < 0 && diff[j-2] > 0 ){
-                        vector.add(j-1);
-                    }
-                }
-
-                if(x0[j] > maximum)
-                    maximum = x0[j];
-
-                if(x0[j] < minimum)
-                    minimum = x0[j];
-
-                if(j >= half_width){
-                    if(x0[j] > maximumAfterMiddle)
-                        maximumAfterMiddle = x0[j];
-
-                    if(x0[j] < minimumAfterMiddle)
-                        minimumAfterMiddle = x0[j];
-                }
-
-            } 
-            float avgAll = sumAll /width;
-            //System.out.println("");
-            if( (maximum - minimum) < MINIMAL_EFFECTIVE_RANGE ){
-            	if(avgAll > LBOUND_EFFECTIVE_GRAYSCALE){
-            		check -= NO_LINE_PENALTY;
-            		//validatity -= NO_LINE_PENALTY ;
-            	}
-                continue;
-            }
-
-           
-            float avgAfterMiddle = sumAfterMiddle / half_width;
-            float sel = (maximum-minimum)/5;
-            float selAfterMiddle = (maximumAfterMiddle-minimumAfterMiddle)/5;
-            float refCandidate = 0;
-            boolean isFoundRef = false;
-            int refIdx = 0;
-            float secondMaximal = 0;
-            int secondIdx = 0;
-
-//            Log.i(TAG, "Avg: " + String.valueOf(avgAll));
-//            Log.i(TAG, "avgAfterMiddle: " + String.valueOf(avgAfterMiddle));
-//            Log.i(TAG, "Sel: " + String.valueOf(sel));
-//            Log.i(TAG, "selAfterMiddle: " + String.valueOf(selAfterMiddle));
-
-            Vector candidateVector = new Vector();
-            for(int k= 0; k < vector.size(); k++){
-                int idx = (Integer)vector.get(k);
-
-                if( idx > LBOUND_FIRST_LINE_RANGE && idx <= UBOUND_FIRST_LINE_RANGE){
-                    if( x0[idx] - avgAll > sel){
-                        candidateVector.add(idx);
-//                        Log.i(TAG, "Reference in Id:" + idx);
-                    }
-                }
-                else if(idx > UBOUND_FIRST_LINE_RANGE && isFoundRef == false) {
-                    for(int m = 0; m < candidateVector.size(); m++){
-                        int tempIdx = (Integer)candidateVector.get(m);
-                        if( x0[tempIdx] > refCandidate){
-                            refCandidate = x0[tempIdx];
-                            refIdx = tempIdx;
-                        }
-                    }
-                    if(refIdx == 0){
-                    	//validatity -= FIRST_LINE_UNFOUND_PENALTY ;
-                        check -= FIRST_LINE_UNFOUND_PENALTY;
-                        break;
-                    }
-//                    Log.i(TAG, ("Maximum in Idx" + refIdx);
-                    isFoundRef = true;
-                }
-
-                else if(idx > half_width && isFoundRef == true) {
-                    if(x0[idx] - avgAfterMiddle > selAfterMiddle){
-                        //System.out.println(vector.get(k));
-                        if(secondMaximal < x0[idx]){
-                            secondMaximal = x0[idx];
-                            secondIdx = idx;
-                        }
-                    }
-                }
-
-                if(k == vector.size()-1){
-                    if(secondIdx != 0 && (secondIdx - refIdx) > LBOUND_BETWEEN_LINE && (secondIdx - refIdx) < UBOUND_BETWEEN_LINE){
-//                        Log.i(TAG, "Second: " + idx);
-                        check += FOUND_REWARD;
-                    }
-                    else{
-//                        Log.i(TAG, "Failed: " + secondIdx);
-                        check -= SECOND_LINE_UNFOUND_PENALTY;
-                    }
-                }
-
-            }
-        }
-        
-        if(validatity < -15){
-        	check = -1000;
-        }
-        else{
-        	int result2 = check > 0 ? 0:1;
-        	PreferenceControl.setTestResult(result2);
-        }
-	        Log.i(TAG, "Check: " + String.valueOf(check));
-	        
-	        String file_name = "PIC_" + ts + "_" + 2 + ".sob";
-	        String file_name2= "PIC_" + ts + "_" + 3 + ".sob";
-	        File file = new File(mainStorage, file_name);
-	        File file2 = new File(mainStorage, file_name2);
-	        
-	        try {
-	            out = new FileOutputStream(file, true);
-	            roiBmp.compress(Bitmap.CompressFormat.PNG, 100, out);
-	            out2 = new FileOutputStream(file2, true);
-	            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out2); 
-	            // bmp is your Bitmap instance
-	            // PNG is a lossless format, the compression factor (100) is ignored
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        } finally {
-	            try {
-	                if (out != null) {
-	                    out.close();
-	                }
-	                if (out2 != null) {
-	                    out2.close();
-	                }
-	            } catch (IOException e) {
-	                e.printStackTrace();
-	            }
-	        }
-	        
-	        
-        return (int)check;
-    }
+//    public int testStripDetection2(Bitmap bitmap){
+//        Bitmap roiBmp = Bitmap.createBitmap(bitmap, ROI_X_MIN + xmin + 3, ROI_Y_MIN + ymin + 3, xmax - xmin - 6, ymax -ymin-6);
+//        int width = roiBmp.getWidth();
+//        int height = roiBmp.getHeight();
+//        Log.i(TAG, "width: " + width + " , height: " + height);
+//        
+//        int half_width = width/2;
+//        
+//        final float eps = (float) -0.000001;
+//        float [] x0 = new float[width];
+//        float [] diff = new float[width-1];
+//        float [] pivot = new float[width-2];
+//        float check = 0;
+//        float validatity = 0;
+//        
+//        for(int i = 0; i < height; i++){
+//            float maximum = 0;
+//            float minimum = 255;
+//            float sumAll= 0;
+//            float sumAfterMiddle = 0;
+//            float maximumAfterMiddle = 0;
+//            float minimumAfterMiddle = 255;
+//            Vector vector = new Vector();
+//            for (int j = 0; j < width; j++) {
+//                //int pixel = image.getRGB(j, i);
+//                int pixel = roiBmp.getPixel(j, i);
+//                int value = 255 - ((pixel >> 16) & 0xff);
+//                //System.out.print(value + " ");
+//                x0[j] = value;
+//                sumAll += x0[j];
+//                if(j >= half_width){
+//                    sumAfterMiddle += x0[j];
+//                }
+//
+//                if( j > 0 ){
+//                    diff[j-1] = x0[j] - x0[j-1];
+//                    if (diff[j-1] == 0)
+//                        diff[j-1] = eps;
+//                }
+//
+//                if( j > 1 ){
+//                    pivot[j-2] = diff[j-2] * diff[j-1];
+//                    if( pivot[j-2] < 0 && diff[j-2] > 0 ){
+//                        vector.add(j-1);
+//                    }
+//                }
+//
+//                if(x0[j] > maximum)
+//                    maximum = x0[j];
+//
+//                if(x0[j] < minimum)
+//                    minimum = x0[j];
+//
+//                if(j >= half_width){
+//                    if(x0[j] > maximumAfterMiddle)
+//                        maximumAfterMiddle = x0[j];
+//
+//                    if(x0[j] < minimumAfterMiddle)
+//                        minimumAfterMiddle = x0[j];
+//                }
+//
+//            } 
+//            float avgAll = sumAll /width;
+//            //System.out.println("");
+//            if( (maximum - minimum) < MINIMAL_EFFECTIVE_RANGE ){
+//            	if(avgAll > LBOUND_EFFECTIVE_GRAYSCALE){
+//            		check -= NO_LINE_PENALTY;
+//            		//validatity -= NO_LINE_PENALTY ;
+//            	}
+//                continue;
+//            }
+//
+//           
+//            float avgAfterMiddle = sumAfterMiddle / half_width;
+//            float sel = (maximum-minimum)/5;
+//            float selAfterMiddle = (maximumAfterMiddle-minimumAfterMiddle)/5;
+//            float refCandidate = 0;
+//            boolean isFoundRef = false;
+//            int refIdx = 0;
+//            float secondMaximal = 0;
+//            int secondIdx = 0;
+//
+////            Log.i(TAG, "Avg: " + String.valueOf(avgAll));
+////            Log.i(TAG, "avgAfterMiddle: " + String.valueOf(avgAfterMiddle));
+////            Log.i(TAG, "Sel: " + String.valueOf(sel));
+////            Log.i(TAG, "selAfterMiddle: " + String.valueOf(selAfterMiddle));
+//
+//            Vector candidateVector = new Vector();
+//            for(int k= 0; k < vector.size(); k++){
+//                int idx = (Integer)vector.get(k);
+//
+//                if( idx > LBOUND_FIRST_LINE_RANGE && idx <= UBOUND_FIRST_LINE_RANGE){
+//                    if( x0[idx] - avgAll > sel){
+//                        candidateVector.add(idx);
+////                        Log.i(TAG, "Reference in Id:" + idx);
+//                    }
+//                }
+//                else if(idx > UBOUND_FIRST_LINE_RANGE && isFoundRef == false) {
+//                    for(int m = 0; m < candidateVector.size(); m++){
+//                        int tempIdx = (Integer)candidateVector.get(m);
+//                        if( x0[tempIdx] > refCandidate){
+//                            refCandidate = x0[tempIdx];
+//                            refIdx = tempIdx;
+//                        }
+//                    }
+//                    if(refIdx == 0){
+//                    	//validatity -= FIRST_LINE_UNFOUND_PENALTY ;
+//                        check -= FIRST_LINE_UNFOUND_PENALTY;
+//                        break;
+//                    }
+////                    Log.i(TAG, ("Maximum in Idx" + refIdx);
+//                    isFoundRef = true;
+//                }
+//
+//                else if(idx > half_width && isFoundRef == true) {
+//                    if(x0[idx] - avgAfterMiddle > selAfterMiddle){
+//                        //System.out.println(vector.get(k));
+//                        if(secondMaximal < x0[idx]){
+//                            secondMaximal = x0[idx];
+//                            secondIdx = idx;
+//                        }
+//                    }
+//                }
+//
+//                if(k == vector.size()-1){
+//                    if(secondIdx != 0 && (secondIdx - refIdx) > LBOUND_BETWEEN_LINE && (secondIdx - refIdx) < UBOUND_BETWEEN_LINE){
+////                        Log.i(TAG, "Second: " + idx);
+//                        check += FOUND_REWARD;
+//                    }
+//                    else{
+////                        Log.i(TAG, "Failed: " + secondIdx);
+//                        check -= SECOND_LINE_UNFOUND_PENALTY;
+//                    }
+//                }
+//
+//            }
+//        }
+//        
+//        if(validatity < -15){
+//        	check = -1000;
+//        }
+//        else{
+//        	int result2 = check > 0 ? 0:1;
+//        	PreferenceControl.setTestResult(result2);
+//        }
+//	        Log.i(TAG, "Check: " + String.valueOf(check));
+//	        
+//	        String file_name = "PIC_" + ts + "_" + 2 + ".sob";
+//	        String file_name2= "PIC_" + ts + "_" + 3 + ".sob";
+//	        File file = new File(mainStorage, file_name);
+//	        File file2 = new File(mainStorage, file_name2);
+//	        
+//	        try {
+//	            out = new FileOutputStream(file, true);
+//	            roiBmp.compress(Bitmap.CompressFormat.PNG, 100, out);
+//	            out2 = new FileOutputStream(file2, true);
+//	            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out2); 
+//	            // bmp is your Bitmap instance
+//	            // PNG is a lossless format, the compression factor (100) is ignored
+//	        } catch (Exception e) {
+//	            e.printStackTrace();
+//	        } finally {
+//	            try {
+//	                if (out != null) {
+//	                    out.close();
+//	                }
+//	                if (out2 != null) {
+//	                    out2.close();
+//	                }
+//	            } catch (IOException e) {
+//	                e.printStackTrace();
+//	            }
+//	        }
+//	        
+//	        
+//        return (int)check;
+//    }
     
 //    public boolean roiDetection(Bitmap bitmap){
 //

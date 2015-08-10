@@ -641,7 +641,7 @@ public class LineChartView extends View {
     		 Log.i(TAG, "X: " + distanceX + " Y: "+ distanceY);
     		 ClickLog.Log(ClickLogId.DAYBOOK_CHART_SCROLL);
     		 
-             return false;
+             return true;
          }
 
         @Override

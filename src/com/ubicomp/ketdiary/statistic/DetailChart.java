@@ -35,24 +35,19 @@ public class DetailChart {
 	private ImageView[] bar_ends = new ImageView[2];
 	private ImageView[] bar_progress = new ImageView[2];
 
-	private String[] detectionComment = App.getContext().getResources()
-			.getStringArray(R.array.radar_0);
-	private String[] adviceQuestionComment = App.getContext().getResources()
+	private String[] testComment = App.getContext().getResources()
+			.getStringArray(R.array.radar_0_0);
+	private String[] passComment = App.getContext().getResources()
+			.getStringArray(R.array.radar_0_1);
+	private String[] copingComment = App.getContext().getResources()
 			.getStringArray(R.array.radar_1_0);
-	private String[] adviceEmotionDIYComment = App.getContext().getResources()
-			.getStringArray(R.array.radar_1_1);
-	private String[] manageVoiceComment = App.getContext().getResources()
+	private String[] questionComment = App.getContext().getResources()
 			.getStringArray(R.array.radar_2_0);
-	private String[] manageEmotionComment = App.getContext().getResources()
-			.getStringArray(R.array.radar_2_1);
-	private String[] manageAdditionalComment = App.getContext().getResources()
-			.getStringArray(R.array.radar_2_2);
-	private String[] storyReadComment = App.getContext().getResources()
+	private String[] randomComment = App.getContext().getResources()
+			.getStringArray(R.array.radar_2_1);	
+	private String[] noteComment = App.getContext().getResources()
 			.getStringArray(R.array.radar_3_0);
-	private String[] storyTestComment = App.getContext().getResources()
-			.getStringArray(R.array.radar_3_1);
-	private String[] storyFbComment = App.getContext().getResources()
-			.getStringArray(R.array.radar_3_2);
+	
 
 	public static final int TYPE_TEST = 0;
 	public static final int TYPE_COPING = 1;
@@ -175,22 +170,22 @@ public class DetailChart {
 			case TYPE_TEST:
 				title.setText(R.string.radar_label0_full);
 
-				len = Math.min(rank.getTestTimes() * total_len / 200, total_len);
-				idx = Math.min(rank.getTestTimes() * 3 / 200,
-						detectionComment.length - 1);
+				len = Math.min(rank.getTestTimes() * total_len / 100, total_len);
+				idx = Math.min(rank.getTestTimes() * 3 / 100,
+						testComment.length - 1);
 				params[0].width = len;
 				subtitles[0].setText(R.string.radar_label0_0);
 				items[0].updateViewLayout(bar_progress[0], params[0]);
-				comments[0].setText(detectionComment[0]);
+				comments[0].setText(testComment[idx]);
 
 				len = Math.min(rank.getTestPass() * total_len / 100,
 						total_len);
 				idx = Math.min(rank.getTestPass() * 3 / 100,
-						detectionComment.length - 1);
+						passComment.length - 1);
 				params[1].width = len;
 				subtitles[1].setText(R.string.radar_label0_1);
 				items[1].updateViewLayout(bar_progress[1], params[1]);
-				comments[1].setText(detectionComment[0]);
+				comments[1].setText(passComment[idx]);
 				
 				items[0].setVisibility(View.VISIBLE);	
 				items[1].setVisibility(View.VISIBLE);
@@ -203,11 +198,11 @@ public class DetailChart {
 				len = Math.min(rank.getCoping() * total_len / 300,
 						total_len);
 				idx = Math.min(rank.getCoping() * 3 / 300,
-						adviceQuestionComment.length - 1);
+						copingComment.length - 1);
 				params[0].width = len;
 				subtitles[0].setText(R.string.radar_label1_0);
 				items[0].updateViewLayout(bar_progress[0], params[0]);
-				comments[0].setText(adviceQuestionComment[idx]);
+				comments[0].setText(copingComment[idx]);
 				
 				/*
 				len = Math.min(rank.getCoping() * total_len / 300,
@@ -230,20 +225,20 @@ public class DetailChart {
 				len = Math.min(rank.getNormalQ() * total_len / 200,
 						total_len);
 				idx = Math.min(rank.getNormalQ() * 3 / 200,
-						manageVoiceComment.length - 1);
+						questionComment.length - 1);
 				params[0].width = len;
 				subtitles[0].setText(R.string.radar_label2_0);
 				items[0].updateViewLayout(bar_progress[0], params[0]);
-				comments[0].setText(manageVoiceComment[0]);
+				comments[0].setText(questionComment[idx]);
 
-				len = Math.min(rank.getNormalQ() * total_len / 300,
+				len = Math.min(rank.getRandomQ() * total_len / 300,
 						total_len);
-				idx = Math.min(rank.getNormalQ() * 3 / 300,
-						manageEmotionComment.length - 1);
+				idx = Math.min(rank.getRandomQ() * 3 / 300,
+						randomComment.length - 1);
 				params[1].width = len;
 				subtitles[1].setText(R.string.radar_label2_1);
 				items[1].updateViewLayout(bar_progress[1], params[1]);
-				comments[1].setText(manageEmotionComment[0]);
+				comments[1].setText(randomComment[idx]);
 
 //				len = Math.min(rank.getManageAdditional() * total_len / 100,
 //						total_len);
@@ -265,11 +260,11 @@ public class DetailChart {
 				len = Math
 						.min(rank.getNote() * total_len / 300, total_len);
 				idx = Math.min(rank.getNote() * 3 / 300,
-						storyReadComment.length - 1);
+						noteComment.length - 1);
 				params[0].width = len;
 				subtitles[0].setText(R.string.radar_label3_0);
 				items[0].updateViewLayout(bar_progress[0], params[0]);
-				comments[0].setText(storyReadComment[0]);
+				comments[0].setText(noteComment[idx]);
 
 				/*
 				len = Math
