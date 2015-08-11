@@ -22,7 +22,7 @@
             android:layout_height="50dp"
             android:layout_marginLeft="40dp"
             android:layout_marginTop="40dp"
-            android:src="@drawable/emoji5" />
+            android:src="@drawable/type_icon1" />
 
 	        <TextView
 	            android:id="@+id/detail_time"

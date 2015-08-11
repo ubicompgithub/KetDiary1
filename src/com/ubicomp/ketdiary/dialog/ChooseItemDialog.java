@@ -21,7 +21,7 @@ import android.widget.TextView;
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
-import com.ubicomp.ketdiary.check.TimeBlock;
+import com.ubicomp.ketdiary.system.check.TimeBlock;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
 

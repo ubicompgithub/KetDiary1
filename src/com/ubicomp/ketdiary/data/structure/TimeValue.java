@@ -5,7 +5,7 @@ import java.util.Calendar;
 import android.app.AlarmManager;
 
 import com.ubicomp.ketdiary.App;
-import com.ubicomp.ketdiary.check.WeekNumCheck;
+import com.ubicomp.ketdiary.system.check.WeekNumCheck;
 
 public class TimeValue {
 	private int year;

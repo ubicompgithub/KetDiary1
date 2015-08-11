@@ -12,7 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import com.ubicomp.ketdiary.file.MainStorage;
+import com.ubicomp.ketdiary.data.file.MainStorage;
 
 /**
  *

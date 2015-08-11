@@ -33,7 +33,7 @@
                 android:id="@+id/question_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/emoji1"
+                android:src="@drawable/type_icon4"
                 android:visibility="gone" />
             
             <TextView

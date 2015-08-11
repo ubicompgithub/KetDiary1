@@ -10,9 +10,9 @@ import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.SelectActivity;
+import com.ubicomp.ketdiary.data.db.DatabaseControl;
 import com.ubicomp.ketdiary.data.structure.ExchangeHistory;
 import com.ubicomp.ketdiary.data.structure.TimeValue;
-import com.ubicomp.ketdiary.db.DatabaseControl;
 
 /**
  * Class for controlling Android Preference
@@ -114,6 +114,16 @@ public class PreferenceControl {
 	public static void setIsDeveloper(boolean developer) {
 		SharedPreferences.Editor edit = sp.edit();
 		edit.putBoolean("developer", developer);
+		edit.commit();
+	}
+	
+	public static boolean isSkip() {
+		return sp.getBoolean("skip", false);
+	}
+
+	public static void setIsSkip(boolean skip) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putBoolean("skip", skip);
 		edit.commit();
 	}
 	
@@ -227,7 +237,7 @@ public class PreferenceControl {
 	}
 	
 	public static int getPosition() {
-		return sp.getInt("Postion", 11);
+		return sp.getInt("Postion", 10);
 	}
 	
 	public static void setPosition(int addPos) {
@@ -236,8 +246,8 @@ public class PreferenceControl {
 		if(pos<0){
 			pos = 0;
 		}
-		else if(pos > 21){
-			pos = 21;
+		else if(pos > 20){
+			pos = 20;
 		}
 		SharedPreferences.Editor edit = sp.edit();
 		edit.putInt("Postion", pos);

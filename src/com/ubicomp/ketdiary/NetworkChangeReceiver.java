@@ -7,7 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 
-import com.ubicomp.ketdiary.check.NetworkCheck;
+import com.ubicomp.ketdiary.system.check.NetworkCheck;
 
 /**
  * Receiver for getting the network condition

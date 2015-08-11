@@ -12,7 +12,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.ubicomp.ketdiary.db.DatabaseControl;
+import com.ubicomp.ketdiary.data.db.DatabaseControl;
 
 /**
  * Service for handling message received from AlarmReceiver

@@ -5,7 +5,7 @@
     android:layout_height="320dp"
     android:orientation="vertical"
     android:gravity="bottom">    
-       <com.ubicomp.ketdiary.mydaybook.linechart.LineChartTitle
+       <com.ubicomp.ketdiary.daybook.linechart.LineChartTitle
            android:id="@+id/chart_title"
            android:layout_width="wrap_content"
            android:layout_height="50dp" />
@@ -18,7 +18,7 @@
 	            android:layout_width="wrap_content"
 	    	    android:layout_height="wrap_content"
 	    	    android:orientation="vertical" >
-			    <com.ubicomp.ketdiary.mydaybook.linechart.LineChartView
+			    <com.ubicomp.ketdiary.daybook.linechart.LineChartView
 			        android:id="@+id/lineChart"
 			        android:layout_width="700dp"
 			        android:layout_height="match_parent"

@@ -43,21 +43,21 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
-import com.ubicomp.ketdiary.clicklog.ClickLog;
-import com.ubicomp.ketdiary.clicklog.ClickLogId;
+import com.ubicomp.ketdiary.data.db.DatabaseControl;
+import com.ubicomp.ketdiary.data.download.CassetteIDCollector;
 import com.ubicomp.ketdiary.data.structure.Cassette;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
 import com.ubicomp.ketdiary.data.structure.TestResult;
-import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.dialog.CheckResultDialog;
-import com.ubicomp.ketdiary.fragment.DaybookFragment;
-import com.ubicomp.ketdiary.fragment.StatisticFragment;
-import com.ubicomp.ketdiary.fragment.TestFragment2;
+import com.ubicomp.ketdiary.main.fragment.DaybookFragment;
+import com.ubicomp.ketdiary.main.fragment.StatisticFragment;
+import com.ubicomp.ketdiary.main.fragment.TestFragment2;
 import com.ubicomp.ketdiary.noUse.NoteDialog3;
 import com.ubicomp.ketdiary.noUse.TestStripDetection3;
-import com.ubicomp.ketdiary.statistic.CassetteIDCollector;
 import com.ubicomp.ketdiary.system.Config;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.system.clicklog.ClickLog;
+import com.ubicomp.ketdiary.system.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.ui.CustomMenu;
 import com.ubicomp.ketdiary.ui.CustomTab;
 import com.ubicomp.ketdiary.ui.CustomToast;
@@ -932,8 +932,10 @@ public class MainActivity extends FragmentActivity {
 		int result = PreferenceControl.getTestResult();//TODO: check if no data
 		int isFilled = PreferenceControl.getIsFilled();
 		TestDetail testDetail = db.getLatestTestDetail();
-		
-		TestResult testResult = new TestResult(result, timestamp, testDetail.getCassetteId(),	1, isFilled, 0, 0);
+		String cassetteId = testDetail.getCassetteId();
+		if(cassetteId == null)
+			cassetteId = "CT_Test";
+		TestResult testResult = new TestResult(result, timestamp, cassetteId,	1, isFilled, 0, 0);
 		
 		if(db.getTodayTestCount() == 1){
 			addScore = db.insertTestResult(testResult, true);

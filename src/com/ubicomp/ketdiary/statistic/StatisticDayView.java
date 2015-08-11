@@ -16,9 +16,9 @@ import android.widget.TextView;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.data.db.DatabaseControl;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.TestResult;
-import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.ui.CustomTypefaceSpan;
 import com.ubicomp.ketdiary.ui.Typefaces;
 

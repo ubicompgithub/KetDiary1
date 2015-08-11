@@ -18,8 +18,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ubicomp.ketdiary.db.DatabaseRestore;
-import com.ubicomp.ketdiary.file.ReadDummyData;
+import com.ubicomp.ketdiary.data.db.DatabaseRestore;
+import com.ubicomp.ketdiary.data.file.ReadDummyData;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.CustomToastSmall;
 
@@ -57,7 +57,8 @@ public class PreSettingActivity extends Activity {
 
 	private CheckBox developer_switch;
 	private CheckBox collectdata_switch;
-
+	private CheckBox skip_saliva_switch;
+	
 	private static final int DATE_DIALOG_ID = 0;
 	private static final int LOCK_DIALOG_ID = 1;
 
@@ -78,7 +79,10 @@ public class PreSettingActivity extends Activity {
 		
 		developer_switch = (CheckBox) this.findViewById(R.id.developer_switch);
 		developer_switch.setChecked(PreferenceControl.isDeveloper());
-
+		
+		skip_saliva_switch = (CheckBox) this.findViewById(R.id.skip_saliva_switch);
+		skip_saliva_switch.setChecked(PreferenceControl.isSkip());
+		
 		target_good = (EditText) this.findViewById(R.id.target_positive_edit);
 		target_good.setText(PreferenceControl.getPostiveGoal());
 
@@ -344,6 +348,7 @@ public class PreSettingActivity extends Activity {
 				PreferenceControl.setUID(text);
 				PreferenceControl.setDeviceId(text2);
 				
+				PreferenceControl.setIsSkip(skip_saliva_switch.isChecked());
 				PreferenceControl.setIsDeveloper(developer_switch.isChecked());
 				PreferenceControl.setCollectData(collectdata_switch.isChecked());
 				PreferenceControl.setGoal2(target_g, target_b);

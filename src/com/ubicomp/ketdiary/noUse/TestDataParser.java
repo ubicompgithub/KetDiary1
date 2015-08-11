@@ -8,9 +8,9 @@ import android.content.Context;
 import android.util.Log;
 
 import com.ubicomp.ketdiary.App;
+import com.ubicomp.ketdiary.data.file.MainStorage;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.TestResult;
-import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 
 /**

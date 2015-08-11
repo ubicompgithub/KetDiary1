@@ -17,14 +17,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/emoji5" />
+            android:src="@drawable/type_icon1" />
 
         <ImageView
             android:id="@+id/vts_iv_not_good"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/emoji2"
+            android:src="@drawable/type_icon2"
             android:layout_marginLeft="10dp" />
 
         <ImageView
@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/emoji4"
+            android:src="@drawable/type_icon3"
             android:layout_marginLeft="10dp" />
 
     </LinearLayout>
@@ -55,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/emoji3"
+            android:src="@drawable/type_icon5"
             android:layout_marginLeft="10dp" />
 
         <ImageView
@@ -63,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/emoji4"
+            android:src="@drawable/type_icon3"
             android:visibility="invisible"
             android:layout_marginLeft="10dp" />
 

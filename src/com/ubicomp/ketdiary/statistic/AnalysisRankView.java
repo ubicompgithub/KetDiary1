@@ -17,10 +17,11 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.ubicomp.ketdiary.R;
-import com.ubicomp.ketdiary.check.StartDateCheck;
+import com.ubicomp.ketdiary.data.db.DatabaseControl;
+import com.ubicomp.ketdiary.data.download.UserLevelCollector;
 import com.ubicomp.ketdiary.data.structure.Rank;
-import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.system.check.StartDateCheck;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
 public class AnalysisRankView extends StatisticPageView {

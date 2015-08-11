@@ -20,15 +20,15 @@ import android.widget.Toast;
 
 import com.ubicomp.ketdiary.AlarmService;
 import com.ubicomp.ketdiary.R;
-import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE_old;
-import com.ubicomp.ketdiary.BluetoothLE.BluetoothListener;
 import com.ubicomp.ketdiary.R.id;
 import com.ubicomp.ketdiary.R.layout;
-import com.ubicomp.ketdiary.file.ColorRawFileHandler;
-import com.ubicomp.ketdiary.file.MainStorage;
-import com.ubicomp.ketdiary.file.VoltageFileHandler;
+import com.ubicomp.ketdiary.data.file.ColorRawFileHandler;
+import com.ubicomp.ketdiary.data.file.MainStorage;
+import com.ubicomp.ketdiary.data.file.VoltageFileHandler;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 //import com.ubicomp.ketdiary.dialog.NoteDialog;
+import com.ubicomp.ketdiary.test.bluetoothLE.BluetoothLE_old;
+import com.ubicomp.ketdiary.test.bluetoothLE.BluetoothListener;
 
 /** Event Cope Skill Page
  * 

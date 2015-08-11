@@ -36,9 +36,9 @@ import android.widget.Toast;
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.data.file.QuestionFile;
 import com.ubicomp.ketdiary.dialog.ChooseItemDialog;
 import com.ubicomp.ketdiary.dialog.TestQuestionCaller;
-import com.ubicomp.ketdiary.file.QuestionFile;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.BarButtonGenerator;
 import com.ubicomp.ketdiary.ui.CustomToast;
@@ -760,15 +760,15 @@ public class NoteDialog2{
 		}
 		
 		private void resetView(){
-			iv_smile.setImageResource(R.drawable.emoji4);
-			iv_not_good.setImageResource(R.drawable.emoji2);
-			iv_urge.setImageResource(R.drawable.emoji3);
-			iv_cry.setImageResource(R.drawable.emoji5);
-			iv_try.setImageResource(R.drawable.emoji1);
+			iv_smile.setImageResource(R.drawable.type_icon3);
+			iv_not_good.setImageResource(R.drawable.type_icon2);
+			iv_urge.setImageResource(R.drawable.type_icon5);
+			iv_cry.setImageResource(R.drawable.type_icon1);
+			iv_try.setImageResource(R.drawable.type_icon4);
 			
-			iv_social.setImageResource(R.drawable.others_emoji1);
-			iv_playing.setImageResource(R.drawable.others_emoji2);
-			iv_conflict.setImageResource(R.drawable.others_emoji3);
+			iv_social.setImageResource(R.drawable.type_icon8);
+			iv_playing.setImageResource(R.drawable.type_icon7);
+			iv_conflict.setImageResource(R.drawable.type_icon6);
 		}
 		
 		/** 初始化Type*/
@@ -813,7 +813,7 @@ public class NoteDialog2{
 		        
 		        case R.id.vts_iv_cry:
 		        	resetView();
-		        	iv_cry.setImageResource(R.drawable.emoji5_pressed);
+		        	iv_cry.setImageResource(R.drawable.type_icon1_pressed);
 		        	typetext.setHint(R.string.note_negative);
 		        	
 		        	SetListItem(R.array.note_negative);
@@ -824,7 +824,7 @@ public class NoteDialog2{
 	        		break;
 		        case R.id.vts_iv_not_good:
 		        	resetView();
-		        	iv_not_good.setImageResource(R.drawable.emoji2_pressed);
+		        	iv_not_good.setImageResource(R.drawable.type_icon2_pressed);
 		        	typetext.setHint(R.string.note_notgood);
 		        	
 		        	SetListItem(R.array.note_notgood);
@@ -834,7 +834,7 @@ public class NoteDialog2{
 			        break;
 		        case R.id.vts_iv_smile:
 		        	resetView();
-		        	iv_smile.setImageResource(R.drawable.emoji4_pressed);
+		        	iv_smile.setImageResource(R.drawable.type_icon3_pressed);
 		        	typetext.setHint(R.string.note_positive);
 		        	
 		        	SetListItem(R.array.note_positive);
@@ -844,7 +844,7 @@ public class NoteDialog2{
 		        	break;
 		        case R.id.vts_iv_try:
 		        	resetView();
-		        	iv_try.setImageResource(R.drawable.emoji1_pressed);
+		        	iv_try.setImageResource(R.drawable.type_icon4_pressed);
 		        	typetext.setHint(R.string.note_selftest);
 		        	
 		        	SetListItem(R.array.note_selftest);
@@ -854,7 +854,7 @@ public class NoteDialog2{
 		        	break;
 		        case R.id.vts_iv_urge:
 		        	resetView();
-		        	iv_urge.setImageResource(R.drawable.emoji3_pressed);
+		        	iv_urge.setImageResource(R.drawable.type_icon5_pressed);
 		        	typetext.setHint(R.string.note_temptation);
 		        	
 		        	SetListItem(R.array.note_temptation);
@@ -864,7 +864,7 @@ public class NoteDialog2{
 		        	break;
 		        case R.id.vts_iv_playing:
 		        	resetView();
-		        	iv_playing.setImageResource(R.drawable.others_emoji2_pressed);
+		        	iv_playing.setImageResource(R.drawable.type_icon7_pressed);
 		        	typetext.setHint(R.string.note_play);
 		        	
 		        	SetListItem(R.array.note_play);
@@ -874,7 +874,7 @@ public class NoteDialog2{
 		        	break;
 		        case R.id.vts_iv_social:
 		        	resetView();
-		        	iv_social.setImageResource(R.drawable.others_emoji1_oressed);
+		        	iv_social.setImageResource(R.drawable.type_icon8_pressed);
 		        	typetext.setHint(R.string.note_social);
 		        	
 		        	SetListItem(R.array.note_social);
@@ -884,7 +884,7 @@ public class NoteDialog2{
 		        	break;
 		        case R.id.vts_iv_conflict:
 		        	resetView();
-		        	iv_conflict.setImageResource(R.drawable.others_emoji3_pressed);
+		        	iv_conflict.setImageResource(R.drawable.type_icon6_pressed);
 		        	typetext.setHint(R.string.note_conflict);
 		        	
 		        	SetListItem(R.array.note_conflict);

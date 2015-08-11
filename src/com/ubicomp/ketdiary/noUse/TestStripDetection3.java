@@ -21,7 +21,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.ubicomp.ketdiary.file.MainStorage;
+import com.ubicomp.ketdiary.data.file.MainStorage;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 //import org.opencv.highgui.Highgui;
 

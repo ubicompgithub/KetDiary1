@@ -4,9 +4,9 @@ import java.io.File;
 
 import android.app.AlarmManager;
 
+import com.ubicomp.ketdiary.data.db.DatabaseControl;
+import com.ubicomp.ketdiary.data.file.MainStorage;
 import com.ubicomp.ketdiary.data.structure.TestResult;
-import com.ubicomp.ketdiary.db.DatabaseControl;
-import com.ubicomp.ketdiary.file.MainStorage;
 
 public class Cleaner {
 

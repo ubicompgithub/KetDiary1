@@ -16,9 +16,9 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.ubicomp.ketdiary.clicklog.ClickLog;
-import com.ubicomp.ketdiary.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.system.clicklog.ClickLog;
+import com.ubicomp.ketdiary.system.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.ui.BarButtonGenerator;
 import com.ubicomp.ketdiary.ui.Typefaces;
 import com.ubicomp.ketdiary.ui.spinnergroup.MultiRadioGroup;

@@ -10,9 +10,9 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.ubicomp.ketdiary.App;
+import com.ubicomp.ketdiary.data.db.DataUploader;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.TestResult;
-import com.ubicomp.ketdiary.db.DataUploader;
 
 
 /** 

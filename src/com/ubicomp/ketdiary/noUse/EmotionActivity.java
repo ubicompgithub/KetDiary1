@@ -30,7 +30,7 @@ import com.ubicomp.ketdiary.R.id;
 import com.ubicomp.ketdiary.R.layout;
 import com.ubicomp.ketdiary.R.raw;
 import com.ubicomp.ketdiary.R.string;
-import com.ubicomp.ketdiary.db.DatabaseControl;
+import com.ubicomp.ketdiary.data.db.DatabaseControl;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.ui.BarButtonGenerator;
 import com.ubicomp.ketdiary.ui.CustomToast;

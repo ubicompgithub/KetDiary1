@@ -16,12 +16,12 @@ import android.widget.Toast;
 
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
-import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE2;
-import com.ubicomp.ketdiary.BluetoothLE.BluetoothListener;
 import com.ubicomp.ketdiary.R.drawable;
+import com.ubicomp.ketdiary.data.db.DatabaseControl;
 import com.ubicomp.ketdiary.data.structure.TestResult;
-import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.test.bluetoothLE.BluetoothLE2;
+import com.ubicomp.ketdiary.test.bluetoothLE.BluetoothListener;
 import com.ubicomp.ketdiary.ui.CustomToast;
 
 public class ResultService2 extends Service {

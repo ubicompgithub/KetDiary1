@@ -23,8 +23,8 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 
 import com.ubicomp.ketdiary.R;
-import com.ubicomp.ketdiary.file.MainStorage;
-import com.ubicomp.ketdiary.file.QuestionFile;
+import com.ubicomp.ketdiary.data.file.MainStorage;
+import com.ubicomp.ketdiary.data.file.QuestionFile;
 
 
 /**

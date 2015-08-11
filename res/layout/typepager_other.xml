@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/others_emoji3" />
+            android:src="@drawable/type_icon6" />
 
         <ImageView
             android:id="@+id/vts_iv_playing"
@@ -25,14 +25,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="10dp"
-            android:src="@drawable/others_emoji1" />
+            android:src="@drawable/type_icon8" />
 
         <ImageView
             android:id="@+id/vts_iv_smile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/emoji4"
+            android:src="@drawable/type_icon3"
             android:layout_marginLeft="10dp"
             android:visibility="invisible" />
 
@@ -48,14 +48,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/others_emoji2" />
+            android:src="@drawable/type_icon7" />
 
         <ImageView
             android:id="@+id/vts_iv_urge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/emoji3"
+            android:src="@drawable/type_icon5"
             android:visibility="invisible"
             android:layout_marginLeft="10dp" />
 
@@ -64,7 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/emoji4"
+            android:src="@drawable/type_icon3"
             android:visibility="invisible"
             android:layout_marginLeft="10dp" />
 

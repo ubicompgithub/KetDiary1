@@ -25,9 +25,9 @@ import android.widget.Spinner;
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.data.file.MainStorage;
+import com.ubicomp.ketdiary.data.file.QuestionFile;
 import com.ubicomp.ketdiary.dialog.TestQuestionCaller;
-import com.ubicomp.ketdiary.file.MainStorage;
-import com.ubicomp.ketdiary.file.QuestionFile;
 
 
 /**

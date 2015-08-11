@@ -13,11 +13,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.ubicomp.ketdiary.clicklog.ClickLogId;
+import com.ubicomp.ketdiary.data.db.DatabaseControl;
+import com.ubicomp.ketdiary.data.db.NoteCatagory3;
 import com.ubicomp.ketdiary.data.structure.TestResult;
-import com.ubicomp.ketdiary.db.DatabaseControl;
-import com.ubicomp.ketdiary.db.NoteCatagory3;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.system.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.ui.BarButtonGenerator;
 import com.ubicomp.ketdiary.ui.Typefaces;
 import com.ubicomp.ketdiary.ui.spinnergroup.MultiRadioGroup;

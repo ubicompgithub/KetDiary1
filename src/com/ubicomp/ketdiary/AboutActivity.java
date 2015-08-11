@@ -17,9 +17,9 @@ import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
-import com.ubicomp.ketdiary.clicklog.ClickLog;
-import com.ubicomp.ketdiary.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.system.clicklog.ClickLog;
+import com.ubicomp.ketdiary.system.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.ui.CustomToastSmall;
 import com.ubicomp.ketdiary.ui.CustomTypefaceSpan;
 import com.ubicomp.ketdiary.ui.Typefaces;

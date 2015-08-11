@@ -17,11 +17,11 @@ import android.widget.TextView;
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
-import com.ubicomp.ketdiary.clicklog.ClickLog;
-import com.ubicomp.ketdiary.clicklog.ClickLogId;
+import com.ubicomp.ketdiary.data.db.DatabaseControl;
 import com.ubicomp.ketdiary.data.structure.QuestionTest;
-import com.ubicomp.ketdiary.db.DatabaseControl;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.system.clicklog.ClickLog;
+import com.ubicomp.ketdiary.system.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.ui.CustomToast;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
@@ -73,9 +73,9 @@ public class QuestionDialog{
 	private static long last_visit= 0;
 	private static long last_visit2=0;
 	
-	private static final int[] iconId = {R.drawable.emoji5, R.drawable.emoji2, R.drawable.emoji4,
-		R.drawable.emoji1, R.drawable.emoji3, R.drawable.others_emoji3, R.drawable.others_emoji2,
-		R.drawable.others_emoji1};
+	private static final int[] iconId = {R.drawable.type_icon1, R.drawable.type_icon2, R.drawable.type_icon3,
+		R.drawable.type_icon4, R.drawable.type_icon5, R.drawable.type_icon6, R.drawable.type_icon7,
+		R.drawable.type_icon8};
 	
 	private static final int[] dotId2 = { 0, R.drawable.dot_color1, R.drawable.dot_color2,
     	R.drawable.dot_color3, R.drawable.dot_color4, R.drawable.dot_color5,

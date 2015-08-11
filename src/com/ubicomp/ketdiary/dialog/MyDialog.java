@@ -7,7 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ubicomp.ketdiary.R;
-import com.ubicomp.ketdiary.db.NoteCategory2;
+import com.ubicomp.ketdiary.noUse.NoteCategory2;
 
 public class MyDialog extends Dialog{
 	
