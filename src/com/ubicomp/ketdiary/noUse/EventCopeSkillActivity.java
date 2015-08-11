@@ -24,7 +24,6 @@ import com.ubicomp.ketdiary.BluetoothLE.BluetoothLE_old;
 import com.ubicomp.ketdiary.BluetoothLE.BluetoothListener;
 import com.ubicomp.ketdiary.R.id;
 import com.ubicomp.ketdiary.R.layout;
-import com.ubicomp.ketdiary.color.ColorDetect2;
 import com.ubicomp.ketdiary.file.ColorRawFileHandler;
 import com.ubicomp.ketdiary.file.MainStorage;
 import com.ubicomp.ketdiary.file.VoltageFileHandler;

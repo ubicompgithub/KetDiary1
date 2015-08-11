@@ -219,7 +219,10 @@ public class ClickLogId {
 																		// on
 																		// agreement
 	public final static long DAYBOOK_TEST_CANCEL = 70300000;
+	
+	public final static long MAIN_BACK_PRESS = 80000000;
 
+	
 	public final static long TAB_TEST = 90000000;
 	public final static long TAB_STATISTIC = 90100000;
 	public final static long TAB_DAYBOOK = 90200000;

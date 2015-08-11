@@ -174,6 +174,8 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 
 			long passTime = System.currentTimeMillis() - PreferenceControl.getLatestTestCompleteTime();
 			
+			long startTime = System.currentTimeMillis();
+			
 			spentTime = timeout - passTime;
 			
 			minutes = (spentTime/1000)/60;
@@ -187,7 +189,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	        	writeToColorRawFile("State: " + state);
 	        }
 	        
-	        mhandler.postDelayed(this, 1000);
+	        //mhandler.postDelayed(this, 1000);
 	        if(state == BEGIN_STATE){
 	        	if(spentTime > 2*60*1000 && spentTime > 8*60*1000){                  //最晚兩分鐘前要把第一張照拍好
 		        	
@@ -205,10 +207,8 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 				    	writeToColorRawFile("Write State : 0x03");
 						ble.bleWriteState((byte)0x03);
 				    }
-
 	        	}
 	        	else{
-
 	        		setTestFail("過曝照片未傳完");
 	        	}
 	        }
@@ -264,10 +264,13 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	        }
 	        else if(state == RESULT_STATE){
 	        	
-	        	if(seconds == 5 && minutes == 0){
+	        	if(seconds == 10 && minutes == 0){
 	        		result2 = checkResult();
+	        		writeToColorRawFile("checkResult");
 				}
 	        	else if(spentTime <=0){
+	        		writeToColorRawFile("Time's up!");
+	        		
 		        	if(result2)
 	        			goResultSuccess();
 	        		else
@@ -276,6 +279,12 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		        	state = END_STATE;
 	        	}
 	        }
+	        long endTime = System.currentTimeMillis();
+	        long runTime = endTime - startTime;
+	        
+	        writeToColorRawFile("RunTime: " + runTime);
+	        
+	        mhandler.postDelayed(this, 1000);
 	        
 //	        if( spentTime < 0 ){
 //	        	boolean isfail = PreferenceControl.isTestFail();
@@ -754,10 +763,12 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		
 		if(colorReading == -1000){
 			Log.i(TAG, "Reading: " + colorReading);
+			writeToColorRawFile("Line Can't Detect");
 			return false;
 			//setTestFail("無法判斷檢測結果");
 		}
 		else{
+			writeToColorRawFile("Line Good");
 			int result2 = colorReading > DETECT_THRESHOLD ? 0:1;
         	PreferenceControl.setTestResult(result2);
         	setResultSuccess();
@@ -766,19 +777,23 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	}
 	
 	private boolean checkResult(){
-		boolean isSuccess = false;
+		boolean isSuccess = true;
 		if(picNum == 2){
+			writeToColorRawFile("check First Pic");
 			isSuccess = checkSingleColor(colorReading1);		
 		}
 		else if(picNum == 3){
 			if(colorReading1 == -1000){
+				writeToColorRawFile("check Second Pic");
 				isSuccess = checkSingleColor(colorReading2);
 			}
 			else{
 				if(colorReading2 == -1000){
+					writeToColorRawFile("check First Pic 2");
 					isSuccess = checkSingleColor(colorReading1);
 				}
 				else{
+					writeToColorRawFile("Average Score");
 					int tmpColor = (colorReading1 + colorReading2)/2;
 					isSuccess = checkSingleColor(tmpColor);
 				}
@@ -838,7 +853,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	@Override
 	public void writeDebug(String msg) {
 		Log.i(TAG, "Msg: " + msg);
-		//writeToColorRawFile(msg);
+		writeToColorRawFile(msg);
 	}
 	
 	

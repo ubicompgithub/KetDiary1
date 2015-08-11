@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.color;
+package com.ubicomp.ketdiary.noUse;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

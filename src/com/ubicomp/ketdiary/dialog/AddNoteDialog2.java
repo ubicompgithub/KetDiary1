@@ -979,7 +979,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 					iv_self_others_bar.setImageResource(R.drawable.note_slide_line1);
 					break;
 				case 1:
-					ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_SCROLL_SELF);
+					ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_SCROLL_OTHER);
 					text_self.setTextColor(resource.getColor(R.color.text_gray3));
 					text_other.setTextColor(resource.getColor(R.color.blue));
 					iv_self_others_bar.setImageResource(R.drawable.note_slide_line2);

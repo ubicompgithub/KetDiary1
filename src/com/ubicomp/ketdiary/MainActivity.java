@@ -741,7 +741,8 @@ public class MainActivity extends FragmentActivity {
 					openOptionsMenu();
 			}
 			return true;
-		} else if (keyCode == KeyEvent.KEYCODE_BACK) {	
+		} else if (keyCode == KeyEvent.KEYCODE_BACK) {
+			ClickLog.Log(ClickLogId.MAIN_BACK_PRESS);
 			if (menu != null && menu.isShowing()) {
 				closeOptionsMenu();
 				return true;
