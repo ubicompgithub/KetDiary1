@@ -3,32 +3,25 @@ package com.ubicomp.ketdiary.noUse;
 import java.io.File;
 import java.util.TimerTask;
 
-import android.annotation.SuppressLint;
+import com.ubicomp.ketdiary.AlarmService;
+import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.data.file.ColorRawFileHandler;
+import com.ubicomp.ketdiary.data.file.MainStorage;
+import com.ubicomp.ketdiary.data.file.VoltageFileHandler;
+import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.test.bluetoothle.BluetoothLE_old;
+
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.ubicomp.ketdiary.AlarmService;
-import com.ubicomp.ketdiary.R;
-import com.ubicomp.ketdiary.R.id;
-import com.ubicomp.ketdiary.R.layout;
-import com.ubicomp.ketdiary.data.file.ColorRawFileHandler;
-import com.ubicomp.ketdiary.data.file.MainStorage;
-import com.ubicomp.ketdiary.data.file.VoltageFileHandler;
-import com.ubicomp.ketdiary.system.PreferenceControl;
-//import com.ubicomp.ketdiary.dialog.NoteDialog;
-import com.ubicomp.ketdiary.test.bluetoothLE.BluetoothLE_old;
-import com.ubicomp.ketdiary.test.bluetoothLE.BluetoothListener;
 
 /** Event Cope Skill Page
  * 

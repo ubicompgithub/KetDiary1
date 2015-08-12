@@ -3,6 +3,22 @@ package com.ubicomp.ketdiary;
 import java.io.File;
 import java.util.Calendar;
 
+import com.ubicomp.ketdiary.data.db.DatabaseControl;
+import com.ubicomp.ketdiary.data.db.TestDataParser2;
+import com.ubicomp.ketdiary.data.file.ColorRawFileHandler;
+import com.ubicomp.ketdiary.data.file.MainStorage;
+import com.ubicomp.ketdiary.data.file.PicFileHandler;
+import com.ubicomp.ketdiary.data.structure.TestDetail;
+import com.ubicomp.ketdiary.main.fragment.TestFragment2;
+import com.ubicomp.ketdiary.noUse.NoteDialog3;
+import com.ubicomp.ketdiary.noUse.TestStripDetection4;
+import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.test.bluetoothle.BluetoothLE3;
+import com.ubicomp.ketdiary.test.bluetoothle.BluetoothListener;
+import com.ubicomp.ketdiary.test.color.ColorDetectListener;
+import com.ubicomp.ketdiary.test.color.ImageDetection;
+import com.ubicomp.ketdiary.ui.CustomToastSmall;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -20,22 +36,6 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.util.Log;
 import android.widget.Toast;
-
-import com.ubicomp.ketdiary.data.db.DatabaseControl;
-import com.ubicomp.ketdiary.data.db.TestDataParser2;
-import com.ubicomp.ketdiary.data.file.ColorRawFileHandler;
-import com.ubicomp.ketdiary.data.file.MainStorage;
-import com.ubicomp.ketdiary.data.file.PicFileHandler;
-import com.ubicomp.ketdiary.data.structure.TestDetail;
-import com.ubicomp.ketdiary.main.fragment.TestFragment2;
-import com.ubicomp.ketdiary.noUse.NoteDialog3;
-import com.ubicomp.ketdiary.noUse.TestStripDetection4;
-import com.ubicomp.ketdiary.system.PreferenceControl;
-import com.ubicomp.ketdiary.test.bluetoothLE.BluetoothLE3;
-import com.ubicomp.ketdiary.test.bluetoothLE.BluetoothListener;
-import com.ubicomp.ketdiary.test.color.ColorDetectListener;
-import com.ubicomp.ketdiary.test.color.ImageDetection;
-import com.ubicomp.ketdiary.ui.CustomToastSmall;
 
 public class ResultService3 extends Service implements BluetoothListener, ColorDetectListener{
 	

@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.test.bluetoothLE;
+package com.ubicomp.ketdiary.test.bluetoothle;
 
 import java.io.File;
 import java.io.FileOutputStream;
