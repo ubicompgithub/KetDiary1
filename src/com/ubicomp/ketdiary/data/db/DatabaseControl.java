@@ -147,12 +147,12 @@ public class DatabaseControl {
 				boolean isPrime = !(data.isSameDay(prev_data));
 				// add by Andy
 				int result = data.getResult();
-				if(isPrime){
-					if(result == 0)
-						PreferenceControl.setPosition(1);
-					else
-						PreferenceControl.setPosition(-1);
-				}
+//				if(isPrime){
+//					if(result == 0)
+//						PreferenceControl.setPosition(1);
+//					else
+//						PreferenceControl.setPosition(-1);
+//				}
 				//
 				int isPrimeValue = isPrime ? 1 : 0;
 				int addScore = 0;
@@ -1609,7 +1609,7 @@ public class DatabaseControl {
 				if (!StartDateCheck.afterStartDate())
 					addScore = 0;
 				
-				if(data.getQuestionType() == 1){
+				if(data.getQuestionType() == 1 && (data.getisCorrect()==1)){
 					addScore = 3;
 				}
 				

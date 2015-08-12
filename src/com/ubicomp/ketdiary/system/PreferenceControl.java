@@ -49,7 +49,7 @@ public class PreferenceControl {
 	public static void defaultSetting() {
 		setUID("rehab_default_test");
 		setDeviceId("ket_000");
-		setIsDeveloper(true);
+		setIsDeveloper(false);
 		Calendar cal = Calendar.getInstance();
 		setStartDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
 				cal.get(Calendar.DAY_OF_MONTH));
@@ -217,10 +217,13 @@ public class PreferenceControl {
 	
 	public static int getPoint() {
 		DatabaseControl db = new DatabaseControl();
-		int total_point = db.getLatestTestResult().getScore()
-				+ db.getLatestNoteAdd().getScore()
-				+ db.getLatestQuestionTest().getScore()
-				+ db.getLatestCopingSkill().getScore();
+		int resultScore = db.getLatestTestResult().getScore();
+		int noteScore = db.getLatestNoteAdd().getScore();
+		int questionScore = db.getLatestQuestionTest().getScore();
+		int copingScore = db.getLatestCopingSkill().getScore();
+		
+		Log.i(TAG, "result: "+resultScore + "note: "+noteScore + "question: "+questionScore +"coping: " +copingScore);
+		int total_point = resultScore + noteScore + questionScore + copingScore;
 		return total_point;	
 		//return sp.getInt("Point", 0);
 	}
@@ -255,12 +258,19 @@ public class PreferenceControl {
 	}
 	
 	public static int getLastPosition() {
-		return sp.getInt("LastPostion", 11);
+		return sp.getInt("LastPostion", 10);
 	}
 	
 	public static void setLastPosition(int Pos) {
 //		int last_position= getLastPosition();
 		SharedPreferences.Editor edit = sp.edit();
+		if(Pos<0){
+			Pos = 0;
+		}
+		else if(Pos > 20){
+			Pos = 20;
+		}
+		
 		edit.putInt("LastPostion", Pos);
 		edit.commit();
 	}

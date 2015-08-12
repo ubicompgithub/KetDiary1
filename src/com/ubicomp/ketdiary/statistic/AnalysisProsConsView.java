@@ -13,6 +13,7 @@ import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
@@ -45,7 +46,7 @@ public class AnalysisProsConsView extends StatisticPageView {
 
 	private BarHandler barHandler = new BarHandler();
 	private AlphaAnimation arrowAnimation;
-	
+	private boolean debug = PreferenceControl.isDebugMode();
 	//for debug
 	private static int count = 20;
 
@@ -211,6 +212,11 @@ public class AnalysisProsConsView extends StatisticPageView {
 		@Override
 		public void handleMessage(Message msg) {
 			updateBar();
+			
+			if(debug){
+				int today_situation = PreferenceControl.getPosition();
+				Toast.makeText(context, "Position:"+(today_situation-10), Toast.LENGTH_LONG).show();
+			}
 			
 			long curTime = System.currentTimeMillis();
 			long testTime = PreferenceControl.getLatestTestCompleteTime();

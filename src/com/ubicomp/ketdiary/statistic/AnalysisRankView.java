@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.data.db.DatabaseControl;
@@ -56,6 +57,7 @@ public class AnalysisRankView extends StatisticPageView {
 	private ShowRadarChart showRadarChart;
 	
 	private AlphaAnimation titleAnimation;
+	private boolean debug = PreferenceControl.isDebugMode();
 	
 	public AnalysisRankView(ShowRadarChart showRadarChart) {
 		super(R.layout.analysis_rank_view);
@@ -176,7 +178,10 @@ public class AnalysisRankView extends StatisticPageView {
 		RankInfo _rank = getRankMonth(uid);
 		nPeople = _rank.nPeople;
 		rank = _rank.rank;
-
+		
+		if(debug)
+			Toast.makeText(context, "Month:"+(rank+1), Toast.LENGTH_LONG).show();
+		
 		increaseMonth.setVisibility(View.INVISIBLE);
 		decreaseMonth.setVisibility(View.INVISIBLE);
 
@@ -244,6 +249,9 @@ public class AnalysisRankView extends StatisticPageView {
 		RankInfo _rank = getRankWeek(uid);
 		nPeople = _rank.nPeople;
 		rank = _rank.rank;
+		
+		if(debug)
+			Toast.makeText(context, "Week:"+(rank+1), Toast.LENGTH_LONG).show();
 
 		increaseWeek.setVisibility(View.INVISIBLE);
 		decreaseWeek.setVisibility(View.INVISIBLE);
