@@ -9,7 +9,7 @@
         <item>衝動、誘惑或轉移注意</item>
         <item>與他人相處上遇到困難</item>
         <item>維持社交</item>
-        <item>與他人相聚</item>
+        <item>與他人或動物相處</item>
         <item>自訂</item>
     </string-array>
     
@@ -108,7 +108,7 @@
     <string name="note_temptation">衝動、誘惑或轉移注意</string>
     <string name="note_conflict">與他人相處上遇到困難</string>
     <string name="note_social">維持社交</string>
-    <string name="note_play">與他人相聚</string>
+    <string name="note_play">與他人或動物相處</string>
     
     <string-array name="item_select">
         <item>請點選類別以選擇</item>

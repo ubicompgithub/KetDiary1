@@ -129,7 +129,7 @@ public class AnalysisProsConsView extends StatisticPageView {
 		
 		
 		int maxWidth = barWidth - positionWidth;
-		int width_per_block=maxWidth/21;
+		int width_per_block=maxWidth/20;
 		int nextWidth = width_per_block*today_situation;
 		Log.d(TAG,""+today_situation);
 		

@@ -298,7 +298,7 @@ public class PreferenceControl {
 	}
 	
 	public static int getVoltag1() {
-		return sp.getInt("Voltage1", 100);
+		return sp.getInt("Voltage1", 110);
 	}
 	
 	public static void setVoltage1(int voltage1) {
@@ -308,7 +308,7 @@ public class PreferenceControl {
 	}
 	
 	public static int getVoltag2() {
-		return sp.getInt("Voltage2", 120);
+		return sp.getInt("Voltage2", 110);
 	}
 	
 	public static void setVoltage2(int voltage2) {
