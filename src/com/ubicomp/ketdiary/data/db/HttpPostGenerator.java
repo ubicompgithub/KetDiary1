@@ -42,7 +42,7 @@ public class HttpPostGenerator {
 	//public HttpPostGenerator inst = new HttpPostGenerator();
 	//private HttpPostGenerator(){}
 		
-	
+	private static final int PicNum = 8;
 	/**
 	 * Generate POST of Patient
 	 * @param p
@@ -75,6 +75,7 @@ public class HttpPostGenerator {
 		}
 		nvps.add(new BasicNameValuePair("userData[]", String.valueOf( WeekNumCheck.getWeek(System.currentTimeMillis()))));		
 		nvps.add(new BasicNameValuePair("userData[]", String.valueOf( PreferenceControl.getPosition()-10)));
+		nvps.add(new BasicNameValuePair("userData[]", String.valueOf( PreferenceControl.getPoint())));
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
 		} catch (UnsupportedEncodingException e) {}
@@ -121,8 +122,8 @@ public class HttpPostGenerator {
 		
 		builder.addTextBody("data[]", String.valueOf(fileNum));
 		
-		imageFiles = new File[fileNum];
-		picFiles = new File[fileNum];
+		imageFiles = new File[fileNum - PicNum];
+		picFiles = new File[PicNum];
 		
 		testFile = new File(mainStorageDir.getPath() + File.separator + _ts
 				+ File.separator + "voltage.txt");

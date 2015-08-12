@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -42,6 +44,10 @@ public class AnalysisProsConsView extends StatisticPageView {
 	private String dollor_sign;
 
 	private BarHandler barHandler = new BarHandler();
+	private AlphaAnimation arrowAnimation;
+	
+	//for debug
+	private static int count = 20;
 
 	public AnalysisProsConsView() {
 		super(R.layout.analysis_saving_view);
@@ -116,6 +122,14 @@ public class AnalysisProsConsView extends StatisticPageView {
 		clear();
 	}
 	
+	private void setAnimation(View v){
+		arrowAnimation = new AlphaAnimation(1.0F, 0.0F);
+		arrowAnimation.setDuration(200);
+		arrowAnimation.setRepeatCount(Animation.INFINITE);
+		arrowAnimation.setRepeatMode(Animation.REVERSE);
+		v.setAnimation(arrowAnimation);
+		arrowAnimation.start();
+	}
 	
 	private void updateBar(){
 		//int today_situation=19; //pass or fail
@@ -123,17 +137,24 @@ public class AnalysisProsConsView extends StatisticPageView {
 		boolean checkBars = PreferenceControl.getCheckBars();
 		int today_situation = PreferenceControl.getPosition();
 		int barWidth = bar.getRight() - bar.getLeft();
-		int positionWidth =currentBar.getRight() - currentBar.getLeft();
+		int positionWidth = currentBar.getRight() - currentBar.getLeft();
 //		int leftWidth = barStart.getRight() - barStart.getLeft();
 //		int rightWidth = barEnd.getRight() - barEnd.getLeft();
 		
 		
 		int maxWidth = barWidth - positionWidth;
 		int width_per_block=maxWidth/20;
+		
+//		//for debug
+//		today_situation = count--;
+//		checkBars = true;
+		
 		int nextWidth = width_per_block*today_situation;
+		
 		Log.d(TAG,""+today_situation);
 		
-		if(check || checkBars){
+		//if(check || checkBars){
+		if(checkBars){
 			int curWidth = width_per_block*PreferenceControl.getLastPosition();
 			if(nextWidth>curWidth){
 				if(nextWidth>=maxWidth){
@@ -144,10 +165,11 @@ public class AnalysisProsConsView extends StatisticPageView {
 				else{
 					barStart.setVisibility(View.INVISIBLE);
 					barEnd.setVisibility(View.VISIBLE);
+					setAnimation(barEnd);
 				}
 			}
 			else if(nextWidth<curWidth){
-				if(nextWidth<=0){
+				if(nextWidth<0){
 					nextWidth=0;
 					barStart.setVisibility(View.INVISIBLE);
 					barEnd.setVisibility(View.INVISIBLE);
@@ -155,7 +177,7 @@ public class AnalysisProsConsView extends StatisticPageView {
 				else{
 					barStart.setVisibility(View.VISIBLE);
 					barEnd.setVisibility(View.INVISIBLE);
-					
+					setAnimation(barStart);
 				}
 			}
 			else{
@@ -169,6 +191,7 @@ public class AnalysisProsConsView extends StatisticPageView {
 		layout.updateViewLayout(bar_followed, currentBarParam);
 		currentBar.setVisibility(View.VISIBLE);
 		
+		PreferenceControl.setCheckBars(false);
 		
 		/*
 		int result = db.getTodayPrimeResult();
@@ -196,8 +219,7 @@ public class AnalysisProsConsView extends StatisticPageView {
 			
 			if(testFail){				
 			}
-			else if( PreferenceControl.getCheckResult() && pastTime >= MainActivity.WAIT_RESULT_TIME){
-				
+			else if( PreferenceControl.getCheckResult() && pastTime >= MainActivity.WAIT_RESULT_TIME){			
 				PreferenceControl.setCheckResult(false);
 			}
 			else if ( PreferenceControl.getCheckResult() && pastTime < MainActivity.WAIT_RESULT_TIME ){

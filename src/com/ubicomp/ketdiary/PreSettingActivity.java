@@ -16,11 +16,11 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ubicomp.ketdiary.data.db.DatabaseRestore;
 import com.ubicomp.ketdiary.data.file.ReadDummyData;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.system.cleaner.Cleaner;
 import com.ubicomp.ketdiary.ui.CustomToastSmall;
 
 /**
@@ -34,7 +34,7 @@ public class PreSettingActivity extends Activity {
 	private EditText voltage1, voltage2, ACountDown, VCountDown, V2CountDown;
 
 	private Button saveButton, exchangeButton, restoreButton, debugButton,
-			restoreVer1Button, dummyDataButton, changeButton;
+			restoreVer1Button, dummyDataButton, changeButton, cleanButton;
 	private boolean debug;
 	private Activity activity;
 	private static final int MIN_NAME_LENGTH = 3;
@@ -132,6 +132,38 @@ public class PreSettingActivity extends Activity {
 				 intent.setClass(activity, SelectActivity.class);
 				 startActivity(intent);					
 			}
+			
+		});
+		
+		cleanButton = (Button) this.findViewById(R.id.cleanButton);
+		cleanButton.setOnClickListener(new OnClickListener(){
+			
+			private Thread cleanThread = null;
+			@Override
+			public void onClick(View v) {
+				
+				if (cleanThread != null && !cleanThread.isInterrupted()) { //May be used some day.
+					cleanThread.interrupt();
+					cleanThread = null;
+				}
+	
+				cleanThread = new Thread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							Cleaner.clean();
+						} catch (Exception e) {
+						}
+					}
+				});
+				cleanThread.start();
+				try {
+					cleanThread.join(500);
+				} catch (InterruptedException e) {
+				}
+				
+			}
+			
 			
 		});
 		

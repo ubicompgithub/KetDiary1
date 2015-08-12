@@ -485,7 +485,8 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			water_layout.setVisibility(View.INVISIBLE);
 			img_cassette.setVisibility(View.INVISIBLE);
 			//cameraLayout.setVisibility(View.INVISIBLE);
-			cameraRecorder.pause();
+			if(cameraRecorder != null)
+				cameraRecorder.pause();
 			
 			stopDueToInit();
 			MainActivity.getMainActivity().enableTabAndClick(true);
@@ -1337,7 +1338,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 					if( millisUntilFinished < (40-DEBUG_SPEED_UP_SECOND)*1000 || (first && first_voltage)) {
 						img_cassette.setVisibility(View.VISIBLE);
 						water_layout.setVisibility(View.INVISIBLE);
-						label_subtitle.setText("吐完足量口水後，請抽掉檔片");
+						label_subtitle.setText("吐完足量口水後，請抽掉擋片");
 						label_title.setText("測試進行中，請稍候");
 						first = false;					
 						state = DRAW_STATE;				
