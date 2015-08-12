@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.ubicomp.ketdiary.test.bluetoothLE;
+package com.ubicomp.ketdiary.test.bluetoothle;
 
 import android.annotation.SuppressLint;
 import android.app.Service;

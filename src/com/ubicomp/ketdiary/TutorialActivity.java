@@ -25,7 +25,8 @@ public class TutorialActivity extends Activity {
 
 	private ImageView replay, arrow1, arrow2, arrow3;
 	private ImageView tab;
-
+	private ImageView tutorial1_bg2, tutorial2_bg2, tutorial3_bg2, tutorial4_bg2, tutorial5_bg2, tutorial6_bg2;
+	private ImageView tutorial1_flash, tutorial2_flash, tutorial3_flash, tutorial4_flash, tutorial5_flash, tutorial6_flash;
 	private TextView step;
 	private TextView help;
 	private TextView notify;
@@ -45,7 +46,18 @@ public class TutorialActivity extends Activity {
 
 		digitTypeface = Typefaces.getDigitTypeface();
 		wordTypefaceBold = Typefaces.getWordTypefaceBold();
-
+		tutorial1_bg2 = (ImageView) this.findViewById(R.id.tutorial1_bg2);
+		tutorial2_bg2 = (ImageView) this.findViewById(R.id.tutorial2_bg2);
+		tutorial3_bg2 = (ImageView) this.findViewById(R.id.tutorial3_bg2);
+		tutorial4_bg2 = (ImageView) this.findViewById(R.id.tutorial4_bg2);
+		tutorial5_bg2 = (ImageView) this.findViewById(R.id.tutorial5_bg2);
+		tutorial6_bg2 = (ImageView) this.findViewById(R.id.tutorial6_bg2);
+		tutorial1_flash = (ImageView) this.findViewById(R.id.tutorial1_flash);
+		tutorial2_flash = (ImageView) this.findViewById(R.id.tutorial2_flash);
+		tutorial3_flash = (ImageView) this.findViewById(R.id.tutorial3_flash);
+		tutorial4_flash = (ImageView) this.findViewById(R.id.tutorial4_flash);
+		tutorial5_flash = (ImageView) this.findViewById(R.id.tutorial5_flash);
+		tutorial6_flash = (ImageView) this.findViewById(R.id.tutorial6_flash);
 		//replay = (ImageView) this.findViewById(R.id.tutorial_replay);
 		//replay.setOnTouchListener(new ScaleOnTouchListener());
 		//arrow1 = (ImageView) this.findViewById(R.id.tutorial_arrow1);
@@ -104,7 +116,10 @@ public class TutorialActivity extends Activity {
 			
 			layout.setBackgroundResource(R.drawable.tutorial1_bg);
 			layout.setOnClickListener(new Listener(0));
-			
+			tutorial6_bg2.setVisibility(View.GONE);
+			tutorial6_flash.setVisibility(View.GONE);
+			tutorial1_bg2.setVisibility(View.VISIBLE);
+			tutorial1_flash.setVisibility(View.VISIBLE);
 //			help.setText(R.string.tutorial_step1);
 //			layout.setOnClickListener(new Listener(0));
 //			replay.setOnClickListener(null);
@@ -122,7 +137,10 @@ public class TutorialActivity extends Activity {
 			
 			layout.setBackgroundResource(R.drawable.tutorial2_bg);
 			layout.setOnClickListener(new Listener(1));
-			
+			tutorial1_bg2.setVisibility(View.GONE);
+			tutorial1_flash.setVisibility(View.GONE);
+			tutorial2_bg2.setVisibility(View.VISIBLE);
+			tutorial2_flash.setVisibility(View.VISIBLE);
 //			help.setText(R.string.tutorial_step2);
 //			layout.setOnClickListener(new Listener(1));
 //			replay.setOnClickListener(null);
@@ -140,7 +158,10 @@ public class TutorialActivity extends Activity {
 			
 			layout.setBackgroundResource(R.drawable.tutorial3_bg);
 			layout.setOnClickListener(new Listener(2));
-			
+			tutorial2_bg2.setVisibility(View.GONE);
+			tutorial2_flash.setVisibility(View.GONE);
+			tutorial3_bg2.setVisibility(View.VISIBLE);
+			tutorial3_flash.setVisibility(View.VISIBLE);
 //			help.setText(R.string.tutorial_step3);
 //			layout.setOnClickListener(new EndListener());
 //			replay.setOnClickListener(new Listener(-1));
@@ -155,16 +176,28 @@ public class TutorialActivity extends Activity {
 //			anim3.start();
 			break;
 		case 3:
-			layout.setBackgroundResource(R.drawable.tutorial4);
+			layout.setBackgroundResource(R.drawable.tutorial4_bg);
 			layout.setOnClickListener(new Listener(3));
+			tutorial3_bg2.setVisibility(View.GONE);
+			tutorial3_flash.setVisibility(View.GONE);
+			tutorial4_bg2.setVisibility(View.VISIBLE);
+			tutorial4_flash.setVisibility(View.VISIBLE);
 			break;
 		case 4:
-			layout.setBackgroundResource(R.drawable.tutorial5);
+			layout.setBackgroundResource(R.drawable.tutorial5_bg);
 			layout.setOnClickListener(new Listener(4));
+			tutorial4_bg2.setVisibility(View.GONE);
+			tutorial4_flash.setVisibility(View.GONE);
+			tutorial5_bg2.setVisibility(View.VISIBLE);
+			tutorial5_flash.setVisibility(View.VISIBLE);
 			break;
 		case 5:
 			layout.setBackgroundResource(R.drawable.tutorial6_bg);
 			layout.setOnClickListener(new EndListener());
+			tutorial5_bg2.setVisibility(View.GONE);
+			tutorial5_flash.setVisibility(View.GONE);
+			tutorial6_bg2.setVisibility(View.VISIBLE);
+			tutorial6_flash.setVisibility(View.VISIBLE);
 			
 			break;
 
