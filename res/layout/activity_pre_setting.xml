@@ -673,6 +673,33 @@
                         android:textColor="@color/white"
                         android:textSize="@dimen/small_title_size" />
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Clean Directory"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+
+                    <Button
+                        android:id="@+id/cleanButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/setting_button"
+                        android:paddingBottom="3dp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:paddingTop="3dp"
+                        android:text="Clean"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+                </LinearLayout>
             </LinearLayout>
 
             <TextView

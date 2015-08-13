@@ -71,10 +71,10 @@ public class NoteCatagory3 {
 		temptation.put(504, "喝酒且想用K");
 		temptation.put(505, "想到用K後的舒服感");
 		temptation.put(506, "沒來由地想用K");
-		temptation.put(507, "習慣、不用會不對勁");
+		temptation.put(507, "已習慣用K,不用K會不對勁");
 		temptation.put(508, "找事情做");
 		temptation.put(509, "培養其他興趣、專長");
-		temptation.put(510, "避開K");
+		temptation.put(510, "想避開K");
 		temptation.put(511, "找替代品");
 		temptation.put(512, "深呼吸");
 		temptation.put(513, "運動");

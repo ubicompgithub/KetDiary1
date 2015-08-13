@@ -10,6 +10,7 @@ import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
@@ -359,9 +360,7 @@ public class MainActivity extends FragmentActivity {
             Log.d(TAG, "OpenCV library found inside package. Using it!");
             mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
         }
-		
-		
-		
+			
 		/*if (LockCheck.check()) {
 			Intent lock_intent = new Intent(this, LockedActivity.class);
 			startActivity(lock_intent);
@@ -922,6 +921,11 @@ public class MainActivity extends FragmentActivity {
 	}
 	
 	public void checkResultAddPoint(){
+		
+		if( getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE ){
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+			setTabHostVisible(View.VISIBLE);
+		}
 		
 		int addScore=0;
 		//NoteAdd noteAdd = ((TestFragment) fragments[0]).TDP.noteAdd;//TODO: set NoteAdd, get NoteAdd
