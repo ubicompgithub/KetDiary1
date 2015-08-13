@@ -347,14 +347,24 @@ public class PreferenceControl {
 		edit.commit();
 	}
 	
+	// public static int getSustainMonth(){
+	// 	int sustainMonth = 0;
+	// 	Calendar cal = Calendar.getInstance();
+	// 	int data = sp.getInt("sMonth", cal.get(Calendar.MONTH));
+	// 	sustainMonth = cal.get(Calendar.MONTH) - data + 1;
+	// 	return sustainMonth;
+	// }
+	
+	// Blue Zhong
 	public static int getSustainMonth(){
 		int sustainMonth = 0;
 		Calendar cal = Calendar.getInstance();
-		int data = sp.getInt("sMonth", cal.get(Calendar.MONTH));
-		sustainMonth = cal.get(Calendar.MONTH) - data + 1;
+		int sYear = sp.getInt("sYear", cal.get(Calendar.YEAR));
+		int sMonth = sp.getInt("sMonth", cal.get(Calendar.MONTH));
+		sustainMonth = (cal.get(Calendar.YEAR) - sYear) * 12 + cal.get(Calendar.MONTH) - sMonth + 1;
 		return sustainMonth;
 	}
-	
+
 	public static Calendar getStartDate() {
 		int[] data = new int[3];
 		Calendar cal = Calendar.getInstance();

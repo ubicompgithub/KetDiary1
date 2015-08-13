@@ -36,6 +36,8 @@ public class SectionsPagerAdapter extends PagerAdapter {
 	private static final String TAG = "Calendar";
 	
     private View[] pageViewList;
+    public static final int TAG_PAGE_YEAR = R.string.TAG_PAGE_YEAR;
+    public static final int TAG_PAGE_MONTH = R.string.TAG_PAGE_MONTH;
     private GridLayout[] glCalendar;
     private Calendar mCalendar;
     private static final int THIS_DAY = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
@@ -128,7 +130,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
 	
     private void initPageView(View pageView, int position){
 
-        int pageViewMonth = Integer.valueOf((pageView.getTag()).toString());
+        int pageViewMonth = Integer.valueOf((pageView.getTag(TAG_PAGE_MONTH)).toString());
         glCalendar[position] = (GridLayout) pageView.findViewById(R.id.gl_calendar);
         
         // Initialize the calendar

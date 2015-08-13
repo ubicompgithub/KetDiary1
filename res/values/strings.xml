@@ -412,7 +412,10 @@
 	<string name="check_result">看測試結果?</string>
 	<string name="knowledge">戒K小常識</string>
 	
-	
+
+    
+	<string name="TAG_PAGE_YEAR">tag_page_year</string>
+    <string name="TAG_PAGE_MONTH">tag_page_month</string>
 	
 	<string name="TAG_CAL_CELL_DAY">tag_cal_cell_day</string>
 	<string name="TAG_CAL_CELL_MONTH">tag_cal_cell_month</string>
