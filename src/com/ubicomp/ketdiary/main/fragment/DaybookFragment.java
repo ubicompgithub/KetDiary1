@@ -154,11 +154,11 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private static final String[] monthName = {"一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"};
 	
 	private LineChartData[] dataset = null;
-	private int sustainMonth = PreferenceControl.getSustainMonth();
+	private static final int sustainMonth = PreferenceControl.getSustainMonth();
 	private Calendar startDay = PreferenceControl.getStartDate();
 	private int startYear = startDay.get(Calendar.YEAR);
 	private int startMonth = startDay.get(Calendar.MONTH) + 1;
-	private int currentPageIdx = Calendar.getInstance().get(Calendar.MONTH) + 1 - startMonth;
+	private int currentPageIdx = sustainMonth - 1;
 	
 	private static final int[] iconId = {0, R.drawable.type_icon1, R.drawable.type_icon2, R.drawable.type_icon3,
 		R.drawable.type_icon4, R.drawable.type_icon5, R.drawable.type_icon6, R.drawable.type_icon7,
@@ -237,8 +237,8 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		for (int i = 0; i < sustainMonth; i++) {
 			pageViewList[i] = (View) inflater.inflate(R.layout.fragment_calendar, null);
 			
-			pageViewList[i].setTag(TAG_PAGE_YEAR, tempCalendar.get(Calendar.YEAR));  // Blue Zhong
-			pageViewList[i].setTag(TAG_PAGE_MONTH, tempCalendar.get(Calendar.MONTH));  // Blue Zhong
+			pageViewList[i].setTag(TAG_PAGE_YEAR, tempCalendar.get(Calendar.YEAR));
+			pageViewList[i].setTag(TAG_PAGE_MONTH, tempCalendar.get(Calendar.MONTH));
 			tempCalendar.add(Calendar.MONTH, 1);
 		}
 		mSectionsPagerAdapter = new SectionsPagerAdapter(pageViewList);
@@ -482,12 +482,11 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			public void onPageSelected(int arg0) {
 				ClickLog.Log(ClickLogId.DAYBOOK_CHANGE_MONTH);
 				currentPageIdx = arg0;
-				// titleText.setText( (startMonth + currentPageIdx) + "月");  // Original Blue Zhong
 				int month = (startMonth + currentPageIdx)%12;
 				if(month == 0)
-					titleText.setText("12月");  // Blue Zhong
+					titleText.setText("12月");
 				else
-					titleText.setText( month + "月");  // Blue Zhong
+					titleText.setText( month + "月");
 				
 //				updateTask = new LoadDiaryTask();
 //				updateTask.execute(startMonth + currentPageIdx-1);
@@ -555,7 +554,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
                     newSelectedDayTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                 }
 
-                mViewPager.setCurrentItem(Calendar.getInstance().get(Calendar.MONTH) + 1 - startMonth);
+                mViewPager.setCurrentItem(sustainMonth - 1);
             }
         });
 
@@ -1364,9 +1363,9 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		//0805 add
 		int month = (startMonth + currentPageIdx)%12;
 		if(month == 0)
-			titleText.setText("12月");  // Blue Zhong
+			titleText.setText("12月");
 		else
-			titleText.setText( month + "月");  // Blue Zhong
+			titleText.setText( month + "月");
 		
 		Log.d(TAG, "chart_type: "+chart_type);
 		setArrow(true);
@@ -1866,21 +1865,17 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			for (int i = 0; i < sustainMonth; i++) {
 				pageViewList[i] = (View) inflater.inflate(R.layout.fragment_calendar, null);
 				
-				pageViewList[i].setTag(TAG_PAGE_YEAR, tempCalendar.get(Calendar.YEAR));  // Blue Zhong
-				pageViewList[i].setTag(TAG_PAGE_MONTH, tempCalendar.get(Calendar.MONTH));  // Blue Zhong
+				pageViewList[i].setTag(TAG_PAGE_YEAR, tempCalendar.get(Calendar.YEAR));
+				pageViewList[i].setTag(TAG_PAGE_MONTH, tempCalendar.get(Calendar.MONTH));
 				tempCalendar.add(Calendar.MONTH, 1);
 			}
-			// To Be Deleted Blue Zhong
-			// for (int i = 0; i < sustainMonth; i++) {
-			// 	pageViewList[i] = (View) inflater.inflate(R.layout.fragment_calendar, null);
-			// 	pageViewList[i].setTag(i + startMonth - 1);
-			// }
 
 			mSectionsPagerAdapter = new SectionsPagerAdapter(pageViewList);
 			mViewPager.setAdapter(mSectionsPagerAdapter);
-	
+			
 			if (pageIdx == -1)
-				mViewPager.setCurrentItem(Calendar.getInstance().get(Calendar.MONTH) + 1 - startMonth);
+				// mViewPager.setCurrentItem(Calendar.getInstance().get(Calendar.MONTH) + 1 - startMonth);
+				mViewPager.setCurrentItem(sustainMonth - 1);
 			else
 				mViewPager.setCurrentItem(pageIdx);
 		}

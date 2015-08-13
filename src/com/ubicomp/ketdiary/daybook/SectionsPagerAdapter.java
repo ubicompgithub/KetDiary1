@@ -42,6 +42,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
     private Calendar mCalendar;
     private static final int THIS_DAY = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
     private static final int THIS_MONTH = Calendar.getInstance().get(Calendar.MONTH);
+    private static final int THIS_YEAR = Calendar.getInstance().get(Calendar.YEAR);
     
     private static View thisDayView;
     private static View selectedView;
@@ -130,6 +131,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
 	
     private void initPageView(View pageView, int position){
 
+        int pageViewYear = Integer.valueOf((pageView.getTag(TAG_PAGE_YEAR)).toString());
         int pageViewMonth = Integer.valueOf((pageView.getTag(TAG_PAGE_MONTH)).toString());
         glCalendar[position] = (GridLayout) pageView.findViewById(R.id.gl_calendar);
         
@@ -138,10 +140,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
         int maxDaysOfWeek = mCalendar.getMaximum(Calendar.DAY_OF_WEEK);
         mCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 
-        mCalendar.set(Calendar.DAY_OF_MONTH, 1);
-        
-        // 如果使用者可以使用超過一年會有問題！例如閏年跟非閏年的二月就有所不同，必須跟著調整年份
-        mCalendar.set(Calendar.MONTH, pageViewMonth);
+        mCalendar.set(pageViewYear, pageViewMonth, 1);
         int maxWeeksOfMonth = mCalendar.getActualMaximum(Calendar.WEEK_OF_MONTH);
 
         // Our first day of week is Monday, but "Calendar.SUNDAY" is still 1 not 7,
@@ -306,7 +305,7 @@ public class SectionsPagerAdapter extends PagerAdapter {
             }
             
             // Initialize the selected view on current day
-            if (mCalendar.get(Calendar.DAY_OF_MONTH) == THIS_DAY && mCalendar.get(Calendar.MONTH) == THIS_MONTH) {
+            if (mCalendar.get(Calendar.DAY_OF_MONTH) == THIS_DAY && mCalendar.get(Calendar.MONTH) == THIS_MONTH && mCalendar.get(Calendar.YEAR) == THIS_YEAR) {
                 thisDayView = cellView;
                 if (selectedView == null){
                     selectedView = thisDayView;
@@ -314,12 +313,13 @@ public class SectionsPagerAdapter extends PagerAdapter {
             }
             
             // Highlight the selected day
-            int selectedDay, selectedMonth;
+            int selectedDay, selectedMonth, selectedYear;
             if (selectedView != null){
                 selectedDay = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_DAY).toString());
                 selectedMonth = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_MONTH).toString());
+                selectedYear = Integer.valueOf(selectedView.getTag(TAG_CAL_CELL_YEAR).toString());
 
-                if (mCalendar.get(Calendar.DAY_OF_MONTH) == selectedDay && mCalendar.get(Calendar.MONTH) == selectedMonth) {
+                if (mCalendar.get(Calendar.DAY_OF_MONTH) == selectedDay && mCalendar.get(Calendar.MONTH) == selectedMonth && mCalendar.get(Calendar.YEAR) == selectedYear) {
                     selectedView = cellView;
                     calDateText.setTextColor(context.getResources().getColor(R.color.black));
                     calDateText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
