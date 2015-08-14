@@ -1752,14 +1752,13 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
         Log.i(TAG, "plugId: " + id + " power: " + power_notenough);
         
         cassetteId = "CT_"+id;
-        boolean check = db.checkCassette(cassetteId);
         
-        
-        Log.i(TAG, "cassetteId: " + cassetteId + " " + check);
-        if( (!check  || cassetteId.equals("CT_-0001")) && !debug ){
-        	
-        	setState(new FailState("試紙匣已用過，請更換試紙匣"));
-        	
+        if(state != FAIL_STATE && state!= IDLE_STATE && state != DONE_STATE){
+	        boolean check = db.checkCassette(cassetteId);        
+	        Log.i(TAG, "cassetteId: " + cassetteId + " " + check);
+	        if( (!check  || cassetteId.equals("CT_-0001")) && !debug ){        	
+	        	setState(new FailState("試紙匣已用過，請更換試紙匣"));        	
+	        }
         }
         //check ID here
         if( state == CONN_STATE )

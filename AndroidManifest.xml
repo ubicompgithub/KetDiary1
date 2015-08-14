@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ubicomp.ketdiary"
-    android:versionCode="77"
-    android:versionName="1.77" >
+    android:versionCode="79"
+    android:versionName="1.79" >
     
     <uses-sdk android:minSdkVersion="14" />
  	
@@ -89,7 +89,7 @@
 
         <service android:name=".DailyService" />
         <service
-            android:name="com.ubicomp.ketdiary.test.bluetoothLE.BluetoothLeService"
+            android:name="com.ubicomp.ketdiary.test.bluetoothle.BluetoothLeService"
             android:enabled="true" >
         </service>
 

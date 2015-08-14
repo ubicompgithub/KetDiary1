@@ -128,7 +128,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	        	
 	    state = BEGIN_STATE;   	
 		initVariable();
-		writeToColorRawFile("Service Start, State = " + state);
+		writeToColorRawFile("Service Start, State = " + state + " Device: " + PreferenceControl.getDeviceId());
 		PreferenceControl.setResultServiceRun(true);
 	    Log.d(TAG,  "onStartCommand() executed" );       
 	    mhandler.postDelayed(updateTimer, 1000);

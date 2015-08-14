@@ -35,7 +35,7 @@ public class TutorialActivity extends Activity {
 	private Typeface digitTypeface;
 	private Typeface wordTypefaceBold;
 
-	private Animation anim1, anim2, anim3;
+	private Animation anim1, anim2, anim3, anim4, anim5, anim6;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +82,12 @@ public class TutorialActivity extends Activity {
 				R.anim.animation_tutorial_arrow);
 		anim3 = AnimationUtils.loadAnimation(this,
 				R.anim.animation_tutorial_arrow);
+		anim4 = AnimationUtils.loadAnimation(this,
+				R.anim.animation_tutorial_arrow);
+		anim5 = AnimationUtils.loadAnimation(this,
+				R.anim.animation_tutorial_arrow);
+		anim6 = AnimationUtils.loadAnimation(this,
+				R.anim.animation_tutorial_arrow);
 
 	}
 
@@ -99,6 +105,12 @@ public class TutorialActivity extends Activity {
 			anim2.cancel();
 		if (anim3 != null)
 			anim3.cancel();
+		if (anim4 != null)
+			anim4.cancel();
+		if (anim5 != null)
+			anim5.cancel();
+		if (anim6 != null)
+			anim6.cancel();
 		ClickLog.Log(ClickLogId.TUTORIAL_LEAVE);
 		super.onPause();
 	}
@@ -111,6 +123,12 @@ public class TutorialActivity extends Activity {
 			anim2.cancel();
 		if (anim3 != null)
 			anim3.cancel();
+		if (anim4 != null)
+			anim4.cancel();
+		if (anim5 != null)
+			anim5.cancel();
+		if (anim6 != null)
+			anim6.cancel();
 		switch (state) {
 		case 0:
 			
@@ -120,6 +138,9 @@ public class TutorialActivity extends Activity {
 			tutorial6_flash.setVisibility(View.GONE);
 			tutorial1_bg2.setVisibility(View.VISIBLE);
 			tutorial1_flash.setVisibility(View.VISIBLE);
+			
+			tutorial6_flash.setAnimation(null);
+			tutorial1_flash.setAnimation(anim1);
 //			help.setText(R.string.tutorial_step1);
 //			layout.setOnClickListener(new Listener(0));
 //			replay.setOnClickListener(null);
@@ -141,6 +162,9 @@ public class TutorialActivity extends Activity {
 			tutorial1_flash.setVisibility(View.GONE);
 			tutorial2_bg2.setVisibility(View.VISIBLE);
 			tutorial2_flash.setVisibility(View.VISIBLE);
+			
+			tutorial1_flash.setAnimation(null);
+			tutorial2_flash.setAnimation(anim1);
 //			help.setText(R.string.tutorial_step2);
 //			layout.setOnClickListener(new Listener(1));
 //			replay.setOnClickListener(null);
@@ -162,6 +186,9 @@ public class TutorialActivity extends Activity {
 			tutorial2_flash.setVisibility(View.GONE);
 			tutorial3_bg2.setVisibility(View.VISIBLE);
 			tutorial3_flash.setVisibility(View.VISIBLE);
+			
+			tutorial2_flash.setAnimation(null);
+			tutorial3_flash.setAnimation(anim1);
 //			help.setText(R.string.tutorial_step3);
 //			layout.setOnClickListener(new EndListener());
 //			replay.setOnClickListener(new Listener(-1));
@@ -182,6 +209,9 @@ public class TutorialActivity extends Activity {
 			tutorial3_flash.setVisibility(View.GONE);
 			tutorial4_bg2.setVisibility(View.VISIBLE);
 			tutorial4_flash.setVisibility(View.VISIBLE);
+			
+			tutorial3_flash.setAnimation(null);
+			tutorial4_flash.setAnimation(anim1);
 			break;
 		case 4:
 			layout.setBackgroundResource(R.drawable.tutorial5_bg);
@@ -190,6 +220,9 @@ public class TutorialActivity extends Activity {
 			tutorial4_flash.setVisibility(View.GONE);
 			tutorial5_bg2.setVisibility(View.VISIBLE);
 			tutorial5_flash.setVisibility(View.VISIBLE);
+			
+			tutorial4_flash.setAnimation(null);
+			tutorial5_flash.setAnimation(anim1);
 			break;
 		case 5:
 			layout.setBackgroundResource(R.drawable.tutorial6_bg);
@@ -199,6 +232,8 @@ public class TutorialActivity extends Activity {
 			tutorial6_bg2.setVisibility(View.VISIBLE);
 			tutorial6_flash.setVisibility(View.VISIBLE);
 			
+			tutorial5_flash.setAnimation(null);
+			tutorial6_flash.setAnimation(anim1);
 			break;
 
 		}

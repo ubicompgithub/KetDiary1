@@ -211,18 +211,23 @@ public class BluetoothLE3 {
                 }
                 else if (data[0] == (byte)0xFB){
                     long temp = (data[4] & 0xFF) + (data[3] & 0xFF)*256 + (data[2] & 0xFF)*256*256 + (data[1] & 0xFF)*256*256*256;
-                    hardware_state = (int)data[5];
-                    power_notenough = (int)data[6];
+                    hardware_state = (int)(data[5] & 0xFF);
+                    power_notenough = (int)(data[6] & 0xFF);
                     
                     int debug1 = (data[7] & 0xFF) + (data[8]&0xFF) * 256;
                     int debug2 = (data[9] & 0xFF) + (data[10]&0xFF) * 256;
                     int voltage = (data[11] & 0xFF) + (data[12]&0xFF) * 256;
                     
+                    int camera_state = (int)(data[13] & 0xFF);
+                    int retransmit_size = (int)(data[14] & 0xFF);
+                    int retransmit_id = (int)(data[15] & 0xFF);
+                    
                     ((BluetoothListener) bluetoothListener).displayCurrentId(String.valueOf(temp), hardware_state, power_notenough);
                     
                     
                     
-                    ((BluetoothListener) bluetoothListener).writeDebug("Device Debug: "+ hardware_state + " " + debug1+" "+debug2+" voltage: "+voltage);
+                    ((BluetoothListener) bluetoothListener).writeDebug("Device Debug: "+ hardware_state + " " + debug1+" "+debug2+" voltage: "+
+                                                             voltage+" camera: " + Integer.toHexString(data[13] & 0xFF) +" size: "+retransmit_size + " id: " + retransmit_id);
 //                    byte[] plugId = new byte[data.length-1];
 //                    System.arraycopy(data, 1, plugId, 0, data.length - 1);
 //                    ((BluetoothListener) bluetoothListener).blePlugInserted(plugId);
