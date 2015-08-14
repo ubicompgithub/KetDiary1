@@ -85,6 +85,8 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	private ViewPager mViewPager;
+	public static final int TAG_PAGE_YEAR = R.string.TAG_PAGE_YEAR;
+	public static final int TAG_PAGE_MONTH = R.string.TAG_PAGE_MONTH;
 	private static LinearLayout diaryList;
 	private LinearLayout boxesLayout, drawerContent, caltoggleLayout, charttoggleLayout;
 	private RelativeLayout upperBarContent;
@@ -152,10 +154,11 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	private static final String[] monthName = {"一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"};
 	
 	private LineChartData[] dataset = null;
-	private int sustainMonth = PreferenceControl.getSustainMonth();
+	private static final int sustainMonth = PreferenceControl.getSustainMonth();
 	private Calendar startDay = PreferenceControl.getStartDate();
-	private int startMonth = startDay.get(Calendar.MONTH)+1;
-	private int currentPageIdx = Calendar.getInstance().get(Calendar.MONTH) + 1 - startMonth;
+	private int startYear = startDay.get(Calendar.YEAR);
+	private int startMonth = startDay.get(Calendar.MONTH) + 1;
+	private int currentPageIdx = sustainMonth - 1;
 	
 	private static final int[] iconId = {0, R.drawable.type_icon1, R.drawable.type_icon2, R.drawable.type_icon3,
 		R.drawable.type_icon4, R.drawable.type_icon5, R.drawable.type_icon6, R.drawable.type_icon7,
@@ -229,9 +232,14 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 
 		// Set up the ViewPager with the sections adapter.
 		pageViewList = new View[sustainMonth];
+		Calendar tempCalendar = Calendar.getInstance();
+		tempCalendar.set(startYear, startMonth - 1, 1);
 		for (int i = 0; i < sustainMonth; i++) {
 			pageViewList[i] = (View) inflater.inflate(R.layout.fragment_calendar, null);
-			pageViewList[i].setTag(i + startMonth - 1);
+			
+			pageViewList[i].setTag(TAG_PAGE_YEAR, tempCalendar.get(Calendar.YEAR));
+			pageViewList[i].setTag(TAG_PAGE_MONTH, tempCalendar.get(Calendar.MONTH));
+			tempCalendar.add(Calendar.MONTH, 1);
 		}
 		mSectionsPagerAdapter = new SectionsPagerAdapter(pageViewList);
 
@@ -474,8 +482,11 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			public void onPageSelected(int arg0) {
 				ClickLog.Log(ClickLogId.DAYBOOK_CHANGE_MONTH);
 				currentPageIdx = arg0;
-				titleText.setText( (startMonth + currentPageIdx) + "月");
-				
+				int month = (startMonth + currentPageIdx)%12;
+				if(month == 0)
+					titleText.setText("12月");
+				else
+					titleText.setText( month + "月");
 				
 //				updateTask = new LoadDiaryTask();
 //				updateTask.execute(startMonth + currentPageIdx-1);
@@ -543,7 +554,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
                     newSelectedDayTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                 }
 
-                mViewPager.setCurrentItem(Calendar.getInstance().get(Calendar.MONTH) + 1 - startMonth);
+                mViewPager.setCurrentItem(sustainMonth - 1);
             }
         });
 
@@ -1350,7 +1361,11 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 	
 	private void addDrawerContent(int id){
 		//0805 add
-		titleText.setText( (startMonth + currentPageIdx) + "月");
+		int month = (startMonth + currentPageIdx)%12;
+		if(month == 0)
+			titleText.setText("12月");
+		else
+			titleText.setText( month + "月");
 		
 		Log.d(TAG, "chart_type: "+chart_type);
 		setArrow(true);
@@ -1845,15 +1860,22 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 			
 			LayoutInflater inflater = LayoutInflater.from(context);
 			pageViewList = new View[sustainMonth];
+			Calendar tempCalendar = Calendar.getInstance();
+			tempCalendar.set(startYear, startMonth - 1, 1);
 			for (int i = 0; i < sustainMonth; i++) {
 				pageViewList[i] = (View) inflater.inflate(R.layout.fragment_calendar, null);
-				pageViewList[i].setTag(i + startMonth - 1);
+				
+				pageViewList[i].setTag(TAG_PAGE_YEAR, tempCalendar.get(Calendar.YEAR));
+				pageViewList[i].setTag(TAG_PAGE_MONTH, tempCalendar.get(Calendar.MONTH));
+				tempCalendar.add(Calendar.MONTH, 1);
 			}
+
 			mSectionsPagerAdapter = new SectionsPagerAdapter(pageViewList);
 			mViewPager.setAdapter(mSectionsPagerAdapter);
-	
+			
 			if (pageIdx == -1)
-				mViewPager.setCurrentItem(Calendar.getInstance().get(Calendar.MONTH) + 1 - startMonth);
+				// mViewPager.setCurrentItem(Calendar.getInstance().get(Calendar.MONTH) + 1 - startMonth);
+				mViewPager.setCurrentItem(sustainMonth - 1);
 			else
 				mViewPager.setCurrentItem(pageIdx);
 		}
