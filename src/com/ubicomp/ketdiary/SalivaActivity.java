@@ -13,7 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubicomp.ketdiary.data.db.DatabaseControl;
-import com.ubicomp.ketdiary.data.structure.TestResult;
+import com.ubicomp.ketdiary.data.structure.Cassette;
 import com.ubicomp.ketdiary.ui.BarButtonGenerator;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
@@ -22,7 +22,7 @@ import com.ubicomp.ketdiary.ui.Typefaces;
  * 
  * @author Andy Chen
  */
-public class ModifyActivity extends Activity {
+public class SalivaActivity extends Activity {
 
 	private LayoutInflater inflater;
 
@@ -62,7 +62,7 @@ public class ModifyActivity extends Activity {
 
 	private void setViews(){
 		
-		TestResult[] testResult = db.getAllPrimeTestResult();
+		Cassette[] cassette = db.getAllCassette();
 		
 //		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 //		builder.setTitle("確定修改結果?");
@@ -70,26 +70,17 @@ public class ModifyActivity extends Activity {
 //		builder.setNegativeButton("取消", null);
 //		AlertDialog cleanAlertDialog = builder.create();
 		
-		for(int i=0; i<testResult.length; i++){
+		for(int i=0; i<cassette.length; i++){
 			
-			int year = testResult[i].getTv().getYear();
-			int month = testResult[i].getTv().getMonth();
-			int day = testResult[i].getTv().getDay();
-			final long ts = testResult[i].getTv().getTimestamp();
-			final int result = testResult[i].getResult();
-			if(result < 0 || result > 1 )
-				continue;
+			int isUsed = cassette[i].getisUsed();
+			String cassetteId = cassette[i].getCassetteId();
 			
-			String text = year+"年"+(month+1)+"月"+day+"日"+" 結果: "+RESULT[result];
-			
-			
-			
+			String text = "ID: " + cassetteId + " isUsed: " + isUsed;
+//			
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle( year+"年"+(month+1)+"月"+day+"日\n"+"確定修改成 "+ RESULT[result^1]+"?");
-//			builder.setPositiveButton("確定", new ModifyListener(ts, result)); 
-//			builder.setNegativeButton("取消", null);
-			builder.setNegativeButton("確定", new ModifyListener(ts, result)); 
-			builder.setPositiveButton("取消", null);
+			builder.setTitle( text + "\n");
+			builder.setNegativeButton("修改", new ModifyListener(cassetteId, isUsed)); 
+			builder.setPositiveButton("刪除", new CleanListener(cassetteId));
 			AlertDialog cleanAlertDialog = builder.create();	
 			RelativeLayout aboutView = createListView(text,
 					new AlertOnClickListener(cleanAlertDialog));
@@ -117,16 +108,31 @@ public class ModifyActivity extends Activity {
 	
 	private class ModifyListener implements
 	DialogInterface.OnClickListener {
-		long ts;
-		int result;
-		public ModifyListener(long ts, int result){
-			this.ts = ts;
-			this.result = result;
+		String id;
+		int isUsed;
+		public ModifyListener(String id, int isUsed){
+			this.id = id;
+			this.isUsed = isUsed;
 		}
 		
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
-			db.modifyResultByTs(ts, (result ^ 1) );
+			db.modifyCassetteById(id, isUsed^1);
+			updateView();
+		}
+	}
+	
+	private class CleanListener implements
+	DialogInterface.OnClickListener {
+		String id;
+		
+		public CleanListener(String id){
+			this.id = id;
+		}
+		
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+			db.deleteCassetteById(id);
 			updateView();
 		}
 	}
@@ -138,12 +144,6 @@ public class ModifyActivity extends Activity {
 
 	@Override
 	protected void onPause() {
-
-		//PreferenceControl.setNotificationTimeIdx(notificationGroup.getResult());
-
-//		BootBoardcastReceiver.setRegularNotification(getBaseContext(),
-//				getIntent());
-
 		super.onPause();
 	}
 

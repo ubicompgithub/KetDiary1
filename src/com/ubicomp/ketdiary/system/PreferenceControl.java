@@ -127,6 +127,15 @@ public class PreferenceControl {
 		edit.commit();
 	}
 	
+	public static boolean isDemo() {
+		return sp.getBoolean("demo", false);
+	}
+
+	public static void setIsDemo(boolean demo) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putBoolean("demo", demo);
+		edit.commit();
+	}
 	
 	public static boolean getCollectData() {
 		return sp.getBoolean("collectdata", false);

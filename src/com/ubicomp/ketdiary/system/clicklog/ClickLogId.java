@@ -20,6 +20,11 @@ public class ClickLogId {
 	public final static long SETTING_ENTER = 1000000; // 01000000;
 	public final static long SETTING_LEAVE = 1010000; // 01010000;
 	public final static long SETTING_TITLE_LIST = 1100000; // 01100000;
+	
+	public final static long SETTING_TITLE_LIST_RECREATION = 1100100; // 01100100;
+	public final static long SETTING_TITLE_LIST_CONTACT = 1100200; // 01100200;
+	public final static long SETTING_TITLE_LIST_ALARM = 1100400; // 01100400;
+	
 	public final static long SETTING_CHECK = 1200000;
 	public final static long SETTING_EDIT = 1300000;
 	public final static long SETTING_SPINNER = 1400000;
@@ -55,6 +60,17 @@ public class ClickLogId {
 	public final static long TEST_NOTE_SELECT_SLOT = 12710000;
 	
 	public final static long TEST_NOTE_SELECT_TYPE = 12800000;
+	public final static long TEST_NOTE_SELECT_TYPE_1 = 12800001;
+	public final static long TEST_NOTE_SELECT_TYPE_2 = 12800002;
+	public final static long TEST_NOTE_SELECT_TYPE_3 = 12800003;
+	public final static long TEST_NOTE_SELECT_TYPE_4 = 12800004;
+	public final static long TEST_NOTE_SELECT_TYPE_5 = 12800005;
+	public final static long TEST_NOTE_SELECT_TYPE_6 = 12800006;
+	public final static long TEST_NOTE_SELECT_TYPE_7 = 12800007;
+	public final static long TEST_NOTE_SELECT_TYPE_8 = 12800008;
+	
+	
+	
 	public final static long TEST_NOTE_SELECT_ITEM = 12810000;
 	
 	public final static long TEST_NOTE_IMPACT = 12900000;
@@ -171,6 +187,15 @@ public class ClickLogId {
 	public final static long DAYBOOK_ADDNOTE_SELECT_SLOT = 31610000;
 	
 	public final static long DAYBOOK_ADDNOTE_SELECT_TYPE = 31700000;
+	public final static long DAYBOOK_ADDNOTE_SELECT_TYPE_1 = 31700001;
+	public final static long DAYBOOK_ADDNOTE_SELECT_TYPE_2 = 31700002;
+	public final static long DAYBOOK_ADDNOTE_SELECT_TYPE_3 = 31700003;
+	public final static long DAYBOOK_ADDNOTE_SELECT_TYPE_4 = 31700004;
+	public final static long DAYBOOK_ADDNOTE_SELECT_TYPE_5 = 31700005;
+	public final static long DAYBOOK_ADDNOTE_SELECT_TYPE_6 = 31700006;
+	public final static long DAYBOOK_ADDNOTE_SELECT_TYPE_7 = 31700007;
+	public final static long DAYBOOK_ADDNOTE_SELECT_TYPE_8 = 31700008;
+	
 	public final static long DAYBOOK_ADDNOTE_SELECT_ITEM = 31710000;
 	
 	public final static long DAYBOOK_ADDNOTE_IMPACT = 31800000;
@@ -183,7 +208,21 @@ public class ClickLogId {
 	public final static long COPING_ENTER = 40000000;
 	public final static long COPING_LEAVE = 40010000;
 	public final static long COPING_RETURN = 40200000;
-	public final static long COPING_SELECTION = 40300000;
+	
+	public final static long COPING_SELECTION = 40210000;	
+	public final static long COPING_SELECTION_BREATH = 40300000;
+	public final static long COPING_SELECTION_WALK = 40300001;
+	public final static long COPING_SELECTION_STRETCH = 40300002;
+	public final static long COPING_SELECTION_MUSIC = 40300003;
+	public final static long COPING_SELECTION_LEAVE = 40300004;
+	public final static long COPING_SELECTION_TOLD = 40300005;
+	public final static long COPING_SELECTION_CD = 40300006;
+	public final static long COPING_SELECTION_POSITIVE = 40300007;
+	public final static long COPING_SELECTION_POISON = 40300008;
+	public final static long COPING_SELECTION_SUGGESTION = 40300009;
+	public final static long COPING_SELECTION_HOW = 40300010;
+	
+	
 	public final static long COPING_PLAY = 40400000;
 	public final static long COPING_PAUSE = 40410000;
 	public final static long COPING_CANCEL_PLAY = 40500000;// Not use

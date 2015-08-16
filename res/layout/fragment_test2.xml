@@ -243,7 +243,9 @@
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/shadow" >
+            android:background="@color/shadow" 
+            android:visibility="invisible">
+            
 
             <FrameLayout
                 android:layout_width="match_parent"

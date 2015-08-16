@@ -69,4 +69,6 @@ public interface BluetoothListener {
     void displayHardwareVersion(String version);
     
     void writeDebug(String msg);
+    
+    void displayPower(int power);
 }

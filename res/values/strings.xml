@@ -379,7 +379,7 @@
     </string-array>
 
     <string name="edit">編輯</string>
-    <string name="setting_limit">抱歉！最多只能選擇五項</string>
+    <string name="setting_limit">抱歉！最多只能選擇十項</string>
     <string name="story_test_cancel">下次再做</string>
     <string name="story_test_ok">確定送出</string>
     <string name="title_activity_trigger">新增記事</string>
@@ -431,5 +431,6 @@
 	
     <string name="help_page">相關設定與資訊</string>
     <string name="result_fail">測試未成功，記錄無上傳。\n\n（請保持檢測器開啟，並置於與手機鄰近的地方。）\n\n立即回到測試頁面？</string>
-
+	<string name="saliva_page">檢視試紙匣狀態</string>
+	
 </resources>

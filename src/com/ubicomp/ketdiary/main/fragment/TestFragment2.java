@@ -30,6 +30,7 @@ import com.ubicomp.ketdiary.test.camera.CameraRecorder;
 import com.ubicomp.ketdiary.test.camera.CameraRunHandler;
 import com.ubicomp.ketdiary.test.camera.ImageFileHandler;
 import com.ubicomp.ketdiary.test.camera.Tester;
+import com.ubicomp.ketdiary.ui.CustomToastCassette;
 import com.ubicomp.ketdiary.ui.CustomToastSmall;
 import com.ubicomp.ketdiary.ui.LoadingDialogControl;
 import com.ubicomp.ketdiary.ui.ScaleOnTouchListener;
@@ -85,6 +86,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	private boolean isSkip = PreferenceControl.isSkip();
 	private boolean debug = PreferenceControl.isDebugMode();
 	private boolean collectdata = PreferenceControl.getCollectData();
+	private boolean isDemo = PreferenceControl.isDemo();
 	
 	//debug View
 	private ScrollView debugScrollView;
@@ -96,7 +98,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	private long timestamp = 0;
 
 	private CountDownTimer testCountDownTimer = null;
-	private CountDownTimer salivaCountDownTimer = null;
+	private static CountDownTimer salivaCountDownTimer = null;
 	private CountDownTimer timeoutCountDownTimer= null;
 	private CountDownTimer cameraCountDownTimer= null;
 	private CountDownTimer openSensorMsgTimer = null;
@@ -154,7 +156,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 //	private static SoundPool soundpool;
 //	private static int soundId;
 	
-	private TestState CertainState = null;
+	private static TestState CertainState = null;
 	private BluetoothLE2 ble = null;
 	
 	private boolean first = true;
@@ -365,8 +367,11 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	 * @param sts
 	 */
 	protected void setState(TestState sts){
-		if(CertainState != null)
+		Log.d(TAG, "SetState Called");
+		if(CertainState != null){
 			CertainState.onExit();
+			CertainState = null;
+		}
 		CertainState = sts;
 		CertainState.onStart();
 	}
@@ -392,7 +397,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			//label_subtitle.setText(Html.fromHtml(styledText), TextView.BufferType.SPANNABLE);
 			int todayTestCount = db.getTodayTestCount();
 			//Log.i(TAG, "Today Test:" + todayTestCount);
-			if( todayTestCount >=2 && !isSkip && !debug){
+			if( todayTestCount >=2 && !isSkip && !debug && !isDemo){
 				long lastDetection = PreferenceControl.getUpdateDetectionTimestamp();
 				if(System.currentTimeMillis() - lastDetection < CANTTEST_HOURS ){
 					label_subtitle.setText("請稍晚再進行測試");
@@ -424,9 +429,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			ble_pluginserted =false;
 			MainActivity.getMainActivity().enableTabAndClick(false);
 			reset();
-			
-			
-			
+						
 			if(isSkip){
 				setState(new DoneState());
 			}
@@ -434,6 +437,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 				setState(new ConnState());
 			}
 			
+			Log.d(TAG, "Start Button Press");
 		}
 	}
 	
@@ -466,7 +470,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	                connectionFailRate, failedReason, hardwareVersion);
 			
 			db.insertTestDetail(testDetail);
-			if(failedState >= 4){
+			if(failedState >= 4 && first_voltage){
 				db.insertCassette(cassetteId);
 			}
 			
@@ -517,6 +521,10 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 				updateInitState(Tester._BT);
 			}
 			else{
+				if(openSensorMsgTimer != null){
+					openSensorMsgTimer.cancel();
+					openSensorMsgTimer = null;
+				}
 				openSensorMsgTimer = new OpenSensorMsgTimer();
 				openSensorMsgTimer.start();
 			}
@@ -551,6 +559,10 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 				ble.bleWriteState((byte)0x0A);
 			
 			//if(	testCountDownTimer == null )
+			if(	testCountDownTimer != null ){
+				testCountDownTimer.cancel();
+				testCountDownTimer = null;
+			}
 			testCountDownTimer = new TestCountDownTimer(COUNT_DOWN_SECOND);
 			testCountDownTimer.start();
 			
@@ -593,6 +605,11 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			//img_face.bringToFront();
 			img_face.setVisibility(View.VISIBLE);
 			
+			
+			if(cameraCountDownTimer!=null){
+				cameraCountDownTimer.cancel();
+				cameraCountDownTimer=null;
+			}
 			cameraCountDownTimer = new CameraCountDownTimer(CAMERATIMEOUT - DEBUG_SPEED_UP_SECOND);
 			cameraCountDownTimer.start();
 			
@@ -637,6 +654,10 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			img_water1.setImageResource(R.drawable.saliva1_yes);
 			img_water2.setImageResource(R.drawable.saliva2_yes);
 			
+			if (salivaCountDownTimer != null){
+				salivaCountDownTimer.cancel();
+				salivaCountDownTimer = null;
+			}
 			salivaCountDownTimer = new SalivaCountDownTimer();
 			salivaCountDownTimer.start();
 			
@@ -644,11 +665,11 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		@Override
 		public void onExit(){
 			if (salivaCountDownTimer != null){
+				Log.d(TAG, "Saliva Timer cancel");
 				salivaCountDownTimer.cancel();
 				salivaCountDownTimer = null;
 			}
-			
-			
+						
 			img_bg.setVisibility(View.INVISIBLE);
 			img_ac.setVisibility(View.INVISIBLE);
 			img_btn.setVisibility(View.VISIBLE);
@@ -670,6 +691,10 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			label_title.setText("口水量不足");
 			ble.bleWriteState((byte) 0x02);
 			
+			if(	cameraCountDownTimer!=null	){
+				cameraCountDownTimer.cancel();
+				cameraCountDownTimer = null;
+			}
 			cameraCountDownTimer = new CameraCountDownTimer(CAMERATIMEOUT2);
 			cameraCountDownTimer.start();
 		}
@@ -677,8 +702,10 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		public void onClick(){
 		}
 		public void onExit(){
-			if(	cameraCountDownTimer!=null	)
+			if(	cameraCountDownTimer!=null	){
 				cameraCountDownTimer.cancel();
+				cameraCountDownTimer = null;
+			}
 		}
 	}
 	
@@ -700,7 +727,10 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			img_water3.setImageResource(R.drawable.saliva3_yes);
 			//cameraLayout.setVisibility(View.VISIBLE);
 			
-			
+			if (confirmCountDownTimer != null){
+				confirmCountDownTimer.cancel();
+				confirmCountDownTimer = null;
+			}
 			confirmCountDownTimer = new ConfirmCountDownTimer();
 			confirmCountDownTimer.start();
 			
@@ -711,8 +741,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 				confirmCountDownTimer.cancel();
 				confirmCountDownTimer = null;
 			}
-			
-			
+						
 			img_bg.setVisibility(View.INVISIBLE);
 			img_ac.setVisibility(View.INVISIBLE);
 			img_btn.setVisibility(View.VISIBLE);
@@ -1133,8 +1162,9 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		//getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		//acquireWakeLock();
 		
-		checkDebug(is_debug);//PreferenceControl.isDebugMode());
+		//PreferenceControl.isDebugMode());
 		checkPreference();
+		checkDebug(is_debug);
 		
 		boolean resultServiceRun = PreferenceControl.getResultServiceRun();
 		msgBox = new NoteDialog4(testFragment, main_layout);
@@ -1182,7 +1212,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		LoadingDialogControl.dismiss();
 	}
 	
-	
+	private boolean toast_first = true;
 	private void reset() {
 		
 		acquireWakeLock();
@@ -1194,6 +1224,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		first_voltage = false;
 		second_voltage = false;
 		first = true;
+		toast_first = true;
 		
 		test_done = false;
 		camera_initial=false;
@@ -1338,7 +1369,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 					if( millisUntilFinished < (40-DEBUG_SPEED_UP_SECOND)*1000 || (first && first_voltage)) {
 						img_cassette.setVisibility(View.VISIBLE);
 						water_layout.setVisibility(View.INVISIBLE);
-						label_subtitle.setText("吐完足量口水後，請抽掉擋片");
+						label_subtitle.setText("吐完足量口水後，取出口水匣後方擋片");
 						label_title.setText("測試進行中，請稍候");
 						first = false;					
 						state = DRAW_STATE;				
@@ -1434,7 +1465,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 					}
 				else{
 					failedState = state;
-					setState(new FailState("請更換試紙匣後重試"));
+					setState(new FailState("口水匣已使用過,請更換口水匣後重試"));
 				}
 			}
 		}
@@ -1471,6 +1502,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 
 		public SalivaCountDownTimer() {
 			super( (WAIT_SALIVA_SECOND-DEBUG_SPEED_UP_SECOND)*1000, 1000);
+			Log.d(TAG, "SalivaCounter Running");
 		}
 
 		@Override
@@ -1502,6 +1534,9 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			if(count % 10 == 0){
 				int idx = rand.nextInt(test_guide_msg.length);
 				test_msg.setText(test_guide_msg[idx]);
+				Log.d(TAG, "SalivaCounter Running " + (millisUntilFinished)/1000);
+				
+				//salivaCountDownTimer.cancel(); //debug
 			}
 			count++;
 			
@@ -1558,7 +1593,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
     	
         failedState = state;
         if(!goThroughState)
-        	setState(new FailState("連接逾時"));
+        	setState(new FailState("連接逾時", "請確認檢測器已開啟(綠燈亮起)"));
     }
 
     @Override
@@ -1614,14 +1649,24 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
     public void bleNoPlug() {
         Log.i(TAG, "No test plug");
     	
-        if(state != IDLE_STATE && !goThroughState){
+        if(state >= CAMERA_STATE)
+        	setState(new FailState("檢測過程中請勿拔出口水匣", "測試失敗"));
+        
+        else if(state != IDLE_STATE && !goThroughState && state != FAIL_STATE){
         	if(debug){
         		//Toast.makeText(activity, "No test plug", Toast.LENGTH_SHORT).show();
         		CustomToastSmall.generateToast("No test plug");
         	}
         	failedState = state;
-        	setState(new FailState("請將試紙匣插入裝置"));
+        	setState(new FailState("請將口水匣插入直到紅燈亮起"));
+    
+        	if(toast_first){
+        		CustomToastCassette.generateToast();
+        		toast_first = false;
+        	}
         }
+        
+        
     }
 
 
@@ -1714,27 +1759,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	
     @Override
     public void blePlugInserted(byte[] plugId) {
-//        //Log.i(TAG, "Test plug is inserted");
-//        ble_pluginserted = true;
-//        cassetteId = "saliva_1438268769608"; //TODO: set cassetteId in here.
-//        
-//        Log.i(TAG, "plugId: " + plugId);
-//        
-//        cassetteId = "tmpId";
-//        boolean check = db.checkCassette(cassetteId);
-//        
-//        
-//        Log.i(TAG, "cassetteId: " + cassetteId + " " + check);
-//        if( !check ){
-//        	
-//        	setState(new FailState("試紙匣已用過，請更換試紙匣"));
-//        	
-//        }
-//        //check ID here
-//        if( state == CONN_STATE )
-//        	updateInitState(Tester._BT);
-        
-        
+       
     }
 	
 	@Override
@@ -1749,15 +1774,15 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		
         //cassetteId = "saliva_1438268769608"; //TODO: set cassetteId in here.
         
-        Log.i(TAG, "plugId: " + id + " power: " + power_notenough);
+        //Log.i(TAG, "plugId: " + id + " power: " + power_notenough);
         
         cassetteId = "CT_"+id;
         
         if(state != FAIL_STATE && state!= IDLE_STATE && state != DONE_STATE){
 	        boolean check = db.checkCassette(cassetteId);        
-	        Log.i(TAG, "cassetteId: " + cassetteId + " " + check);
-	        if( (!check  || cassetteId.equals("CT_-0001")) && !debug ){        	
-	        	setState(new FailState("試紙匣已用過，請更換試紙匣"));        	
+	        //Log.i(TAG, "cassetteId: " + cassetteId + " " + check);
+	        if( (!check  || cassetteId.equals("CT_-0001")) && !debug &&!isDemo){        	
+	        	setState(new FailState("口水匣已用過，請更換口水匣"));        	
 	        }
         }
         //check ID here
@@ -1855,6 +1880,12 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		isSkip = PreferenceControl.isSkip();
 		debug = PreferenceControl.isDebugMode();
 		collectdata = PreferenceControl.getCollectData();
+		isDemo = PreferenceControl.isDemo();
+		
+		if(debug)
+			btn_debug.setVisibility(View.VISIBLE);
+		else
+			btn_debug.setVisibility(View.INVISIBLE);
 		
 		Log.d(TAG, "V1: "+FIRST_VOLTAGE_THRESHOLD+" V2: "+SECOND_VOLTAGE_THRESHOLD+" TIMEOUT: "+CAMERATIMEOUT);
 		Log.d(TAG, "isSkip: "+isSkip+" debug: "+debug+" Did: "+PreferenceControl.getDeviceId());
@@ -1864,6 +1895,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	private void checkDebug(boolean debug) {
 		
 		if (debug) {
+			
 			debugScrollView.setVisibility(View.VISIBLE);
 			msgHandler = new ChangeMsgHandler();
 			debugMsg.setText("");
@@ -1957,7 +1989,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	}
 	@Override
 	public void PictureRetransmit(int count) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
@@ -1977,6 +2009,10 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	public void writeDebug(String msg) {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public void displayPower(int power) {
+		devicePower = power;
 	}
 
 }

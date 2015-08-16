@@ -45,8 +45,7 @@ public class BootBoardcastReceiver extends BroadcastReceiver {
 		}
 
 		setRegularNotification(context, intent);
-		setRegularCheck(context, intent);
-		
+		setRegularCheck(context, intent);		
 		setDailyEvent(context, intent);
 	}
 

@@ -34,7 +34,7 @@ public class PreSettingActivity extends Activity {
 	private EditText voltage1, voltage2, ACountDown, VCountDown, V2CountDown;
 
 	private Button saveButton, exchangeButton, restoreButton, debugButton,
-			restoreVer1Button, dummyDataButton, changeButton, cleanButton;
+			restoreVer1Button, dummyDataButton, changeButton, cleanButton, cassetteButton;
 	private boolean debug;
 	private Activity activity;
 	private static final int MIN_NAME_LENGTH = 3;
@@ -58,6 +58,7 @@ public class PreSettingActivity extends Activity {
 	private CheckBox developer_switch;
 	private CheckBox collectdata_switch;
 	private CheckBox skip_saliva_switch;
+	private CheckBox demo_switch;
 	
 	private static final int DATE_DIALOG_ID = 0;
 	private static final int LOCK_DIALOG_ID = 1;
@@ -82,6 +83,9 @@ public class PreSettingActivity extends Activity {
 		
 		skip_saliva_switch = (CheckBox) this.findViewById(R.id.skip_saliva_switch);
 		skip_saliva_switch.setChecked(PreferenceControl.isSkip());
+		
+		demo_switch = (CheckBox) this.findViewById(R.id.demo_switch);
+		demo_switch.setChecked(PreferenceControl.isDemo());
 		
 		target_good = (EditText) this.findViewById(R.id.target_positive_edit);
 		target_good.setText(PreferenceControl.getPostiveGoal());
@@ -128,7 +132,7 @@ public class PreSettingActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent();
+				 Intent intent = new Intent();
 				 intent.setClass(activity, SelectActivity.class);
 				 startActivity(intent);					
 			}
@@ -166,6 +170,19 @@ public class PreSettingActivity extends Activity {
 			
 			
 		});
+		
+		cassetteButton = (Button) this.findViewById(R.id.debug_cassette_data);
+		cassetteButton.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent();
+				intent.setClass(activity, SalivaActivity.class);
+				startActivity(intent);
+			}
+		
+		});
+		
 		
 		versionText = (TextView) this.findViewById(R.id.version);
 
@@ -380,6 +397,7 @@ public class PreSettingActivity extends Activity {
 				PreferenceControl.setUID(text);
 				PreferenceControl.setDeviceId(text2);
 				
+				PreferenceControl.setIsDemo(demo_switch.isChecked());
 				PreferenceControl.setIsSkip(skip_saliva_switch.isChecked());
 				PreferenceControl.setIsDeveloper(developer_switch.isChecked());
 				PreferenceControl.setCollectData(collectdata_switch.isChecked());

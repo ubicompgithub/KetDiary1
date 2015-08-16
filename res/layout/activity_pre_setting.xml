@@ -172,6 +172,21 @@
                     android:textOff="no"
                     android:textOn="yes"
                     android:textSize="@dimen/small_title_size" />
+                
+                <CheckBox
+                    android:id="@+id/demo_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/radio_button"
+                    android:drawablePadding="5dp"
+                    android:padding="0dp"
+                    android:text="Demo?"
+                    android:textColor="@color/white"
+                    android:textOff="no"
+                    android:textOn="yes"
+                    android:textSize="@dimen/small_title_size" />
 
                 <LinearLayout
                     android:id="@+id/start_date_setting"
@@ -743,6 +758,21 @@
                     android:paddingRight="12dp"
                     android:paddingTop="3dp"
                     android:text="Use Dummy Data"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/normal_title_size" />
+                
+                <Button
+                    android:id="@+id/debug_cassette_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/setting_button"
+                    android:paddingBottom="3dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="3dp"
+                    android:text="CassetteID"
                     android:textColor="@color/white"
                     android:textSize="@dimen/normal_title_size" />
             </LinearLayout>

@@ -18,7 +18,7 @@ import com.ubicomp.ketdiary.ui.Typefaces;
 /**
  * Activity for Help Button
  * 
- * @author Andy Chen
+ * @author Andy Chen & Blue
  */
 public class HelpActivity extends Activity {
 

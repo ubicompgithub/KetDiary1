@@ -42,7 +42,7 @@ import com.ubicomp.ketdiary.ui.Typefaces;
 /**
  * Activity for All Coping Skill
  * 
- * @author Andy Chen
+ * @author Andy Chen & Blue
  */
 public class CopingActivity extends Activity {
 
@@ -285,9 +285,10 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
-						ClickLog.Log(ClickLogId.COPING_SELECTION);
-						setAnimationView(1);
 						skillSelect = SELECT_BREATH;
+						ClickLog.Log(ClickLogId.COPING_SELECTION + skillSelect);
+						setAnimationView(1);
+						
 					}
 
 				});
@@ -299,9 +300,10 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
-						ClickLog.Log(ClickLogId.COPING_SELECTION);
-						setAnimationView(2);
 						skillSelect = SELECT_WALK;
+						ClickLog.Log(ClickLogId.COPING_SELECTION + skillSelect);
+						setAnimationView(2);
+						
 					}
 
 				});
@@ -313,9 +315,9 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
-						ClickLog.Log(ClickLogId.COPING_SELECTION);
-						setAnimationView(3);
 						skillSelect = SELECT_STRETCH;
+						ClickLog.Log(ClickLogId.COPING_SELECTION + skillSelect);
+						setAnimationView(3);
 					}
 
 				});
@@ -327,9 +329,10 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
-						ClickLog.Log(ClickLogId.COPING_SELECTION);
-						setAnimationView(0);
 						skillSelect = SELECT_MUSIC;
+						ClickLog.Log(ClickLogId.COPING_SELECTION + skillSelect);
+						setAnimationView(0);
+						
 					}
 
 				});
@@ -493,9 +496,10 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
-						ClickLog.Log(ClickLogId.COPING_SELECTION);
-						generateDialog(R.string.coping_away_dialog);
 						skillSelect = SELECT_LEAVE;
+						ClickLog.Log(ClickLogId.COPING_SELECTION + skillSelect);
+						generateDialog(R.string.coping_away_dialog);
+						
 					}
 
 				});
@@ -507,9 +511,10 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
-						ClickLog.Log(ClickLogId.COPING_SELECTION);
-						generateDialog(R.string.coping_told_dialog);
 						skillSelect = SELECT_TOLD;
+						ClickLog.Log(ClickLogId.COPING_SELECTION + skillSelect);
+						generateDialog(R.string.coping_told_dialog);
+						
 					}
 
 				});
@@ -521,9 +526,10 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
-						ClickLog.Log(ClickLogId.COPING_SELECTION);
+						skillSelect = SELECT_CD;
+						ClickLog.Log(ClickLogId.COPING_SELECTION + skillSelect);
 						generateDialog(R.string.coping_repeat_dialog);
-						skillSelect = SELECT_CD;	
+							
 					}
 
 				});
@@ -606,12 +612,13 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
-						ClickLog.Log(ClickLogId.COPING_SELECTION);
+						skillSelect = SELECT_POSITIVE;
+						ClickLog.Log(ClickLogId.COPING_SELECTION + skillSelect);
 						String[] tmp = activity.getResources().getStringArray(R.array.question_reading_question);
 						Random rand = new Random();
 						int idx = rand.nextInt(tmp.length);
 						generateDialog(tmp[idx]);
-						skillSelect = SELECT_POSITIVE;
+						
 					}
 
 				});
@@ -623,12 +630,13 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
-						ClickLog.Log(ClickLogId.COPING_SELECTION);
+						skillSelect = SELECT_POISON;
+						ClickLog.Log(ClickLogId.COPING_SELECTION + skillSelect);
 						String[] tmp = activity.getResources().getStringArray(R.array.knowing_list);
 						Random rand = new Random();
 						int idx = rand.nextInt(tmp.length);
 						generateDialog2(tmp[idx]);
-						skillSelect = SELECT_POISON;
+						
 					}
 
 				});
@@ -640,12 +648,13 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
-						ClickLog.Log(ClickLogId.COPING_SELECTION);
+						skillSelect = SELECT_SUGGESTION;
+						ClickLog.Log(ClickLogId.COPING_SELECTION + skillSelect);
 						String[] tmp = activity.getResources().getStringArray(R.array.lifestyle_list);
 						Random rand = new Random();
 						int idx = rand.nextInt(tmp.length);
 						generateDialog(tmp[idx]);
-						skillSelect = SELECT_SUGGESTION;
+						
 					}
 
 				});
@@ -657,12 +666,13 @@ public class CopingActivity extends Activity {
 
 					@Override
 					public void onClick(View v) {
-						ClickLog.Log(ClickLogId.COPING_SELECTION);
+						skillSelect = SELECT_HOW;
+						ClickLog.Log(ClickLogId.COPING_SELECTION + skillSelect);
 						String[] tmp = activity.getResources().getStringArray(R.array.lapse_list);
 						Random rand = new Random();
 						int idx = rand.nextInt(tmp.length);
 						generateDialog(tmp[idx]);
-						skillSelect = SELECT_HOW;
+						
 					}
 
 				});

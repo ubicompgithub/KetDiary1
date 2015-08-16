@@ -22,8 +22,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
-import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -53,6 +51,7 @@ import com.ubicomp.ketdiary.system.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.ui.BarButtonGenerator;
 import com.ubicomp.ketdiary.ui.CustomScrollView;
 import com.ubicomp.ketdiary.ui.CustomToast;
+import com.ubicomp.ketdiary.ui.CustomToastSmall;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
 
@@ -512,9 +511,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 			note_title.setText(R.string.test_done);
 			View bottom = BarButtonGenerator.createOneButtonView( R.string.go_result, goResultOnClickListener );
 			bottom_layout.addView(bottom);
-		}
-
-	
+		}	
 	}
 	
 	
@@ -665,7 +662,8 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		public void onClick(View v){
 			
 			if(!done){
-				Toast.makeText(context, "確定要送出結果嗎?" ,Toast.LENGTH_SHORT).show();
+				//Toast.makeText(context, "確定要送出結果嗎?" ,Toast.LENGTH_SHORT).show();
+				CustomToastSmall.generateToast("確定要送出結果嗎?");
 				done = true;
 			}
 			else{
@@ -673,11 +671,13 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 				if(state == STATE_NOTE){
 					if(type <= 0 || items < 100){
 						//CustomToastSmall.generateToast(R.string.note_check);
-						Toast.makeText(context, R.string.note_check ,Toast.LENGTH_SHORT).show();
+						//Toast.makeText(context, R.string.note_check ,Toast.LENGTH_SHORT).show();
+						CustomToastSmall.generateToast(R.string.note_check);
 					}
 					else{
 						if(listView.getVisibility() == View.VISIBLE){
-							Toast.makeText(context, "請選擇項目再送出", Toast.LENGTH_SHORT).show();
+							//Toast.makeText(context, "請選擇項目再送出", Toast.LENGTH_SHORT).show();
+							CustomToastSmall.generateToast("請選擇項目再送出");
 							listView.setVisibility(View.GONE);
 						}
 						else{

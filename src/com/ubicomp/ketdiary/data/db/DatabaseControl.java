@@ -1330,8 +1330,65 @@ public class DatabaseControl {
 	
 	
 	
+	 
+	//Cassette   //TODO: Working on here
 	
-	//Cassette
+	public Cassette[] getAllCassette() {
+		synchronized (sqlLock) {
+			Cassette[] cassette = null;
+			db = dbHelper.getReadableDatabase();
+			String sql = "SELECT * FROM Cassette ORDER BY ts DESC";
+			Cursor cursor = db.rawQuery(sql, null);
+			int count = cursor.getCount();
+			if (count == 0) {
+				cursor.close();
+				db.close();
+				return null;
+			}
+			cassette = new Cassette[count];
+			for (int i = 0; i < count; ++i) {
+				cursor.moveToPosition(i);
+				long ts = cursor.getLong(1);
+				String cid = cursor.getString(2);
+				int isUsed = cursor.getInt(3);
+				cassette[i] = new Cassette(ts, isUsed, cid);
+			}
+			cursor.close();
+			db.close();
+			return cassette;
+		}
+	}
+	
+	public void modifyCassetteById(String casseteId, int isUsed) {
+		synchronized (sqlLock) {
+
+			db = dbHelper.getReadableDatabase();
+			String sql;
+			//sql = "SELECT * FROM TestResult WHERE ts = " + ts + " AND isPrime = 1";
+			sql = "UPDATE Cassette SET isUsed = " + isUsed + " WHERE cassetteId = '" + casseteId + "'";
+			db.execSQL(sql);
+			db.close();
+
+			return ;
+		}
+	}
+	
+	public void deleteCassetteById(String casseteeId) {
+		synchronized (sqlLock) {
+
+			db = dbHelper.getReadableDatabase();
+			String sql;
+			//sql = "SELECT * FROM TestResult WHERE ts = " + ts + " AND isPrime = 1";
+			sql = "DELETE FROM Cassette WHERE cassetteId= '" + casseteeId + "'";
+			db.execSQL(sql);
+			db.close();
+
+			return ;
+		}
+	}
+
+	
+	
 	public void insertCassette(String cassette_id ){
 		db = dbHelper.getWritableDatabase();
 		ContentValues content = new ContentValues();
@@ -1371,18 +1428,18 @@ public class DatabaseControl {
 	public void clearCassette() {
 		synchronized (sqlLock) {
 			db = dbHelper.getWritableDatabase();
-			String sql = "DELETE  FROM Cassette";
+			String sql = "DELETE FROM Cassette";
 			db.execSQL(sql);
 			db.close();
 		}
 	}
 
 	/**
-	 * Update the Rank in a short period
+	 * Update CassetteId from Server 
 	 * 
 	 * @param data
-	 *            Updated Rank in a short period
-	 * @see ubicomp.soberdiary.data.structure.Rank
+	 *            Updated CassetteId in a short period
+	 * @see ubicomp.ketdiary.data.structure.CassetteId
 	 */
 	public void updateCassette(Cassette data) {
 		synchronized (sqlLock) {

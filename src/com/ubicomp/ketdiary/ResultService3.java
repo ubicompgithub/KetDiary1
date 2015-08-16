@@ -94,6 +94,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	private int regular_connect = 0;
 	private boolean connect = false;
 	private boolean debug = PreferenceControl.isDebugMode();
+	private boolean demo = PreferenceControl.isDemo();
 	
 	public static long spentTime ;
 	private ColorRawFileHandler colorRawFileHandler;
@@ -130,9 +131,12 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		initVariable();
 		writeToColorRawFile("Service Start, State = " + state + " Device: " + PreferenceControl.getDeviceId());
 		PreferenceControl.setResultServiceRun(true);
-	    Log.d(TAG,  "onStartCommand() executed" );       
-	    mhandler.postDelayed(updateTimer, 1000);
-  
+	    Log.d(TAG,  "onStartCommand() executed" );
+	    if(!demo)
+	    	mhandler.postDelayed(updateTimer, 1000);
+	    else
+	    	mhandler.postDelayed(demoTimer, 1000);
+	    
 	    return  super.onStartCommand(intent, flags, startId);  
 	}
 	
@@ -142,6 +146,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		colorReading2 = 0;
 		
 		timeout = PreferenceControl.getAfterCountDown()*1000;
+		
 		spentTime = timeout;
 		isConnect = false;
 		first = true;
@@ -295,6 +300,108 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		}
     };
     
+	private Runnable demoTimer = new Runnable() {
+		@SuppressWarnings("deprecation")
+		public void run() {
+
+			long passTime = System.currentTimeMillis() - PreferenceControl.getLatestTestCompleteTime();
+			
+			long startTime = System.currentTimeMillis();
+			
+			spentTime = timeout - passTime;
+			
+			minutes = (spentTime/1000)/60;
+			seconds = (spentTime/1000) % 60;
+			
+			notification.setLatestEventInfo( myservice ,  "測試結果倒數" ,  minutes+":"+seconds , pendingIntent);  
+	        startForeground( 1 , notification); 
+	        
+	        
+	        if(seconds == 30){
+	        	writeToColorRawFile("State: " + state);
+	        }
+	        
+	        //mhandler.postDelayed(this, 1000);
+	        if(state == BEGIN_STATE){
+	        	if(spentTime > 2*60*1000){  //最晚兩分鐘前要把第一張照拍好
+		        	
+		        	if(first){                                                   									
+						if(openSensorMsgTimer!=null){
+							openSensorMsgTimer.cancel();
+				       		openSensorMsgTimer.start();
+				       		first = false;
+						}
+					}
+		        	if(isConnect){
+		        		openSensorMsgTimer.cancel();
+		        	}
+				    if(!stateSuccess && isConnect && picNum == 0){
+				    	writeToColorRawFile("Write State : 0x03");
+						ble.bleWriteState((byte)0x03);
+				    }
+	        	}
+	        	else{
+	        		setTestFail("過曝照片未傳完");
+	        	}
+	        }
+	        else if(state == FRAME_STATE){
+	        }
+	        else if(state == REGULAR_STATE){
+	        	if(spentTime < 2*60*1000 ){
+	        		state = DETECT_STATE;
+	        		writeToColorRawFile("State = " + state);
+	        	}
+	        }
+	        else if(state == DETECT_STATE){
+	        	if(spentTime < 2*60*1000 && picNum == 1){   //剩兩分鐘的時候才開始拍照傳照片
+					
+					if(second){									
+						if(openSensorMsgTimer!=null){
+							openSensorMsgTimer.cancel();
+			        		openSensorMsgTimer.start();
+			        		second = false;
+						}
+					}
+					if(isConnect){
+		        		openSensorMsgTimer.cancel();
+		        	}										
+					if(!stateSuccess && isConnect && !first){
+						writeToColorRawFile("Write State : 0x06");
+			        	ble.bleWriteState((byte)0x06);
+			        	first = true;
+					}
+				}
+	        	else if(picNum == 0){
+	        		setTestFail("無過曝照片");
+	        	}	        	
+	        }
+	        else if(state == RESULT_STATE){
+	        	
+	        	if(seconds == 10 && minutes == 0){
+	        		result2 = checkResult();
+	        		writeToColorRawFile("checkResult");
+				}
+	        	else if(spentTime <=0){
+	        		writeToColorRawFile("Time's up!");
+	        		
+		        	if(result2)
+	        			goResultSuccess();
+	        		else
+	        			setTestFail("無法判斷檢測結果");
+		        	
+		        	state = END_STATE;
+	        	}
+	        }
+	        long endTime = System.currentTimeMillis();
+	        long runTime = endTime - startTime;
+	        
+	        writeToColorRawFile("RunTime: " + runTime);
+	        
+	        mhandler.postDelayed(this, 1000);
+	        
+		}
+    };
+    
     @SuppressWarnings("deprecation")
 	private void goResultSuccess(){   //檢測成功的話
     	notification.defaults = Notification.DEFAULT_ALL;
@@ -308,7 +415,11 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		if(!inApp)
 			notificationManager.notify(0, notification);
     	
-		mhandler.removeCallbacks(updateTimer);
+		if(!demo)
+			mhandler.removeCallbacks(updateTimer);
+		else
+			mhandler.removeCallbacks(demoTimer);
+		
 		if(ble!=null){
 			isConnect = false;
 			writeToColorRawFile("Write State : 0x05");
@@ -410,7 +521,10 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	
 	private void stop(){
 		
-		mhandler.removeCallbacks(updateTimer);
+		if(!demo)
+			mhandler.removeCallbacks(updateTimer);
+		else
+			mhandler.removeCallbacks(demoTimer);
 		
 		if(connectSensorTimer!=null){
         	connectSensorTimer.cancel();
@@ -865,6 +979,11 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 			writeToColorRawFile("Power: " + power_notenough);
 			PreferenceControl.setPowerNotEnough(power_notenough);
 		}
+	}
+	@Override
+	public void displayPower(int power) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

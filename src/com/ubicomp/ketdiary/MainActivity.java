@@ -6,6 +6,7 @@ import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 
+import android.app.ActivityManager;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -70,7 +71,7 @@ import com.ubicomp.ketdiary.ui.Typefaces;
  * Main activity of KetDiary. This activity contains the three functions -
  * test, statistic, and storytelling.
  * 
- * @author AndyChen
+ * @author Andy Chen
  */
 public class MainActivity extends FragmentActivity {
 	
@@ -177,6 +178,11 @@ public class MainActivity extends FragmentActivity {
 		}
 		
 		db = new DatabaseControl();
+		
+		ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+		int mMemoryClass = am.getMemoryClass();
+		long mLargeMemoryClass = am.getLargeMemoryClass();
+		Log.i(TAG, "Memory: " + mMemoryClass + " Larger Memory: " + mLargeMemoryClass);
 		
 		loadingHandler.sendEmptyMessage(0);
 
@@ -987,7 +993,6 @@ public class MainActivity extends FragmentActivity {
 	
 	private void showResultFail(){
 		
-
 		PreferenceControl.setCheckResult(false);
 		msgBox = new CheckResultDialog(mainLayout);
 		msgBox.initialize();
@@ -1001,8 +1006,7 @@ public class MainActivity extends FragmentActivity {
 			ft.commit();
 		}
 		else if(tabHost.getCurrentTab() == 1 && fragments[1] != null
-				&& fragments[1].isAdded()){			
-			
+				&& fragments[1].isAdded()){						
 		}
 		else{
 		}
@@ -1069,6 +1073,8 @@ public class MainActivity extends FragmentActivity {
 				return;
 			}
 
+			db.clearCassette(); //delete table and Insert table from db
+			
 			for (int i = 0; i < cassettes.length; ++i)
 				db.updateCassette(cassettes[i]);
 		}
