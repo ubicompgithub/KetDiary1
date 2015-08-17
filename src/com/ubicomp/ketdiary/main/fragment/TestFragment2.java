@@ -132,6 +132,8 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	private QuestionFile questionFile; 
 	private Handler closeHandler = new Handler();
 	
+	private boolean active_disconnect = false;
+	
 	/** Sound playing variables */
 	private SoundPool soundPool;
 	
@@ -684,7 +686,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			state = NOTENOUGH_STATE;
 			
 			
-			soundPool.play(supply_audio_id, 1.0F, 1.0F, 0, 0, 1.0F);
+			soundPool.play(supply_audio_id, 1.5F, 1.5F, 0, 0, 1.0F);
 			img_btn.setEnabled(false);
 			//label_btn.setText("繼續");
 			label_subtitle.setText("請在10秒內再吐一口水");
@@ -753,8 +755,10 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		public void onStart(){
 			state = DONE_STATE;
 			
-			if(ble != null)
+			if(ble != null){
+				active_disconnect = true;
 				ble.bleDisconnect();
+			}
 			//DBControl.inst.startTesting();
 			stop();
 			img_help.setEnabled(false);
@@ -859,7 +863,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		if(!is_connect)
 			ble.bleConnect();
 		
-		ble.bleWriteState((byte)0x01);
+		ble.bleWriteState((byte)0x01);//TODO: delay 2 seconds
 		// initialize camera task
 		cameraInitHandler = new CameraInitHandler(this, cameraRecorder);
 		cameraInitHandler.sendEmptyMessage(0);
@@ -890,7 +894,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		
 		if(ble!=null){
 			//is_connect = false;
-			
+			active_disconnect = true;
 			ble.bleDisconnect();
 			ble = null;
 		}
@@ -1033,6 +1037,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			if(ble!=null){
 				//is_connect = false;
 				//ble.bleWriteState((byte)0x01);
+				active_disconnect = true;
 				ble.bleDisconnect();
 				ble = null;
 			}
@@ -1614,9 +1619,15 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
         
         is_connect = false;
         
+        //TODO: 加上重連
         if(state != IDLE_STATE && state!= FAIL_STATE && state!= DONE_STATE && !goThroughState){
-        	failedState = state;
-        	setState(new FailState("連接中斷"));
+        	if(!active_disconnect){
+        		ble.bleConnect();
+        	}
+        	else{
+	        	failedState = state;
+	        	setState(new FailState("連接中斷"));
+        	}
         }
         else if (state == STAGE2_STATE){
         	failedState = state;
@@ -1831,7 +1842,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 
 	@Override
 	public void stopByFail(int fail) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

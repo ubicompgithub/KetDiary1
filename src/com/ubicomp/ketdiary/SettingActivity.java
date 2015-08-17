@@ -291,7 +291,7 @@ public class SettingActivity extends Activity {
 		private String edit = App.getContext().getString(R.string.edit);
 
 		private int ok_color = App.getContext().getResources()
-				.getColor(R.color.lite_orange);
+				.getColor(R.color.red);
 		private int edit_color = App.getContext().getResources()
 				.getColor(R.color.text_gray);
 

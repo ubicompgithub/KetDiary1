@@ -266,6 +266,13 @@ public class PreferenceControl {
 		edit.commit();
 	}
 	
+	public static void setAbsPosition(int Pos) {
+		Pos = Pos + 10;
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putInt("Postion", Pos);
+		edit.commit();
+	}
+	
 	public static int getLastPosition() {
 		return sp.getInt("LastPostion", 10);
 	}

@@ -102,88 +102,88 @@
         
         
     <string-array name="coping_list1">
-        <item><![CDATA[<font color=#C2B5FF face="DFKai-sb">負面情緒</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb">你可以試著<font color=#f2a6a3>閉眼專注觀察呼吸</font>來緩和情緒。</font>]]></item>
-        <item><![CDATA[<font color=#C2B5FF face="DFKai-sb">負面情緒</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb">你可以試著<font color=#f2a6a3>閉眼讓肌肉放鬆</font>，緩和一下。</font>]]></item>
+        <item><![CDATA[<font color=#C2B5FF face="DFKai-sb">負面情緒</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb">你可以試著<font color=#f2a6a3>閉眼專注觀察呼吸</font>來緩和情緒。</font>]]></item>
+        <item><![CDATA[<font color=#C2B5FF face="DFKai-sb">負面情緒</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb">你可以試著<font color=#f2a6a3>閉眼讓肌肉放鬆</font>，緩和一下。</font>]]></item>
         <!-- <item><![CDATA[<font color=#C2B5FF face="DFKai-sb">負面情緒</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb">(幫助平靜的圖片)</font>]]></item> -->
-        <item><![CDATA[<font color=#C2B5FF face="DFKai-sb">負面情緒</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb">請點開你的歌單，<font color=#f2a6a3>聆聽一曲</font>你喜愛的歌，平衡一下心情。</font>]]></item> <!-- 本來是寫舒緩音樂 -->
-        <item><![CDATA[<font color=#C2B5FF face="DFKai-sb">負面情緒</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb">你可以試著想像你漫步在充滿鳥鳴、綠意以及芬多精的氣息的森林中。</font>]]></item>
-        <item><![CDATA[<font color=#C2B5FF face="DFKai-sb">負面情緒</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb">你可以試著想像海浪一波一波打上你的腳，你的心漸漸像海浪聲一般，開始有了節奏。</font>]]></item>
-        <item><![CDATA[<font color=#C2B5FF face="DFKai-sb">負面情緒</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb">你可以試著想像陽光灑進屋中，桌几、牆壁以及你的身上，一切都明亮了。</font>]]></item>
+        <item><![CDATA[<font color=#C2B5FF face="DFKai-sb">負面情緒</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb">請點開你的歌單，<font color=#f2a6a3>聆聽一曲</font>你喜愛的歌，平衡一下心情。</font>]]></item> <!-- 本來是寫舒緩音樂 -->
+        <item><![CDATA[<font color=#C2B5FF face="DFKai-sb">負面情緒</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb">你可以試著想像你漫步在充滿鳥鳴、綠意以及芬多精的氣息的森林中。</font>]]></item>
+        <item><![CDATA[<font color=#C2B5FF face="DFKai-sb">負面情緒</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb">你可以試著想像海浪一波一波打上你的腳，你的心漸漸像海浪聲一般，開始有了節奏。</font>]]></item>
+        <item><![CDATA[<font color=#C2B5FF face="DFKai-sb">負面情緒</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb">你可以試著想像陽光灑進屋中，桌几、牆壁以及你的身上，一切都明亮了。</font>]]></item>
         <!-- <item><![CDATA[<font color=#C2B5FF face="DFKai-sb">負面情緒</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb">休息</font>]]></item> -->
-        <item><![CDATA[<font color=#C2B5FF face="DFKai-sb">負面情緒</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb">即使只有幾分鐘，做一下你喜愛的<font color=#f2a6a3>休閒活動</font>吧，會有效果的。</font>]]></item>
-        <item><![CDATA[<font color=#C2B5FF face="DFKai-sb">負面情緒</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb"><font color=#f2a6a3>打電話給親友</font>傾訴，會感覺好一些~</font>]]></item>
-        <item><![CDATA[<font color=#C2B5FF face="DFKai-sb">負面情緒</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb">心情不好的時候，<font color=#f2a6a3>傳個訊息給親友</font>吧，聊聊可以讓自己不要一直陷在負面的狀態裡。</font>]]></item>
+        <item><![CDATA[<font color=#C2B5FF face="DFKai-sb">負面情緒</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb">即使只有幾分鐘，做一下你喜愛的<font color=#f2a6a3>休閒活動</font>吧，會有效果的。</font>]]></item>
+        <item><![CDATA[<font color=#C2B5FF face="DFKai-sb">負面情緒</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb"><font color=#f2a6a3>打電話給親友</font>傾訴，會感覺好一些~</font>]]></item>
+        <item><![CDATA[<font color=#C2B5FF face="DFKai-sb">負面情緒</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb">心情不好的時候，<font color=#f2a6a3>傳個訊息給親友</font>吧，聊聊可以讓自己不要一直陷在負面的狀態裡。</font>]]></item>
     </string-array>
     <string-array name="coping_list2">
-        <item><![CDATA[<font color=#8C7AA8 face="DFKai-sb">身體不舒服</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb">你可以試著<font color=#f2a6a3>閉眼專注觀察呼吸</font>來緩和情緒。</font>]]></item>
-        <item><![CDATA[<font color=#8C7AA8 face="DFKai-sb">身體不舒服</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb">你可以試著<font color=#f2a6a3>閉眼讓肌肉放鬆</font>，緩和一下。</font>]]></item>
+        <item><![CDATA[<font color=#8C7AA8 face="DFKai-sb">身體不舒服</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb">你可以試著<font color=#f2a6a3>閉眼專注觀察呼吸</font>來緩和情緒。</font>]]></item>
+        <item><![CDATA[<font color=#8C7AA8 face="DFKai-sb">身體不舒服</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb">你可以試著<font color=#f2a6a3>閉眼讓肌肉放鬆</font>，緩和一下。</font>]]></item>
         <!-- <item>身體不舒服</font><font face="DFKai-sb">的應對方法</font>\n(幫助平靜的圖片)</item> -->
-        <item><![CDATA[<font color=#8C7AA8 face="DFKai-sb">身體不舒服</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb">請點開你的歌單，<font color=#f2a6a3>聆聽一曲</font>你喜愛的歌，平衡一下心情。</font>]]></item>
-        <item><![CDATA[<font color=#8C7AA8 face="DFKai-sb">身體不舒服</font><font face="DFKai-sb">的應對方法</font></font><br><font face="DFKai-sb">你可以試著想像你漫步在充滿鳥鳴、綠意以及芬多精的氣息的森林中，身體漸漸冷靜。</font>]]></item>
-        <item><![CDATA[<font color=#8C7AA8 face="DFKai-sb">身體不舒服</font><font face="DFKai-sb">的應對方法</font></font><br><font face="DFKai-sb">你可以試著想像海浪一波一波打上你的腳，你的心漸漸像海浪聲一般跳動，身體被海水所治癒。</font>]]></item>
-        <item><![CDATA[<font color=#8C7AA8 face="DFKai-sb">身體不舒服</font><font face="DFKai-sb">的應對方法</font></font><br><font face="DFKai-sb">你可以試著想像溫暖的陽光灑在身上，身上的痛苦慢慢平靜下來了。</font>]]></item>
-        <item><![CDATA[<font color=#8C7AA8 face="DFKai-sb">身體不舒服</font><font face="DFKai-sb">的應對方法</font></font><br><font face="DFKai-sb">請多多<font color=#f2a6a3>休息</font>，別讓身體累壞了。</font>]]></item>
-        <item><![CDATA[<font color=#8C7AA8 face="DFKai-sb">身體不舒服</font><font face="DFKai-sb">的應對方法</font></font><br><font face="DFKai-sb">不會更不舒服的話，做一下你喜愛的、適當的<font color=#f2a6a3>休閒活動</font>可以讓你忽略身體上的不適。</font>]]></item>
-        <item><![CDATA[<font color=#8C7AA8 face="DFKai-sb">身體不舒服</font><font face="DFKai-sb">的應對方法</font></font><br><font face="DFKai-sb"><font color=#f2a6a3>打個電話給親友</font>聊天轉移注意力吧！</font>]]></item>
-        <item><![CDATA[<font color=#8C7AA8 face="DFKai-sb">身體不舒服</font><font face="DFKai-sb">的應對方法</font></font><br><font face="DFKai-sb"><font color=#f2a6a3>傳訊息給親友</font>聊天轉移注意力吧！</font>]]></item>
+        <item><![CDATA[<font color=#8C7AA8 face="DFKai-sb">身體不舒服</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb">請點開你的歌單，<font color=#f2a6a3>聆聽一曲</font>你喜愛的歌，平衡一下心情。</font>]]></item>
+        <item><![CDATA[<font color=#8C7AA8 face="DFKai-sb">身體不舒服</font><font face="DFKai-sb">的應對方法:</font></font><br><font face="DFKai-sb">你可以試著想像你漫步在充滿鳥鳴、綠意以及芬多精的氣息的森林中，身體漸漸冷靜。</font>]]></item>
+        <item><![CDATA[<font color=#8C7AA8 face="DFKai-sb">身體不舒服</font><font face="DFKai-sb">的應對方法:</font></font><br><font face="DFKai-sb">你可以試著想像海浪一波一波打上你的腳，你的心漸漸像海浪聲一般跳動，身體被海水所治癒。</font>]]></item>
+        <item><![CDATA[<font color=#8C7AA8 face="DFKai-sb">身體不舒服</font><font face="DFKai-sb">的應對方法:</font></font><br><font face="DFKai-sb">你可以試著想像溫暖的陽光灑在身上，身上的痛苦慢慢平靜下來了。</font>]]></item>
+        <item><![CDATA[<font color=#8C7AA8 face="DFKai-sb">身體不舒服</font><font face="DFKai-sb">的應對方法:</font></font><br><font face="DFKai-sb">請多多<font color=#f2a6a3>休息</font>，別讓身體累壞了。</font>]]></item>
+        <item><![CDATA[<font color=#8C7AA8 face="DFKai-sb">身體不舒服</font><font face="DFKai-sb">的應對方法:</font></font><br><font face="DFKai-sb">不會更不舒服的話，做一下你喜愛的、適當的<font color=#f2a6a3>休閒活動</font>可以讓你忽略身體上的不適。</font>]]></item>
+        <item><![CDATA[<font color=#8C7AA8 face="DFKai-sb">身體不舒服</font><font face="DFKai-sb">的應對方法:</font></font><br><font face="DFKai-sb"><font color=#f2a6a3>打個電話給親友</font>聊天轉移注意力吧！</font>]]></item>
+        <item><![CDATA[<font color=#8C7AA8 face="DFKai-sb">身體不舒服</font><font face="DFKai-sb">的應對方法:</font></font><br><font face="DFKai-sb"><font color=#f2a6a3>傳訊息給親友</font>聊天轉移注意力吧！</font>]]></item>
 
     </string-array>
     <string-array name="coping_list3">
-        <item><![CDATA[<font color=#FF7AA6 face="DFKai-sb">正面情緒</font><font face="DFKai-sb">的應對方法</font></font><br><font face="DFKai-sb"><font color=#f2a6a3>打電話給親友</font>告知他們你的狀態。</font>]]></item>
-        <item><![CDATA[<font color=#FF7AA6 face="DFKai-sb">正面情緒</font><font face="DFKai-sb">的應對方法</font></font><br><font face="DFKai-sb">傳訊息給親友告知他們你的狀態。</font>]]></item>
+        <item><![CDATA[<font color=#FF7AA6 face="DFKai-sb">正面情緒</font><font face="DFKai-sb">的應對方法:</font></font><br><font face="DFKai-sb"><font color=#f2a6a3>打電話給親友</font>告知他們你的狀態。</font>]]></item>
+        <item><![CDATA[<font color=#FF7AA6 face="DFKai-sb">正面情緒</font><font face="DFKai-sb">的應對方法:</font></font><br><font face="DFKai-sb">傳訊息給親友告知他們你的狀態。</font>]]></item>
     </string-array>
     <string-array name="coping_list4">
-        <item><![CDATA[<font color=#FDC16E face="DFKai-sb">測試自我控制力</font><font face="DFKai-sb">的應對方法</font></font><br><font face="DFKai-sb"><font color=#f2a6a3>打電話給親友</font>聊聊，要知道自己可以控制的話，之前就不會成癮了。</font>]]></item>
-        <item><![CDATA[<font color=#FDC16E face="DFKai-sb">測試自我控制力</font><font face="DFKai-sb">的應對方法</font></font><br><font face="DFKai-sb"><font color=#f2a6a3>打電話給親友聊聊</font>，要知道自己可以控制的話，之前就不會成癮了。</font>]]></item>
+        <item><![CDATA[<font color=#FDC16E face="DFKai-sb">測試自我控制力</font><font face="DFKai-sb">的應對方法:</font></font><br><font face="DFKai-sb"><font color=#f2a6a3>打電話給親友</font>聊聊，要知道自己可以控制的話，之前就不會成癮了。</font>]]></item>
+        <item><![CDATA[<font color=#FDC16E face="DFKai-sb">測試自我控制力</font><font face="DFKai-sb">的應對方法:</font></font><br><font face="DFKai-sb"><font color=#f2a6a3>打電話給親友聊聊</font>，要知道自己可以控制的話，之前就不會成癮了。</font>]]></item>
 
     </string-array>
     <string-array name="coping_list5">
-        <item><![CDATA[<font color=#FF8B7D face="DFKai-sb">誘惑與衝動</font><font face="DFKai-sb">的應對方法</font></font><br><font face="DFKai-sb">你可以試著<font color=#f2a6a3>閉眼專注觀察呼吸</font>來緩和情緒。</font>]]></item>
-        <item><![CDATA[<font color=#FF8B7D face="DFKai-sb">誘惑與衝動</font><font face="DFKai-sb">的應對方法</font></font><br><font face="DFKai-sb">你可以試著<font color=#f2a6a3>閉眼讓肌肉放鬆</font>，緩和一下。</font>]]></item>
+        <item><![CDATA[<font color=#FF8B7D face="DFKai-sb">誘惑與衝動</font><font face="DFKai-sb">的應對方法:</font></font><br><font face="DFKai-sb">你可以試著<font color=#f2a6a3>閉眼專注觀察呼吸</font>來緩和情緒。</font>]]></item>
+        <item><![CDATA[<font color=#FF8B7D face="DFKai-sb">誘惑與衝動</font><font face="DFKai-sb">的應對方法:</font></font><br><font face="DFKai-sb">你可以試著<font color=#f2a6a3>閉眼讓肌肉放鬆</font>，緩和一下。</font>]]></item>
         <!-- <item><![CDATA[<font color=#FF8B7D face="DFKai-sb">負面情緒<font face="DFKai-sb">的應對方法</font></font><br><font face="DFKai-sb">(幫助平靜的圖片)</item> -->
-        <item><![CDATA[<font color=#FF8B7D face="DFKai-sb">誘惑與衝動</font><font face="DFKai-sb">的應對方法</font></font><br><font face="DFKai-sb">請點開你的歌單，<font color=#f2a6a3>聆聽一曲</font>你喜愛的歌，並專注在這個歌上，忘卻其他的事務吧。</font>]]></item>
-        <item><![CDATA[<font color=#FF8B7D face="DFKai-sb">誘惑與衝動</font><font face="DFKai-sb">的應對方法</font></font><br><font face="DFKai-sb">你可以試著想像你漫步在充滿鳥鳴、綠意以及芬多精的氣息的森林中，心中無欲無求。</font>]]></item>
-        <item><![CDATA[<font color=#FF8B7D face="DFKai-sb">誘惑與衝動</font><font face="DFKai-sb">的應對方法</font></font><br><font face="DFKai-sb">你可以試著想像海浪一波一波打上你的腳，浪潮的聲音有節奏地響著。</font>]]></item>
-        <item><![CDATA[<font color=#FF8B7D face="DFKai-sb">誘惑與衝動</font><font face="DFKai-sb">的應對方法</font></font><br><font face="DFKai-sb">你可以試著想像陽光灑進屋中，桌几、牆壁以及你的身上，你只想專注在這上面。</font>]]></item>
+        <item><![CDATA[<font color=#FF8B7D face="DFKai-sb">誘惑與衝動</font><font face="DFKai-sb">的應對方法:</font></font><br><font face="DFKai-sb">請點開你的歌單，<font color=#f2a6a3>聆聽一曲</font>你喜愛的歌，並專注在這個歌上，忘卻其他的事務吧。</font>]]></item>
+        <item><![CDATA[<font color=#FF8B7D face="DFKai-sb">誘惑與衝動</font><font face="DFKai-sb">的應對方法:</font></font><br><font face="DFKai-sb">你可以試著想像你漫步在充滿鳥鳴、綠意以及芬多精的氣息的森林中，心中無欲無求。</font>]]></item>
+        <item><![CDATA[<font color=#FF8B7D face="DFKai-sb">誘惑與衝動</font><font face="DFKai-sb">的應對方法:</font></font><br><font face="DFKai-sb">你可以試著想像海浪一波一波打上你的腳，浪潮的聲音有節奏地響著。</font>]]></item>
+        <item><![CDATA[<font color=#FF8B7D face="DFKai-sb">誘惑與衝動</font><font face="DFKai-sb">的應對方法:</font></font><br><font face="DFKai-sb">你可以試著想像陽光灑進屋中，桌几、牆壁以及你的身上，你只想專注在這上面。</font>]]></item>
         <!-- <item><![CDATA[<font color=#FF8B7D face="DFKai-sb">誘惑與衝動</font><font face="DFKai-sb">的應對方法</font></font><br><font face="DFKai-sb">休息</font>]]></item> -->
-        <item><![CDATA[<font color=#FF8B7D face="DFKai-sb">誘惑與衝動</font><font face="DFKai-sb">的應對方法</font></font><br><font face="DFKai-sb">快做做你喜歡的<font color=#f2a6a3>休閒活動</font>轉移注意力！</font>]]></item>
-        <item><![CDATA[<font color=#FF8B7D face="DFKai-sb">誘惑與衝動</font><font face="DFKai-sb">的應對方法</font></font><br><font face="DFKai-sb">你可以試著<font color=#f2a6a3>打電話給親友</font>，讓親友轉移你的注意力。</font>]]></item>
-        <item><![CDATA[<font color=#FF8B7D face="DFKai-sb">誘惑與衝動</font><font face="DFKai-sb">的應對方法</font></font><br><font face="DFKai-sb">你可以試著<font color=#f2a6a3>傳訊息給親友</font>，讓親友轉移你的注意力。</font>]]></item>
+        <item><![CDATA[<font color=#FF8B7D face="DFKai-sb">誘惑與衝動</font><font face="DFKai-sb">的應對方法:</font></font><br><font face="DFKai-sb">快做做你喜歡的<font color=#f2a6a3>休閒活動</font>轉移注意力！</font>]]></item>
+        <item><![CDATA[<font color=#FF8B7D face="DFKai-sb">誘惑與衝動</font><font face="DFKai-sb">的應對方法:</font></font><br><font face="DFKai-sb">你可以試著<font color=#f2a6a3>打電話給親友</font>，讓親友轉移你的注意力。</font>]]></item>
+        <item><![CDATA[<font color=#FF8B7D face="DFKai-sb">誘惑與衝動</font><font face="DFKai-sb">的應對方法:</font></font><br><font face="DFKai-sb">你可以試著<font color=#f2a6a3>傳訊息給親友</font>，讓親友轉移你的注意力。</font>]]></item>
 
 
     </string-array>
     <string-array name="coping_list6">
-        <item><![CDATA[<font color=#71C4BE face="DFKai-sb">與他人相處上遇到困難</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb">你可以試著<font color=#f2a6a3>閉眼專注觀察呼吸</font>來緩和情緒。</font>]]></item>
-        <item><![CDATA[<font color=#71C4BE face="DFKai-sb">與他人相處上遇到困難</font><font face="DFKai-sb">的應對方法</font></font><br><font face="DFKai-sb">你可以試著<font color=#f2a6a3>閉眼讓肌肉放鬆</font>，緩和一下。</font>]]></item>
+        <item><![CDATA[<font color=#71C4BE face="DFKai-sb">與他人相處上遇到困難</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb">你可以試著<font color=#f2a6a3>閉眼專注觀察呼吸</font>來緩和情緒。</font>]]></item>
+        <item><![CDATA[<font color=#71C4BE face="DFKai-sb">與他人相處上遇到困難</font><font face="DFKai-sb">的應對方法:</font></font><br><font face="DFKai-sb">你可以試著<font color=#f2a6a3>閉眼讓肌肉放鬆</font>，緩和一下。</font>]]></item>
         <!-- <item><![CDATA[<font color=#71C4BE face="DFKai-sb">與他人相處上遇到困難</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb">(幫助平靜的圖片)</font>]]></item> -->
-        <item><![CDATA[<font color=#71C4BE face="DFKai-sb">與他人相處上遇到困難</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb"><font color=#f2a6a3>聆聽舒緩音樂</font>讓自己冷靜下來，再換個角度站在他的立場想想。</font>]]></item>
-        <item><![CDATA[<font color=#71C4BE face="DFKai-sb">與他人相處上遇到困難</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb">你可以試著想像你漫步在充滿鳥鳴、綠意以及芬多精的氣息的森林中，自己漸漸變得柔軟。</font>]]></item>
-        <item><![CDATA[<font color=#71C4BE face="DFKai-sb">與他人相處上遇到困難</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb">你可以試著想像海浪一波一波打上你的腳，浪潮的聲音有節奏地響著。</font>]]></item>
-        <item><![CDATA[<font color=#71C4BE face="DFKai-sb">與他人相處上遇到困難</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb">你可以試著想像陽光灑進屋中，桌几、牆壁以及你的身上，你只想專注在這上面。</font>]]></item>
+        <item><![CDATA[<font color=#71C4BE face="DFKai-sb">與他人相處上遇到困難</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb"><font color=#f2a6a3>聆聽舒緩音樂</font>讓自己冷靜下來，再換個角度站在他的立場想想。</font>]]></item>
+        <item><![CDATA[<font color=#71C4BE face="DFKai-sb">與他人相處上遇到困難</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb">你可以試著想像你漫步在充滿鳥鳴、綠意以及芬多精的氣息的森林中，自己漸漸變得柔軟。</font>]]></item>
+        <item><![CDATA[<font color=#71C4BE face="DFKai-sb">與他人相處上遇到困難</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb">你可以試著想像海浪一波一波打上你的腳，浪潮的聲音有節奏地響著。</font>]]></item>
+        <item><![CDATA[<font color=#71C4BE face="DFKai-sb">與他人相處上遇到困難</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb">你可以試著想像陽光灑進屋中，桌几、牆壁以及你的身上，你只想專注在這上面。</font>]]></item>
         <!-- <item><![CDATA[<font color=#71C4BE face="DFKai-sb">與他人相處上遇到困難</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb">休息</font>]]></item> -->
-        <item><![CDATA[<font color=#71C4BE face="DFKai-sb">與他人相處上遇到困難</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb">做一下你喜愛的<font color=#f2a6a3>休閒活動吧</font>~</font>]]></item>
-        <item><![CDATA[<font color=#71C4BE face="DFKai-sb">與他人相處上遇到困難</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb"><font color=#f2a6a3>遠離現場</font>，先讓自己冷靜下來，別陷入了！</font>]]></item>
+        <item><![CDATA[<font color=#71C4BE face="DFKai-sb">與他人相處上遇到困難</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb">做一下你喜愛的<font color=#f2a6a3>休閒活動吧</font>~</font>]]></item>
+        <item><![CDATA[<font color=#71C4BE face="DFKai-sb">與他人相處上遇到困難</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb"><font color=#f2a6a3>遠離現場</font>，先讓自己冷靜下來，別陷入了！</font>]]></item>
         <!-- <item><![CDATA[<font color=#71C4BE face="DFKai-sb">與他人相處上遇到困難</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb">練習拒絕</font>]]></item> -->
-        <item><![CDATA[<font color=#71C4BE face="DFKai-sb">與他人相處上遇到困難</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb"><font color=#f2a6a3>打電話問問親友的意見</font>，自己一個人的話在這種情況下容易做出不適當的判斷。</font>]]></item>
-        <item><![CDATA[<font color=#71C4BE face="DFKai-sb">與他人相處上遇到困難</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb"><font color=#f2a6a3>傳訊息問問親友的意見</font>，自己一個人的話在這種情況下容易做出不適當的判斷。</font>]]></item>
+        <item><![CDATA[<font color=#71C4BE face="DFKai-sb">與他人相處上遇到困難</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb"><font color=#f2a6a3>打電話問問親友的意見</font>，自己一個人的話在這種情況下容易做出不適當的判斷。</font>]]></item>
+        <item><![CDATA[<font color=#71C4BE face="DFKai-sb">與他人相處上遇到困難</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb"><font color=#f2a6a3>傳訊息問問親友的意見</font>，自己一個人的話在這種情況下容易做出不適當的判斷。</font>]]></item>
 
 
     </string-array>
     <string-array name="coping_list7">
-        <item><![CDATA[<font color=#BBE578 face="DFKai-sb">維持社交</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb"><font color=#f2a6a3>遠離現場</font>，替自己爭取找理由的時間。</font>]]></item>
-        <item><![CDATA[<font color=#BBE578 face="DFKai-sb">維持社交</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb"><font color=#f2a6a3>練習拒絕</font>，可以看看拒絕人的書或是文章。</font>]]></item>
-        <item><![CDATA[<font color=#BBE578 face="DFKai-sb">維持社交</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb"><font color=#f2a6a3>打電話給親友</font>，他們會有方法的。</font>]]></item>
-        <item><![CDATA[<font color=#BBE578 face="DFKai-sb">維持社交</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb"><font color=#f2a6a3>傳訊息給親友</font>，他們會有方法的。</font>]]></item>
+        <item><![CDATA[<font color=#BBE578 face="DFKai-sb">維持社交</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb"><font color=#f2a6a3>遠離現場</font>，替自己爭取找理由的時間。</font>]]></item>
+        <item><![CDATA[<font color=#BBE578 face="DFKai-sb">維持社交</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb"><font color=#f2a6a3>練習拒絕</font>，可以看看拒絕人的書或是文章。</font>]]></item>
+        <item><![CDATA[<font color=#BBE578 face="DFKai-sb">維持社交</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb"><font color=#f2a6a3>打電話給親友</font>，他們會有方法的。</font>]]></item>
+        <item><![CDATA[<font color=#BBE578 face="DFKai-sb">維持社交</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb"><font color=#f2a6a3>傳訊息給親友</font>，他們會有方法的。</font>]]></item>
     </string-array>
     <string-array name="coping_list8">
-        <item><![CDATA[<font color=#9AD1F9 face="DFKai-sb">與他人相聚</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb"><font color=#f2a6a3>打電話給親友</font>，關係更重要的親友們知道你這樣做會很難過的。</font>]]></item>
-        <item><![CDATA[<font color=#9AD1F9 face="DFKai-sb">與他人相聚</font><font face="DFKai-sb">的應對方法</font><br><font face="DFKai-sb">想想，普通的親友們知道你這樣做會開始遠離你，得不償失啊！</font>]]></item>
+        <item><![CDATA[<font color=#9AD1F9 face="DFKai-sb">與他人相聚</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb"><font color=#f2a6a3>打電話給親友</font>，關係更重要的親友們知道你這樣做會很難過的。</font>]]></item>
+        <item><![CDATA[<font color=#9AD1F9 face="DFKai-sb">與他人相聚</font><font face="DFKai-sb">的應對方法:</font><br><font face="DFKai-sb">想想，普通的親友們知道你這樣做會開始遠離你，得不償失啊！</font>]]></item>
 
     </string-array>
     <string-array name="coping_list0">
-        <item><![CDATA[<font face="DFKai-sb">一般的應對方法</font><br><font face="DFKai-sb"><font color=#f2a6a3>打電話</font>給願意幫助你的親友求助吧！</font>]]></item>
-        <item><![CDATA[<font face="DFKai-sb">一般的應對方法</font><br><font face="DFKai-sb"><font color=#f2a6a3>傳訊息</font>給願意幫助你的親友求助吧！</font>]]></item>
-        <item><![CDATA[<font face="DFKai-sb">一般的應對方法</font><br><font face="DFKai-sb"><font color=#f2a6a3>聆聽舒緩音樂</font>讓自己冷靜下來，再多思考一下後果。</font>]]></item>
+        <item><![CDATA[<font face="DFKai-sb">一般的應對方法:</font><br><font face="DFKai-sb"><font color=#f2a6a3>打電話</font>給願意幫助你的親友求助吧！</font>]]></item>
+        <item><![CDATA[<font face="DFKai-sb">一般的應對方法:</font><br><font face="DFKai-sb"><font color=#f2a6a3>傳訊息</font>給願意幫助你的親友求助吧！</font>]]></item>
+        <item><![CDATA[<font face="DFKai-sb">一般的應對方法:</font><br><font face="DFKai-sb"><font color=#f2a6a3>聆聽舒緩音樂</font>讓自己冷靜下來，再多思考一下後果。</font>]]></item>
 
     </string-array>
     

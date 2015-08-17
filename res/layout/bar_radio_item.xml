@@ -2,9 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal" 
-    android:background="@drawable/bar_button_transparent"
-    >
+    android:background="@drawable/bar_button"
+    android:orientation="horizontal" >
 
     <TextView
         android:id="@+id/question_description"

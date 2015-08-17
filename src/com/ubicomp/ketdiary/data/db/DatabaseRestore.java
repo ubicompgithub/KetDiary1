@@ -149,6 +149,9 @@ public class DatabaseRestore extends AsyncTask<Void, Void, Void> {
 					PreferenceControl.setStartDate(year, month, day);
 
 					int usedScore = Integer.valueOf(data[2]);
+					int position = Integer.valueOf(data[3]);
+					
+					PreferenceControl.setAbsPosition(position);
 					PreferenceControl.setUsedCounter(usedScore);
 				}
 				reader.close();

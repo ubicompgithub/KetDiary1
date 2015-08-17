@@ -54,7 +54,8 @@ public class SectionsPagerAdapter extends PagerAdapter {
     public static final int TAG_changedot = -1;
     public static final int TAG_ADDNOTE = R.string.TAG_CAL_CELL_NOTEADD;
     		
-    private static final Calendar startDay = PreferenceControl.getStartDate();
+    //private static final Calendar startDay = PreferenceControl.getStartDate();
+    private static final Calendar startDay = PreferenceControl.getStartDateMinus();
     private static final Calendar today = Calendar.getInstance();
     
     private Context context;
