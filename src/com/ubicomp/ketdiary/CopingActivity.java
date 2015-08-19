@@ -859,7 +859,7 @@ public class CopingActivity extends Activity {
 		case 3:	
 			tv = BarButtonGenerator.createTextView(R.string.emotionDIY_help_case2_2);
 			animId = R.anim.animation_stretch;
-			mediaId = R.raw.emotion_0;
+			mediaId = R.raw.emotion_3;
 			break;
 		default:
 			tv = BarButtonGenerator.createTextView(R.string.emotionDIY_help_case1);

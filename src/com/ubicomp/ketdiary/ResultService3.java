@@ -347,7 +347,23 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	        else if(state == FRAME_STATE){
 	        }
 	        else if(state == REGULAR_STATE){
-	        	if(spentTime < 2*60*1000 ){
+	        	if(spentTime > 3*60*1000 ){ 
+		        	if(seconds == 0 && picNum == 1){    //Regular connect after take  picture.
+		        		if(connectSensorTimer != null)
+		        			//connectSensorTimer.cancel();
+		        			Log.i(TAG, "second = 0");
+		        			if(!isConnect){
+		        				connect = false;
+		        				writeToColorRawFile("Connect Timer Start");
+		        				connectSensorTimer.cancel();
+		        				connectSensorTimer.start();
+		        			}
+		        	}
+		        	else if(picNum == 0){
+		        		setTestFail("過曝照片未傳成功");
+		        	}
+	        	}
+	        	else if(spentTime < 2*60*1000 ){
 	        		state = DETECT_STATE;
 	        		writeToColorRawFile("State = " + state);
 	        	}

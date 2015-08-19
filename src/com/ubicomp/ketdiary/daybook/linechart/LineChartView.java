@@ -190,15 +190,17 @@ public class LineChartView extends View {
 		Calendar currentDay = Calendar.getInstance(); 
     	currentDay.setTimeInMillis(startDay.getTimeInMillis());
     	
-    	NoteAdd[] noteAdds = db.getAllNoteAdd();
+    	NoteAdd[] noteAdds = db.getAllNoteAdd(); //假如都沒新增記事顯示會有問題
     	if(noteAdds == null){
-    		return;
+    		//return;
+    	}else{
+	    	if(noteAdds.length == this.lastNoteAddNum){ //check data update or not
+	    		Log.d(TAG, "no Update");
+	    		return;
+	    	}
+	    	lastNoteAddNum = noteAdds.length;
     	}
-    	if(noteAdds.length == this.lastNoteAddNum){ //check data update or not
-    		Log.d(TAG, "no Update");
-    		return;
-    	}
-    	lastNoteAddNum = noteAdds.length;
+    	
     	
     	TestResult testResult;
     	NoteAdd[] noteAdd = null;
