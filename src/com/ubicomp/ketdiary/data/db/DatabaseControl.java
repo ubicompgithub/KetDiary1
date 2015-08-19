@@ -360,7 +360,7 @@ public class DatabaseControl {
 				passDay++;
 			}
 			Log.i(TAG, "PassDay: " + passDay + " NoTestDay " + noTestDay);
-			if(noTestDay > 0){
+			if(noTestDay > 0 && StartDateCheck.afterStartDate()){			
 				PreferenceControl.setCheckBars(true);
 				PreferenceControl.setPosition(-noTestDay);
 			}

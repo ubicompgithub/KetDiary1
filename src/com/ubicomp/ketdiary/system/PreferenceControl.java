@@ -56,6 +56,7 @@ public class PreferenceControl {
 				cal.get(Calendar.DAY_OF_MONTH));
 		setFirstUsedDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
 				cal.get(Calendar.DAY_OF_MONTH));
+		setOpenAppTimestamp();
 	}
 
 	/**
@@ -445,6 +446,12 @@ public class PreferenceControl {
 
 		cal.set(data[0], data[1], data[2], 0, 0, 0);
 		cal.set(Calendar.MILLISECOND, 0);
+		
+		Calendar startCal = getStartDate();
+		
+		if(cal.compareTo(startCal) == 1 )
+			cal = startCal;
+		
 		return cal;
 	}
 	
@@ -458,6 +465,12 @@ public class PreferenceControl {
 		cal.set(data[0], data[1], data[2], 0, 0, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 		cal.add(Calendar.DATE, -2);
+		
+		Calendar startCal = getStartDateMinus();
+		
+		if(cal.compareTo(startCal) == 1 )
+			cal = startCal;
+		
 		return cal;
 	}
 	
