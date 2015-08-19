@@ -6,6 +6,6 @@
         />
     <item 
         android:state_pressed="true"
-        android:drawable="@drawable/bar_bg_button_pressed"
+        android:drawable="@drawable/list_button_bg"
         />
 </selector>

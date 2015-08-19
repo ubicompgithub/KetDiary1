@@ -7,7 +7,7 @@ import java.util.TreeMap;
 import android.annotation.SuppressLint;
 
 @SuppressLint("UseSparseArrays")
-public class NoteCatagory4 {
+public class NoteCategory4 {
 	
 	
 	@SuppressLint("UseSparseArrays")
@@ -27,7 +27,7 @@ public class NoteCatagory4 {
 		
 	/** create instance*/
 	
-	public NoteCatagory4(){
+	public NoteCategory4(){
 		
 		noteSetting();
 	}

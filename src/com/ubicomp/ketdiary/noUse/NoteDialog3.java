@@ -40,7 +40,6 @@ import android.widget.Toast;
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
-import com.ubicomp.ketdiary.data.db.NoteCatagory3;
 import com.ubicomp.ketdiary.data.file.QuestionFile;
 import com.ubicomp.ketdiary.dialog.ChooseItemCaller;
 import com.ubicomp.ketdiary.dialog.ChooseItemDialog;

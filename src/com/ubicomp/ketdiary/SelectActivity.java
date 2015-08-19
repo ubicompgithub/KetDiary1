@@ -14,9 +14,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubicomp.ketdiary.data.db.DatabaseControl;
-import com.ubicomp.ketdiary.data.db.NoteCatagory3;
-import com.ubicomp.ketdiary.data.db.NoteCatagory4;
+import com.ubicomp.ketdiary.data.db.NoteCategory4;
 import com.ubicomp.ketdiary.data.structure.TestResult;
+import com.ubicomp.ketdiary.noUse.NoteCatagory3;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.system.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.ui.BarButtonGenerator;
@@ -75,7 +75,7 @@ public class SelectActivity extends Activity {
 	private Activity activity;
 	private DatabaseControl db;
 	private static final String[] RESULT = {"陰性", "陽性", ""};
-	private NoteCatagory4 noteCategory;
+	private NoteCategory4 noteCategory;
 	private static final String[] TYPE_TITLE = App.getContext().getResources().getStringArray(R.array.trigger_list); 
 	
 	public static final int NOTE_UPPER_BOUND = 10; 
@@ -98,7 +98,7 @@ public class SelectActivity extends Activity {
 		titleLayout.addView(title);
 		
 		db = new DatabaseControl();
-		noteCategory = new NoteCatagory4();
+		noteCategory = new NoteCategory4();
 		
 
 		setViews1();

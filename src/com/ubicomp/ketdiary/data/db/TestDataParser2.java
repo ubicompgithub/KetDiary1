@@ -94,7 +94,7 @@ public class TestDataParser2 {
 	}
 	
 	/** start to handle the noteAdd data */
-	public void startAddNote3(int isAfterTest, int day, int timeslot, int type, int items, int impact, String descripiton) {
+	public static void startAfterAddNote3(int isAfterTest, int day, int timeslot, int type, int items, int impact, String descripiton) {
 
 		Log.i(TAG, "TDP AddNote3 Start");
 		Calendar cal = Calendar.getInstance();
@@ -114,22 +114,24 @@ public class TestDataParser2 {
 		
 		if(category == -1){
 			items = -1;
-			impact = -1;
-			
+			impact = -1;			
 			return;
 		}
 
-		long timestamp = ts;
-		if(ts == 0)
-			ts = System.currentTimeMillis();
+//		long timestamp = ts;
+//		if(ts == 0)
+//			ts = System.currentTimeMillis();
 		
-		noteAdd = new NoteAdd(isAfterTest, ts, year, month, date, timeslot, category, type, items, impact, descripiton, 0, 0);
+		long ts = PreferenceControl.getUpdateDetectionTimestamp();
+		
+		NoteAdd noteAdd = new NoteAdd(isAfterTest, ts, year, month, date, timeslot, category, type, items, impact, descripiton, 0, 0);
 		boolean update = false;
-		if (timestamp == PreferenceControl.getUpdateDetectionTimestamp())
+		if (ts == PreferenceControl.getUpdateDetectionTimestamp())
 			update = true;
-		PreferenceControl.setUpdateDetection(false);
+		PreferenceControl.setUpdateDetection(update);
 		//PreferenceControl.setUpdateDetectionTimestamp(0);
 		
+		DatabaseControl db = new DatabaseControl();
 		db.insertNoteAdd(noteAdd);
 		
 		//db.addTestResult(testResult);

@@ -38,7 +38,7 @@ import android.widget.TextView;
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
-import com.ubicomp.ketdiary.data.db.NoteCatagory3;
+import com.ubicomp.ketdiary.noUse.NoteCatagory3;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.system.check.TimeBlock;
 import com.ubicomp.ketdiary.system.clicklog.ClickLog;
@@ -995,6 +995,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 		@Override
 		public void resetView(int type, int select) {
 			setEnabledAll(boxLayout, true);
+			MainActivity.getMainActivity().enableTabAndClick(false);
 			edtext.setEnabled(true);
 			edtext.setInputType(InputType.TYPE_CLASS_TEXT);
 			edtext.setFocusable(true);

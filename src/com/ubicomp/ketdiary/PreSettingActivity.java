@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -29,7 +30,9 @@ import com.ubicomp.ketdiary.ui.CustomToastSmall;
  * @author Stanley Wang
  */
 public class PreSettingActivity extends Activity {
-
+	
+	
+	
 	private EditText uid, did, target_good, target_bad, drink;
 	private EditText voltage1, voltage2, ACountDown, VCountDown, V2CountDown;
 
@@ -37,8 +40,9 @@ public class PreSettingActivity extends Activity {
 			restoreVer1Button, dummyDataButton, changeButton, cleanButton, cassetteButton;
 	private boolean debug;
 	private Activity activity;
-	private static final int MIN_NAME_LENGTH = 3;
-
+	private static final int MIN_NAME_LENGTH = 9;
+	private static final String TAG = "PreSetting";
+	
 	private int mYear, mMonth, mDay;
 	private int lYear, lMonth, lDay;
 	private int v1, v2, aCount, vCount, v2Count;
@@ -328,9 +332,12 @@ public class PreSettingActivity extends Activity {
 			String text2 = did.getText().toString();
 			
 			boolean check = true;
+			//Log.d(TAG, "uid_length " +text.length());
 			if (text.length() < MIN_NAME_LENGTH)
 				check = false;
 			if (!text.startsWith("rehab"))
+				check = false;
+			if (text.contains(" "))
 				check = false;
 			
 			target_g = target_good.getText().toString();

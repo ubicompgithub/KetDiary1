@@ -58,6 +58,7 @@ import com.ubicomp.ketdiary.noUse.NoteDialog3;
 import com.ubicomp.ketdiary.noUse.TestStripDetection3;
 import com.ubicomp.ketdiary.system.Config;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.system.check.StartDateCheck;
 import com.ubicomp.ketdiary.system.clicklog.ClickLog;
 import com.ubicomp.ketdiary.system.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.ui.CustomMenu;
@@ -178,6 +179,10 @@ public class MainActivity extends FragmentActivity {
 		}
 		
 		db = new DatabaseControl();
+
+		long prev_check = PreferenceControl.getOpenAppTimestamp(); //check didn't do test day since last check
+		int noTestDay = db.noTestDayCount(prev_check, System.currentTimeMillis());
+				
 		
 		ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
 		int mMemoryClass = am.getMemoryClass();
@@ -195,13 +200,11 @@ public class MainActivity extends FragmentActivity {
         @Override
         public void onManagerConnected(int status) {
             switch (status) {
-                case LoaderCallbackInterface.SUCCESS:
-                {
+                case LoaderCallbackInterface.SUCCESS:{
                     Log.i(TAG, "OpenCV loaded successfully");
-                    testStripDetection = new TestStripDetection3();
+                    //testStripDetection = new TestStripDetection3();
                 } break;
-                default:
-                {
+                default:{
                     super.onManagerConnected(status);
                 } break;
             }
@@ -958,19 +961,23 @@ public class MainActivity extends FragmentActivity {
 		//PreferenceControl.setTestAddScore(addScore);
 
 		PreferenceControl.setPoint(addScore);
-		Log.d(TAG, "AddScore:"+addScore);		
+		Log.d(TAG, "AddScore:"+addScore);
+		int addPos = 0;
 		if (addScore == 0 && result == 1){ // TestFail & get no credit 
 			CustomToast.generateToast(R.string.after_test_fail, -1);
-			PreferenceControl.setPosition(-1);
+			addPos = -1;
 		}
 		else if(result == 1){
 			CustomToast.generateToast(R.string.after_test_fail, addScore);
-			PreferenceControl.setPosition(-1);
+			addPos = -1;
 		}
 		else{
 			CustomToast.generateToast(R.string.after_test_pass, addScore);
-			PreferenceControl.setPosition(1);
+			addPos = 1;
 		}
+		
+		if(StartDateCheck.afterStartDate())
+			PreferenceControl.setPosition(addPos);
 		
 		if(PreferenceControl.getPowerNotEnough() == 1){
 			generateDialog("電量不足，請將檢測器充電");

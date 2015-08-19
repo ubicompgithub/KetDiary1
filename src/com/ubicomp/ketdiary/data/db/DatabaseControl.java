@@ -36,7 +36,7 @@ public class DatabaseControl {
 	 * 
 	 * @see ubicomp.soberdiary.data.database.DBHelper
 	 */
-	private final static String TAG = "db";
+	private final static String TAG = "DatabaseControl";
 	private SQLiteOpenHelper dbHelper = null;
 	/** SQLLiteDatabase */
 	private SQLiteDatabase db = null;
@@ -91,8 +91,8 @@ public class DatabaseControl {
 	/**
 	 * This method is used for the latest result detection
 	 * 
-	 * @return Detection. If there are no Detection, return a dummy data.
-	 * @see ubicomp.soberdiary.data.structure.Detection
+	 * @return TestResult. If there are no TestResult, return a dummy data.
+	 * @see ubicomp.soberdiary.data.structure.TestResult
 	 *
 	 */
 	
@@ -270,7 +270,7 @@ public class DatabaseControl {
 	/**
 	 * This method is used for getting result of today's prime detections
 	 * 
-	 * @return result 
+	 * @return count 
 	 */
 	public int getTodayTestCount() {
 		synchronized (sqlLock) {
@@ -292,6 +292,81 @@ public class DatabaseControl {
 			cursor.close();
 			db.close();
 			return count;
+		}
+	}
+	
+	public int getDayTestCount() {
+		synchronized (sqlLock) {
+			//int result;
+			Calendar cal = Calendar.getInstance();
+			int year = cal.get(Calendar.YEAR);
+			int month = cal.get(Calendar.MONTH);
+			int day = cal.get(Calendar.DATE);
+
+			db = dbHelper.getReadableDatabase();
+
+			String sql = "SELECT result FROM TestResult WHERE year = "
+					+ year + " AND month = " + month + " AND day = " + day;
+			Cursor cursor = db.rawQuery(sql, null);
+
+			int count = cursor.getCount();
+			//result = cursor.getInt(1);
+
+			cursor.close();
+			db.close();
+			return count;
+		}
+	}
+	
+	/**
+	 * This method is used for getting result of today's prime detections
+	 * 
+	 * @return count 
+	 */
+	public int noTestDayCount(long prev_ts, long ts) {  //TODO:
+		synchronized (sqlLock) {
+			//int result;
+			TimeValue prev_tv = TimeValue.generate(prev_ts);
+			TimeValue tv = TimeValue.generate(ts);
+			
+			int noTestDay = 0;
+			int passDay = 0;
+			final long DAY = AlarmManager.INTERVAL_DAY;
+			
+			if(tv.isSameDay(prev_tv) || prev_ts >= ts){
+				Log.i(TAG, "Day: " + 0 );
+				return 0;
+			}
+			
+			db = dbHelper.getReadableDatabase();
+			
+			while(!tv.isSameDay(prev_tv) && prev_ts < ts){
+				
+				int year = prev_tv.getYear();
+				int month = prev_tv.getMonth();
+				int day = prev_tv.getDay();
+				Log.i(TAG, "Day: " + day );
+				
+				String sql = "SELECT result FROM TestResult WHERE year = "
+					+ year + " AND month = " + month + " AND day = " + day;
+				Cursor cursor = db.rawQuery(sql, null);
+				int count = cursor.getCount();
+				if(count == 0){
+					noTestDay++;
+				}
+				cursor.close();
+				prev_ts = prev_ts + DAY;
+				prev_tv = TimeValue.generate(prev_ts);
+				passDay++;
+			}
+			Log.i(TAG, "PassDay: " + passDay + " NoTestDay " + noTestDay);
+			if(noTestDay > 0){
+				PreferenceControl.setCheckBars(true);
+				PreferenceControl.setPosition(-noTestDay);
+			}
+			PreferenceControl.setOpenAppTimestamp();
+			db.close();
+			return noTestDay;
 		}
 	}
 
@@ -1663,13 +1738,15 @@ public class DatabaseControl {
 				if (!prev_data.getTv().isSameTimeBlock(data.getTv())
 						&& (data.getisCorrect()==1) )
 					addScore = 1;
-				if (!StartDateCheck.afterStartDate())
-					addScore = 0;
 				
 				if(data.getQuestionType() == 1 && (data.getisCorrect()==1)){
 					addScore = 3;
 				}
 				
+				if (!StartDateCheck.afterStartDate())
+					addScore = 0;
+				
+								
 				db = dbHelper.getWritableDatabase();
 				ContentValues content = new ContentValues();
 				content.put("year", data.getTv().getYear());

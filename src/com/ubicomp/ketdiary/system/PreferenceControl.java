@@ -11,6 +11,7 @@ import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.SelectActivity;
 import com.ubicomp.ketdiary.data.db.DatabaseControl;
+import com.ubicomp.ketdiary.data.db.NoteCategory4;
 import com.ubicomp.ketdiary.data.structure.ExchangeHistory;
 import com.ubicomp.ketdiary.data.structure.TimeValue;
 
@@ -52,6 +53,8 @@ public class PreferenceControl {
 		setIsDeveloper(false);
 		Calendar cal = Calendar.getInstance();
 		setStartDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
+				cal.get(Calendar.DAY_OF_MONTH));
+		setFirstUsedDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
 				cal.get(Calendar.DAY_OF_MONTH));
 	}
 
@@ -344,7 +347,7 @@ public class PreferenceControl {
 	}
 	
 	public static int getAfterCountDown() {
-		return sp.getInt("AfterCountDown", 600);
+		return sp.getInt("AfterCountDown", 720);
 	}
 	
 	public static void setAfterCountDown(int afterCountDown) {
@@ -431,6 +434,49 @@ public class PreferenceControl {
 		cal.set(Calendar.MILLISECOND, 0);
 		cal.add(Calendar.DATE, -2);
 		return cal;
+	}
+	
+	public static Calendar getFirstUsedDate() {
+		int[] data = new int[3];
+		Calendar cal = Calendar.getInstance();
+		data[0] = sp.getInt("fYear", cal.get(Calendar.YEAR));
+		data[1] = sp.getInt("fMonth", cal.get(Calendar.MONTH));
+		data[2] = sp.getInt("fDay", cal.get(Calendar.DATE));
+
+		cal.set(data[0], data[1], data[2], 0, 0, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal;
+	}
+	
+	public static Calendar getFirstUsedDateMinus() {
+		int[] data = new int[3];
+		Calendar cal = Calendar.getInstance();
+		data[0] = sp.getInt("fYear", cal.get(Calendar.YEAR));
+		data[1] = sp.getInt("fMonth", cal.get(Calendar.MONTH));
+		data[2] = sp.getInt("fDay", cal.get(Calendar.DATE));
+
+		cal.set(data[0], data[1], data[2], 0, 0, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		cal.add(Calendar.DATE, -2);
+		return cal;
+	}
+	
+	public static int[] getFirstUsedDateData() {
+		int[] data = new int[3];
+		Calendar cal = Calendar.getInstance();
+		data[0] = sp.getInt("fYear", cal.get(Calendar.YEAR));
+		data[1] = sp.getInt("fMonth", cal.get(Calendar.MONTH));
+		data[2] = sp.getInt("fDay", cal.get(Calendar.DATE));
+		return data;
+	}
+	
+
+	public static void setFirstUsedDate(int year, int month, int day) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putInt("fYear", year);
+		edit.putInt("fMonth", month);
+		edit.putInt("fDay", day);
+		edit.commit();
 	}
 	
 	public static void setGoal2(String positive, String negative) {
@@ -635,19 +681,20 @@ public class PreferenceControl {
 	}
 	
 	private static int noteNum = SelectActivity.NOTE_UPPER_BOUND;
+	private static NoteCategory4 noteCateogry = new NoteCategory4();
 	/** Get the names of the */
 	public static String[] getType1() {
 		String[] names = new String[noteNum];
-		names[0] = sp.getString("type1_name0", "");
-		names[1] = sp.getString("type1_name1", "");
-		names[2] = sp.getString("type1_name2", "");
-		names[3] = sp.getString("type1_name3", "");
-		names[4] = sp.getString("type1_name4", "");
-		names[5] = sp.getString("type1_name5", "");
-		names[6] = sp.getString("type1_name6", "");
-		names[7] = sp.getString("type1_name7", "");
-		names[8] = sp.getString("type1_name8", "");
-		names[9] = sp.getString("type1_name9", "");
+		names[0] = sp.getString("type1_name0", noteCateogry.negative.get(100));
+		names[1] = sp.getString("type1_name1", noteCateogry.negative.get(101));
+		names[2] = sp.getString("type1_name2", noteCateogry.negative.get(102));
+		names[3] = sp.getString("type1_name3", noteCateogry.negative.get(103));
+		names[4] = sp.getString("type1_name4", noteCateogry.negative.get(104));
+		names[5] = sp.getString("type1_name5", noteCateogry.negative.get(105));
+		names[6] = sp.getString("type1_name6", noteCateogry.negative.get(106));
+		names[7] = sp.getString("type1_name7", noteCateogry.negative.get(107));
+		names[8] = sp.getString("type1_name8", noteCateogry.negative.get(108));
+		names[9] = sp.getString("type1_name9", noteCateogry.negative.get(109));
 		return names;
 	}
 
@@ -669,12 +716,12 @@ public class PreferenceControl {
 	/** Get the names of the */
 	public static String[] getType2() {
 		String[] names = new String[noteNum];
-		names[0] = sp.getString("type2_name0", "");
-		names[1] = sp.getString("type2_name1", "");
-		names[2] = sp.getString("type2_name2", "");
-		names[3] = sp.getString("type2_name3", "");
-		names[4] = sp.getString("type2_name4", "");
-		names[5] = sp.getString("type2_name5", "");
+		names[0] = sp.getString("type2_name0", noteCateogry.notgood.get(200));
+		names[1] = sp.getString("type2_name1", noteCateogry.notgood.get(201));
+		names[2] = sp.getString("type2_name2", noteCateogry.notgood.get(202));
+		names[3] = sp.getString("type2_name3", noteCateogry.notgood.get(203));
+		names[4] = sp.getString("type2_name4", noteCateogry.notgood.get(204));
+		names[5] = sp.getString("type2_name5", noteCateogry.notgood.get(205));
 		names[6] = sp.getString("type2_name6", "");
 		names[7] = sp.getString("type2_name7", "");
 		names[8] = sp.getString("type2_name8", "");
@@ -700,12 +747,12 @@ public class PreferenceControl {
 	/** Get the names of the */
 	public static String[] getType3() {
 		String[] names = new String[noteNum];
-		names[0] = sp.getString("type3_name0", "");
-		names[1] = sp.getString("type3_name1", "");
-		names[2] = sp.getString("type3_name2", "");
-		names[3] = sp.getString("type3_name3", "");
-		names[4] = sp.getString("type3_name4", "");
-		names[5] = sp.getString("type3_name5", "");
+		names[0] = sp.getString("type3_name0", noteCateogry.positive.get(300));
+		names[1] = sp.getString("type3_name1", noteCateogry.positive.get(301));
+		names[2] = sp.getString("type3_name2", noteCateogry.positive.get(302));
+		names[3] = sp.getString("type3_name3", noteCateogry.positive.get(303));
+		names[4] = sp.getString("type3_name4", noteCateogry.positive.get(304));
+		names[5] = sp.getString("type3_name5", noteCateogry.positive.get(305));
 		names[6] = sp.getString("type3_name6", "");
 		names[7] = sp.getString("type3_name7", "");
 		names[8] = sp.getString("type3_name8", "");
@@ -731,10 +778,10 @@ public class PreferenceControl {
 	/** Get the names of the */
 	public static String[] getType4() {
 		String[] names = new String[noteNum];
-		names[0] = sp.getString("type4_name0", "");
-		names[1] = sp.getString("type4_name1", "");
-		names[2] = sp.getString("type4_name2", "");
-		names[3] = sp.getString("type4_name3", "");
+		names[0] = sp.getString("type4_name0", noteCateogry.selftest.get(400));
+		names[1] = sp.getString("type4_name1", noteCateogry.selftest.get(401));
+		names[2] = sp.getString("type4_name2", noteCateogry.selftest.get(402));
+		names[3] = sp.getString("type4_name3", noteCateogry.selftest.get(403));
 		names[4] = sp.getString("type4_name4", "");
 		names[5] = sp.getString("type4_name5", "");
 		names[6] = sp.getString("type4_name6", "");
@@ -762,16 +809,16 @@ public class PreferenceControl {
 	/** Get the names of the */
 	public static String[] getType5() {
 		String[] names = new String[noteNum];
-		names[0] = sp.getString("type5_name0", "");
-		names[1] = sp.getString("type5_name1", "");
-		names[2] = sp.getString("type5_name2", "");
-		names[3] = sp.getString("type5_name3", "");
-		names[4] = sp.getString("type5_name4", "");
-		names[5] = sp.getString("type5_name5", "");
-		names[6] = sp.getString("type5_name6", "");
-		names[7] = sp.getString("type5_name7", "");
-		names[8] = sp.getString("type5_name8", "");
-		names[9] = sp.getString("type5_name9", "");
+		names[0] = sp.getString("type5_name0", noteCateogry.temptation.get(500));
+		names[1] = sp.getString("type5_name1", noteCateogry.temptation.get(501));
+		names[2] = sp.getString("type5_name2", noteCateogry.temptation.get(502));
+		names[3] = sp.getString("type5_name3", noteCateogry.temptation.get(503));
+		names[4] = sp.getString("type5_name4", noteCateogry.temptation.get(504));
+		names[5] = sp.getString("type5_name5", noteCateogry.temptation.get(505));
+		names[6] = sp.getString("type5_name6", noteCateogry.temptation.get(506));
+		names[7] = sp.getString("type5_name7", noteCateogry.temptation.get(507));
+		names[8] = sp.getString("type5_name8", noteCateogry.temptation.get(508));
+		names[9] = sp.getString("type5_name9", noteCateogry.temptation.get(509));
 		return names;
 	}
 
@@ -793,15 +840,15 @@ public class PreferenceControl {
 	/** Get the names of the */
 	public static String[] getType6() {
 		String[] names = new String[noteNum];
-		names[0] = sp.getString("type6_name0", "");
-		names[1] = sp.getString("type6_name1", "");
-		names[2] = sp.getString("type6_name2", "");
-		names[3] = sp.getString("type6_name3", "");
-		names[4] = sp.getString("type6_name4", "");
-		names[5] = sp.getString("type6_name5", "");
-		names[6] = sp.getString("type6_name6", "");
-		names[7] = sp.getString("type6_name7", "");
-		names[8] = sp.getString("type6_name8", "");
+		names[0] = sp.getString("type6_name0", noteCateogry.conflict.get(600));
+		names[1] = sp.getString("type6_name1", noteCateogry.conflict.get(601));
+		names[2] = sp.getString("type6_name2", noteCateogry.conflict.get(602));
+		names[3] = sp.getString("type6_name3", noteCateogry.conflict.get(603));
+		names[4] = sp.getString("type6_name4", noteCateogry.conflict.get(604));
+		names[5] = sp.getString("type6_name5", noteCateogry.conflict.get(605));
+		names[6] = sp.getString("type6_name6", noteCateogry.conflict.get(606));
+		names[7] = sp.getString("type6_name7", noteCateogry.conflict.get(607));
+		names[8] = sp.getString("type6_name8", noteCateogry.conflict.get(608));
 		names[9] = sp.getString("type6_name9", "");
 		return names;
 	}
@@ -824,11 +871,11 @@ public class PreferenceControl {
 	/** Get the names of the */
 	public static String[] getType7() {
 		String[] names = new String[noteNum];
-		names[0] = sp.getString("type7_name0", "");
-		names[1] = sp.getString("type7_name1", "");
-		names[2] = sp.getString("type7_name2", "");
-		names[3] = sp.getString("type7_name3", "");
-		names[4] = sp.getString("type7_name4", "");
+		names[0] = sp.getString("type7_name0", noteCateogry.social.get(700));
+		names[1] = sp.getString("type7_name1", noteCateogry.social.get(701));
+		names[2] = sp.getString("type7_name2", noteCateogry.social.get(702));
+		names[3] = sp.getString("type7_name3", noteCateogry.social.get(703));
+		names[4] = sp.getString("type7_name4", noteCateogry.social.get(704));
 		names[5] = sp.getString("type7_name5", "");
 		names[6] = sp.getString("type7_name6", "");
 		names[7] = sp.getString("type7_name7", "");
@@ -856,10 +903,10 @@ public class PreferenceControl {
 	/** Get the names of the */
 	public static String[] getType8() {
 		String[] names = new String[noteNum];
-		names[0] = sp.getString("type8_name0", "");
-		names[1] = sp.getString("type8_name1", "");
-		names[2] = sp.getString("type8_name2", "");
-		names[3] = sp.getString("type8_name3", "");
+		names[0] = sp.getString("type8_name0", noteCateogry.play.get(800));
+		names[1] = sp.getString("type8_name1", noteCateogry.play.get(801));
+		names[2] = sp.getString("type8_name2", noteCateogry.play.get(802));
+		names[3] = sp.getString("type8_name3", noteCateogry.play.get(803));
 		names[4] = sp.getString("type8_name4", "");
 		names[5] = sp.getString("type8_name5", "");
 		names[6] = sp.getString("type8_name6", "");
@@ -893,7 +940,16 @@ public class PreferenceControl {
 	public static long getLastTestTime() {
 		return sp.getLong("latestDetectionDoneTimestamp", 0);
 	}
-
+	
+	public static long getOpenAppTimestamp() {
+		return sp.getLong("latestOpenAppTimestamp", PreferenceControl.getStartDate().getTimeInMillis());
+	}
+	
+	public static void setOpenAppTimestamp() {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putLong("latestOpenAppTimestamp", System.currentTimeMillis());
+		edit.commit();
+	}
 
 	public static void setTestFail() {
 		SharedPreferences.Editor edit = sp.edit();

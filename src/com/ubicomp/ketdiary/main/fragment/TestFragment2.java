@@ -667,9 +667,9 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		@Override
 		public void onExit(){
 			if (salivaCountDownTimer != null){
-				Log.d(TAG, "Saliva Timer cancel");
+				//Log.d(TAG, "Saliva Timer cancel");
 				salivaCountDownTimer.cancel();
-				salivaCountDownTimer = null;
+				//salivaCountDownTimer = null;
 			}
 						
 			img_bg.setVisibility(View.INVISIBLE);
@@ -874,11 +874,14 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		if( questionFile!= null )
 			questionFile.write(day, timeslot, type, items, impact, description);
 		
-		if( TDP!= null ){
-			//TDP.startAddNote();
-			//TDP.getQuestionResult2(textFile)
-			TDP.startAddNote3(1, day, timeslot, type, items, impact, description);
-		}
+		if(type > -1)
+			TestDataParser2.startAfterAddNote3(1, day, timeslot, type, items, impact, description);
+		
+//		if( TDP!= null ){
+//			//TDP.startAddNote();
+//			//TDP.getQuestionResult2(textFile)
+//			TDP.startAddNote3(1, day, timeslot, type, items, impact, description);
+//		}
 	}
 
 	//release resource
@@ -930,7 +933,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		
 		if (salivaCountDownTimer!= null){
 			salivaCountDownTimer.cancel();
-			salivaCountDownTimer = null;
+			//salivaCountDownTimer = null;
 		}
 		
 		if (testCountDownTimer != null) {
@@ -1005,7 +1008,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		
 		if (salivaCountDownTimer!= null){
 			salivaCountDownTimer.cancel();
-			salivaCountDownTimer = null;
+			//salivaCountDownTimer = null;
 		}
 		
 		if (testCountDownTimer != null) {
@@ -1225,6 +1228,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		notificationManager.cancel(0); //做檢測把Notification關掉
 		
 		img_help.setEnabled(false);
+		PreferenceControl.setIsFilled(0);
 		
 		first_voltage = false;
 		second_voltage = false;
@@ -1488,7 +1492,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			long displaySecond = millisUntilFinished / SECOND_FIX;
 			if (displaySecond < prevSecond) {
 				
-				Log.i(TAG, hardwareVersion+"");
+				//Log.i(TAG, hardwareVersion+"");
 				
 				soundPool.play(count_down_audio_id, 0.6f, 0.6f, 0, 0, 1.0F);
 				label_btn.setText(String.valueOf(displaySecond));
@@ -1549,7 +1553,8 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 				first = false;
 				img_water3.setImageResource(R.drawable.saliva3_yes);
 				secondVoltage = voltage;
-				setState(new DoneState());
+				second_voltage = true;
+				//setState(new DoneState());
 				return;
 			}
 			else if(first){
@@ -1621,6 +1626,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
         
         //TODO: 加上重連
         if(state != IDLE_STATE && state!= FAIL_STATE && state!= DONE_STATE && !goThroughState){
+        	//CustomToastSmall.generateToast("");
         	if(!active_disconnect){
         		ble.bleConnect();
         	}
@@ -1783,9 +1789,17 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 				setState(new FailState("檢測器電量不足", "請將檢測器充電"));
 		}
 		
-        //cassetteId = "saliva_1438268769608"; //TODO: set cassetteId in here.
-        
-        //Log.i(TAG, "plugId: " + id + " power: " + power_notenough);
+		if(second_voltage){
+			if(salivaCountDownTimer != null){
+				
+				Log.d(TAG, "Saliva Timer cancel");
+				salivaCountDownTimer.cancel();
+				salivaCountDownTimer = null;
+				setState(new DoneState());
+			}
+		}
+			
+        Log.i(TAG, "plugId: " + id + " power: " + power_notenough);
         
         cassetteId = "CT_"+id;
         

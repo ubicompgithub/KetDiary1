@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.data.db;
+package com.ubicomp.ketdiary.noUse;
 
 import java.util.HashMap;
 import java.util.Map;

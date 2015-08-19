@@ -11,6 +11,8 @@ import android.util.Log;
 import com.ubicomp.ketdiary.data.db.DatabaseControl;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.system.clicklog.ClickLog;
+import com.ubicomp.ketdiary.system.clicklog.ClickLogId;
 
 /**
  * Service for daily do something
@@ -41,18 +43,19 @@ public class DailyService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
 		
-		DatabaseControl db = new DatabaseControl();
-		Calendar c  = Calendar.getInstance();
-		c.add(Calendar.DATE, -1);
-		int Year = c.get(Calendar.YEAR);
-		int Month = c.get(Calendar.MONTH);
-		int Date = c.get(Calendar.DAY_OF_MONTH);
-		TestResult testResult = db.getDayTestResult(Year, Month, Date);
-		if(testResult.tv.getTimestamp() == 0){
-			PreferenceControl.setPosition(-1);	
-			PreferenceControl.setCheckBars(true);
-		}
-				
+//		DatabaseControl db = new DatabaseControl();
+//		Calendar c  = Calendar.getInstance();
+//		c.add(Calendar.DATE, -1);
+//		int Year = c.get(Calendar.YEAR);
+//		int Month = c.get(Calendar.MONTH);
+//		int Date = c.get(Calendar.DAY_OF_MONTH);
+//		TestResult testResult = db.getDayTestResult(Year, Month, Date);
+//		if(testResult.tv.getTimestamp() == 0){
+//			PreferenceControl.setPosition(-1);	
+//			PreferenceControl.setCheckBars(true);
+//		}
+		ClickLog.Log(ClickLogId.DAILY_SERVICE);
+		
 		Log.i(TAG, "Enter Daily Service");
 		return Service.START_REDELIVER_INTENT;
 	}

@@ -91,7 +91,7 @@ public class LineChartView extends View {
         
         gestureDetector = new GestureDetector(context, new GestureListener());
         db = new DatabaseControl();
-        startDay = PreferenceControl.getStartDateMinus();
+        startDay = PreferenceControl.getFirstUsedDateMinus();
     	//dummyDataGenerator();
         //setChartData2();
         
@@ -100,7 +100,8 @@ public class LineChartView extends View {
     	currentDay.setTimeInMillis(startDay.getTimeInMillis());
     	
     	numOfDays = daysOfTwo(startDay, Calendar.getInstance())+1;
-        
+        if(numOfDays < 0)
+        	numOfDays = 1;
         dataset = new LineChartData[numOfDays];
         initDataset();
         //setChartData3();
@@ -691,8 +692,12 @@ public class LineChartView extends View {
                         else
                             nearbyIdx = 0;
                     }
-
+                    
+                    if(nearbyIdx < 0){
+                    	nearbyIdx = 0;
+                    }
                     nearbySelfType = dataset[nearbyIdx].self_type;
+                    
                     if( (nearbySelfType > 0) && drawTheDotOrNot(nearbySelfType) ){
                         tempCursorLinePos = nearbyIdx;
                         isFindANeighbor = true;
@@ -720,6 +725,9 @@ public class LineChartView extends View {
                             nearbyIdx = 0;
                     }
                     
+                    if(nearbyIdx < 0){
+                    	nearbyIdx = 0;
+                    }
                     nearbyOtherType = dataset[nearbyIdx].other_type;
                     if( (nearbyOtherType > 0) && drawTheDotOrNot(nearbyOtherType) ){
                         tempCursorLinePos = nearbyIdx;
@@ -747,7 +755,9 @@ public class LineChartView extends View {
                         else
                             nearbyIdx = 0;
                     }
-
+                    if(nearbyIdx < 0){
+                    	nearbyIdx = 0;
+                    }
                     nearbySelfType = dataset[nearbyIdx].self_type;
                     nearbyOtherType = dataset[nearbyIdx].other_type;
                     if( ( (dataset[nearbyIdx].self_type > 0) && (drawTheDotOrNot(nearbySelfType)) )
