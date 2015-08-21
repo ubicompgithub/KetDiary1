@@ -476,6 +476,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 				db.insertCassette(cassetteId);
 			}
 			
+			PreferenceControl.setInTest(false);
 //			if( TDP!= null ){
 //				TDP.startTestDetail(cassetteId, failedState, firstVoltage,
 //						secondVoltage, devicePower, colorReading,
@@ -551,7 +552,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 			state = FIVESECOND_STATE;
 			
 			Log.d("Main", "Enter FiveSecond");
-			label_btn.setText("5");
+			label_btn.setText("9");
 			label_btn.setTypeface(digitTypefaceBold);
 			label_btn.setTextSize(40);
 			label_subtitle.setText("請蓄積口水");
@@ -863,7 +864,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		if(!is_connect)
 			ble.bleConnect();
 		
-		ble.bleWriteState((byte)0x01);//TODO: delay 2 seconds
+		ble.bleWriteState((byte)0x01);//TODO: delay 1 seconds
 		// initialize camera task
 		cameraInitHandler = new CameraInitHandler(this, cameraRecorder);
 		cameraInitHandler.sendEmptyMessage(0);
@@ -1227,8 +1228,16 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		notificationManager.cancel(0); //做檢測把Notification關掉
 		
+		timestamp = System.currentTimeMillis();
+		//Disable help button
 		img_help.setEnabled(false);
+		
 		PreferenceControl.setIsFilled(0);
+		PreferenceControl.setPowerNotEnough(0);
+		PreferenceControl.setUpdateDetectionTimestamp(timestamp);
+		PreferenceControl.setInTest(true);
+		
+		Log.d(TAG,""+timestamp);
 		
 		first_voltage = false;
 		second_voltage = false;
@@ -1245,23 +1254,18 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 		devicePower=0;
 		colorReading=0;
 		connectionFailRate=0;
-		failedReason=""; 
-
-		timestamp = System.currentTimeMillis();
+		failedReason=""; 		
 		voltage_count = 0;
 		//setGuideMessage(R.string.test_guide_reset_top,R.string.test_guide_reset_bottom);
 
-		PreferenceControl.setUpdateDetectionTimestamp(timestamp);
-		//long ts = PreferenceControl.getUpdateDetectionTimestamp();
-		Log.d(TAG,""+timestamp);
-		
+	
 		setStorage();
 		
 		
 		cameraRecorder = new CameraRecorder(this, imgFileHandler);
 		cameraRunHandler = new CameraRunHandler(cameraRecorder);
 		
-		PreferenceControl.setPowerNotEnough(0);
+		
 
 		//prev_drawable_time = -1;
 

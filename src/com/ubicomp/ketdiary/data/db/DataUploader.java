@@ -31,6 +31,8 @@ import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.QuestionTest;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
 import com.ubicomp.ketdiary.data.structure.TestResult;
+import com.ubicomp.ketdiary.data.upload.HttpPostGenerator;
+import com.ubicomp.ketdiary.data.upload.HttpSecureClientGenerator;
 import com.ubicomp.ketdiary.system.check.DefaultCheck;
 import com.ubicomp.ketdiary.system.check.NetworkCheck;
 

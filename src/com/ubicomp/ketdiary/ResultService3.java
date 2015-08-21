@@ -519,6 +519,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
         spentTime = 0;
         releaseWakeLock();
         
+        PreferenceControl.setInTest(false);
         writeToColorRawFile("ResultService Close");
         Log.d(TAG, "OnDestroy Call");
         if(debug)

@@ -25,7 +25,7 @@ import com.ubicomp.ketdiary.ui.CustomTypefaceSpan;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
 /**
- * About Activity
+ * About Activity  "關於"頁面
  * 
  * @author Stanley Wang
  */

@@ -13,6 +13,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.ubicomp.ketdiary.data.db.DatabaseControl;
+import com.ubicomp.ketdiary.system.PreferenceControl;
 
 /**
  * Service for handling message received from AlarmReceiver
@@ -50,6 +51,11 @@ public class AlarmService extends Service {
 		int cur_hour = cal.get(Calendar.HOUR_OF_DAY);
 		if (cur_hour < 8)
 			return Service.START_REDELIVER_INTENT;
+		
+		
+		if (PreferenceControl.getInTest())         //If user in the test, disable notification.
+			return Service.START_REDELIVER_INTENT;
+		
 
 		Intent mIntent = new Intent(this, MainActivity.class);
 		PendingIntent pIntent = PendingIntent.getActivity(this, 0, mIntent,

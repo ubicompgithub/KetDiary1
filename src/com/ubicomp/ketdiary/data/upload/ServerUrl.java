@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.data.db;
+package com.ubicomp.ketdiary.data.upload;
 
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.system.PreferenceControl;

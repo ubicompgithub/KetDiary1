@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.data.db;
+package com.ubicomp.ketdiary.data.upload;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;

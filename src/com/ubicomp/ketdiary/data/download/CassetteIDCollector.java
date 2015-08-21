@@ -19,8 +19,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.ubicomp.ketdiary.R;
-import com.ubicomp.ketdiary.data.db.ServerUrl;
 import com.ubicomp.ketdiary.data.structure.Cassette;
+import com.ubicomp.ketdiary.data.upload.ServerUrl;
 
 public class CassetteIDCollector {
 

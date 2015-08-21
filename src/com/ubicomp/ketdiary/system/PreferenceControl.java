@@ -141,6 +141,16 @@ public class PreferenceControl {
 		edit.commit();
 	}
 	
+	public static boolean getInTest() {
+		return sp.getBoolean("intest", false);
+	}
+
+	public static void setInTest(boolean intest) {
+		SharedPreferences.Editor edit = sp.edit();
+		edit.putBoolean("intest", intest);
+		edit.commit();
+	}
+	
 	public static boolean getCollectData() {
 		return sp.getBoolean("collectdata", false);
 	}

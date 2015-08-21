@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.ui;
+package com.ubicomp.ketdiary.noUse;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.ui.Typefaces;
 
 public class CopyCustomToast {
 
