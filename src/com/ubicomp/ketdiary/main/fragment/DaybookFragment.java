@@ -855,7 +855,8 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		super.onResume();
 		ClickLog.Log(ClickLogId.DAYBOOK_ENTER);
 		filter_count = 0;
-
+		isFilterOpen = false;
+		
 		for(int i=0; i<filterButtonIsPressed.length; i++)
 			filterButtonIsPressed[i] = false;
 		filterButtonIsPressed[0] = true;

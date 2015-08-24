@@ -88,7 +88,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	private static final int RESULT_STATE = 13;
 	private static final int END_STATE = 14;
 	
-	private static final int DETECT_THRESHOLD = 20;
+	private static final int DETECT_THRESHOLD = 10;
 	
 	private boolean testSuccess = false;
 	private int regular_connect = 0;
@@ -104,7 +104,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	private long seconds;
 	private boolean active_disconnect = false;
 	private boolean result2 = false;
-	
+	private boolean checkResultOnce = false;
 	
 	private Calendar today = Calendar.getInstance(); 
 	
@@ -152,6 +152,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		first = true;
 		second = true;
 		connect = false;
+		checkResultOnce = false;
 		regular_connect = 0;
 		picNum = 0;
 		active_disconnect = false;
@@ -269,9 +270,10 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	        }
 	        else if(state == RESULT_STATE){
 	        	
-	        	if(seconds == 10 && minutes == 0){
+	        	if(seconds <= 10 && minutes == 0 && !checkResultOnce){
 	        		result2 = checkResult();
 	        		writeToColorRawFile("checkResult");
+	        		checkResultOnce = true;
 				}
 	        	else if(spentTime <=0){
 	        		writeToColorRawFile("Time's up!");

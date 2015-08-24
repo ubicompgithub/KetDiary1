@@ -497,7 +497,8 @@ private void setViews8(){
 	}
 	
 	private void storeType1(){
-		String[] socialSelections = new String[NOTE_UPPER_BOUND];
+		//String[] socialSelections = new String[NOTE_UPPER_BOUND];
+		String[] socialSelections = {"","","","","","","","","",""};
 		int social_idx = 0;
 		boolean[] socialSelected = noteGroup1.getResult();
 		for (int i = 0; i < socialSelected.length; ++i) {
@@ -508,7 +509,8 @@ private void setViews8(){
 	}
 	
 	private void storeType2(){
-		String[] socialSelections = new String[NOTE_UPPER_BOUND];
+		//String[] socialSelections = new String[NOTE_UPPER_BOUND];
+		String[] socialSelections = {"","","","","","","","","",""};
 		int social_idx = 0;
 		boolean[] socialSelected = noteGroup2.getResult();
 		for (int i = 0; i < socialSelected.length; ++i) {
@@ -518,7 +520,8 @@ private void setViews8(){
 		PreferenceControl.setType2(socialSelections);
 	}
 	private void storeType3(){
-		String[] socialSelections = new String[NOTE_UPPER_BOUND];
+		//String[] socialSelections = new String[NOTE_UPPER_BOUND];
+		String[] socialSelections = {"","","","","","","","","",""};
 		int social_idx = 0;
 		boolean[] socialSelected = noteGroup3.getResult();
 		for (int i = 0; i < socialSelected.length; ++i) {
@@ -528,7 +531,8 @@ private void setViews8(){
 		PreferenceControl.setType3(socialSelections);
 	}
 	private void storeType4(){
-		String[] socialSelections = new String[NOTE_UPPER_BOUND];
+		//String[] socialSelections = new String[NOTE_UPPER_BOUND];
+		String[] socialSelections = {"","","","","","","","","",""};
 		int social_idx = 0;
 		boolean[] socialSelected = noteGroup4.getResult();
 		for (int i = 0; i < socialSelected.length; ++i) {
@@ -538,7 +542,8 @@ private void setViews8(){
 		PreferenceControl.setType4(socialSelections);
 	}
 	private void storeType5(){
-		String[] socialSelections = new String[NOTE_UPPER_BOUND];
+		//String[] socialSelections = new String[NOTE_UPPER_BOUND];
+		String[] socialSelections = {"","","","","","","","","",""};
 		int social_idx = 0;
 		boolean[] socialSelected = noteGroup5.getResult();
 		for (int i = 0; i < socialSelected.length; ++i) {
@@ -548,7 +553,8 @@ private void setViews8(){
 		PreferenceControl.setType5(socialSelections);
 	}
 	private void storeType6(){
-		String[] socialSelections = new String[NOTE_UPPER_BOUND];
+		//String[] socialSelections = new String[NOTE_UPPER_BOUND];
+		String[] socialSelections = {"","","","","","","","","",""};
 		int social_idx = 0;
 		boolean[] socialSelected = noteGroup6.getResult();
 		for (int i = 0; i < socialSelected.length; ++i) {
@@ -558,7 +564,8 @@ private void setViews8(){
 		PreferenceControl.setType6(socialSelections);
 	}
 	private void storeType7(){
-		String[] socialSelections = new String[NOTE_UPPER_BOUND];
+		//String[] socialSelections = new String[NOTE_UPPER_BOUND];
+		String[] socialSelections = {"","","","","","","","","",""};
 		int social_idx = 0;
 		boolean[] socialSelected = noteGroup7.getResult();
 		for (int i = 0; i < socialSelected.length; ++i) {
@@ -568,7 +575,8 @@ private void setViews8(){
 		PreferenceControl.setType7(socialSelections);
 	}
 	private void storeType8(){
-		String[] socialSelections = new String[NOTE_UPPER_BOUND];
+		//String[] socialSelections = new String[NOTE_UPPER_BOUND];
+		String[] socialSelections = {"","","","","","","","","",""};
 		int social_idx = 0;
 		boolean[] socialSelected = noteGroup8.getResult();
 		for (int i = 0; i < socialSelected.length; ++i) {

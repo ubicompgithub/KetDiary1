@@ -51,6 +51,12 @@ public class DataTransmission {
     
     private Timer timer = null;
     private int counter = 0;
+    private static int RETRANSMIT_TIMES = 4;
+    
+    private int retransmit_state = STATE_NOMORE_TRANSMIT; 
+    private static int STATE_NOMORE_TRANSMIT = 1;
+    private static int STATE_RETRANSMIT = 2;
+    private static int STATE_RECEIVE_AFTER_RETRANSMIT = 3;
 
     public DataTransmission(BluetoothListener bluetoothListener, BluetoothLE3 ble){
     	this.bluetoothListener = bluetoothListener; 
@@ -141,6 +147,8 @@ public class DataTransmission {
 
                     resetTimeoutTimer();
                     
+                    if(retransmit_state == STATE_RETRANSMIT)
+                    	retransmit_state = STATE_RECEIVE_AFTER_RETRANSMIT;
                     
                     ((BluetoothListener) bluetoothListener).updateProcessRate(""+(float)recvNum*100/pktNum +"%  p: "+ tempPktId);
                 }else{
@@ -211,7 +219,8 @@ public class DataTransmission {
         picInfoPktRecv = false;
         recvNum = 0;
         bufOffset = 0;
-
+        retransmit_state = STATE_NOMORE_TRANSMIT; 
+        
         for(int i = 0; i < maximumPktNum; i++){
             picBuf[i] = null;
         }
@@ -230,11 +239,17 @@ public class DataTransmission {
         @Override
         public void run() {
             Log.i(TAG, "Timeout timer was  fired " + counter);
-            if(counter < 10){
+            if(counter < RETRANSMIT_TIMES){
             	if(ResultService3.isConnect){
 	                checkPackets();
 	                ((BluetoothListener) bluetoothListener).PictureRetransmit(counter);
 	                counter++;
+	                if(retransmit_state == STATE_NOMORE_TRANSMIT)
+	                	retransmit_state = STATE_RETRANSMIT;
+	                else if(retransmit_state == STATE_RECEIVE_AFTER_RETRANSMIT){
+	                	retransmit_state = STATE_RETRANSMIT;
+	                	counter = 0;
+	                }
 	                resetTimeoutTimer();
             	}
             }

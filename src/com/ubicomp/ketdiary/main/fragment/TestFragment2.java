@@ -1337,7 +1337,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 					if(state == CAMERA_STATE || state == DRAW_STATE){ //80秒時, 如果第一個電極沒導通就fail
 						if(first_voltage == false){				
 							failedState = state;
-							setState(new FailState("測試超時"));
+							setState(new FailState("測試超時", "尚未偵測到口水吐入"));
 						}
 						else{
 							setState(new Stage2State());

@@ -249,7 +249,7 @@ public class ImageDetection {
                 selAfterMiddle = (maximumAfterMiddle-minimumAfterMiddle)/SELECTIVITY_CONST;
             }
             else{
-                selAfterMiddle = (maximumAfterMiddle-minimumAfterMiddle)/(SELECTIVITY_CONST+2);
+                selAfterMiddle = (maximumAfterMiddle-minimumAfterMiddle)/(SELECTIVITY_CONST + 10);
             }
             
             float refCandidate = 0;
