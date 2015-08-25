@@ -88,7 +88,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	private static final int RESULT_STATE = 13;
 	private static final int END_STATE = 14;
 	
-	private static final int DETECT_THRESHOLD = 10;
+	private static final int DETECT_THRESHOLD = 0; //1.88 modify
 	
 	private boolean testSuccess = false;
 	private int regular_connect = 0;
@@ -246,7 +246,23 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	        	}
 	        }
 	        else if(state == DETECT_STATE){
-	        	if(spentTime < 2*60*1000 && picNum == 1){   //剩兩分鐘的時候才開始拍照傳照片
+	        	
+	        	if(seconds <= 10 && minutes == 0 && !checkResultOnce){
+	        		result2 = checkResult();
+	        		writeToColorRawFile("checkResult");
+	        		checkResultOnce = true;
+				}
+	        	else if(spentTime <=0){
+	        		writeToColorRawFile("Time's up!");
+	        		
+		        	if(result2)
+	        			goResultSuccess();
+	        		else
+	        			setTestFail("無法判斷檢測結果");
+		        	
+		        	state = END_STATE;
+	        	}
+	        	else if(spentTime < 2*60*1000 && picNum == 1){   //剩兩分鐘的時候才開始拍照傳照片
 					
 					if(second){									
 						if(openSensorMsgTimer!=null){
@@ -371,7 +387,23 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	        	}
 	        }
 	        else if(state == DETECT_STATE){
-	        	if(spentTime < 2*60*1000 && picNum == 1){   //剩兩分鐘的時候才開始拍照傳照片
+	        	
+	        	if(seconds <= 10 && minutes == 0 && !checkResultOnce){
+	        		result2 = checkResult();
+	        		writeToColorRawFile("checkResult");
+	        		checkResultOnce = true;
+				}
+	        	else if(spentTime <=0){
+	        		writeToColorRawFile("Time's up!");
+	        		
+		        	if(result2)
+	        			goResultSuccess();
+	        		else
+	        			setTestFail("無法判斷檢測結果");
+		        	
+		        	state = END_STATE;
+	        	}
+	        	else if(spentTime < 2*60*1000 && picNum == 1){   //剩兩分鐘的時候才開始拍照傳照片
 					
 					if(second){									
 						if(openSensorMsgTimer!=null){
@@ -395,9 +427,10 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	        }
 	        else if(state == RESULT_STATE){
 	        	
-	        	if(seconds == 10 && minutes == 0){
+	        	if(seconds <= 10 && minutes == 0 && !checkResultOnce){
 	        		result2 = checkResult();
 	        		writeToColorRawFile("checkResult");
+	        		checkResultOnce = true;
 				}
 	        	else if(spentTime <=0){
 	        		writeToColorRawFile("Time's up!");
@@ -947,9 +980,9 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	@Override
 	public void bleTakePictureFail(float dropRate) {
 		
-		if(picNum == 1)
+		if(picNum == 1 || picNum == 2)
 			blehandler.postDelayed(writeBle, 2*1000);
-		else{
+		else if(picNum == 0){
 			failedState = PIC_SEND_FAIL;
 			connectionFailRate = dropRate;
 			Log.i(TAG, "DropRate: " + dropRate);

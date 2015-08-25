@@ -26,7 +26,7 @@ import com.ubicomp.ketdiary.test.color.ImageDetection;
 public class DataTransmission {
     private static final String TAG = "DataTransmission";
     private static final int maximumPktNum = 120;
-	private static final int timeout = 10 *1000;
+	private static final int timeout = 8 *1000;
 
     private BluetoothListener bluetoothListener = null;
     private BluetoothLE3 ble = null;
@@ -51,7 +51,7 @@ public class DataTransmission {
     
     private Timer timer = null;
     private int counter = 0;
-    private static int RETRANSMIT_TIMES = 4;
+    private static int RETRANSMIT_TIMES = 3;
     
     private int retransmit_state = STATE_NOMORE_TRANSMIT; 
     private static int STATE_NOMORE_TRANSMIT = 1;
