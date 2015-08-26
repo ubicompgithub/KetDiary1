@@ -245,12 +245,12 @@ public class ImageDetection {
             float avgAfterMiddle = sumAfterMiddle /middle;
             float sel = (maximum-minimum)/4;
             float selAfterMiddle = (maximumAfterMiddle-minimumAfterMiddle)/4;
-            if(i < halfHeight){
-                selAfterMiddle = (maximumAfterMiddle-minimumAfterMiddle)/SELECTIVITY_CONST;
-            }
-            else{
-                selAfterMiddle = (maximumAfterMiddle-minimumAfterMiddle)/(SELECTIVITY_CONST + 10);
-            }
+//            if(i < halfHeight){
+//                selAfterMiddle = (maximumAfterMiddle-minimumAfterMiddle)/SELECTIVITY_CONST;
+//            }
+//            else{
+            selAfterMiddle = (maximumAfterMiddle-minimumAfterMiddle)/(SELECTIVITY_CONST + 10);
+//          }
             
             float refCandidate = 0;
             boolean isFoundRef = false;
