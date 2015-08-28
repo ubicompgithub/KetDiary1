@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary;
+package com.ubicomp.ketdiary.noUse;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

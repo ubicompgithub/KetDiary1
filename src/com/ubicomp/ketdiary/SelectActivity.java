@@ -14,9 +14,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ubicomp.ketdiary.data.db.DatabaseControl;
-import com.ubicomp.ketdiary.data.db.NoteCategory4;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.noUse.NoteCatagory3;
+import com.ubicomp.ketdiary.system.NoteCategory4;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.system.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.ui.BarButtonGenerator;

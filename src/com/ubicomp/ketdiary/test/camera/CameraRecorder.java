@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.ubicomp.ketdiary.App;
+import com.ubicomp.ketdiary.data.file.ImageFileHandler;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

@@ -4,10 +4,10 @@ import java.io.File;
 import java.util.Calendar;
 
 import com.ubicomp.ketdiary.data.db.DatabaseControl;
-import com.ubicomp.ketdiary.data.db.TestDataParser2;
 import com.ubicomp.ketdiary.data.file.ColorRawFileHandler;
 import com.ubicomp.ketdiary.data.file.MainStorage;
 import com.ubicomp.ketdiary.data.file.PicFileHandler;
+import com.ubicomp.ketdiary.data.file.TestDataParser2;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
 import com.ubicomp.ketdiary.main.fragment.TestFragment2;
 import com.ubicomp.ketdiary.noUse.NoteDialog3;
@@ -860,6 +860,16 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 			}
 		}
     };
+    
+    private Runnable writeBle3 = new Runnable() {
+		public void run() {
+			blehandler.removeCallbacks(writeBle3);
+		if(ble!=null){
+				writeToColorRawFile("Write State : 0x03");
+	        	ble.bleWriteState((byte)0x03);
+		}
+	}
+};
 
 	@Override
 	public void updateProcessRate(String rate) {
@@ -983,11 +993,12 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		if(picNum == 1 || picNum == 2)
 			blehandler.postDelayed(writeBle, 2*1000);
 		else if(picNum == 0){
-			failedState = PIC_SEND_FAIL;
-			connectionFailRate = dropRate;
-			Log.i(TAG, "DropRate: " + dropRate);
-			writeToColorRawFile("Picture sending fail: "+dropRate);
-			setTestFail("照片傳送失敗");
+			blehandler.postDelayed(writeBle3, 2*1000);
+//			failedState = PIC_SEND_FAIL;
+//			connectionFailRate = dropRate;
+//			Log.i(TAG, "DropRate: " + dropRate);
+//			writeToColorRawFile("Picture sending fail: "+dropRate);
+//			setTestFail("照片傳送失敗");
 		}
 	}
 

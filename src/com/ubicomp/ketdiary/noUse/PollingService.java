@@ -1,4 +1,9 @@
-package com.ubicomp.ketdiary;
+package com.ubicomp.ketdiary.noUse;
+
+import com.ubicomp.ketdiary.MainActivity;
+import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.R.drawable;
+import com.ubicomp.ketdiary.R.string;
 
 import android.app.Notification;
 import android.app.NotificationManager;

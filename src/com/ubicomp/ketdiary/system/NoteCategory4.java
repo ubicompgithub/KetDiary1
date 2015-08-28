@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.data.db;
+package com.ubicomp.ketdiary.system;
 
 import java.util.HashMap;
 import java.util.Map;

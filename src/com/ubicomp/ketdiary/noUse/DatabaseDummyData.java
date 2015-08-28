@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.data.db;
+package com.ubicomp.ketdiary.noUse;
 
 import java.util.Calendar;
 
@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 
 import com.ubicomp.ketdiary.MainActivity;
+import com.ubicomp.ketdiary.data.db.DatabaseControl;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.data.structure.TimeValue;

@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.data.db;
+package com.ubicomp.ketdiary.data.upload;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;

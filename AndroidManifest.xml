@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ubicomp.ketdiary"
-    android:versionCode="89"
-    android:versionName="1.89" >
+    android:versionCode="91"
+    android:versionName="1.91" >
     
     <uses-sdk android:minSdkVersion="14" />
  	

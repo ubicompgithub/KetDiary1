@@ -855,7 +855,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 		        	break;
 		        case R.id.vts_iv_social:
 		        	resetView();
-		        	iv_social.setImageResource(R.drawable.type_icon8_pressed);
+		        	iv_social.setImageResource(R.drawable.type_icon7_pressed);
 		        	typetext.setText(R.string.note_social);
 		        	
 		        	//SetListItem(R.array.note_social);
@@ -864,7 +864,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 		        	break;
 		        case R.id.vts_iv_playing:
 		        	resetView();
-		        	iv_playing.setImageResource(R.drawable.type_icon7_pressed);
+		        	iv_playing.setImageResource(R.drawable.type_icon8_pressed);
 		        	typetext.setText(R.string.note_play);
 		        	
 		        	//SetListItem(R.array.note_play);

@@ -1,8 +1,10 @@
-	package com.ubicomp.ketdiary.test.camera;
+	package com.ubicomp.ketdiary.data.file;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+
+import com.ubicomp.ketdiary.test.camera.CameraRecorder;
 
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;

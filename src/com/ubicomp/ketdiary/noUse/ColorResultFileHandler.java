@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.data.file;
+package com.ubicomp.ketdiary.noUse;
 
 import java.io.BufferedWriter;
 import java.io.File;

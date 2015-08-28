@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 
-import com.ubicomp.ketdiary.data.db.DataUploader;
+import com.ubicomp.ketdiary.data.upload.DataUploader;
 import com.ubicomp.ketdiary.system.check.DefaultCheck;
 
 /**
