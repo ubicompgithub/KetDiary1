@@ -10,6 +10,7 @@ import org.opencv.android.Utils;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
+import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import android.graphics.Bitmap;
@@ -21,7 +22,7 @@ import com.ubicomp.ketdiary.system.PreferenceControl;
 /**
  * Created by larry on 15/7/22.
  */
-public class ImageDetection {
+public class ImageDetectionValidate {
     private static final String TAG = "ImageDetetion";
 
     private static final int ROI_X_MIN = 80;
@@ -72,19 +73,22 @@ public class ImageDetection {
     private FileOutputStream out3 = null;
     ColorDetectListener colorDetectListener;
     
-    public ImageDetection(ColorDetectListener colorDetectListener){
-    	this.colorDetectListener = colorDetectListener;
-    	
+    public ImageDetectionValidate(){    	
     	ts = PreferenceControl.getUpdateDetectionTimestamp();
         File dir = MainStorage.getMainStorageDirectory();
-        mainStorage = new File(dir, String.valueOf(ts));       
+        mainStorage = dir;       
     }
 
-    public void roiDetectionOnWhite(Bitmap bitmap){
-        Mat matOrigin = new Mat ();
-        Utils.bitmapToMat(bitmap, matOrigin);
+    public void roiDetectionOnWhite(){
+//        Mat matOrigin = new Mat ();
+//        Utils.bitmapToMat(bitmap, matOrigin);
         //Mat matROI = matOrigin.submat(ROI_Y_MIN, ROI_Y_MAX, ROI_X_MIN, ROI_X_MAX);
-
+    	String file_name = "PIC_" + "1440632179425" + "_" + 1 + ".jpg";
+        File file = new File(mainStorage, file_name);
+        
+        Mat matOrigin = Imgcodecs.imread(file.getAbsolutePath());
+        Bitmap bitmap = Bitmap.createBitmap(matOrigin.cols(), matOrigin.rows(), Bitmap.Config.ARGB_4444);; 
+        Utils.matToBitmap(matOrigin, bitmap);
         //Mat matClone = new Mat(matROI.cols(),matROI.rows(), CvType.CV_8UC1);
         //Imgproc.cvtColor(matROI, matClone, Imgproc.COLOR_RGB2GRAY);
 
@@ -98,26 +102,19 @@ public class ImageDetection {
         int xSum = 0;
         int ySum = 0;
         int count = 0;
-        
-        Vector pointVector = new Vector();
+     
         for(int i = 0; i < height; i++){
             for (int j = 0; j < width; j++) {
                 int pixel = roiBmp.getPixel(j, i);
                 int value = ((pixel >> 16) & 0xff);
                 if (value > WHITE_THRESHOLD) {
-                	Point p = new Point(ROI_X_MIN + j, ROI_Y_MIN + i);
-                    pointVector.add(p);
                     xSum += j;
                     ySum += i;
                     count++;
                 }
             }
         }
-        
-        for (Object o: pointVector){
-            Imgproc.circle(matOrigin, (Point)o, 1, new Scalar(0,0,255), 1);
-        }
-        
+
         int xCenter = xSum / count;
         int yCenter = ySum / count;
 
@@ -142,15 +139,15 @@ public class ImageDetection {
         Bitmap bmp = Bitmap.createBitmap(matOrigin.cols(), matOrigin.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(matOrigin, bmp);
         
-        String file_name = "PIC_" + ts + "_" + 0 + ".sob";
+        //String file_name = "PIC_" + ts + "_" + 0 + ".sob";
         String file_name2 = "PIC_" + ts + "_" + 1 + ".sob";
-        File file = new File(mainStorage, file_name);
+        //File file = new File(mainStorage, file_name);
         File file2 = new File(mainStorage, file_name2);
         try {
             out = new FileOutputStream(file, true);
-            bmp.compress(Bitmap.CompressFormat.JPEG, 50, out);
-            out2 = new FileOutputStream(file2, true);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out2); 
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
+//            out2 = new FileOutputStream(file2, true);
+//            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out2); 
             // bmp is your Bitmap instance
             // PNG is a lossless format, the compression factor (100) is ignored
         } catch (Exception e) {
@@ -172,7 +169,14 @@ public class ImageDetection {
         //((BluetoothListener) activity).setImgPreview(bmp);
 
     }
-    public int testStripDetection(Bitmap bitmap){
+    public int testStripDetection(){
+    	
+    	String fn = "PIC_" + "1440632179425" + "_" + 4 + ".jpg";
+        File f = new File(mainStorage, fn);
+        
+        Mat matOrigin = Imgcodecs.imread(f.getAbsolutePath());
+        Bitmap bitmap = Bitmap.createBitmap(matOrigin.cols(), matOrigin.rows(), Bitmap.Config.ARGB_4444);; 
+        Utils.matToBitmap(matOrigin, bitmap);
 
         Bitmap roiBmp = Bitmap.createBitmap(bitmap, ROI_X_MIN + xmin + 2, ROI_Y_MIN + ymin + 1, xmax - xmin - 4, ymax - ymin - 2);
         int width = roiBmp.getWidth();

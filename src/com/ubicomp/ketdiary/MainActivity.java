@@ -61,6 +61,7 @@ import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.system.check.StartDateCheck;
 import com.ubicomp.ketdiary.system.clicklog.ClickLog;
 import com.ubicomp.ketdiary.system.clicklog.ClickLogId;
+import com.ubicomp.ketdiary.test.color.ImageDetectionValidate;
 import com.ubicomp.ketdiary.ui.CustomMenu;
 import com.ubicomp.ketdiary.ui.CustomTab;
 import com.ubicomp.ketdiary.ui.CustomToast;
@@ -144,6 +145,7 @@ public class MainActivity extends FragmentActivity {
 	public static final int ACTION_QUESTIONNAIRE = 2;
 	
 	private TestStripDetection3 testStripDetection;
+	private ImageDetectionValidate imageDetectionValidate;
 	
 	static {
        System.loadLibrary("opencv_java");
@@ -240,7 +242,12 @@ public class MainActivity extends FragmentActivity {
 //	        Mat matFilter = new Mat();
 //	        Mat matCanny = new Mat();
 //	        Mat matLines = new Mat();
+			//TODO: Test, 
 			
+//			imageDetectionValidate = new ImageDetectionValidate();
+//			imageDetectionValidate.roiDetectionOnWhite();
+//			imageDetectionValidate.testStripDetection();
+			//TODO:
 			
 			Typefaces.initAll();
 			CustomToast.settingSoundPool();
