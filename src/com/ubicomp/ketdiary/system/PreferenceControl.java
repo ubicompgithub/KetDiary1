@@ -50,11 +50,14 @@ public class PreferenceControl {
 		setUID("rehab_default_test");
 		setDeviceId("ket_000");
 		setIsDeveloper(false);
-		Calendar cal = Calendar.getInstance();
-		setStartDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
-				cal.get(Calendar.DAY_OF_MONTH));
+		Calendar cal = Calendar.getInstance();		
 		setFirstUsedDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
 				cal.get(Calendar.DAY_OF_MONTH));
+		
+		cal.add(Calendar.DATE, 1);
+		setStartDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
+				cal.get(Calendar.DAY_OF_MONTH));
+		
 		setOpenAppTimestamp();
 	}
 

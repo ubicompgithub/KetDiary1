@@ -83,13 +83,14 @@ public class ImageDetection {
     public void roiDetectionOnWhite(Bitmap bitmap){
         Mat matOrigin = new Mat ();
         Utils.bitmapToMat(bitmap, matOrigin);
-        Mat matROI = matOrigin.submat(ROI_Y_MIN, ROI_Y_MAX, ROI_X_MIN, ROI_X_MAX);
+        //Mat matROI = matOrigin.submat(ROI_Y_MIN, ROI_Y_MAX, ROI_X_MIN, ROI_X_MAX);
 
         //Mat matClone = new Mat(matROI.cols(),matROI.rows(), CvType.CV_8UC1);
         //Imgproc.cvtColor(matROI, matClone, Imgproc.COLOR_RGB2GRAY);
 
-        Bitmap roiBmp = Bitmap.createBitmap(matROI.cols(), matROI.rows(), Bitmap.Config.ARGB_4444);
-        Utils.matToBitmap(matROI, roiBmp);
+//        Bitmap roiBmp = Bitmap.createBitmap(matROI.cols(), matROI.rows(), Bitmap.Config.ARGB_4444);
+//        Utils.matToBitmap(matROI, roiBmp);
+        Bitmap roiBmp = Bitmap.createBitmap(bitmap, ROI_X_MIN, ROI_Y_MIN, ROI_X_MAX - ROI_X_MIN, ROI_Y_MAX - ROI_Y_MIN);
 
         int width = roiBmp.getWidth();
         int height = roiBmp.getHeight();
@@ -244,7 +245,7 @@ public class ImageDetection {
 
             float avgAfterMiddle = sumAfterMiddle /middle;
             float sel = (maximum-minimum)/4;
-            float selAfterMiddle = (maximumAfterMiddle-minimumAfterMiddle)/4;
+            float selAfterMiddle = (maximumAfterMiddle-minimumAfterMiddle)/SELECTIVITY_CONST;
 //            if(i < halfHeight){
 //                selAfterMiddle = (maximumAfterMiddle-minimumAfterMiddle)/SELECTIVITY_CONST;
 //            }
@@ -276,7 +277,7 @@ public class ImageDetection {
                     }
                 }
 
-                if (idx > 40 && isFoundRef == false) {
+                if (idx > UBOUND_FIRST_LINE_RANGE && isFoundRef == false) {
                     for (int m = 0; m < candidateVector.size(); m++) {
                         int tempIdx = (Integer) candidateVector.get(m);
                         if (x0[tempIdx] > refCandidate) {
@@ -297,7 +298,7 @@ public class ImageDetection {
                     }
                 }
 
-                if (idx > 50 && isFoundRef == true) {
+                if (idx > middle && isFoundRef == true) {
                     if (x0[idx] - avgAfterMiddle > selAfterMiddle) {
                         if (secondMaximal < x0[idx]) {
                             secondMaximal = x0[idx];
