@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AlphaAnimation;
@@ -26,7 +27,8 @@ import com.ubicomp.ketdiary.system.check.StartDateCheck;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
 public class AnalysisRankView extends StatisticPageView {
-
+	
+	private static final String TAG = "AnalysisRank";
 	private TextView title;
 
 	private TextView helpMonth, helpWeek;
@@ -225,8 +227,10 @@ public class AnalysisRankView extends StatisticPageView {
 			int restPeople = nPeople - 4;
 			int restRank = rank - 3;
 			int len = 0;
-			if (restPeople == 0)
-				len = width_bar;
+			if (restPeople <= 0){
+				//len = width_bar;
+				len = 0;
+			}
 			else
 				len = width_bar - restRank * width_bar / restPeople;
 			paramMonth.leftMargin = marginLeft + len;
@@ -296,8 +300,10 @@ public class AnalysisRankView extends StatisticPageView {
 			int restPeople = nPeople - 4;
 			int restRank = rank - 3;
 			int len;
-			if (restPeople == 0)
-				len = width_bar;
+			if (restPeople <= 0){
+				//len = width_bar;
+				len = 0;
+			}
 			else
 				len = width_bar - restRank * width_bar / restPeople;
 			paramWeek.leftMargin = marginLeft + len;
@@ -356,7 +362,7 @@ public class AnalysisRankView extends StatisticPageView {
 			}
 			max_rank = tmp_rank;
 		}
-
+		Log.i(TAG, "MAX: " + max_rank + "Rank: "+ rank);
 		return new RankInfo(max_rank, rank);
 	}
 
