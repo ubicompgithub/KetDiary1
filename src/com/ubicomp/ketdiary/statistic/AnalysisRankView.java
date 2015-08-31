@@ -330,14 +330,16 @@ public class AnalysisRankView extends StatisticPageView {
 	}
 
 	private RankInfo getRankMonth(String uid) {
-		int nPeople, rank;
+		int nPeople, rank, max_rank;
 		Rank[] ranks = db.getAllRanks();
 		if (ranks == null) {
 			nPeople = 0;
 			rank = 0;
+			max_rank = 0;
 		} else {
 			rank = ranks.length;
 			nPeople = ranks.length;
+			max_rank = ranks.length;
 			int tmp_rank = 0, count = 0;
 			int prev_score = ranks[0].getScore();
 
@@ -347,25 +349,28 @@ public class AnalysisRankView extends StatisticPageView {
 				}
 				if (ranks[i].getUid().equals(uid)) {
 					rank = tmp_rank;
-					break;
+					//break;
 				}
 				++count;
 				prev_score = ranks[i].getScore();
 			}
+			max_rank = tmp_rank;
 		}
 
-		return new RankInfo(nPeople, rank);
+		return new RankInfo(max_rank, rank);
 	}
 
 	private RankInfo getRankWeek(String uid) {
-		int nPeople, rank;
+		int nPeople, rank, max_rank;
 		Rank[] ranks = db.getAllRankShort();
 		if (ranks == null) {
 			nPeople = 0;
 			rank = 0;
+			max_rank = 0;
 		} else {
 			rank = ranks.length;
 			nPeople = ranks.length;
+			max_rank = ranks.length;
 			int tmp_rank = 0, count = 0;
 			int prev_score = ranks[0].getScore();
 
@@ -375,14 +380,15 @@ public class AnalysisRankView extends StatisticPageView {
 				}
 				if (ranks[i].getUid().equals(uid)) {
 					rank = tmp_rank;
-					break;
+					//break;
 				}
 				++count;
 				prev_score = ranks[i].getScore();
 			}
+			max_rank = tmp_rank;
 		}
 
-		return new RankInfo(nPeople, rank);
+		return new RankInfo(max_rank, rank);
 	}
 
 	@Override
