@@ -967,12 +967,17 @@ public class PreferenceControl {
 	}
 	
 	public static long getOpenAppTimestamp() {
-		return sp.getLong("latestOpenAppTimestamp", PreferenceControl.getStartDate().getTimeInMillis());
+		return sp.getLong("latestOpenAppTimestamp", getStartDate().getTimeInMillis());
 	}
 	
-	public static void setOpenAppTimestamp() {
+	public static void setOpenAppTimestamp() {//TODO:
 		SharedPreferences.Editor edit = sp.edit();
-		edit.putLong("latestOpenAppTimestamp", System.currentTimeMillis());
+		Calendar startCal = getStartDate();
+		Calendar cal =  Calendar.getInstance();
+		if(cal.compareTo(startCal) == -1 )
+			cal = startCal;
+		//edit.putLong("latestOpenAppTimestamp", System.currentTimeMillis());
+		edit.putLong("latestOpenAppTimestamp", cal.getTimeInMillis());
 		edit.commit();
 	}
 
