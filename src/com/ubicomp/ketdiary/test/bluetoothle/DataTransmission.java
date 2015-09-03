@@ -2,23 +2,16 @@ package com.ubicomp.ketdiary.test.bluetoothle;
 
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.ubicomp.ketdiary.ResultService3;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
-
-import com.ubicomp.ketdiary.MainActivity;
-import com.ubicomp.ketdiary.ResultService3;
-import com.ubicomp.ketdiary.data.file.MainStorage;
-import com.ubicomp.ketdiary.system.PreferenceControl;
-import com.ubicomp.ketdiary.test.color.ImageDetection;
 
 /**
  * Created by larry on 15/7/17.
@@ -31,10 +24,6 @@ public class DataTransmission {
     private BluetoothListener bluetoothListener = null;
     private BluetoothLE3 ble = null;
 
-    private File mainStorage = null;
-    private File file;
-    private FileOutputStream fos;
-
     private byte [][] picBuf;
     private byte [] tempBuf;
     private int pktNum = 0;
@@ -45,7 +34,6 @@ public class DataTransmission {
     private int bufOffset = 0;
     private boolean picInfoPktRecv = false;
     
-    private int picNum = 10;
 
     private Set<Integer> integerSet;
     
@@ -65,7 +53,6 @@ public class DataTransmission {
 		
         tempBuf = new byte [128];
         picBuf = new byte [maximumPktNum][];
-        integerSet = new HashSet();
     }
 
     public void parsePackets(byte [] data){

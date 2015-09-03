@@ -41,12 +41,9 @@ public class SettingActivity extends Activity {
 
 	private Activity activity;
 
-	private View fbView;
-	private View uvView;
+
 	private RelativeLayout[] recreationViews;
 	private RelativeLayout[] contactViews;
-	private MultiRadioGroup socialGroup;
-	private View socialGroupView;
 	private SingleRadioGroup notificationGroup;
 	private View notificationGroupView;
 	// private View bluetoothView;

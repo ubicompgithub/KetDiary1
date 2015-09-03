@@ -33,7 +33,7 @@ public class AboutActivity extends Activity {
 
 	// TextView of About Activity
 	private TextView titleText, aboutText, copyrightText, about, phone,
-			phone_number, email, website;
+			phone_number, email;
 	// ImageView of About Activity
 	private ImageView logo, logo0, logo1, logo2;
 
@@ -168,8 +168,6 @@ public class AboutActivity extends Activity {
 		String happ_design = getString(R.string.happ_design);
 
 		String curVersion = getString(R.string.current_version);
-		String rickie_wu = getString(R.string.rickie_wu);
-		String yuga_huang = getString(R.string.yuda_huang);
 		String versionName = " unknown";
 		PackageInfo pinfo;
 		try {

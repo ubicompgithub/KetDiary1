@@ -76,12 +76,11 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	private TestFragment2 testFragment;
 	private View view;
 	
-	private DoneState doneState;
 	
 	private RelativeLayout main_layout;
 	private LinearLayout water_layout;
-	private TextView label_btn, label_subtitle, label_title, debug_msg, test_msg;
-	private ImageView img_bg, img_ac, img_btn, img_info, img_water1, img_water2, img_water3, img_face, img_help, img_cassette;
+	private TextView label_btn, label_subtitle, label_title, test_msg;
+	private ImageView img_bg, img_ac, img_btn, img_water1, img_water2, img_water3, img_face, img_help, img_cassette;
 	
 	private boolean isSkip = PreferenceControl.isSkip();
 	private boolean debug = PreferenceControl.isDebugMode();
@@ -92,7 +91,6 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	private ScrollView debugScrollView;
 	private EditText debugMsg;
 	private ChangeMsgHandler msgHandler;
-	private TextView debugBracValueView;
 	private Button btn_debug, btn_note;
 
 	private long timestamp = 0;
@@ -472,7 +470,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	                connectionFailRate, failedReason, hardwareVersion);
 			
 			db.insertTestDetail(testDetail);
-			if(failedState >= 4 && first_voltage){
+			if(failedState >= STAGE2_STATE && first_voltage){
 				db.insertCassette(cassetteId);
 			}
 			

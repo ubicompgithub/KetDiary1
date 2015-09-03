@@ -16,7 +16,6 @@ import com.ubicomp.ketdiary.dialog.NoteDialog4;
 import com.ubicomp.ketdiary.main.fragment.DaybookFragment;
 import com.ubicomp.ketdiary.main.fragment.StatisticFragment;
 import com.ubicomp.ketdiary.main.fragment.TestFragment2;
-import com.ubicomp.ketdiary.system.Config;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.system.check.StartDateCheck;
 import com.ubicomp.ketdiary.system.clicklog.ClickLog;
@@ -116,14 +115,8 @@ public class MainActivity extends FragmentActivity {
 	private static final String TAG = "MAIN_ACTIVITY";
 
 	private boolean canUpdate;
-	private CountDownTimer updateTestTimer = null;
-
-	private static final long TEST_GAP_DURATION_LONG = Config.TEST_GAP_DURATION_LONG;
-	private static final long TEST_GAP_DURATION_SHORT = Config.TEST_GAP_DURATION_SHORT;
 	
 	private CountDownTimer sensorCountDownTimer = null;
-	private boolean isRecovery = false;
-	private boolean restart = false;
 
 	private SoundPool soundpool;
 	private int timer_sound_id;
@@ -137,13 +130,12 @@ public class MainActivity extends FragmentActivity {
 	private boolean testFail = false;
 	private boolean resultServiceRun = false;
 	
-	private int changeClock=0;
 	
 	public static long WAIT_RESULT_TIME = PreferenceControl.getAfterCountDown() * 1000;
 	public static final int ACTION_RECORD = 1;
 	public static final int ACTION_QUESTIONNAIRE = 2;
 	
-	private ImageDetectionValidate imageDetectionValidate;
+	//private ImageDetectionValidate imageDetectionValidate;
 	
 	static {
        System.loadLibrary("opencv_java");
@@ -791,7 +783,6 @@ public class MainActivity extends FragmentActivity {
 		long countTime = WAIT_RESULT_TIME - time;
 		//long countTime = ResultService3.spentTime;
 		Log.i(TAG, "sensorCountDown: "+countTime);
-		isRecovery = false;
 		closeSensorCountDownTimer();
 		
 		sensorCountDownTimer = new SensorCountDownTimer(countTime);
@@ -820,7 +811,6 @@ public class MainActivity extends FragmentActivity {
 		//long countTime = WAIT_RESULT_TIME - time;
 		long countTime = ResultService3.spentTime;
 		Log.i(TAG, "sensorCountDown: "+countTime);
-		isRecovery = false;
 		closeSensorCountDownTimer();
 		
 		sensorCountDownTimer = new SensorCountDownTimer(countTime);
@@ -857,7 +847,6 @@ public class MainActivity extends FragmentActivity {
 		@Override
 		public void onFinish() {
 			testFail = PreferenceControl.isTestFail();
-			isRecovery = false;
 			count_down_layout.setVisibility(View.GONE);
 			
 			
@@ -909,8 +898,6 @@ public class MainActivity extends FragmentActivity {
 				animation.start();
 			}
 			
-			
-			isRecovery = true;
 			
 			count_down_layout.setVisibility(View.VISIBLE);
 

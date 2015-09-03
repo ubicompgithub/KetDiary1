@@ -1,20 +1,15 @@
 package com.ubicomp.ketdiary;
 
+import com.ubicomp.ketdiary.system.clicklog.ClickLog;
+import com.ubicomp.ketdiary.system.clicklog.ClickLogId;
+
 import android.app.Activity;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import com.ubicomp.ketdiary.system.PreferenceControl;
-import com.ubicomp.ketdiary.system.clicklog.ClickLog;
-import com.ubicomp.ketdiary.system.clicklog.ClickLogId;
-import com.ubicomp.ketdiary.ui.ScaleOnTouchListener;
-import com.ubicomp.ketdiary.ui.Typefaces;
 
 /**
  * Activity for user tutorial
@@ -23,18 +18,12 @@ import com.ubicomp.ketdiary.ui.Typefaces;
  */
 public class TutorialActivity extends Activity {
 
-	private ImageView replay, arrow1, arrow2, arrow3;
-	private ImageView tab;
+
 	private ImageView tutorial1_bg2, tutorial2_bg2, tutorial3_bg2, tutorial4_bg2, tutorial5_bg2, tutorial6_bg2;
 	private ImageView tutorial1_flash, tutorial2_flash, tutorial3_flash, tutorial4_flash, tutorial5_flash, tutorial6_flash;
-	private TextView step;
-	private TextView help;
-	private TextView notify;
+
 
 	private RelativeLayout layout;
-	private Typeface digitTypeface;
-	private Typeface wordTypefaceBold;
-
 	private Animation anim1, anim2, anim3, anim4, anim5, anim6;
 
 	@Override
@@ -44,8 +33,6 @@ public class TutorialActivity extends Activity {
 
 		setContentView(R.layout.activity_tutorial);
 
-		digitTypeface = Typefaces.getDigitTypeface();
-		wordTypefaceBold = Typefaces.getWordTypefaceBold();
 		tutorial1_bg2 = (ImageView) this.findViewById(R.id.tutorial1_bg2);
 		tutorial2_bg2 = (ImageView) this.findViewById(R.id.tutorial2_bg2);
 		tutorial3_bg2 = (ImageView) this.findViewById(R.id.tutorial3_bg2);

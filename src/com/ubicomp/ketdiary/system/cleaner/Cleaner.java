@@ -2,11 +2,10 @@ package com.ubicomp.ketdiary.system.cleaner;
 
 import java.io.File;
 
-import android.app.AlarmManager;
-
-import com.ubicomp.ketdiary.data.db.DatabaseControl;
 import com.ubicomp.ketdiary.data.file.MainStorage;
 import com.ubicomp.ketdiary.data.structure.TestResult;
+
+import android.app.AlarmManager;
 
 public class Cleaner {
 
@@ -14,7 +13,7 @@ public class Cleaner {
 
 		long cur_ts = System.currentTimeMillis() - AlarmManager.INTERVAL_DAY;
 
-		DatabaseControl db = new DatabaseControl();
+		//DatabaseControl db = new DatabaseControl();
 		//Detection[] detections = db.getAllNotUploadedDetection();
 		TestResult[] testResults = null;
 
