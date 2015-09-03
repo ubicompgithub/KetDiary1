@@ -9,9 +9,8 @@ import com.ubicomp.ketdiary.data.file.MainStorage;
 import com.ubicomp.ketdiary.data.file.PicFileHandler;
 import com.ubicomp.ketdiary.data.file.TestDataParser2;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
+import com.ubicomp.ketdiary.dialog.NoteDialog4;
 import com.ubicomp.ketdiary.main.fragment.TestFragment2;
-import com.ubicomp.ketdiary.noUse.NoteDialog3;
-import com.ubicomp.ketdiary.noUse.TestStripDetection4;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.test.bluetoothle.BluetoothLE3;
 import com.ubicomp.ketdiary.test.bluetoothle.BluetoothListener;
@@ -60,7 +59,6 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	private int result= -1;
 	private DatabaseControl db;
 	private int picNum = 0;
-	private TestStripDetection4 testStripDetection;
 	private OpenSensorMsgTimer openSensorMsgTimer;
 	private final ConnectSensorTimer connectSensorTimer = new ConnectSensorTimer();
 	
@@ -157,7 +155,6 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		picNum = 0;
 		active_disconnect = false;
 		debug = PreferenceControl.isDebugMode();
-		testStripDetection = new TestStripDetection4(myservice);
         db = new DatabaseControl();
         openSensorMsgTimer = new OpenSensorMsgTimer();
         imageDetection = new ImageDetection(this);
@@ -680,7 +677,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	
 	private void setTestFail(String reason){
 		PreferenceControl.setTestFail();
-		PreferenceControl.setAfterTestState(NoteDialog3.STATE_TEST);
+		PreferenceControl.setAfterTestState(NoteDialog4.STATE_TEST);
 		
 		failedReason = reason;
 		writeToColorRawFile("Test Fail: "+ failedReason);

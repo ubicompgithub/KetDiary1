@@ -14,10 +14,6 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.util.Log;
-
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.data.file.MainStorage;
 import com.ubicomp.ketdiary.data.structure.CopingSkill;
@@ -26,9 +22,12 @@ import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.QuestionTest;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
 import com.ubicomp.ketdiary.data.structure.TestResult;
-import com.ubicomp.ketdiary.noUse.DBControl;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.system.check.WeekNumCheck;
+
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.util.Log;
 
 /**
  * Used for generating Http POST

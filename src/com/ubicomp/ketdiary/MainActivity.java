@@ -6,6 +6,29 @@ import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 
+import com.ubicomp.ketdiary.data.db.DatabaseControl;
+import com.ubicomp.ketdiary.data.download.CassetteIDCollector;
+import com.ubicomp.ketdiary.data.structure.Cassette;
+import com.ubicomp.ketdiary.data.structure.TestDetail;
+import com.ubicomp.ketdiary.data.structure.TestResult;
+import com.ubicomp.ketdiary.dialog.CheckResultDialog;
+import com.ubicomp.ketdiary.dialog.NoteDialog4;
+import com.ubicomp.ketdiary.main.fragment.DaybookFragment;
+import com.ubicomp.ketdiary.main.fragment.StatisticFragment;
+import com.ubicomp.ketdiary.main.fragment.TestFragment2;
+import com.ubicomp.ketdiary.system.Config;
+import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.system.check.StartDateCheck;
+import com.ubicomp.ketdiary.system.clicklog.ClickLog;
+import com.ubicomp.ketdiary.system.clicklog.ClickLogId;
+import com.ubicomp.ketdiary.test.color.ImageDetectionValidate;
+import com.ubicomp.ketdiary.ui.CustomMenu;
+import com.ubicomp.ketdiary.ui.CustomTab;
+import com.ubicomp.ketdiary.ui.CustomToast;
+import com.ubicomp.ketdiary.ui.LoadingDialogControl;
+import com.ubicomp.ketdiary.ui.ScreenSize;
+import com.ubicomp.ketdiary.ui.Typefaces;
+
 import android.app.ActivityManager;
 import android.app.Dialog;
 import android.app.NotificationManager;
@@ -44,30 +67,6 @@ import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
 import android.widget.TextView;
-
-import com.ubicomp.ketdiary.data.db.DatabaseControl;
-import com.ubicomp.ketdiary.data.download.CassetteIDCollector;
-import com.ubicomp.ketdiary.data.structure.Cassette;
-import com.ubicomp.ketdiary.data.structure.TestDetail;
-import com.ubicomp.ketdiary.data.structure.TestResult;
-import com.ubicomp.ketdiary.dialog.CheckResultDialog;
-import com.ubicomp.ketdiary.main.fragment.DaybookFragment;
-import com.ubicomp.ketdiary.main.fragment.StatisticFragment;
-import com.ubicomp.ketdiary.main.fragment.TestFragment2;
-import com.ubicomp.ketdiary.noUse.NoteDialog3;
-import com.ubicomp.ketdiary.noUse.TestStripDetection3;
-import com.ubicomp.ketdiary.system.Config;
-import com.ubicomp.ketdiary.system.PreferenceControl;
-import com.ubicomp.ketdiary.system.check.StartDateCheck;
-import com.ubicomp.ketdiary.system.clicklog.ClickLog;
-import com.ubicomp.ketdiary.system.clicklog.ClickLogId;
-import com.ubicomp.ketdiary.test.color.ImageDetectionValidate;
-import com.ubicomp.ketdiary.ui.CustomMenu;
-import com.ubicomp.ketdiary.ui.CustomTab;
-import com.ubicomp.ketdiary.ui.CustomToast;
-import com.ubicomp.ketdiary.ui.LoadingDialogControl;
-import com.ubicomp.ketdiary.ui.ScreenSize;
-import com.ubicomp.ketdiary.ui.Typefaces;
 
 /**
  * Main activity of KetDiary. This activity contains the three functions -
@@ -144,7 +143,6 @@ public class MainActivity extends FragmentActivity {
 	public static final int ACTION_RECORD = 1;
 	public static final int ACTION_QUESTIONNAIRE = 2;
 	
-	private TestStripDetection3 testStripDetection;
 	private ImageDetectionValidate imageDetectionValidate;
 	
 	static {
@@ -405,7 +403,7 @@ public class MainActivity extends FragmentActivity {
 		int state = PreferenceControl.getAfterTestState();
 		Log.d("InApp",String.valueOf(state));
 		
-		if(state == NoteDialog3.STATE_NOTE || state == NoteDialog3.STATE_COPE){
+		if(state == NoteDialog4.STATE_NOTE || state == NoteDialog4.STATE_COPE){
 			enableTabAndClick(false);
 			//Log.d("InApp","Disable click");
 		}
@@ -1011,7 +1009,7 @@ public class MainActivity extends FragmentActivity {
 		msgBox = new CheckResultDialog(mainLayout);
 		msgBox.initialize();
 		msgBox.show();
-		PreferenceControl.setAfterTestState(NoteDialog3.STATE_TEST);
+		PreferenceControl.setAfterTestState(NoteDialog4.STATE_TEST);
 		if (tabHost.getCurrentTab() == 0 && fragments[0] != null
 				&& fragments[0].isAdded()) {
 			ft = fm.beginTransaction();
