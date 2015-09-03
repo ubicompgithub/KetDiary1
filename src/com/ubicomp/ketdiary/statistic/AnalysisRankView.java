@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AlphaAnimation;
@@ -27,8 +26,7 @@ import com.ubicomp.ketdiary.system.check.StartDateCheck;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
 public class AnalysisRankView extends StatisticPageView {
-	
-	private static final String TAG = "AnalysisRank";
+
 	private TextView title;
 
 	private TextView helpMonth, helpWeek;
@@ -227,10 +225,8 @@ public class AnalysisRankView extends StatisticPageView {
 			int restPeople = nPeople - 4;
 			int restRank = rank - 3;
 			int len = 0;
-			if (restPeople <= 0){
-				//len = width_bar;
-				len = 0;
-			}
+			if (restPeople == 0)
+				len = width_bar;
 			else
 				len = width_bar - restRank * width_bar / restPeople;
 			paramMonth.leftMargin = marginLeft + len;
@@ -300,10 +296,8 @@ public class AnalysisRankView extends StatisticPageView {
 			int restPeople = nPeople - 4;
 			int restRank = rank - 3;
 			int len;
-			if (restPeople <= 0){
-				//len = width_bar;
-				len = 0;
-			}
+			if (restPeople == 0)
+				len = width_bar;
 			else
 				len = width_bar - restRank * width_bar / restPeople;
 			paramWeek.leftMargin = marginLeft + len;
@@ -336,16 +330,14 @@ public class AnalysisRankView extends StatisticPageView {
 	}
 
 	private RankInfo getRankMonth(String uid) {
-		int nPeople, rank, max_rank;
+		int nPeople, rank;
 		Rank[] ranks = db.getAllRanks();
 		if (ranks == null) {
 			nPeople = 0;
 			rank = 0;
-			max_rank = 0;
 		} else {
 			rank = ranks.length;
 			nPeople = ranks.length;
-			max_rank = ranks.length;
 			int tmp_rank = 0, count = 0;
 			int prev_score = ranks[0].getScore();
 
@@ -355,28 +347,25 @@ public class AnalysisRankView extends StatisticPageView {
 				}
 				if (ranks[i].getUid().equals(uid)) {
 					rank = tmp_rank;
-					//break;
+					break;
 				}
 				++count;
 				prev_score = ranks[i].getScore();
 			}
-			max_rank = tmp_rank;
 		}
-		Log.i(TAG, "MAX: " + max_rank + "Rank: "+ rank);
-		return new RankInfo(max_rank, rank);
+
+		return new RankInfo(nPeople, rank);
 	}
 
 	private RankInfo getRankWeek(String uid) {
-		int nPeople, rank, max_rank;
+		int nPeople, rank;
 		Rank[] ranks = db.getAllRankShort();
 		if (ranks == null) {
 			nPeople = 0;
 			rank = 0;
-			max_rank = 0;
 		} else {
 			rank = ranks.length;
 			nPeople = ranks.length;
-			max_rank = ranks.length;
 			int tmp_rank = 0, count = 0;
 			int prev_score = ranks[0].getScore();
 
@@ -386,15 +375,14 @@ public class AnalysisRankView extends StatisticPageView {
 				}
 				if (ranks[i].getUid().equals(uid)) {
 					rank = tmp_rank;
-					//break;
+					break;
 				}
 				++count;
 				prev_score = ranks[i].getScore();
 			}
-			max_rank = tmp_rank;
 		}
 
-		return new RankInfo(max_rank, rank);
+		return new RankInfo(nPeople, rank);
 	}
 
 	@Override

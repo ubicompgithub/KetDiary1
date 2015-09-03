@@ -38,7 +38,7 @@ public class ImageDetection {
     private static final int LBOUND_BETWEEN_LINE = 30;
     private static final int UBOUND_BETWEEN_LINE = 45;
     
-    private static final int WHITE_THRESHOLD = 160;
+    private static final int WHITE_THRESHOLD = 180;
     private static final int VALID_THRESHOLD = -15;
     private static final int MINIMAL_EFFECTIVE_RANGE = 20;
     
