@@ -26,7 +26,6 @@ import com.ubicomp.ketdiary.R;
 import com.ubicomp.ketdiary.data.db.DatabaseControl;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.TestResult;
-import com.ubicomp.ketdiary.daybook.LineChartData;
 import com.ubicomp.ketdiary.main.fragment.DaybookFragment;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.system.clicklog.ClickLog;

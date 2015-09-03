@@ -47,9 +47,9 @@ import com.ubicomp.ketdiary.data.file.QuestionFile;
 import com.ubicomp.ketdiary.data.file.TestDataParser2;
 import com.ubicomp.ketdiary.data.structure.NoteAdd;
 import com.ubicomp.ketdiary.data.structure.TestResult;
-import com.ubicomp.ketdiary.daybook.LineChartData;
 import com.ubicomp.ketdiary.daybook.SectionsPagerAdapter;
 import com.ubicomp.ketdiary.daybook.linechart.ChartCaller;
+import com.ubicomp.ketdiary.daybook.linechart.LineChartData;
 import com.ubicomp.ketdiary.daybook.linechart.LineChartTitle;
 import com.ubicomp.ketdiary.daybook.linechart.LineChartView;
 import com.ubicomp.ketdiary.dialog.AddNoteDialog2;
@@ -1816,13 +1816,7 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
     public static int getChartType () {
 		return chart_type;
 	}
-    
-    private void addNewItem(){
-    	
-    	
-    	
-    	
-    }
+   
     
     
 	@Override
@@ -1924,22 +1918,6 @@ public class DaybookFragment extends Fragment implements ChartCaller, TestQuesti
 		randomButton.setVisibility(View.GONE);
 	}
 		
-	public class DataInitTask extends AsyncTask<Void, Void, Void> {
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			
-			//settingBars();
-			//checkHasRecorder();
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-
-
-		}
-	}
 
 
 

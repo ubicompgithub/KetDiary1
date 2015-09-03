@@ -107,8 +107,8 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 	//Listener
 
 	private EndOnClickListener endOnClickListener;
-	private GoResultOnClickListener goResultOnClickListener;
-	private GoCopingToResultOnClickListener goCopingToResultOnClickListener;
+	//private GoResultOnClickListener goResultOnClickListener;
+	//private GoCopingToResultOnClickListener goCopingToResultOnClickListener;
 	private MyOnPageChangeListener myOnPageChangeListener;
 	
 	private int day=0;
@@ -147,8 +147,8 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 	    
 		//view = inflater.inflate(R.layout.fragment_note, container, false);
 		endOnClickListener = new EndOnClickListener();
-		goResultOnClickListener = new GoResultOnClickListener();
-		goCopingToResultOnClickListener = new GoCopingToResultOnClickListener();
+		//goResultOnClickListener = new GoResultOnClickListener();
+		//goCopingToResultOnClickListener = new GoCopingToResultOnClickListener();
 				
 		noteCategory = new NoteCatagory3();
 	    
@@ -180,7 +180,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		//View title = BarButtonGenerator.createAddNoteView(new DateSelectedListener(), new TimeslotSelectedListener() );
 		
 		title = (LinearLayout) inflater.inflate(
-				R.layout.bar_addnote2, null);
+				R.layout.note_addnote2, null);
 		title_txt = (TextView)title.findViewById(R.id.note_title);
 		date_layout = (LinearLayout) title.findViewById(R.id.note_date_layout);
 		timeslot_layout = (LinearLayout) title.findViewById(R.id.note_timeslot_layout);
@@ -246,7 +246,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 			
 		//Type
 		LinearLayout type_layout = (LinearLayout) inflater.inflate(
-				R.layout.bar_type_name, null);
+				R.layout.note_type_name, null);
 		
 		TextView type_title = (TextView)type_layout.findViewById(R.id.type_title);
 		type_title.setText("事件類型：");
@@ -257,7 +257,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		
 		//Spinner
 		LinearLayout spinner_layout = (LinearLayout) inflater.inflate(
-				R.layout.bar_spinner, null);
+				R.layout.note_spinner, null);
 			
 		//sp_item = (Spinner)spinner_layout.findViewById(R.id.spinner_content);
 		//SetItem(sp_item, R.array.item_select);
@@ -285,7 +285,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		
 		//Impact
 		LinearLayout impact_layout = (LinearLayout) inflater.inflate(
-				R.layout.bar_impact, null);
+				R.layout.note_impact, null);
 		impactSeekBar=(SeekBar)impact_layout.findViewById(R.id.impact_seek_bar);
 		impactSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
 
@@ -310,7 +310,7 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		
 		//Description
 		LinearLayout discription_layout = (LinearLayout) inflater.inflate(
-				R.layout.bar_description, null);
+				R.layout.note_description, null);
 		
 		TextView dec_title = (TextView)discription_layout.findViewById(R.id.description_title);
 		dec_title.setText("補充說明：");
@@ -402,117 +402,117 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		viewshow = !viewshow;
 	}
 	
-	public void copingSetting(){
-		//boxLayout = (RelativeLayout) inflater.inflate(R.layout.activity_qtip, null);
-		//mainLayout.addView(boxLayout);
-		state = STATE_COPE;
-		PreferenceControl.setAfterTestState(STATE_COPE);
-		
-		title_layout.removeAllViews();
-		main_layout.removeAllViews();
-		bottom_layout.removeAllViews();
-		bottom_layout.setVisibility(View.VISIBLE);
-		
-		//Title View
-		LinearLayout layout = (LinearLayout) inflater.inflate(
-				R.layout.bar_addnote, null);
-		
-		note_title = (TextView) layout
-				.findViewById(R.id.note_title);
-		//Spinner sp_date = (Spinner)layout.findViewById(R.id.note_tx_date);
-	    //Spinner sp_timeslot = (Spinner)layout.findViewById(R.id.note_sp_timeslot);
-	    
-	    note_title.setTypeface(wordTypefaceBold);
-	    note_title.setTextColor(resource.getColor(R.color.text_gray2));
-	    note_title.setText(R.string.countdown);
-	    
-	    sp_date.setVisibility(View.INVISIBLE);
-	    sp_timeslot.setVisibility(View.INVISIBLE);
-		title_layout.addView(layout);
-		
-		
-		//View title = BarButtonGenerator.createWaitingTitle();
-		
-		
-		center_layout = (LinearLayout) inflater.inflate(R.layout.knowledge, null);
-		tv_knowdlege = (TextView)center_layout.findViewById(R.id.qtip_tv_tips);
-		tv_title = (TextView)center_layout.findViewById(R.id.text_knowing_title);
-		
-		tv_title.setText(R.string.coping_page);
-		
-		Random rand = new Random();
-		int idx = rand.nextInt(coping_msg.length);
-		tv_knowdlege.setText(coping_msg[idx]);
-		main_layout.addView(center_layout);
-		
-		View bottom = BarButtonGenerator.createOneButtonView( R.string.Iknow, endOnClickListener );
-		bottom_layout.addView(bottom);
-		
-	}
+//	public void copingSetting(){
+//		//boxLayout = (RelativeLayout) inflater.inflate(R.layout.activity_qtip, null);
+//		//mainLayout.addView(boxLayout);
+//		state = STATE_COPE;
+//		PreferenceControl.setAfterTestState(STATE_COPE);
+//		
+//		title_layout.removeAllViews();
+//		main_layout.removeAllViews();
+//		bottom_layout.removeAllViews();
+//		bottom_layout.setVisibility(View.VISIBLE);
+//		
+//		//Title View
+//		LinearLayout layout = (LinearLayout) inflater.inflate(
+//				R.layout.bar_addnote, null);
+//		
+//		note_title = (TextView) layout
+//				.findViewById(R.id.note_title);
+//		//Spinner sp_date = (Spinner)layout.findViewById(R.id.note_tx_date);
+//	    //Spinner sp_timeslot = (Spinner)layout.findViewById(R.id.note_sp_timeslot);
+//	    
+//	    note_title.setTypeface(wordTypefaceBold);
+//	    note_title.setTextColor(resource.getColor(R.color.text_gray2));
+//	    note_title.setText(R.string.countdown);
+//	    
+//	    sp_date.setVisibility(View.INVISIBLE);
+//	    sp_timeslot.setVisibility(View.INVISIBLE);
+//		title_layout.addView(layout);
+//		
+//		
+//		//View title = BarButtonGenerator.createWaitingTitle();
+//		
+//		
+//		center_layout = (LinearLayout) inflater.inflate(R.layout.knowledge, null);
+//		tv_knowdlege = (TextView)center_layout.findViewById(R.id.qtip_tv_tips);
+//		tv_title = (TextView)center_layout.findViewById(R.id.text_knowing_title);
+//		
+//		tv_title.setText(R.string.coping_page);
+//		
+//		Random rand = new Random();
+//		int idx = rand.nextInt(coping_msg.length);
+//		tv_knowdlege.setText(coping_msg[idx]);
+//		main_layout.addView(center_layout);
+//		
+//		View bottom = BarButtonGenerator.createOneButtonView( R.string.Iknow, endOnClickListener );
+//		bottom_layout.addView(bottom);
+//		
+//	}
 	
-	public void copingSettingToResult(){
-		//boxLayout = (RelativeLayout) inflater.inflate(R.layout.activity_qtip, null);
-		//mainLayout.addView(boxLayout);
-		state = STATE_COPE;
-		PreferenceControl.setAfterTestState(STATE_COPE);
-		
-		title_layout.removeAllViews();
-		main_layout.removeAllViews();
-		bottom_layout.removeAllViews();
-		
-		LinearLayout layout = (LinearLayout) inflater.inflate(
-				R.layout.bar_addnote, null);
-		
-		note_title = (TextView) layout
-				.findViewById(R.id.note_title);
-		//Spinner sp_date = (Spinner)layout.findViewById(R.id.note_tx_date);
-	    //Spinner sp_timeslot = (Spinner)layout.findViewById(R.id.note_sp_timeslot);
-	    
-	    note_title.setTypeface(wordTypefaceBold);
-	    note_title.setTextColor(resource.getColor(R.color.text_gray2));
-	    note_title.setText(R.string.countdown);
-	    
-	    sp_date.setVisibility(View.INVISIBLE);
-	    sp_timeslot.setVisibility(View.INVISIBLE);
-		title_layout.addView(layout);
-		
-		//View title = BarButtonGenerator.createWaitingTitle();
-		//title_layout.addView(title);
-		
-		center_layout = (LinearLayout) inflater.inflate(R.layout.knowledge, null);
-		tv_knowdlege = (TextView)center_layout.findViewById(R.id.qtip_tv_tips);
-		tv_title = (TextView)center_layout.findViewById(R.id.text_knowing_title);
-		
-		tv_title.setText(R.string.coping_page);
-		
-		Random rand = new Random();
-		int idx = rand.nextInt(coping_msg.length);
-		tv_knowdlege.setText(coping_msg[idx]);
-		main_layout.addView(center_layout);
-		
-		View bottom = BarButtonGenerator.createOneButtonView( R.string.go_result, goResultOnClickListener );
-		bottom_layout.addView(bottom);
-		
-	}
+//	public void copingSettingToResult(){
+//		//boxLayout = (RelativeLayout) inflater.inflate(R.layout.activity_qtip, null);
+//		//mainLayout.addView(boxLayout);
+//		state = STATE_COPE;
+//		PreferenceControl.setAfterTestState(STATE_COPE);
+//		
+//		title_layout.removeAllViews();
+//		main_layout.removeAllViews();
+//		bottom_layout.removeAllViews();
+//		
+//		LinearLayout layout = (LinearLayout) inflater.inflate(
+//				R.layout.bar_addnote, null);
+//		
+//		note_title = (TextView) layout
+//				.findViewById(R.id.note_title);
+//		//Spinner sp_date = (Spinner)layout.findViewById(R.id.note_tx_date);
+//	    //Spinner sp_timeslot = (Spinner)layout.findViewById(R.id.note_sp_timeslot);
+//	    
+//	    note_title.setTypeface(wordTypefaceBold);
+//	    note_title.setTextColor(resource.getColor(R.color.text_gray2));
+//	    note_title.setText(R.string.countdown);
+//	    
+//	    sp_date.setVisibility(View.INVISIBLE);
+//	    sp_timeslot.setVisibility(View.INVISIBLE);
+//		title_layout.addView(layout);
+//		
+//		//View title = BarButtonGenerator.createWaitingTitle();
+//		//title_layout.addView(title);
+//		
+//		center_layout = (LinearLayout) inflater.inflate(R.layout.knowledge, null);
+//		tv_knowdlege = (TextView)center_layout.findViewById(R.id.qtip_tv_tips);
+//		tv_title = (TextView)center_layout.findViewById(R.id.text_knowing_title);
+//		
+//		tv_title.setText(R.string.coping_page);
+//		
+//		Random rand = new Random();
+//		int idx = rand.nextInt(coping_msg.length);
+//		tv_knowdlege.setText(coping_msg[idx]);
+//		main_layout.addView(center_layout);
+//		
+//		View bottom = BarButtonGenerator.createOneButtonView( R.string.go_result, goResultOnClickListener );
+//		bottom_layout.addView(bottom);
+//		
+//	}
 	
 	
 	
-	public void setResult(){
-		bottom_layout.removeAllViews();
-		//Toast.makeText(context, "倒數結束", Toast.LENGTH_SHORT).show();
-		
-		if(state == STATE_NOTE){
-			Toast.makeText(context, "請完成新增記事以查看檢測結果", Toast.LENGTH_SHORT).show();
-			View bottom = BarButtonGenerator.createTwoButtonView(R.string.cancel, R.string.ok, goCopingToResultOnClickListener, goCopingToResultOnClickListener);
-			bottom_layout.addView(bottom);
-		}
-		else if(state == STATE_COPE){
-			Toast.makeText(context, "請點選以查看檢測結果", Toast.LENGTH_SHORT).show();
-			note_title.setText(R.string.test_done);
-			View bottom = BarButtonGenerator.createOneButtonView( R.string.go_result, goResultOnClickListener );
-			bottom_layout.addView(bottom);
-		}	
-	}
+//	public void setResult(){
+//		bottom_layout.removeAllViews();
+//		//Toast.makeText(context, "倒數結束", Toast.LENGTH_SHORT).show();
+//		
+//		if(state == STATE_NOTE){
+//			Toast.makeText(context, "請完成新增記事以查看檢測結果", Toast.LENGTH_SHORT).show();
+//			View bottom = BarButtonGenerator.createTwoButtonView(R.string.cancel, R.string.ok, goCopingToResultOnClickListener, goCopingToResultOnClickListener);
+//			bottom_layout.addView(bottom);
+//		}
+//		else if(state == STATE_COPE){
+//			Toast.makeText(context, "請點選以查看檢測結果", Toast.LENGTH_SHORT).show();
+//			note_title.setText(R.string.test_done);
+//			View bottom = BarButtonGenerator.createOneButtonView( R.string.go_result, goResultOnClickListener );
+//			bottom_layout.addView(bottom);
+//		}	
+//	}
 	
 	
 	/** Initialize the dialog */
@@ -557,36 +557,36 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 	}
 	
 	
-	private void SetListItem(int array){
-		//ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, android.R.layout.simple_list_item_1);
-		items = -1;
-		sp_content.setText(""); //TODO: 假如點到同一個不要清掉
-		ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, R.layout.my_listitem);
-		listView.setAdapter(adapter);
-		listView.setOnItemClickListener(new OnItemClickListener(){
-		   View view2; //保存點選的View
-	       int select_item=-1;
-		   @Override
-		   public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-			   TextView c = (TextView) view.findViewById(android.R.id.text1);
-			    String playerChanged = c.getText().toString();
-			    
-			    items = 100*type + position;
-				Log.d(TAG, items+"");
-			    //Toast.makeText(Settings.this,playerChanged, Toast.LENGTH_SHORT).show();  
-			 sp_content.setText(playerChanged);
-			 listView.setVisibility(View.GONE);
-			 viewshow = false;
-		   }
-		   
-		});
-		setListViewHeightBasedOnItems(listView);
-		listView.setVisibility(View.VISIBLE);
-		viewshow = true;
-		sv.smoothScrollTo(0 , (int)convertDpToPixel((float)200));
-		
-		//.setOnItemSelectedListener(new SpinnerXMLSelectedListener());
-	}
+//	private void SetListItem(int array){
+//		//ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, android.R.layout.simple_list_item_1);
+//		items = -1;
+//		sp_content.setText(""); //TODO: 假如點到同一個不要清掉
+//		ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, R.layout.my_listitem);
+//		listView.setAdapter(adapter);
+//		listView.setOnItemClickListener(new OnItemClickListener(){
+//		   View view2; //保存點選的View
+//	       int select_item=-1;
+//		   @Override
+//		   public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+//			   TextView c = (TextView) view.findViewById(android.R.id.text1);
+//			    String playerChanged = c.getText().toString();
+//			    
+//			    items = 100*type + position;
+//				Log.d(TAG, items+"");
+//			    //Toast.makeText(Settings.this,playerChanged, Toast.LENGTH_SHORT).show();  
+//			 sp_content.setText(playerChanged);
+//			 listView.setVisibility(View.GONE);
+//			 viewshow = false;
+//		   }
+//		   
+//		});
+//		setListViewHeightBasedOnItems(listView);
+//		listView.setVisibility(View.VISIBLE);
+//		viewshow = true;
+//		sv.smoothScrollTo(0 , (int)convertDpToPixel((float)200));
+//		
+//		//.setOnItemSelectedListener(new SpinnerXMLSelectedListener());
+//	}
 	
 	private void SetListItem2(int type){
 		ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_SELECT_TYPE + type);
@@ -722,29 +722,29 @@ public class AddNoteDialog2 implements ChooseItemCaller{
 		}
 	}
 	
-	class GoResultOnClickListener implements View.OnClickListener{
-		public void onClick(View v){
-			CustomToast.generateToast(R.string.after_test_pass, 2);
-			MainActivity.getMainActivity().changeTab(1);
-			
-	    }
-	}
+//	class GoResultOnClickListener implements View.OnClickListener{
+//		public void onClick(View v){
+//			CustomToast.generateToast(R.string.after_test_pass, 2);
+//			MainActivity.getMainActivity().changeTab(1);
+//			
+//	    }
+//	}
 	
-	class GoCopingToResultOnClickListener implements View.OnClickListener{
-		public void onClick(View v){
-			
-			
-			if(state == STATE_NOTE){
-				impact = impactSeekBar.getProgress();
-				testQuestionCaller.writeQuestionFile(day, timeslot, type, items, impact, edtext.getText().toString());
-			
-				Log.d(TAG, items+" "+impact);
-
-				copingSettingToResult();
-			}
-
-	    }
-	}
+//	class GoCopingToResultOnClickListener implements View.OnClickListener{
+//		public void onClick(View v){
+//			
+//			
+//			if(state == STATE_NOTE){
+//				impact = impactSeekBar.getProgress();
+//				testQuestionCaller.writeQuestionFile(day, timeslot, type, items, impact, edtext.getText().toString());
+//			
+//				Log.d(TAG, items+" "+impact);
+//
+//				copingSettingToResult();
+//			}
+//
+//	    }
+//	}
 	
 	private void initTypePager(){
 	    vPager = (ViewPager) center_layout.findViewById(R.id.viewpager);

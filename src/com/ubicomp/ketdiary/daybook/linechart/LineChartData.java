@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.daybook;
+package com.ubicomp.ketdiary.daybook.linechart;
 
 
 public class LineChartData {

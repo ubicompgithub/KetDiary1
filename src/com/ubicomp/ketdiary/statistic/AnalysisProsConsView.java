@@ -33,16 +33,10 @@ public class AnalysisProsConsView extends StatisticPageView {
 	private ImageView barStart, barEnd, bar_followed;
 	private ImageView bar;
 
-	private String targetGood;
-	private int goal;
-	private int drinkCost;
-	private int currentMoney;
-
 	private RelativeLayout layout;
 
 	private Typeface wordTypeface, wordTypefaceBold, digitTypefaceBold;
 
-	private String dollor_sign;
 
 	private BarHandler barHandler = new BarHandler();
 	private AlphaAnimation arrowAnimation;
@@ -59,10 +53,10 @@ public class AnalysisProsConsView extends StatisticPageView {
 		digitTypefaceBold = Typefaces.getDigitTypefaceBold();
 
 		//targetGood = PreferenceControl.getSavingGoal();
-		goal = PreferenceControl.getSavingGoalMoney();
-		drinkCost = PreferenceControl.getSavingDrinkCost();
-
-		dollor_sign = context.getResources().getString(R.string.dollor_sign);
+//		goal = PreferenceControl.getSavingGoalMoney();
+//		drinkCost = PreferenceControl.getSavingDrinkCost();
+//
+//		dollor_sign = context.getResources().getString(R.string.dollor_sign);
 		//title = (TextView) view.findViewById(R.id.analysis_saving_title);
 		
 		//bar.setVisibility(View.INVISIBLE);

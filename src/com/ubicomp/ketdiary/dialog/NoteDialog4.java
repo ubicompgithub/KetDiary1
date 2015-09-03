@@ -160,7 +160,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 		
 		//Title View
 		title = (LinearLayout) inflater.inflate(
-				R.layout.bar_addnote2, null);
+				R.layout.note_addnote2, null);
 		title_txt = (TextView)title.findViewById(R.id.note_title);
 		date_layout = (LinearLayout) title.findViewById(R.id.note_date_layout);
 		timeslot_layout = (LinearLayout) title.findViewById(R.id.note_timeslot_layout);
@@ -232,7 +232,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 			
 		//Type
 		LinearLayout type_layout = (LinearLayout) inflater.inflate(
-				R.layout.bar_type_name, null);
+				R.layout.note_type_name, null);
 		
 		TextView type_title = (TextView)type_layout.findViewById(R.id.type_title);
 		type_title.setText("事件類型：");
@@ -243,7 +243,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 		
 		//Spinner
 		LinearLayout spinner_layout = (LinearLayout) inflater.inflate(
-				R.layout.bar_spinner, null);
+				R.layout.note_spinner, null);
 			
 		//sp_item = (Spinner)spinner_layout.findViewById(R.id.spinner_content);
 		//SetItem(sp_item, R.array.item_select);
@@ -270,7 +270,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 	    	
 		//Impact
 		LinearLayout impact_layout = (LinearLayout) inflater.inflate(
-				R.layout.bar_impact, null);
+				R.layout.note_impact, null);
 		impactSeekBar=(SeekBar)impact_layout.findViewById(R.id.impact_seek_bar);
 		impactSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
 
@@ -299,7 +299,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 		
 		//Description
 		LinearLayout discription_layout = (LinearLayout) inflater.inflate(
-				R.layout.bar_description, null);
+				R.layout.note_description, null);
 		
 		TextView dec_title = (TextView)discription_layout.findViewById(R.id.description_title);
 		dec_title.setText("補充說明：");
@@ -400,7 +400,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 		
 		//Title View
 		LinearLayout layout = (LinearLayout) inflater.inflate(
-				R.layout.bar_addnote3, null);
+				R.layout.note_addnote3, null);
 		
 		note_title = (TextView) layout
 				.findViewById(R.id.note_title);
@@ -456,7 +456,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 		bottom_layout.removeAllViews();
 		
 		LinearLayout layout = (LinearLayout) inflater.inflate(
-				R.layout.bar_addnote3, null);
+				R.layout.note_addnote3, null);
 		
 		note_title = (TextView) layout
 				.findViewById(R.id.note_title);

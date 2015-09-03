@@ -47,44 +47,44 @@ public class BarButtonGenerator {
 		return layout;
 	}
 	
-	public static View createAddNoteView(OnItemSelectedListener itemselectedListener1, OnItemSelectedListener itemselectedListener2){
-		LinearLayout layout = (LinearLayout) inflater.inflate(
-				R.layout.bar_addnote, null);
-		
-		TextView note_title = (TextView) layout
-				.findViewById(R.id.note_title);
-		Spinner sp_date = (Spinner)layout.findViewById(R.id.note_tx_date);
-	    Spinner sp_timeslot = (Spinner)layout.findViewById(R.id.note_sp_timeslot);
-	    
-	    
-	    note_title.setTypeface(wordTypefaceBold);
-	    note_title.setTextColor(context.getResources().getColor(R.color.text_gray2));
-	    
-	    SetItem(sp_date, R.array.note_date, itemselectedListener1);
-	    SetItem(sp_timeslot, R.array.note_time_slot, itemselectedListener2);
-	    
-	    Calendar cal = Calendar.getInstance();
-		int hours = cal.get(Calendar.HOUR_OF_DAY);
-		int timeslot = TimeBlock.getTimeBlock(hours);
-		sp_timeslot.setSelection(timeslot);
-		
-	    
-		return layout;
-	}
-	
-	private static void SetItem(Spinner sp, int array, OnItemSelectedListener itemselectedListener){
-		ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, R.layout.title_spinner);
-		//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, strs );
-		//adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		sp.setAdapter(adapter);
-		sp.setOnItemSelectedListener(itemselectedListener);
-		
-		//new SpinnerXMLSelectedListener()
-		//sp.setPrompt("負面情緒");
-        
-        //sp.setVisibility(View.VISIBLE);  
-       // sp.performClick();
-	}
+//	public static View createAddNoteView(OnItemSelectedListener itemselectedListener1, OnItemSelectedListener itemselectedListener2){
+//		LinearLayout layout = (LinearLayout) inflater.inflate(
+//				R.layout.bar_addnote, null);
+//		
+//		TextView note_title = (TextView) layout
+//				.findViewById(R.id.note_title);
+//		Spinner sp_date = (Spinner)layout.findViewById(R.id.note_tx_date);
+//	    Spinner sp_timeslot = (Spinner)layout.findViewById(R.id.note_sp_timeslot);
+//	    
+//	    
+//	    note_title.setTypeface(wordTypefaceBold);
+//	    note_title.setTextColor(context.getResources().getColor(R.color.text_gray2));
+//	    
+//	    SetItem(sp_date, R.array.note_date, itemselectedListener1);
+//	    SetItem(sp_timeslot, R.array.note_time_slot, itemselectedListener2);
+//	    
+//	    Calendar cal = Calendar.getInstance();
+//		int hours = cal.get(Calendar.HOUR_OF_DAY);
+//		int timeslot = TimeBlock.getTimeBlock(hours);
+//		sp_timeslot.setSelection(timeslot);
+//		
+//	    
+//		return layout;
+//	}
+//	
+//	private static void SetItem(Spinner sp, int array, OnItemSelectedListener itemselectedListener){
+//		ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, R.layout.title_spinner);
+//		//ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, strs );
+//		//adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//		sp.setAdapter(adapter);
+//		sp.setOnItemSelectedListener(itemselectedListener);
+//		
+//		//new SpinnerXMLSelectedListener()
+//		//sp.setPrompt("負面情緒");
+//        
+//        //sp.setVisibility(View.VISIBLE);  
+//       // sp.performClick();
+//	}
 	
 	public static View createOneButtonView(int TextId, 	OnClickListener Listener) {
 		LinearLayout layout = (LinearLayout) inflater.inflate(
@@ -98,27 +98,27 @@ public class BarButtonGenerator {
 		return layout;
 	}
 	
-	public static View createWaitingTitle(){
-		LinearLayout layout = (LinearLayout) inflater.inflate(
-				R.layout.bar_addnote, null);
-		
-		TextView note_title = (TextView) layout
-				.findViewById(R.id.note_title);
-		Spinner sp_date = (Spinner)layout.findViewById(R.id.note_tx_date);
-	    Spinner sp_timeslot = (Spinner)layout.findViewById(R.id.note_sp_timeslot);
-	    
-	    note_title.setTypeface(wordTypefaceBold);
-	    note_title.setTextColor(context.getResources().getColor(R.color.text_gray2));
-	    note_title.setText(R.string.countdown);
-	    
-	    sp_date.setVisibility(View.INVISIBLE);
-	    sp_timeslot.setVisibility(View.INVISIBLE);
-	    //SetItem(sp_date, R.array.note_date, itemselectedListener1);
-	    //SetItem(sp_timeslot, R.array.note_time_slot, itemselectedListener2);
-	    
-		return layout;
-	}
-	
+//	public static View createWaitingTitle(){
+//		LinearLayout layout = (LinearLayout) inflater.inflate(
+//				R.layout.bar_addnote, null);
+//		
+//		TextView note_title = (TextView) layout
+//				.findViewById(R.id.note_title);
+//		Spinner sp_date = (Spinner)layout.findViewById(R.id.note_tx_date);
+//	    Spinner sp_timeslot = (Spinner)layout.findViewById(R.id.note_sp_timeslot);
+//	    
+//	    note_title.setTypeface(wordTypefaceBold);
+//	    note_title.setTextColor(context.getResources().getColor(R.color.text_gray2));
+//	    note_title.setText(R.string.countdown);
+//	    
+//	    sp_date.setVisibility(View.INVISIBLE);
+//	    sp_timeslot.setVisibility(View.INVISIBLE);
+//	    //SetItem(sp_date, R.array.note_date, itemselectedListener1);
+//	    //SetItem(sp_timeslot, R.array.note_time_slot, itemselectedListener2);
+//	    
+//		return layout;
+//	}
+//	
 
 	public static View createTextView(int textStr) {
 		LinearLayout layout = (LinearLayout) inflater.inflate(
@@ -143,31 +143,31 @@ public class BarButtonGenerator {
 		return layout;
 	}
 
-	public static View createQuoteQuestionView(String textStr) {
-		RelativeLayout layout = (RelativeLayout) inflater.inflate(
-				R.layout.bar_text_area_item, null);
-		TextView text = (TextView) layout.findViewById(R.id.question_text);
-		String quoteBlank = App.getContext().getString(R.string.quote_blank);
-		int firstIdx = textStr.indexOf(quoteBlank);
-		int lastIdx = textStr.lastIndexOf(quoteBlank);
-		Spannable spannable = new SpannableString(textStr);
-		int text_color = App.getContext().getResources()
-				.getColor(R.color.text_gray);
-		int o_color = App.getContext().getResources()
-				.getColor(R.color.lite_orange);
-		spannable.setSpan(
-				new CustomTypefaceSpan("c1", wordTypeface, text_color), 0,
-				firstIdx, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-		spannable.setSpan(new CustomTypefaceSpan("c2", wordTypefaceBold,
-				o_color), firstIdx, lastIdx + 1,
-				Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-		spannable.setSpan(
-				new CustomTypefaceSpan("c1", wordTypeface, text_color),
-				lastIdx + 1, textStr.length(),
-				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		text.setText(spannable);
-		return layout;
-	}
+//	public static View createQuoteQuestionView(String textStr) {
+//		RelativeLayout layout = (RelativeLayout) inflater.inflate(
+//				R.layout.bar_text_area_item, null);
+//		TextView text = (TextView) layout.findViewById(R.id.question_text);
+//		String quoteBlank = App.getContext().getString(R.string.quote_blank);
+//		int firstIdx = textStr.indexOf(quoteBlank);
+//		int lastIdx = textStr.lastIndexOf(quoteBlank);
+//		Spannable spannable = new SpannableString(textStr);
+//		int text_color = App.getContext().getResources()
+//				.getColor(R.color.text_gray);
+//		int o_color = App.getContext().getResources()
+//				.getColor(R.color.lite_orange);
+//		spannable.setSpan(
+//				new CustomTypefaceSpan("c1", wordTypeface, text_color), 0,
+//				firstIdx, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+//		spannable.setSpan(new CustomTypefaceSpan("c2", wordTypefaceBold,
+//				o_color), firstIdx, lastIdx + 1,
+//				Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+//		spannable.setSpan(
+//				new CustomTypefaceSpan("c1", wordTypeface, text_color),
+//				lastIdx + 1, textStr.length(),
+//				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//		text.setText(spannable);
+//		return layout;
+//	}
 
 	public static View createIconView(String textStr, int DrawableId,
 			OnClickListener listener) {

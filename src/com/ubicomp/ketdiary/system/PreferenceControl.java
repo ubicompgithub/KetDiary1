@@ -1058,15 +1058,6 @@ public class PreferenceControl {
 		edit.commit();
 	}
 	
-	public static String getSavingGoal() {
-		return sp.getString("targetGood",
-				App.getContext().getString(R.string.default_goal_good));
-	}
-
-	public static int getSavingGoalMoney() {
-		return sp.getInt("targetMoney", 50000);
-	}
-
 	public static int getSavingDrinkCost() {
 		return sp.getInt("perDrinkCost", 200);
 	}
@@ -1111,17 +1102,6 @@ public class PreferenceControl {
 		edit.putInt("lockDay", day);
 		edit.commit();
 	}
-
-	public static void setShowAdditonalQuestionnaire() {
-		SharedPreferences.Editor edit = sp.edit();
-		edit.putLong("additionalQuestionTime", System.currentTimeMillis());
-		edit.commit();
-	}
-
-
-
-	
-
 
 	public static void setUpdateDetection(boolean update) {
 		SharedPreferences.Editor edit = sp.edit();
@@ -1184,18 +1164,6 @@ public class PreferenceControl {
 		return sp.getInt("prevShowWeekState", 0);
 	}
 
-	public static void setPageChange(boolean change) {
-		SharedPreferences.Editor edit = sp.edit();
-		edit.putBoolean("pageChange", change);
-		edit.commit();
-	}
-
-	public static boolean getPageChange() {
-		// TimeValue curTV = TimeValue.generate(System.currentTimeMillis());
-		// if (curTV.getWeek() > 11)
-		// return false;
-		return sp.getBoolean("pageChange", false);
-	}
 
 	public static boolean getUseNewSensor() {
 		return sp.getBoolean("useNewSensor", false);
