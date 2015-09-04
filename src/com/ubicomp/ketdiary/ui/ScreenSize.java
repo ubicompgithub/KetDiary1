@@ -3,6 +3,7 @@ package com.ubicomp.ketdiary.ui;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Build;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -50,5 +51,15 @@ public class ScreenSize {
 			screen.x = screen.y;
 			screen.y = tmp;
 		}
+	}
+	
+	public static float getDensity(){
+		 DisplayMetrics metrics = App.getContext().getResources().getDisplayMetrics();
+		 return metrics.density;
+		}
+	
+	public static float convertDpToPixel(float dp){
+	    float px = dp * getDensity();
+	    return px;
 	}
 }

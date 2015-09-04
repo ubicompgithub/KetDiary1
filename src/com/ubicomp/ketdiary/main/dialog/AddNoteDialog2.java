@@ -1,5 +1,6 @@
-package com.ubicomp.ketdiary.dialog;
+package com.ubicomp.ketdiary.main.dialog;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -7,12 +8,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.text.Html;
 import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -20,12 +22,12 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,11 +35,14 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ubicomp.ketdiary.App;
 import com.ubicomp.ketdiary.MainActivity;
 import com.ubicomp.ketdiary.R;
+import com.ubicomp.ketdiary.data.file.QuestionFile;
 import com.ubicomp.ketdiary.noUse.NoteCatagory3;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.system.check.TimeBlock;
@@ -45,6 +50,7 @@ import com.ubicomp.ketdiary.system.clicklog.ClickLog;
 import com.ubicomp.ketdiary.system.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.ui.BarButtonGenerator;
 import com.ubicomp.ketdiary.ui.CustomScrollView;
+import com.ubicomp.ketdiary.ui.CustomToast;
 import com.ubicomp.ketdiary.ui.CustomToastSmall;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
@@ -54,24 +60,29 @@ import com.ubicomp.ketdiary.ui.Typefaces;
  * @author Andy
  *
  */
-public class NoteDialog4 implements ChooseItemCaller{
+public class AddNoteDialog2 implements ChooseItemCaller{
 	
-	private NoteDialog4 noteDialog = this;
+	private Activity activity;
+	private AddNoteDialog2 addNoteDialog = this;
 	private static final String TAG = "ADD_PAGE";
 	
 	private TestQuestionCaller2 testQuestionCaller;
 	private Context context;
+	private Resources resource;
 	private LayoutInflater inflater;
 	private RelativeLayout boxLayout = null;
 	private LinearLayout center_layout, title_layout, main_layout, bottom_layout, title, date_layout, timeslot_layout;
 	
 	private RelativeLayout mainLayout;
+	private View view;
 	
 	private ViewPager vPager;
-	private ImageView iv_self_others_bar;
 	private ImageView iv_try, iv_smile, iv_urge,
 					  iv_cry, iv_not_good;
 	private ImageView iv_conflict, iv_social, iv_playing;
+	private ImageView iv_self_others_bar;
+	private Spinner sp_date, sp_timeslot;// sp_item;
+	private Button bt_confirm, bt_cancel;
 	private SeekBar impactSeekBar;
 	private TextView text_self, text_other, text_item, text_impact, text_description,
 	     tv_knowdlege, tv_title, note_title, sp_content, date_txt, timeslot_txt, title_txt, typetext;
@@ -82,27 +93,35 @@ public class NoteDialog4 implements ChooseItemCaller{
 	private String[] coping_msg;
 	private String[] knowing_msg;
 	private static int knowing_index=-1;
-	private static int coping_index = 0;
 	
 	private int state;
 	private ChooseItemDialog chooseBox;
 	private NoteCatagory3 noteCategory;
 	
 	
-	//Listener
-	private EndOnClickListener endOnClickListener;
-	private GoResultOnClickListener goResultOnClickListener;;
+	//write File
+	private File mainDirectory;
+	private long timestamp = 0;
+	private QuestionFile questionFile; 
 	
-	private int day=1;
-	private int timeslot=1; //TODO: default
+	//Listener
+
+	private EndOnClickListener endOnClickListener;
+	//private GoResultOnClickListener goResultOnClickListener;
+	//private GoCopingToResultOnClickListener goCopingToResultOnClickListener;
+	private MyOnPageChangeListener myOnPageChangeListener;
+	
+	private int day=0;
+	private int timeslot=0; //TODO: default
 	private int type;
 	private int items;
 	private int impact;
 	private String description;
 	private boolean viewshow = false;
 	
-	private boolean done = false;
 	private CustomScrollView sv;
+	private boolean done = false;
+	
 	public static final int STATE_TEST = 0;
 	public static final int STATE_NOTE = 1;
 	public static final int STATE_COPE = 2;
@@ -110,55 +129,56 @@ public class NoteDialog4 implements ChooseItemCaller{
 	
 	private static final String[] Timeslot_str = {"上午", "下午", "晚上"};
 	private static final String[] Date_str = {"今天", "昨天", "前天"};
-	private static final Typeface wordTypefaceBold = Typefaces.getWordTypefaceBold();
-	private static final Typeface wordTypeface = Typefaces.getWordTypeface();
 	
-	private static final int[] Coping_list = {R.array.coping_list0,R.array.coping_list1,
-		R.array.coping_list2,R.array.coping_list3,R.array.coping_list4,R.array.coping_list5,
-		R.array.coping_list6,R.array.coping_list7,R.array.coping_list8};
+	private static Typeface wordTypefaceBold = Typefaces.getWordTypefaceBold();
+	private static Typeface wordTypeface = Typefaces.getWordTypeface();
 	
-	public NoteDialog4(TestQuestionCaller2 testQuestionCaller, RelativeLayout mainLayout){
+	public AddNoteDialog2(TestQuestionCaller2 testQuestionCaller, RelativeLayout mainLayout){
 		
 		this.testQuestionCaller = testQuestionCaller;
 		this.context = App.getContext();
 		this.inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.mainLayout = mainLayout;
+		resource = context.getResources();
 		
+		coping_msg = resource.getStringArray(R.array.coping_list);
 		
-		knowing_msg = context.getResources().getStringArray(R.array.knowing_list);
-		//knowing_msg = (String[])context.getResources().getTextArray(R.array.knowing_list);
-		
-		Random rand = new Random();
-		if( knowing_index < 0 )
-			knowing_index = rand.nextInt(knowing_msg.length);
 	    
 		//view = inflater.inflate(R.layout.fragment_note, container, false);
 		endOnClickListener = new EndOnClickListener();
-		goResultOnClickListener = new GoResultOnClickListener();		
-		
+		//goResultOnClickListener = new GoResultOnClickListener();
+		//goCopingToResultOnClickListener = new GoCopingToResultOnClickListener();
+				
 		noteCategory = new NoteCatagory3();
+	    
+	
 	}
 	
 	protected void setting() {
 		
 		day = 0;
-		type = 0;
+		type = -1;
 		items = -1;
 		impact = 0 ;
 		description = "";
+		
 		boxLayout = (RelativeLayout) inflater.inflate(
 				R.layout.note, null);
 		boxLayout.setVisibility(View.INVISIBLE);
 		title_layout = (LinearLayout) boxLayout.findViewById(R.id.note_title_layout);
 		main_layout = (LinearLayout) boxLayout.findViewById(R.id.note_main_layout);
+		
+		
+		
 		bottom_layout = (LinearLayout) boxLayout.findViewById(R.id.note_bottom_layout);
 		sv = (CustomScrollView) boxLayout.findViewById(R.id.note_main_scroll);
-		
 		
 		//
 		
 		//Title View
+		//View title = BarButtonGenerator.createAddNoteView(new DateSelectedListener(), new TimeslotSelectedListener() );
+		
 		title = (LinearLayout) inflater.inflate(
 				R.layout.note_addnote2, null);
 		title_txt = (TextView)title.findViewById(R.id.note_title);
@@ -167,31 +187,24 @@ public class NoteDialog4 implements ChooseItemCaller{
 		date_txt = (TextView)title.findViewById(R.id.note_tx_date);
 		timeslot_txt= (TextView)title.findViewById(R.id.note_tx_timeslot);
 		
-		Calendar cal = Calendar.getInstance();
-		int hours = cal.get(Calendar.HOUR_OF_DAY);
-		int time_slot = TimeBlock.getTimeBlock(hours);
-		timeslot = time_slot;
-		
-		timeslot_txt.setText(Timeslot_str[time_slot]);
-		
+		checkAndSetTimeSlot();
+			
 		title_txt.setTypeface(wordTypefaceBold);
 		date_txt.setTypeface(wordTypefaceBold);
 		timeslot_txt.setTypeface(wordTypefaceBold);
+		
 		
 		date_layout.setOnClickListener(new OnClickListener(){
 			
 
 			@Override
 			public void onClick(View v) {
-				//title_layout.setEnabled(false);
-				//main_layout.setEnabled(false);
-				//bottom_layout.setEnabled(false);
-				//boxLayout.setEnabled(false);
 				
-				ClickLog.Log(ClickLogId.TEST_NOTE_SELECT_DATE);
+				ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_SELECT_DATE);
+				listView.setVisibility(View.GONE);
 				setEnabledAll(boxLayout, false);
 				
-				chooseBox = new ChooseItemDialog(noteDialog, boxLayout, 1, day);
+				chooseBox = new ChooseItemDialog(addNoteDialog,boxLayout, 1, day);
 				chooseBox.initialize();
 				chooseBox.show();
 			}
@@ -203,15 +216,16 @@ public class NoteDialog4 implements ChooseItemCaller{
 
 			@Override
 			public void onClick(View v) {
-				ClickLog.Log(ClickLogId.TEST_NOTE_SELECT_SLOT);
-				
+				ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_SELECT_SLOT);
+				listView.setVisibility(View.GONE);
 				setEnabledAll(boxLayout, false);
-				chooseBox = new ChooseItemDialog(noteDialog, boxLayout, 2, day);
+				chooseBox = new ChooseItemDialog(addNoteDialog,boxLayout, 2, day);
 				chooseBox.initialize();
 				chooseBox.show();			
 			}
 			
 		});
+		
 		title_layout.addView(title);
 		
 		
@@ -220,11 +234,11 @@ public class NoteDialog4 implements ChooseItemCaller{
 				R.layout.note_main2, null);
 		text_self = (TextView)center_layout.findViewById(R.id.text_self);
 	    text_other = (TextView)center_layout.findViewById(R.id.text_other);
-	    iv_self_others_bar = (ImageView)center_layout.findViewById(R.id.self_others_bar);
+	    
 		text_self.setTypeface(wordTypefaceBold);
 	    text_other.setTypeface(wordTypefaceBold);
 	    
-		text_self.setTextColor(context.getResources().getColor(R.color.blue));    
+		text_self.setTextColor(resource.getColor(R.color.blue));    
 	    text_self.setOnClickListener(new MyClickListener(0));
 	    text_other.setOnClickListener(new MyClickListener(1));
 	    
@@ -239,7 +253,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 		type_title.setTypeface(wordTypefaceBold);
 		typetext = (TextView)type_layout.findViewById(R.id.type_content);
 		typetext.setTypeface(wordTypefaceBold);
-		//typetext.setEnabled(false);
+
 		
 		//Spinner
 		LinearLayout spinner_layout = (LinearLayout) inflater.inflate(
@@ -267,7 +281,8 @@ public class NoteDialog4 implements ChooseItemCaller{
 		});
 		
 		listView = (ListView)spinner_layout.findViewById(R.id.item_listview);
-	    	
+		
+		
 		//Impact
 		LinearLayout impact_layout = (LinearLayout) inflater.inflate(
 				R.layout.note_impact, null);
@@ -277,20 +292,16 @@ public class NoteDialog4 implements ChooseItemCaller{
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
+				ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_IMPACT);
 				done = true;
-				ClickLog.Log(ClickLogId.TEST_NOTE_IMPACT);
 			}
 
 			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
-				
+			public void onStartTrackingTouch(SeekBar seekBar) {				
 			}
 
 			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
-				
+			public void onStopTrackingTouch(SeekBar seekBar) {				
 			}
 			
 		});
@@ -313,7 +324,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 //		        // Always use a TextKeyListener when clearing a TextView to prevent android
 //		        // warnings in the log
 //		        	Log.i(TAG, "EditText");
-//		        	ClickLog.Log(ClickLogId.TEST_NOTE_DESCRIPTION);
+//		        	ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_DESCRIPTION);
 //		        }
 //		    }
 //		});
@@ -322,7 +333,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 		    public boolean onTouch(View v, MotionEvent event) {
 		        if (event.getAction() == MotionEvent.ACTION_UP) {
 		        	Log.i(TAG, "EditText");
-		        	ClickLog.Log(ClickLogId.TEST_NOTE_DESCRIPTION);
+		        	ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_DESCRIPTION);
 		        }
 		        return false;
 		    }
@@ -345,7 +356,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 //			}
 //			
 //		});
-//		
+		
 //		main_layout.setOnClickListener(new OnClickListener(){
 //
 //			@Override
@@ -358,9 +369,19 @@ public class NoteDialog4 implements ChooseItemCaller{
 		//main_layout.addView(bottom);
 		bottom_layout.addView(bottom);
 		title_layout.bringToFront();
+		//bottom_layout.setVisibility(View.GONE);
 		bottom_layout.bringToFront();
 		//main_layout.addView(bottom);
 	}
+	
+	private void checkAndSetTimeSlot(){ 
+		Calendar cal = Calendar.getInstance();
+		int hours = cal.get(Calendar.HOUR_OF_DAY);
+		int time_slot = TimeBlock.getTimeBlock(hours);
+		timeslot = time_slot;
+		timeslot_txt.setText(Timeslot_str[time_slot]);
+	}
+	
 	public void setEnabledAll(View v, boolean enabled) {
 	    v.setEnabled(enabled);
 	    v.setFocusable(enabled);
@@ -371,6 +392,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 	            setEnabledAll(vg.getChildAt(i), enabled);
 	    }
 	}
+	
 	private void listViewShowHide(){
 		if(!viewshow)
 			listView.setVisibility(View.VISIBLE);
@@ -380,152 +402,141 @@ public class NoteDialog4 implements ChooseItemCaller{
 		viewshow = !viewshow;
 	}
 	
-	public void copingSetting(){
-		//boxLayout = (RelativeLayout) inflater.inflate(R.layout.activity_qtip, null);
-		//mainLayout.addView(boxLayout);
-		
-		boolean testFail = PreferenceControl.isTestFail();
-		boolean runService = PreferenceControl.getResultServiceRun();
-		
-		
-		ClickLog.Log(ClickLogId.TEST_COPE_ENTER);
-		state = STATE_COPE;
-		PreferenceControl.setAfterTestState(STATE_COPE);
-		
-		title_layout.removeAllViews();
-		main_layout.removeAllViews();
-		bottom_layout.removeAllViews();
-		
-		bottom_layout.setVisibility(View.VISIBLE);
-		
-		//Title View
-		LinearLayout layout = (LinearLayout) inflater.inflate(
-				R.layout.note_addnote3, null);
-		
-		note_title = (TextView) layout
-				.findViewById(R.id.note_title);
-	    
-	    note_title.setTypeface(wordTypefaceBold);
-	    note_title.setTextColor(context.getResources().getColor(R.color.text_gray2));
-	    
-	    if(!testFail && !runService){
-	    	note_title.setText(R.string.test_done);
-	    }
-	    else{
-	    	note_title.setText(R.string.countdown);
-	    }
-	      
-		title_layout.addView(layout);
-		
-		
-		//View title = BarButtonGenerator.createWaitingTitle();
-		
-		
-		center_layout = (LinearLayout) inflater.inflate(R.layout.knowledge, null);
-		tv_knowdlege = (TextView)center_layout.findViewById(R.id.qtip_tv_tips);
-		tv_title = (TextView)center_layout.findViewById(R.id.text_knowing_title);
-		
-		tv_title.setText(R.string.coping_page);
-		
-		coping_msg = context.getResources().getStringArray(Coping_list[type]);
-		Random rand = new Random();
-		int idx = rand.nextInt(coping_msg.length);
-		tv_knowdlege.setText(Html.fromHtml(coping_msg[idx]));
-		main_layout.addView(center_layout);
-		
-		
-		View bottom;
-		if(!testFail && !runService){
-			bottom = BarButtonGenerator.createOneButtonView( R.string.go_result, goResultOnClickListener );
-		}
-		else{
-			bottom = BarButtonGenerator.createOneButtonView( R.string.Iknow, endOnClickListener );
-		}
-		bottom_layout.addView(bottom);
-		
-	}
+//	public void copingSetting(){
+//		//boxLayout = (RelativeLayout) inflater.inflate(R.layout.activity_qtip, null);
+//		//mainLayout.addView(boxLayout);
+//		state = STATE_COPE;
+//		PreferenceControl.setAfterTestState(STATE_COPE);
+//		
+//		title_layout.removeAllViews();
+//		main_layout.removeAllViews();
+//		bottom_layout.removeAllViews();
+//		bottom_layout.setVisibility(View.VISIBLE);
+//		
+//		//Title View
+//		LinearLayout layout = (LinearLayout) inflater.inflate(
+//				R.layout.bar_addnote, null);
+//		
+//		note_title = (TextView) layout
+//				.findViewById(R.id.note_title);
+//		//Spinner sp_date = (Spinner)layout.findViewById(R.id.note_tx_date);
+//	    //Spinner sp_timeslot = (Spinner)layout.findViewById(R.id.note_sp_timeslot);
+//	    
+//	    note_title.setTypeface(wordTypefaceBold);
+//	    note_title.setTextColor(resource.getColor(R.color.text_gray2));
+//	    note_title.setText(R.string.countdown);
+//	    
+//	    sp_date.setVisibility(View.INVISIBLE);
+//	    sp_timeslot.setVisibility(View.INVISIBLE);
+//		title_layout.addView(layout);
+//		
+//		
+//		//View title = BarButtonGenerator.createWaitingTitle();
+//		
+//		
+//		center_layout = (LinearLayout) inflater.inflate(R.layout.knowledge, null);
+//		tv_knowdlege = (TextView)center_layout.findViewById(R.id.qtip_tv_tips);
+//		tv_title = (TextView)center_layout.findViewById(R.id.text_knowing_title);
+//		
+//		tv_title.setText(R.string.coping_page);
+//		
+//		Random rand = new Random();
+//		int idx = rand.nextInt(coping_msg.length);
+//		tv_knowdlege.setText(coping_msg[idx]);
+//		main_layout.addView(center_layout);
+//		
+//		View bottom = BarButtonGenerator.createOneButtonView( R.string.Iknow, endOnClickListener );
+//		bottom_layout.addView(bottom);
+//		
+//	}
 	
-	public void knowingSetting(){
-		ClickLog.Log(ClickLogId.TEST_KOWING_ENTER);
-		state = STATE_KNOW;
-		PreferenceControl.setAfterTestState(STATE_KNOW);
-		MainActivity.getMainActivity().enableTabAndClick(true);
-		
-		title_layout.removeAllViews();
-		main_layout.removeAllViews();
-		bottom_layout.removeAllViews();
-		
-		LinearLayout layout = (LinearLayout) inflater.inflate(
-				R.layout.note_addnote3, null);
-		
-		note_title = (TextView) layout
-				.findViewById(R.id.note_title);
-
-	    
-	    note_title.setTypeface(wordTypefaceBold);
-	    note_title.setTextColor(context.getResources().getColor(R.color.text_gray2));
-	    note_title.setText(R.string.countdown);
-	    
-
-		title_layout.addView(layout);
-		
-		//View title = BarButtonGenerator.createWaitingTitle();
-		//title_layout.addView(title);
-		
-		View bottom = BarButtonGenerator.createTwoButtonView(R.string.last, R.string.next_one, new CancelOnClickListener(), endOnClickListener);
-		bottom_layout.addView(bottom);
-		//main_layout.removeView(center_layout);
-		center_layout = (LinearLayout) inflater.inflate(R.layout.knowledge, null);
-		tv_knowdlege = (TextView)center_layout.findViewById(R.id.qtip_tv_tips);
-		//tv_knowdlege.setText(knowing_msg[knowing_index]); 
-		tv_knowdlege.setText(Html.fromHtml(knowing_msg[knowing_index]));
-		
-		tv_title = (TextView)center_layout.findViewById(R.id.text_knowing_title);
-		tv_title.setText(R.string.knowledge);
-		
-		main_layout.addView(center_layout);
-		
-		main_layout.getLayoutParams().height = center_layout.getLayoutParams().height;
-	}
+//	public void copingSettingToResult(){
+//		//boxLayout = (RelativeLayout) inflater.inflate(R.layout.activity_qtip, null);
+//		//mainLayout.addView(boxLayout);
+//		state = STATE_COPE;
+//		PreferenceControl.setAfterTestState(STATE_COPE);
+//		
+//		title_layout.removeAllViews();
+//		main_layout.removeAllViews();
+//		bottom_layout.removeAllViews();
+//		
+//		LinearLayout layout = (LinearLayout) inflater.inflate(
+//				R.layout.bar_addnote, null);
+//		
+//		note_title = (TextView) layout
+//				.findViewById(R.id.note_title);
+//		//Spinner sp_date = (Spinner)layout.findViewById(R.id.note_tx_date);
+//	    //Spinner sp_timeslot = (Spinner)layout.findViewById(R.id.note_sp_timeslot);
+//	    
+//	    note_title.setTypeface(wordTypefaceBold);
+//	    note_title.setTextColor(resource.getColor(R.color.text_gray2));
+//	    note_title.setText(R.string.countdown);
+//	    
+//	    sp_date.setVisibility(View.INVISIBLE);
+//	    sp_timeslot.setVisibility(View.INVISIBLE);
+//		title_layout.addView(layout);
+//		
+//		//View title = BarButtonGenerator.createWaitingTitle();
+//		//title_layout.addView(title);
+//		
+//		center_layout = (LinearLayout) inflater.inflate(R.layout.knowledge, null);
+//		tv_knowdlege = (TextView)center_layout.findViewById(R.id.qtip_tv_tips);
+//		tv_title = (TextView)center_layout.findViewById(R.id.text_knowing_title);
+//		
+//		tv_title.setText(R.string.coping_page);
+//		
+//		Random rand = new Random();
+//		int idx = rand.nextInt(coping_msg.length);
+//		tv_knowdlege.setText(coping_msg[idx]);
+//		main_layout.addView(center_layout);
+//		
+//		View bottom = BarButtonGenerator.createOneButtonView( R.string.go_result, goResultOnClickListener );
+//		bottom_layout.addView(bottom);
+//		
+//	}
 	
 	
-	public void setResult(){
-		bottom_layout.removeAllViews();
-		//Toast.makeText(context, "倒數結束", Toast.LENGTH_SHORT).show();
-		
-		if(state == STATE_NOTE){
-			//Toast.makeText(context, "請完成新增記事以查看檢測結果", Toast.LENGTH_SHORT).show();
-			CustomToastSmall.generateToast("請完成新增記事以查看檢測結果");
-			View bottom = BarButtonGenerator.createTwoButtonView(R.string.cancel, R.string.ok, new CancelOnClickListener(), endOnClickListener);
-			bottom_layout.addView(bottom);
-		}
-		else if(state == STATE_COPE || state == STATE_KNOW){
-			//Toast.makeText(context, "請點選以查看檢測結果", Toast.LENGTH_SHORT).show();
-			CustomToastSmall.generateToast("請點選以查看檢測結果");	
-			note_title.setText(R.string.test_done);
-			View bottom = BarButtonGenerator.createOneButtonView( R.string.go_result, goResultOnClickListener );
-			bottom_layout.addView(bottom);
-		}
 	
-	}
+//	public void setResult(){
+//		bottom_layout.removeAllViews();
+//		//Toast.makeText(context, "倒數結束", Toast.LENGTH_SHORT).show();
+//		
+//		if(state == STATE_NOTE){
+//			Toast.makeText(context, "請完成新增記事以查看檢測結果", Toast.LENGTH_SHORT).show();
+//			View bottom = BarButtonGenerator.createTwoButtonView(R.string.cancel, R.string.ok, goCopingToResultOnClickListener, goCopingToResultOnClickListener);
+//			bottom_layout.addView(bottom);
+//		}
+//		else if(state == STATE_COPE){
+//			Toast.makeText(context, "請點選以查看檢測結果", Toast.LENGTH_SHORT).show();
+//			note_title.setText(R.string.test_done);
+//			View bottom = BarButtonGenerator.createOneButtonView( R.string.go_result, goResultOnClickListener );
+//			bottom_layout.addView(bottom);
+//		}	
+//	}
+	
 	
 	/** Initialize the dialog */
 	public void initialize() {
-		 setting();
-		 mainLayout.addView(boxLayout);
+		
+		setting();
+	    mainLayout.addView(boxLayout);
+		
 	}
 	
 	/** show the dialog */
 	public void show() {
-		ClickLog.Log(ClickLogId.TEST_NOTE_ENTER);
-		
 		state = STATE_NOTE;
-		PreferenceControl.setAfterTestState(STATE_NOTE);
+		ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_ENTER);
+		//PreferenceControl.setAfterTestState(STATE_NOTE);
 		//questionLayout.setVisibility(View.VISIBLE);
 		
-		MainActivity.getMainActivity().enableTabAndClick(false);
+		//MainActivity.getMainActivity().enableTabAndClick(false);
 		boxLayout.setVisibility(View.VISIBLE);
-	
+		
+		//chooseBox = new ChooseItemDialog(boxLayout, 1);
+		//chooseBox.initialize();
+		//chooseBox.show();
+
 	}
 	
 	/** remove the dialog and release the resources */
@@ -538,14 +549,48 @@ public class NoteDialog4 implements ChooseItemCaller{
 	
 	/** close the dialog */
 	public void close() {
+		ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_LEAVE);
+		testQuestionCaller.resetView();
+		MainActivity.getMainActivity().enableTabAndClick(true);
 		if (boxLayout != null)
 			boxLayout.setVisibility(View.INVISIBLE);
 	}
 	
+	
+//	private void SetListItem(int array){
+//		//ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, android.R.layout.simple_list_item_1);
+//		items = -1;
+//		sp_content.setText(""); //TODO: 假如點到同一個不要清掉
+//		ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, R.layout.my_listitem);
+//		listView.setAdapter(adapter);
+//		listView.setOnItemClickListener(new OnItemClickListener(){
+//		   View view2; //保存點選的View
+//	       int select_item=-1;
+//		   @Override
+//		   public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+//			   TextView c = (TextView) view.findViewById(android.R.id.text1);
+//			    String playerChanged = c.getText().toString();
+//			    
+//			    items = 100*type + position;
+//				Log.d(TAG, items+"");
+//			    //Toast.makeText(Settings.this,playerChanged, Toast.LENGTH_SHORT).show();  
+//			 sp_content.setText(playerChanged);
+//			 listView.setVisibility(View.GONE);
+//			 viewshow = false;
+//		   }
+//		   
+//		});
+//		setListViewHeightBasedOnItems(listView);
+//		listView.setVisibility(View.VISIBLE);
+//		viewshow = true;
+//		sv.smoothScrollTo(0 , (int)convertDpToPixel((float)200));
+//		
+//		//.setOnItemSelectedListener(new SpinnerXMLSelectedListener());
+//	}
+	
 	private void SetListItem2(int type){
+		ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_SELECT_TYPE + type);
 		//ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, android.R.layout.simple_list_item_1);
-		ClickLog.Log(ClickLogId.TEST_NOTE_SELECT_TYPE + type);
-		
 		items = -1;
 		sp_content.setText(""); //TODO: 假如點到同一個不要清掉
 		//ArrayAdapter adapter = ArrayAdapter.createFromResource(context, array, R.layout.my_listitem);
@@ -585,7 +630,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 
 		   @Override
 		   public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-			   ClickLog.Log(ClickLogId.TEST_NOTE_SELECT_ITEM);
+			   ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_SELECT_ITEM);
 			   TextView c = (TextView) view.findViewById(android.R.id.text1);
 			    String playerChanged = c.getText().toString();
 			    
@@ -605,115 +650,101 @@ public class NoteDialog4 implements ChooseItemCaller{
 		
 		//.setOnItemSelectedListener(new SpinnerXMLSelectedListener());
 	}
-	
 	 public static String[] clean(final String[] v) {
 		    List<String> list = new ArrayList<String>(Arrays.asList(v));
 		    list.removeAll(Collections.singleton(""));
 		    return list.toArray(new String[list.size()]);
 		}
 	
+	
 	//把所選取的結果送出 
 	class EndOnClickListener implements View.OnClickListener{
 		public void onClick(View v){
 			
-			Log.d(TAG, items+" "+impact);		
-			if(state == STATE_NOTE){
-				if(type <= 0 || items < 100){
-					//CustomToastSmall.generateToast(R.string.note_check);
-					//Toast.makeText(context, R.string.note_check ,Toast.LENGTH_SHORT).show();
-					CustomToastSmall.generateToast(R.string.note_check);
-				}
-				else{
-					if(listView.getVisibility() == View.VISIBLE){
-						//Toast.makeText(context, "請選擇項目再送出", Toast.LENGTH_SHORT).show();
-						CustomToastSmall.generateToast("請選擇項目再送出");
-						listView.setVisibility(View.GONE);
+			if(!done){
+				//Toast.makeText(context, "確定要送出結果嗎?" ,Toast.LENGTH_SHORT).show();
+				CustomToastSmall.generateToast("確定要送出結果嗎?");
+				done = true;
+			}
+			else{
+				Log.d(TAG, items+" "+impact);
+				if(state == STATE_NOTE){
+					if(type <= 0 || items < 100){
+						//CustomToastSmall.generateToast(R.string.note_check);
+						//Toast.makeText(context, R.string.note_check ,Toast.LENGTH_SHORT).show();
+						CustomToastSmall.generateToast(R.string.note_check);
 					}
 					else{
-						if(!done){
-							//Toast.makeText(context, "確定要送出結果嗎?" ,Toast.LENGTH_SHORT).show();
-							CustomToastSmall.generateToast("確定選擇完畢嗎?");
-							done = true;
+						if(listView.getVisibility() == View.VISIBLE){
+							//Toast.makeText(context, "請選擇項目再送出", Toast.LENGTH_SHORT).show();
+							CustomToastSmall.generateToast("請選擇項目再送出");
+							listView.setVisibility(View.GONE);
 						}
 						else{
-							ClickLog.Log(ClickLogId.TEST_QUESTION_SEND);
+							ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_CONFIRM);
 							
-							PreferenceControl.setIsFilled(1);
 							impact = impactSeekBar.getProgress();
 							testQuestionCaller.writeQuestionFile(day, timeslot, type, items, impact, edtext.getText().toString());
+							close();
+							clear();
+							//copingSetting();
+							//testQuestionCaller.resetView();
 							
-							copingSetting();
 						}
-						
-//						boolean testFail = PreferenceControl.isTestFail();
-//						if(!testFail){
-//							copingSettingToResult();
-//						}
-//						else{
-//							copingSetting();
-//						}
 					}
+					
 				}
-			}
-			else if(state == STATE_COPE){
-				ClickLog.Log(ClickLogId.TEST_COPING_CONFIRM);				
-				knowingSetting();
-			}
-			else if(state == STATE_KNOW){
-				ClickLog.Log(ClickLogId.TEST_KOWING_NEXT);
-				knowing_index++;
-				if(knowing_index>=knowing_msg.length)
-					knowing_index-=knowing_msg.length;
-				tv_knowdlege.setText(Html.fromHtml(knowing_msg[knowing_index]));
-				//tv_knowdlege.setText(DBTip.inst.getTip());
+				
+				else if(state == STATE_COPE){
+					//knowingSetting();
+					//
+					//testQuestionCaller.resetView();
+					close();
+					clear();
+				}
 			}
 	    }
 	}
-	
 	
 	//把所選取的結果取消
 	class CancelOnClickListener implements View.OnClickListener{
 		public void onClick(View v){
-			done = true;
-			if(state == STATE_NOTE){
-				//impact = impactSeekBar.getProgress();
-				ClickLog.Log(ClickLogId.TEST_QUESTION_CANCEL);
-				testQuestionCaller.writeQuestionFile(day, timeslot, -1, -1, -1, edtext.getText().toString());
-				
-				PreferenceControl.setIsFilled(0);
-				type = 0;
-				
-				copingSetting();
-				
-//				boolean testFail = PreferenceControl.isTestFail();
-//				if(!testFail){
-//					copingSettingToResult();
-//				}
-//				else{
-//					copingSetting();
-//				}
-				//questionFile.write(0, 0, 0);
-				//startActivity(new Intent(that, EventCopeSkillActivity.class));
-			}
-			else if(state == STATE_KNOW){
-				ClickLog.Log(ClickLogId.TEST_KOWING_LAST);
-				knowing_index--;
-				if(knowing_index<0)
-					knowing_index+=knowing_msg.length;
-				tv_knowdlege.setText(Html.fromHtml(knowing_msg[knowing_index]));
-				//tv_knowdlege.setText(DBTip.inst.getTip());
-			}
+			
+			ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_CANCEL);
+			
+			//testQuestionCaller.writeQuestionFile(day, timeslot, -1, -1, -1, edtext.getText().toString());
+			close();
+			clear();
+			testQuestionCaller.resetView();
+			
+				//copingSetting();
+
 		}
 	}
 	
-	class GoResultOnClickListener implements View.OnClickListener{
-		public void onClick(View v){
-			
-			ClickLog.Log(ClickLogId.TEST_CHECKING_RESULT);
-			MainActivity.getMainActivity().changeTab(1);
-			
-	    }
-	}
+//	class GoResultOnClickListener implements View.OnClickListener{
+//		public void onClick(View v){
+//			CustomToast.generateToast(R.string.after_test_pass, 2);
+//			MainActivity.getMainActivity().changeTab(1);
+//			
+//	    }
+//	}
+	
+//	class GoCopingToResultOnClickListener implements View.OnClickListener{
+//		public void onClick(View v){
+//			
+//			
+//			if(state == STATE_NOTE){
+//				impact = impactSeekBar.getProgress();
+//				testQuestionCaller.writeQuestionFile(day, timeslot, type, items, impact, edtext.getText().toString());
+//			
+//				Log.d(TAG, items+" "+impact);
+//
+//				copingSettingToResult();
+//			}
+//
+//	    }
+//	}
 	
 	private void initTypePager(){
 	    vPager = (ViewPager) center_layout.findViewById(R.id.viewpager);
@@ -726,6 +757,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 		TypePageAdapter mAdapter = new TypePageAdapter(aList);		
 		vPager.setAdapter(mAdapter);
 	}
+	
 	
 	public class TypePageAdapter extends PagerAdapter{
 		
@@ -755,8 +787,8 @@ public class NoteDialog4 implements ChooseItemCaller{
 			iv_cry.setImageResource(R.drawable.type_icon1);
 			iv_try.setImageResource(R.drawable.type_icon4);
 			
-			iv_social.setImageResource(R.drawable.type_icon8);
-			iv_playing.setImageResource(R.drawable.type_icon7);
+			iv_social.setImageResource(R.drawable.type_icon7);
+			iv_playing.setImageResource(R.drawable.type_icon8);
 			iv_conflict.setImageResource(R.drawable.type_icon6);
 		}
 		
@@ -770,7 +802,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 				iv_urge = (ImageView) center_layout.findViewById(R.id.vts_iv_urge);
 				iv_cry = (ImageView) center_layout.findViewById(R.id.vts_iv_cry);
 				iv_try = (ImageView) center_layout.findViewById(R.id.vts_iv_try);
-				
+				iv_self_others_bar = (ImageView) center_layout.findViewById(R.id.self_others_bar);
 				iv_smile.setOnClickListener(SelectItem);
 				iv_not_good.setOnClickListener(SelectItem);
 				iv_urge.setOnClickListener(SelectItem);
@@ -780,11 +812,12 @@ public class NoteDialog4 implements ChooseItemCaller{
 				iv_social = (ImageView) center_layout.findViewById(R.id.vts_iv_social);
 				iv_playing = (ImageView) center_layout.findViewById(R.id.vts_iv_playing);
 				iv_conflict = (ImageView) center_layout.findViewById(R.id.vts_iv_conflict);
-			
+				iv_self_others_bar = (ImageView) center_layout.findViewById(R.id.self_others_bar);
 				iv_social.setOnClickListener(SelectItem);
 				iv_playing.setOnClickListener(SelectItem);
 				iv_conflict.setOnClickListener(SelectItem);
 			}
+			//Log.d("FORTEST", "aabb");
 			
 			return viewLists.get(position);	
 		}
@@ -799,14 +832,25 @@ public class NoteDialog4 implements ChooseItemCaller{
 			public void onClick(View v) {
 		        switch(v.getId()){
 		        
+		        case R.id.self_bottom_layout:
+		        	listView.setVisibility(View.GONE);
+		        	break;
+		        	
+		        case R.id.other_bottom_layout:
+		        	listView.setVisibility(View.GONE);
+		        	break;
+		        
 		        case R.id.vts_iv_cry:
 		        	resetView();
 		        	iv_cry.setImageResource(R.drawable.type_icon1_pressed);
 		        	typetext.setText(R.string.note_negative);
 		        	
 		        	//SetListItem(R.array.note_negative);
+		        	SetListItem2(1);
+		        	//listViewShowHide();
+	        		//SetItem(sp_item,R.array.note_negative);
+	        		//spinner_content.performClick();
 	        		type = 1;
-	        		SetListItem2(type);
 	        		break;
 		        case R.id.vts_iv_not_good:
 		        	resetView();
@@ -814,8 +858,10 @@ public class NoteDialog4 implements ChooseItemCaller{
 		        	typetext.setText(R.string.note_notgood);
 		        	
 		        	//SetListItem(R.array.note_notgood);
+		        	SetListItem2(2);
+		        	//SetItem(sp_item,R.array.note_notgood);
+		        	//spinner_content.performClick();
 		        	type = 2;
-		        	SetListItem2(type);
 			        break;
 		        case R.id.vts_iv_smile:
 		        	resetView();
@@ -823,8 +869,10 @@ public class NoteDialog4 implements ChooseItemCaller{
 		        	typetext.setText(R.string.note_positive);
 		        	
 		        	//SetListItem(R.array.note_positive);
+		        	SetListItem2(3);
+		        	//SetItem(sp_item, R.array.note_positive);
+		        	//spinner_content.performClick();
 		        	type = 3;
-		        	SetListItem2(type);
 		        	break;
 		        case R.id.vts_iv_try:
 		        	resetView();
@@ -832,8 +880,10 @@ public class NoteDialog4 implements ChooseItemCaller{
 		        	typetext.setText(R.string.note_selftest);
 		        	
 		        	//SetListItem(R.array.note_selftest);
-		        	type = 4;
-		        	SetListItem2(type);
+		        	SetListItem2(4);
+		        	//SetItem(sp_item,R.array.note_selftest);
+		        	//sp_item.performClick();
+		        	type = 4; 
 		        	break;
 		        case R.id.vts_iv_urge:
 		        	resetView();
@@ -841,26 +891,10 @@ public class NoteDialog4 implements ChooseItemCaller{
 		        	typetext.setText(R.string.note_temptation);
 		        	
 		        	//SetListItem(R.array.note_temptation);
+		        	SetListItem2(5);
+		        	//SetItem(sp_item,R.array.note_temptation);
+		        	//sp_item.performClick();
 		        	type = 5;
-		        	SetListItem2(type);
-		        	break;
-		        case R.id.vts_iv_conflict:
-		        	resetView();
-		        	iv_conflict.setImageResource(R.drawable.type_icon6_pressed);
-		        	typetext.setText(R.string.note_conflict);
-		        	
-		        	//SetListItem(R.array.note_conflict);
-		        	type = 6;
-		        	SetListItem2(type);
-		        	break;
-		        case R.id.vts_iv_social:
-		        	resetView();
-		        	iv_social.setImageResource(R.drawable.type_icon7_pressed);
-		        	typetext.setText(R.string.note_social);
-		        	
-		        	//SetListItem(R.array.note_social);
-		        	type = 7;
-		        	SetListItem2(type);
 		        	break;
 		        case R.id.vts_iv_playing:
 		        	resetView();
@@ -868,8 +902,32 @@ public class NoteDialog4 implements ChooseItemCaller{
 		        	typetext.setText(R.string.note_play);
 		        	
 		        	//SetListItem(R.array.note_play);
+		        	SetListItem2(8);
+		        	//SetItem(sp_item,R.array.note_play);
+		        	//sp_item.performClick();
 		        	type = 8;
-		        	SetListItem2(type);
+		        	break;
+		        case R.id.vts_iv_social:
+		        	resetView();
+		        	iv_social.setImageResource(R.drawable.type_icon7_pressed);
+		        	typetext.setText(R.string.note_social);
+		        	
+		        	//SetListItem(R.array.note_social);
+		        	SetListItem2(7);
+		        	//SetItem(sp_item,R.array.note_social);
+		        	//sp_item.performClick();
+		        	type = 7;
+		        	break;
+		        case R.id.vts_iv_conflict:
+		        	resetView();
+		        	iv_conflict.setImageResource(R.drawable.type_icon6_pressed);
+		        	typetext.setText(R.string.note_conflict);
+		        	
+		        	//SetListItem(R.array.note_conflict);
+		        	SetListItem2(6);
+		        	//SetItem(sp_item,R.array.note_conflict);
+		        	//sp_item.performClick();
+		        	type = 6;
 		        	break;
 		        	
 		        }
@@ -888,15 +946,15 @@ public class NoteDialog4 implements ChooseItemCaller{
 			vPager.setCurrentItem(index);
 			switch(index){
 			case 0:
-				ClickLog.Log(ClickLogId.TEST_NOTE_CLICK_SELF);
-				text_self.setTextColor(context.getResources().getColor(R.color.blue));
-				text_other.setTextColor(context.getResources().getColor(R.color.text_gray3));
+				ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_CLICK_SELF);
+				text_self.setTextColor(resource.getColor(R.color.blue));
+				text_other.setTextColor(resource.getColor(R.color.text_gray3));
 				iv_self_others_bar.setImageResource(R.drawable.note_slide_line1);
 				break;
 			case 1:
-				ClickLog.Log(ClickLogId.TEST_NOTE_CLICK_OTHER);
-				text_self.setTextColor(context.getResources().getColor(R.color.text_gray3));
-				text_other.setTextColor(context.getResources().getColor(R.color.blue));
+				ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_CLICK_OTHER);
+				text_self.setTextColor(resource.getColor(R.color.text_gray3));
+				text_other.setTextColor(resource.getColor(R.color.blue));
 				iv_self_others_bar.setImageResource(R.drawable.note_slide_line2);
 				break;
 
@@ -908,20 +966,22 @@ public class NoteDialog4 implements ChooseItemCaller{
 	
 	//監聽頁面切換時間,主要做的是動畫處理,就是移動條的移動
 		public class MyOnPageChangeListener implements OnPageChangeListener {
+
+
 			@Override
 			public void onPageSelected(int index) {
 
 				switch (index) {
 				case 0:
-					ClickLog.Log(ClickLogId.TEST_NOTE_SCROLL_SELF);
-					text_self.setTextColor(context.getResources().getColor(R.color.blue));
-					text_other.setTextColor(context.getResources().getColor(R.color.text_gray3));
+					ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_SCROLL_SELF);
+					text_self.setTextColor(resource.getColor(R.color.blue));
+					text_other.setTextColor(resource.getColor(R.color.text_gray3));
 					iv_self_others_bar.setImageResource(R.drawable.note_slide_line1);
 					break;
 				case 1:
-					ClickLog.Log(ClickLogId.TEST_NOTE_SCROLL_OTHER);
-					text_self.setTextColor(context.getResources().getColor(R.color.text_gray3));
-					text_other.setTextColor(context.getResources().getColor(R.color.blue));
+					ClickLog.Log(ClickLogId.DAYBOOK_ADDNOTE_SCROLL_OTHER);
+					text_self.setTextColor(resource.getColor(R.color.text_gray3));
+					text_other.setTextColor(resource.getColor(R.color.blue));
 					iv_self_others_bar.setImageResource(R.drawable.note_slide_line2);
 					break;
 				}
@@ -936,7 +996,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 		}
 		
 		public float getDensity(){
-			 DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+			 DisplayMetrics metrics = resource.getDisplayMetrics();
 			 return metrics.density;
 			}
 		
@@ -972,7 +1032,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 		        // Set list height.
 		        ViewGroup.LayoutParams params = listView.getLayoutParams();
 		        //params.height = totalItemsHeight + totalDividersHeight;
-		        params.height = (int) (convertDpToPixel((float)40)* numberOfItems + totalDividersHeight);
+		        params.height = (int) (convertDpToPixel((float)40)* numberOfItems) + totalDividersHeight;
 		        listView.setLayoutParams(params);
 		        listView.requestLayout();
 
@@ -983,19 +1043,10 @@ public class NoteDialog4 implements ChooseItemCaller{
 		    }
 
 		}
-		
-		private void checkAndSetTimeSlot(){ 
-			Calendar cal = Calendar.getInstance();
-			int hours = cal.get(Calendar.HOUR_OF_DAY);
-			int time_slot = TimeBlock.getTimeBlock(hours);
-			timeslot = time_slot;
-			timeslot_txt.setText(Timeslot_str[time_slot]);
-		}
 
 		@Override
 		public void resetView(int type, int select) {
 			setEnabledAll(boxLayout, true);
-			MainActivity.getMainActivity().enableTabAndClick(false);
 			edtext.setEnabled(true);
 			edtext.setInputType(InputType.TYPE_CLASS_TEXT);
 			edtext.setFocusable(true);
@@ -1014,6 +1065,7 @@ public class NoteDialog4 implements ChooseItemCaller{
 				timeslot = select;
 				timeslot_txt.setText(Timeslot_str[select]);
 			}
+			
 			
 		}
 	

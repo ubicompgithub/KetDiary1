@@ -34,7 +34,8 @@ public class DatabaseControl {
 	/**
 	 * SQLiteOpenHelper
 	 * 
-	 * @see ubicomp.soberdiary.data.database.DBHelper
+	 * @see com.ubicomp.ketdiary,data.db.DBHelper
+	 * 
 	 */
 	private final static String TAG = "DatabaseControl";
 	private SQLiteOpenHelper dbHelper = null;
@@ -51,10 +52,10 @@ public class DatabaseControl {
 	// TestResult
 
 	/**
-	 * This method is used for getting all prime brac Detection
+	 * This method is used for getting all prime testResult
 	 * 
-	 * @return An array of Detection. If there are no detections, return null
-	 * @see ubicomp.soberdiary.data.structure.Detection
+	 * @return An array of testResult. If there are no testResults, return null
+	 * @see com.ubicomp.ketdiary.data.structure.Detection
 	 */
 	
 	public TestResult[] getAllPrimeTestResult() {
@@ -92,7 +93,7 @@ public class DatabaseControl {
 	 * This method is used for the latest result detection
 	 * 
 	 * @return TestResult. If there are no TestResult, return a dummy data.
-	 * @see ubicomp.soberdiary.data.structure.TestResult
+	 * @see com.ubicomp.ketdiary.data.structure.TestResult
 	 *
 	 */
 	
@@ -131,7 +132,7 @@ public class DatabaseControl {
 	 * @param update
 	 *            If update = true, the previous prime detection will be
 	 *            replaced by current Detection
-	 * @see ubicomp.soberdiary.data.structure.Detection
+	 * @see com.ubicomp.ketdiary.data.structure.Detection
 	 */
 	
 	public int insertTestResult(TestResult data, boolean update) {
@@ -566,7 +567,7 @@ public class DatabaseControl {
 	 * server
 	 * 
 	 * @return An array of TestResult. If there are no TestResult, return null.
-	 * @see ubicomp.soberdiary.data.structure.TestResult
+	 * @see com.ubicomp.ketdiary.data.structure.TestResult
 	 */
 	
 	
@@ -675,7 +676,7 @@ public class DatabaseControl {
 	 * 
 	 * @return NoteAdd. If there are no EmotionManagement, return a
 	 *         dummy data.
-	 * @see ubicomp.soberdiary.data.structure.EmotionManagement
+	 * @see com.ubicomp.ketdiary.data.structure.EmotionManagement
 	 */
 	
 	public NoteAdd getLatestNoteAdd() {
@@ -724,7 +725,7 @@ public class DatabaseControl {
 	 * Insert an NoteAdd result
 	 * 
 	 * @return # of credits got by the user
-	 * @see ubicomp.soberdiary.data.structure.EmotionManagement
+	 * @see com.ubicomp.ketdiary.data.structure.EmotionManagement
 	 */
 	
 	public int insertNoteAdd(NoteAdd data) {
@@ -766,7 +767,7 @@ public class DatabaseControl {
 	 * 
 	 * @return An array of NoteAdd results If there are no
 	 *         NoteAdd, return null.
-	 * @see ubicomp.soberdiary.data.structure.EmotionManagement
+	 * @see com.ubicomp.ketdiary.data.structure.EmotionManagement
 	 */
 	
 	public NoteAdd[] getNotUploadedNoteAdd() {
@@ -818,7 +819,7 @@ public class DatabaseControl {
 	 * 
 	 * @param ts
 	 *            Timestamp of the uploaded EmotionManagement
-	 * @see ubicomp.soberdiary.data.structure.EmotionManagement
+	 * @see com.ubicomp.ketdiary.data.structure.EmotionManagement
 	 */
 	
 	public void setNoteAddUploaded(long ts) {
@@ -837,7 +838,7 @@ public class DatabaseControl {
 	 * This method is used for getting all prime brac Detection
 	 * 
 	 * @return An array of Detection. If there are no detections, return null
-	 * @see ubicomp.soberdiary.data.structure.Detection
+	 * @see com.ubicomp.ketdiary.data.structure.Detection
 	 */
 	
 	public NoteAdd[] getAllNoteAdd() {
@@ -890,7 +891,7 @@ public class DatabaseControl {
 	 *            record Day of Month
 	 * @return An array of EmotionManagement results @ rYear/rMonth/rDay. If
 	 *         there are no EmotionManagement, return null.
-	 * @see ubicomp.soberdiary.data.structure.EmotionManagement
+	 * @see com.ubicomp.ketdiary.data.structure.EmotionManagement
 	 */
 	
 	public NoteAdd[] getDayNoteAdd(int rYear, int rMonth, int rDay) {
@@ -995,7 +996,7 @@ public class DatabaseControl {
 	 * @param tv
 	 *            TimeValue of the date
 	 * @return true if exists EmotionManagement
-	 * @see ubicomp.soberdiary.data.structure.TimeValue
+	 * @see com.ubicomp.ketdiary.data.structure.TimeValue
 	 */
 	
 	public NoteAdd getTsNoteAdd(long ts) {
@@ -1174,7 +1175,7 @@ public class DatabaseControl {
 	 * @param tv
 	 *            TimeValue of the date
 	 * @return true if exists EmotionManagement
-	 * @see ubicomp.soberdiary.data.structure.TimeValue
+	 * @see com.ubicomp.ketdiary.data.structure.TimeValue
 	 */
 	/*
 	public boolean hasEmotionManagement(TimeValue tv) {
@@ -1201,7 +1202,7 @@ public class DatabaseControl {
 	 * Get the user's rank
 	 * 
 	 * @return Rank. If there are no data, return dummy data with UID=""
-	 * @see ubicomp.soberdiary.data.structure.Rank
+	 * @see com.ubicomp.ketdiary.data.structure.Rank
 	 */
 	public Rank getMyRank() {
 		synchronized (sqlLock) {
@@ -1234,7 +1235,7 @@ public class DatabaseControl {
 	 * Get all user's ranks
 	 * 
 	 * @return An array of Rank. If there are no Rank, return null.
-	 * @see ubicomp.soberdiary.data.structure.Rank
+	 * @see com.ubicomp.ketdiary.data.structure.Rank
 	 */
 	public Rank[] getAllRanks() {
 		synchronized (sqlLock) {
@@ -1272,7 +1273,7 @@ public class DatabaseControl {
 	 * Get the user's rank in a short period
 	 * 
 	 * @return An array of Rank. If there are no Rank, return null.
-	 * @see ubicomp.soberdiary.data.structure.Rank
+	 * @see com.ubicomp.ketdiary.data.structure.Rank
 	 */
 	public Rank[] getAllRankShort() {
 		synchronized (sqlLock) {
@@ -1302,7 +1303,7 @@ public class DatabaseControl {
 	/**
 	 * Truncate the Ranking table
 	 * 
-	 * @see ubicomp.soberdiary.data.structure.Rank
+	 * @see com.ubicomp.ketdiary.data.structure.Rank
 	 */
 	public void clearRank() {
 		synchronized (sqlLock) {
@@ -1318,7 +1319,7 @@ public class DatabaseControl {
 	 * 
 	 * @param data
 	 *            Updated Rank
-	 * @see ubicomp.soberdiary.data.structure.Rank
+	 * @see com.ubicomp.ketdiary.data.structure.Rank
 	 */
 	public void updateRank(Rank data) {
 		synchronized (sqlLock) {
@@ -1362,7 +1363,7 @@ public class DatabaseControl {
 	/**
 	 * Truncate the RankingShort table
 	 * 
-	 * @see ubicomp.soberdiary.data.structure.Rank
+	 * @see com.ubicomp.ketdiary.data.structure.Rank
 	 */
 	public void clearRankShort() {
 		synchronized (sqlLock) {
@@ -1378,7 +1379,7 @@ public class DatabaseControl {
 	 * 
 	 * @param data
 	 *            Updated Rank in a short period
-	 * @see ubicomp.soberdiary.data.structure.Rank
+	 * @see com.ubicomp.ketdiary.data.structure.Rank
 	 */
 	public void updateRankShort(Rank data) {
 		synchronized (sqlLock) {
@@ -1498,7 +1499,7 @@ public class DatabaseControl {
 	/**
 	 * Truncate the RankingShort table
 	 * 
-	 * @see ubicomp.soberdiary.data.structure.Cassette
+	 * @see com.ubicomp.ketdiary.data.structure.Cassette
 	 */
 	public void clearCassette() {
 		synchronized (sqlLock) {
@@ -1547,7 +1548,7 @@ public class DatabaseControl {
 	 * This method is used for the latest result detection
 	 * 
 	 * @return Detection. If there are no Detection, return a dummy data.
-	 * @see ubicomp.soberdiary.data.structure.Detection
+	 * @see com.ubicomp.ketdiary.data.structure.Detection
 	 *
 	 */
 	
@@ -1589,7 +1590,7 @@ public class DatabaseControl {
 		 * 
 		 * @param data
 		 *            inserted BreathDetail
-		 * @see ubicomp.soberdiary.data.structure.BreathDetail
+		 * @see com.ubicomp.ketdiary.data.structure.BreathDetail
 		 */
 		public void insertTestDetail(TestDetail data) {
 			synchronized (sqlLock) {
@@ -1627,7 +1628,7 @@ public class DatabaseControl {
 		 * 
 		 * @return An array of BreathDetail. If there are no BreathDetail, return
 		 *         null.
-		 * @see ubicomp.soberdiary.data.structure.BreathDetail
+		 * @see com.ubicomp.ketdiary.data.structure.BreathDetail
 		 */
 		public TestDetail[] getNotUploadedTestDetail() {
 			synchronized (sqlLock) {
@@ -1674,7 +1675,7 @@ public class DatabaseControl {
 		 * 
 		 * @param ts
 		 *            Timestamp of the uploaded TestDetail
-		 * @see ubicomp.soberdiary.data.structure.TestDetail
+		 * @see com.ubicomp.ketdiary.data.structure.TestDetail
 		 */
 		public void setTestDetailUploaded(long ts) {
 			synchronized (sqlLock) {
@@ -1694,7 +1695,7 @@ public class DatabaseControl {
 		 * 
 		 * @return StorytellingTest. If there are no StorytellingTest, return a
 		 *         dummy data.
-		 * @see ubicomp.soberdiary.data.structure.StorytellingTest
+		 * @see com.ubicomp.ketdiary.data.structure.StorytellingTest
 		 */
 		public QuestionTest getLatestQuestionTest() {
 			synchronized (sqlLock) {
@@ -1729,7 +1730,7 @@ public class DatabaseControl {
 		 * @return # of credits got by the user
 		 * @param data
 		 *            inserted StorytellingTest
-		 * @see ubicomp.soberdiary.data.structure.StorytellingTest
+		 * @see com.ubicomp.ketdiary.data.structure.StorytellingTest
 		 */
 		public int insertQuestionTest(QuestionTest data) {
 			synchronized (sqlLock) {
@@ -1771,7 +1772,7 @@ public class DatabaseControl {
 		 * 
 		 * @return An array of StorytellingTest. If there are no StorytellingTest,
 		 *         return null.
-		 * @see ubicomp.soberdiary.data.structure.StorytellingTest
+		 * @see com.ubicomp.ketdiary.data.structure.StorytellingTest
 		 */
 		public QuestionTest[] getNotUploadedQuestionTest() {
 			synchronized (sqlLock) {
@@ -1816,7 +1817,7 @@ public class DatabaseControl {
 		 * 
 		 * @param ts
 		 *            Timestamp of the uploaded StorytellingTest
-		 * @see ubicomp.soberdiary.data.structure.StorytellingTest
+		 * @see com.ubicomp.ketdiary.data.structure.StorytellingTest
 		 */
 		public void setQuestionTestUploaded(long ts) {
 			synchronized (sqlLock) {
@@ -1857,7 +1858,7 @@ public class DatabaseControl {
 		 * Get the latest CopingSkill result
 		 * 
 		 * @return CopingSkill. If there are no CopingSkill, return a dummy data.
-		 * @see ubicomp.soberdiary.data.structure.EmotionDIY
+		 * @see com.ubicomp.ketdiary.data.structure.EmotionDIY
 		 */
 		public CopingSkill getLatestCopingSkill() {
 			synchronized (sqlLock) {
@@ -1889,7 +1890,7 @@ public class DatabaseControl {
 		 * Insert an CopingSkill result
 		 * 
 		 * @return # credits got by the user
-		 * @see ubicomp.soberdiary.data.structure.CopingSkill
+		 * @see com.ubicomp.ketdiary.data.structure.CopingSkill
 		 */
 		public int insertCopingSkill(CopingSkill data) {
 			synchronized (sqlLock) {
@@ -1921,7 +1922,7 @@ public class DatabaseControl {
 		 * Get all CopingSkill results which are not uploaded to the server
 		 * 
 		 * @return An array of EmotionDIY. If there are no EmotionDIY, return null.
-		 * @see ubicomp.soberdiary.data.structure.EmotionDIY
+		 * @see com.ubicomp.ketdiary.data.structure.EmotionDIY
 		 */
 		public CopingSkill[] getNotUploadedCopingSkill() {
 			synchronized (sqlLock) {
@@ -1964,7 +1965,7 @@ public class DatabaseControl {
 		 * 
 		 * @param ts
 		 *            Timestamp of the Emotion DIY result
-		 * @see ubicomp.soberdiary.data.structure.EmotionDIY
+		 * @see com.ubicomp.ketdiary.data.structure.EmotionDIY
 		 */
 		public void setCopingSkillUploaded(long ts) {
 			synchronized (sqlLock) {
@@ -1982,7 +1983,7 @@ public class DatabaseControl {
 		 * 
 		 * @param data
 		 *            inserted ExchangeHistory
-		 * @see ubicomp.soberdiary.data.structure.ExchangeHistory
+		 * @see com.ubicomp.ketdiary.data.structure.ExchangeHistory
 		 */
 		public void insertExchangeHistory(ExchangeHistory data) {
 			synchronized (sqlLock) {
@@ -2000,7 +2001,7 @@ public class DatabaseControl {
 		 * 
 		 * @return An array of ExchangeHistory. If there are no ExchangeHistory,
 		 *         return null.
-		 * @see ubicomp.soberdiary.data.structure.ExchangeHistory
+		 * @see com.ubicomp.ketdiary.data.structure.ExchangeHistory
 		 */
 		public ExchangeHistory[] getNotUploadedExchangeHistory() {
 			synchronized (sqlLock) {
@@ -2036,7 +2037,7 @@ public class DatabaseControl {
 		 * 
 		 * @param ts
 		 *            Timestamp of the uploaded ExchangeHistory
-		 * @see ubicomp.soberdiary.data.structure.ExchangeHistory
+		 * @see com.ubicomp.ketdiary.data.structure.ExchangeHistory
 		 */
 		public void setExchangeHistoryUploaded(long ts) {
 			synchronized (sqlLock) {

@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.dialog;
+package com.ubicomp.ketdiary.main.dialog;
 
 import java.util.Random;
 
@@ -32,10 +32,10 @@ import com.ubicomp.ketdiary.ui.Typefaces;
  * 
  * @author Andy
  */
-public class QuestionDialog{
+public class QuestionDialog2 {
 	
 	private Activity activity;
-	private QuestionDialog noteFragment = this;
+	private QuestionDialog2 noteFragment = this;
 	private QuestionCaller questionCaller;
 	private static final String TAG = "ADD_PAGE";
 	
@@ -49,11 +49,8 @@ public class QuestionDialog{
 	private static String answer = "";
 	private String selectedAnswer = "";
 	private static String[] selection;
+	private static int typeID;
 
-	private static String question2 = "";
-	private static String[] selection2;
-	private static String answer2 = "";
-	
 	private RelativeLayout mainLayout;
 	private String[] type_str;
 	
@@ -67,11 +64,10 @@ public class QuestionDialog{
 	
 	private int select = -1;
 	private DatabaseControl db;
-	private int questionType = 0;
+	private int questionType = 1;
 	private static boolean change = true;
-	private static boolean change2 = true;
 	private static long last_visit= 0;
-	private static long last_visit2=0;
+
 	
 	private static final int[] iconId = {R.drawable.type_icon1, R.drawable.type_icon2, R.drawable.type_icon3,
 		R.drawable.type_icon4, R.drawable.type_icon5, R.drawable.type_icon6, R.drawable.type_icon7,
@@ -83,7 +79,7 @@ public class QuestionDialog{
     };
 	
 	
-	public QuestionDialog(RelativeLayout mainLayout, QuestionCaller questionCaller){
+	public QuestionDialog2(RelativeLayout mainLayout, QuestionCaller questionCaller){
 		
 		this.context = App.getContext();
 		this.inflater = (LayoutInflater) context
@@ -161,28 +157,17 @@ public class QuestionDialog{
 	
 	/** show the dialog */
 	public void show(int type) {
-			if(System.currentTimeMillis() - last_visit > 10*60*1000){
-				change = true;
-			}
-			if(System.currentTimeMillis() - last_visit2 > 10*60*1000){
-				change2 = true;
-			}
+		if(System.currentTimeMillis() - last_visit > 10*60*1000){
+			change = true;
+		}
 		
-			if(type == 1){
-				if(change2){
-					change2 = false;
-					selection = settingQuestion2();
-					last_visit2 = System.currentTimeMillis();
-				}
-			}
-			else{
-				if(change){
-					change = false;
-					selection = settingQuestion();
-					last_visit = System.currentTimeMillis();
-				}
-			}
-			
+		if(change){
+			selection = settingQuestion2();
+			last_visit = System.currentTimeMillis();
+			change = false;
+		}
+		iv_type.setImageResource(typeID);
+		iv_type.setVisibility(View.VISIBLE);
 		selectedAnswer = "" ;
 		tv_answer1.setText(selection[0]);
 		tv_answer2.setText(selection[1]);
@@ -195,43 +180,6 @@ public class QuestionDialog{
 		boxLayout.setVisibility(View.VISIBLE);
 
 	}
-	
-	public void show2(int type) {
-		if(System.currentTimeMillis() - last_visit > 10*60*1000){
-			change = true;
-		}
-		if(System.currentTimeMillis() - last_visit2 > 10*60*1000){
-			change2 = true;
-		}
-	
-		if(type == 1){
-			if(change2){
-				change2 = false;
-				selection2 = settingQuestion2();
-				last_visit2 = System.currentTimeMillis();
-			}
-		}
-		else{
-			if(change){
-				change = false;
-				selection = settingQuestion();
-				last_visit = System.currentTimeMillis();
-			}
-		}
-		
-		iv_type.setVisibility(View.VISIBLE);
-	selectedAnswer = "" ;
-	tv_answer1.setText(selection2[0]);
-	tv_answer2.setText(selection2[1]);
-	tv_answer3.setText(selection2[2]);
-	tv_answer4.setText(selection2[3]);
-		
-	tv_question.setText(question2);
-	
-	MainActivity.getMainActivity().enableTabAndClick(false);
-	boxLayout.setVisibility(View.VISIBLE);
-
-}
 	
 	/** remove the dialog and release the resources */
 	public void clear() {
@@ -258,11 +206,12 @@ public class QuestionDialog{
 		
 		Random rand = new Random();
 		int qid = rand.nextInt(8);
-		question2 = r.getString(R.string.question_type);
+		question = r.getString(R.string.question_type);
 		answers = r.getStringArray(R.array.trigger_list);
 		
-		answer2 = new String(answers[qid]);
-		iv_type.setImageResource(iconId[qid]);
+		answer = new String(answers[qid]);
+		typeID = iconId[qid];
+		iv_type.setImageResource(typeID);
 		iv_type.setVisibility(View.VISIBLE);
 		
 		String[] tempSelection = new String[4];
@@ -278,36 +227,8 @@ public class QuestionDialog{
 		for (int i = 0; i < selectAns.length; ++i)
 			selectAns[i] = tempSelection[i];
 		
-		//int ans_id = rand.nextInt(selectAns.length); //把隨機一個選項換成答案
-		//selectAns[ans_id] = answer;
-
-		return selectAns;
-	}
-	
-	
-	private String[] settingQuestion() {
-		String[] questions = null;
-		String[] answers = null;
-		Resources r = App.getContext().getResources();
-		
-		questions = r.getStringArray(R.array.question_1);
-		answers = r.getStringArray(R.array.question_answer_1);
-		Random rand = new Random();
-		int qid = rand.nextInt(questions.length);
-		question = questions[qid];
-		answer = new String(answers[qid * 4]);
-		
-
-		String[] tempSelection = new String[4];
-		for (int i = 0; i < tempSelection.length; ++i)
-			tempSelection[i] = answers[qid * 4 + i];
-		shuffleArray(tempSelection);
-		String[] selectAns = new String[4];
-		for (int i = 0; i < selectAns.length; ++i)
-			selectAns[i] = tempSelection[i];
-		
-		//int ans_id = rand.nextInt(selectAns.length); //把隨機一個選項換成答案
-		//selectAns[ans_id] = answer;
+//		int ans_id = rand.nextInt(selectAns.length); //把隨機一個選項換成答案
+//		selectAns[ans_id] = answer;
 
 		return selectAns;
 	}
@@ -328,7 +249,7 @@ public class QuestionDialog{
 		/**Cancel and dismiss the check check dialog*/
 		public void onClick(View v) {
 			
-			ClickLog.Log(ClickLogId.STATISTIC_QUESTIONTEST_CONFIRM);
+			ClickLog.Log(ClickLogId.DAYBOOK_RANDOMTEST_CONFIRM);
 			
 			long ts = System.currentTimeMillis();
 			int isCorrect = 0;
@@ -373,8 +294,7 @@ public class QuestionDialog{
 		@Override
 		/**Calling out*/
 		public void onClick(View v) {
-			ClickLog.Log(ClickLogId.STATISTIC_QUESTIONTEST_CANCEL);
-			
+			ClickLog.Log(ClickLogId.DAYBOOK_RANDOMTEST_CANCEL);		
 			MainActivity.getMainActivity().enableTabAndClick(true);
         	close();
 			//clear();
@@ -388,25 +308,25 @@ public class QuestionDialog{
 			resetAllImage();
 			switch (v.getId()){
 			case R.id.question_answer1_layout:
-				ClickLog.Log(ClickLogId.STATISTIC_QUESTIONTEST_SELECT_A);
+				ClickLog.Log(ClickLogId.DAYBOOK_RANDOMTEST_SELECT_A);
 				radio1.setImageResource(R.drawable.radio_node_select);
 				selectedAnswer = selection[0];
 				select = 0;
 				break;
 			case R.id.question_answer2_layout:
-				ClickLog.Log(ClickLogId.STATISTIC_QUESTIONTEST_SELECT_B);
+				ClickLog.Log(ClickLogId.DAYBOOK_RANDOMTEST_SELECT_B);
 				radio2.setImageResource(R.drawable.radio_node_select);
 				selectedAnswer = selection[1];
 				select = 1;
 				break;
 			case R.id.question_answer3_layout:
-				ClickLog.Log(ClickLogId.STATISTIC_QUESTIONTEST_SELECT_C);
+				ClickLog.Log(ClickLogId.DAYBOOK_RANDOMTEST_SELECT_C);
 				radio3.setImageResource(R.drawable.radio_node_select);
 				selectedAnswer = selection[2];
 				select = 2;
 				break;
 			case R.id.question_answer4_layout:
-				ClickLog.Log(ClickLogId.STATISTIC_QUESTIONTEST_SELECT_D);
+				ClickLog.Log(ClickLogId.DAYBOOK_RANDOMTEST_SELECT_D);
 				radio4.setImageResource(R.drawable.radio_node_select);
 				selectedAnswer = selection[3];
 				select = 3;

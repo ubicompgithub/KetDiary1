@@ -1,4 +1,4 @@
-package com.ubicomp.ketdiary.dialog;
+package com.ubicomp.ketdiary.main.dialog;
 
 import java.util.Calendar;
 

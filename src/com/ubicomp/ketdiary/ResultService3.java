@@ -9,7 +9,7 @@ import com.ubicomp.ketdiary.data.file.MainStorage;
 import com.ubicomp.ketdiary.data.file.PicFileHandler;
 import com.ubicomp.ketdiary.data.file.TestDataParser2;
 import com.ubicomp.ketdiary.data.structure.TestDetail;
-import com.ubicomp.ketdiary.dialog.NoteDialog4;
+import com.ubicomp.ketdiary.main.dialog.NoteDialog4;
 import com.ubicomp.ketdiary.main.fragment.TestFragment2;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.test.bluetoothle.BluetoothLE3;
