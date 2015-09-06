@@ -218,8 +218,14 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	        else if(state == FRAME_STATE){
 	        	if(spentTime < 5*60*1000 ){
 	        		//setTestFail("過曝照片未傳完2");
-	        		state = REGULAR_STATE;
 	        		picNum = 1;
+	        		state = REGULAR_STATE;
+	    			writeToColorRawFile("State = " + state);
+	    			
+	    			if(ble!=null){
+	    				active_disconnect = true;
+	    				ble.bleDisconnect();
+	    			}
 	        	}
 	        }
 	        else if(state == REGULAR_STATE){
