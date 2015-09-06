@@ -217,7 +217,9 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	        }
 	        else if(state == FRAME_STATE){
 	        	if(spentTime < 5*60*1000 ){
-	        		setTestFail("過曝照片未傳完2");
+	        		//setTestFail("過曝照片未傳完2");
+	        		state = REGULAR_STATE;
+	        		picNum = 1;
 	        	}
 	        }
 	        else if(state == REGULAR_STATE){
@@ -988,9 +990,10 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	public void bleTakePictureFail(float dropRate) {
 		
 		if(picNum == 1 || picNum == 2)
-			blehandler.postDelayed(writeBle, 2*1000);
+			blehandler.postDelayed(writeBle, 10*1000);
 		else if(picNum == 0){
-			blehandler.postDelayed(writeBle3, 2*1000);
+			setTestFail("過曝照片傳送失敗，重新傳送");
+			blehandler.postDelayed(writeBle3, 10*1000);
 //			failedState = PIC_SEND_FAIL;
 //			connectionFailRate = dropRate;
 //			Log.i(TAG, "DropRate: " + dropRate);

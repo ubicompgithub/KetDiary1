@@ -30,10 +30,10 @@ public class ImageDetection {
     private static final int ROI_Y_MAX = 160;
     
     //
-    private static final int DEFAULT_X_MIN = 45;
-    private static final int DEFAULT_X_MAX = 135;
-    private static final int DEFAULT_Y_MIN = 20;
-    private static final int DEFAULT_Y_MAX = 50;
+    private static final int DEFAULT_X_MIN = 28;
+    private static final int DEFAULT_X_MAX = 118;
+    private static final int DEFAULT_Y_MIN = 18;
+    private static final int DEFAULT_Y_MAX = 48;
     
     private static final int LBOUND_BETWEEN_LINE = 30;
     private static final int UBOUND_BETWEEN_LINE = 45;
