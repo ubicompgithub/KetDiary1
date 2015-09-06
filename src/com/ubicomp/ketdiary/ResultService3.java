@@ -992,7 +992,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		if(picNum == 1 || picNum == 2)
 			blehandler.postDelayed(writeBle, 10*1000);
 		else if(picNum == 0){
-			setTestFail("過曝照片傳送失敗，重新傳送");
+			//setTestFail("過曝照片傳送失敗，重新傳送");
 			blehandler.postDelayed(writeBle3, 10*1000);
 //			failedState = PIC_SEND_FAIL;
 //			connectionFailRate = dropRate;
