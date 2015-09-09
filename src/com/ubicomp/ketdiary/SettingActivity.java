@@ -1,4 +1,5 @@
 package com.ubicomp.ketdiary;
+import com.ubicomp.ketdiary.ui.CustomToastSmall;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -45,6 +46,7 @@ public class SettingActivity extends Activity {
 	private View uvView;
 	private RelativeLayout[] recreationViews;
 	private RelativeLayout[] contactViews;
+	private RelativeLayout[] deviceIDViews;
 	private MultiRadioGroup socialGroup;
 	private View socialGroupView;
 	private SingleRadioGroup notificationGroup;
@@ -52,7 +54,7 @@ public class SettingActivity extends Activity {
 	// private View bluetoothView;
 
 	private static final int PRIVACY = 0, RECREATION = 100, CONTACT = 200,
-			SOCIAL = 300, ALARM = 400, SYSTEM = 500;
+			SOCIAL = 300, ALARM = 400, SYSTEM = 500, DEVICE_ID = 800;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -174,7 +176,43 @@ public class SettingActivity extends Activity {
 				});
 		mainLayout.addView(alarmView);
 		mainLayout.addView(notificationGroupView);
+		
+		//
+		RelativeLayout deviceIDView = createListView(
+				R.string.setting_detection_id, new OnClickListener() {
 
+					private boolean visible = false;
+
+					@Override
+					public void onClick(View v) {
+						ClickLog.Log(ClickLogId.SETTING_TITLE_LIST + DEVICE_ID);
+						ImageView list = (ImageView) v
+								.findViewById(R.id.question_list);
+						if (visible) {
+							for (int i = 0; i < deviceIDViews.length; ++i)
+								deviceIDViews[i].setVisibility(View.GONE);
+							list.setVisibility(View.INVISIBLE);
+						} else {
+							for (int i = 0; i < deviceIDViews.length; ++i)
+								deviceIDViews[i].setVisibility(View.VISIBLE);
+							list.setVisibility(View.VISIBLE);
+						}
+						visible = !visible;
+					}
+				});
+		mainLayout.addView(deviceIDView);
+
+		String ori_deviceid = PreferenceControl.getDeviceId();
+		int intID = Integer.valueOf(ori_deviceid.substring(ori_deviceid.length()-3));
+		String deviceid = Integer.toString(intID);
+		
+		deviceIDViews = new RelativeLayout[1];
+		
+		deviceIDViews[0] = createEditDeviceIDView(deviceid, 0);
+		deviceIDViews[0].setVisibility(View.GONE);
+		mainLayout.addView(deviceIDViews[0]);
+		
+		
 		// bluetoothView = BarButtonGenerator.createSettingButtonView(
 		// 		R.string.setting_bluetooth, new OnClickListener() {
 
@@ -402,6 +440,99 @@ public class SettingActivity extends Activity {
 				name.setVisibility(View.VISIBLE);
 				phone.setText(pt.getText());
 				phone.setVisibility(View.VISIBLE);
+				button.setText(ok);
+				button.setTextColor(ok_color);
+			}
+			editable = !editable;
+		}
+
+	}
+	
+	private RelativeLayout createEditDeviceIDView(String defaultText, int id) {
+
+		RelativeLayout layout = (RelativeLayout) inflater.inflate(
+				R.layout.bar_edit_recreation_item, null);
+
+		TextView text = (TextView) layout.findViewById(R.id.question_text);
+		text.setTypeface(wordTypeface);
+		text.setText(defaultText);
+
+		EditText edit = (EditText) layout.findViewById(R.id.question_edit);
+		edit.setTypeface(wordTypefaceBold);
+		edit.setText(defaultText);
+		edit.setVisibility(View.INVISIBLE);
+
+		TextView button = (TextView) layout.findViewById(R.id.question_button);
+		button.setTypeface(wordTypefaceBold);
+		button.setOnClickListener(new DeviceIDOnClickListener(text, edit,
+				button, id));
+
+		return layout;
+	}
+
+	private class DeviceIDOnClickListener implements View.OnClickListener {
+		private boolean editable = false;
+
+		private TextView text;
+		private EditText editText;
+		private TextView button;
+		private int id;
+
+		private String ok = App.getContext().getString(R.string.ok);
+		private String edit = App.getContext().getString(R.string.edit);
+
+		private int ok_color = App.getContext().getResources()
+				.getColor(R.color.red);
+		private int edit_color = App.getContext().getResources()
+				.getColor(R.color.text_gray);
+
+		public DeviceIDOnClickListener(TextView text, EditText editText,
+				TextView button, int id) {
+			this.text = text;
+			this.editText = editText;
+			this.button = button;
+			this.id = id;
+		}
+
+		@Override
+		public void onClick(View v) {
+			ClickLog.Log(ClickLogId.SETTING_EDIT + DEVICE_ID);
+			if (editable) {
+				String deviceid = editText.getText().toString();
+				text.setText(deviceid);
+				text.setVisibility(View.VISIBLE);
+				editText.setVisibility(View.INVISIBLE);
+				button.setText(edit);
+				button.setTextColor(edit_color);
+				
+				boolean isNum = true;
+				for(int i = 0; i < deviceid.length(); i++)
+					if(!Character.isDigit(deviceid.charAt(0)))
+						isNum = false;
+				
+				int intID = 0;
+				if(isNum)
+					intID = Integer.valueOf(deviceid);	
+				
+				if(intID >= 1 && intID <= 999){
+					int[] lastnum = new int[3];
+					lastnum[0] = intID / 100;
+					lastnum[1] = (intID % 100) / 10;
+					lastnum[2] = intID % 10;
+					
+					String DeviceID = PreferenceControl.getDeviceId();
+					DeviceID = DeviceID.substring(0, DeviceID.length() - 3);
+					for(int i = 0; i < 3; i++)
+						DeviceID += lastnum[i];
+				
+					PreferenceControl.setDeviceId(DeviceID);
+				}
+				else
+					CustomToastSmall.generateToast(R.string.device_reject);
+			} else {
+				text.setVisibility(View.INVISIBLE);
+				editText.setText(text.getText());
+				editText.setVisibility(View.VISIBLE);
 				button.setText(ok);
 				button.setTextColor(ok_color);
 			}

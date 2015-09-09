@@ -13,5 +13,5 @@
     <string name="setting_alarm">提醒設定</string>
     <string name="setting_system">系統設定</string>
     <string name="setting_bluetooth">前往藍牙設定頁面</string>
-
+	<string name="setting_detection_id">檢測器編號</string>
 </resources>

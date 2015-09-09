@@ -27,7 +27,7 @@ public class ImageDetection {
     private static final int ROI_X_MIN = 80;
     private static final int ROI_X_MAX = 240;
     private static final int ROI_Y_MIN = 80;
-    private static final int ROI_Y_MAX = 160;
+    private static final int ROI_Y_MAX = 180;//20150909
     
     //
     private static final int DEFAULT_X_MIN = 28;

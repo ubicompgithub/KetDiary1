@@ -433,4 +433,6 @@
     <string name="result_fail">測試未成功，記錄無上傳。\n\n（請保持檢測器開啟，並置於與手機鄰近的地方。）\n\n立即回到測試頁面？</string>
 	<string name="saliva_page">檢視試紙匣狀態</string>
 	
+	<string name="device_reject">請輸入正確編號</string>
+	
 </resources>
