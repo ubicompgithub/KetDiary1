@@ -506,29 +506,34 @@ public class SettingActivity extends Activity {
 				button.setTextColor(edit_color);
 				
 				boolean isNum = true;
-				for(int i = 0; i < deviceid.length(); i++)
-					if(!Character.isDigit(deviceid.charAt(0)))
-						isNum = false;
-				
 				int intID = 0;
+				String DeviceID;
+				for(int i = 0; i < deviceid.length(); i++)
+					if(!Character.isDigit(deviceid.charAt(i)))
+						isNum = false;
+					
 				if(isNum)
 					intID = Integer.valueOf(deviceid);	
 				
-				if(intID >= 1 && intID <= 999){
+				else 
+					CustomToastSmall.generateToast(R.string.device_reject_not_digit);
+				
+				if(isNum && intID >= 1 && intID <= 999){
 					int[] lastnum = new int[3];
 					lastnum[0] = intID / 100;
 					lastnum[1] = (intID % 100) / 10;
 					lastnum[2] = intID % 10;
 					
-					String DeviceID = PreferenceControl.getDeviceId();
-					DeviceID = DeviceID.substring(0, DeviceID.length() - 3);
+					//String DeviceID = PreferenceControl.getDeviceId();
+					//DeviceID = DeviceID.substring(0, DeviceID.length() - 3);
+					DeviceID = new String("ket_");
 					for(int i = 0; i < 3; i++)
 						DeviceID += lastnum[i];
 				
 					PreferenceControl.setDeviceId(DeviceID);
 				}
-				else
-					CustomToastSmall.generateToast(R.string.device_reject);
+				else if(isNum)
+					CustomToastSmall.generateToast(R.string.device_reject_range_error);
 			} else {
 				text.setVisibility(View.INVISIBLE);
 				editText.setText(text.getText());
