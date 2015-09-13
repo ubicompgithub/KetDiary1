@@ -24,7 +24,7 @@ public class ClickLogId {
 	public final static long SETTING_TITLE_LIST_RECREATION = 1100100; // 01100100;
 	public final static long SETTING_TITLE_LIST_CONTACT = 1100200; // 01100200;
 	public final static long SETTING_TITLE_LIST_ALARM = 1100400; // 01100400;
-	public final static long SETTING_TITLE_LIST_DETECTIONID = 1100800; // 01100400;
+	public final static long SETTING_TITLE_LIST_DEVICEID = 1100800; // 01100800;
 	
 	public final static long SETTING_CHECK = 1200000;
 	public final static long SETTING_EDIT = 1300000;

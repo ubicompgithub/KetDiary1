@@ -1,4 +1,5 @@
 package com.ubicomp.ketdiary.test.bluetoothle;
+import com.ubicomp.ketdiary.ResultService3;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -286,6 +287,7 @@ public class BluetoothLE3 {
     public void bleWriteState(byte state) {
     	
     	if(state == 0x06 || state == 0x03){
+    		ResultService3.pictureSending = true;
 			dataTransmission.resetParameters();
 		}
 

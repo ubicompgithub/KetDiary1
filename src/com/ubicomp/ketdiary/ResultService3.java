@@ -54,6 +54,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	private BluetoothLE3 ble = null;
 	private boolean stateSuccess = false;
 	public static boolean isConnect = false;
+	public static boolean pictureSending = false;
 	private static int state;
 	
 	private int result= -1;
@@ -147,6 +148,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		
 		spentTime = timeout;
 		isConnect = false;
+		pictureSending = false;
 		first = true;
 		second = true;
 		connect = false;
@@ -216,10 +218,18 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	        	}
 	        }
 	        else if(state == FRAME_STATE){
+	        	if(spentTime > 7*60*1000 && picNum == 0 && !pictureSending && isConnect){
+	        		//在7分鐘以前可以一直重傳過曝照片
+	        		writeToColorRawFile("send 1st picture again");
+	        		
+	        		writeToColorRawFile("Write State : 0x03");
+					ble.bleWriteState((byte)0x03);
+	        	}
 	        	if(spentTime < 5*60*1000 ){
 	        		//setTestFail("過曝照片未傳完2");
 	        		picNum = 1;
 	        		state = REGULAR_STATE;
+	        		writeToColorRawFile("use default xy range");
 	    			writeToColorRawFile("State = " + state);
 	    			
 	    			if(ble!=null){
@@ -617,7 +627,8 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	private class OpenSensorMsgTimer extends CountDownTimer { //OpenSensor for take picture
 
 		public OpenSensorMsgTimer() {
-			super(20000, 2000);
+			//super(20000, 2000);
+			super(60000, 2000);
 		}
 
 		@Override
@@ -763,6 +774,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
     public void bleDisconnected() { //如果被動斷線的話就主動重連
     	isConnect = false;
     	stateSuccess = false;
+    	pictureSending = false;
         Log.i(TAG, "BLE disconnected");
 //        if(state == BEGIN_STATE)
 //    		first = true;
@@ -895,6 +907,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	public void bleTakePictureSuccess(Bitmap bitmap) {
 		picNum++;
 		Log.i(TAG, "Picture: " + picNum + " Save");
+		pictureSending = false;
 		//Toast.makeText(this, "Picture: " + picNum + " Save", Toast.LENGTH_SHORT).show();
 		
 		writeToColorRawFile("Picture: " + picNum + " Save");
@@ -999,6 +1012,8 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 			blehandler.postDelayed(writeBle, 10*1000);
 		else if(picNum == 0){
 			//setTestFail("過曝照片傳送失敗，重新傳送");
+			writeToColorRawFile("Picture 1 sending fail: "+dropRate);
+			
 			blehandler.postDelayed(writeBle3, 10*1000);
 //			failedState = PIC_SEND_FAIL;
 //			connectionFailRate = dropRate;

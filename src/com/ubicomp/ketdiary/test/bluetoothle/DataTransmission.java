@@ -239,7 +239,7 @@ public class DataTransmission {
         @Override
         public void run() {
             Log.i(TAG, "Timeout timer was  fired " + counter);
-            if(counter < RETRANSMIT_TIMES){
+            if(counter < RETRANSMIT_TIMES ){
             	if(ResultService3.isConnect){
 	                checkPackets();
 	                ((BluetoothListener) bluetoothListener).PictureRetransmit(counter);
