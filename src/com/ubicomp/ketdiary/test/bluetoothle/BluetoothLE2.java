@@ -63,7 +63,7 @@ public class BluetoothLE2 {
     private Handler mHandler;
     private Runnable mRunnable;
 
-    // Stops scanning after 10 seconds.
+    // Stops scanning after 3 seconds.
     private static final long SCAN_PERIOD = 3000;
 
 

@@ -214,8 +214,8 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 	private static int CAMERATIMEOUT = PreferenceControl.getVoltageCountDown();
 	private static int CAMERATIMEOUT2 = PreferenceControl.getVoltage2CountDown();
 	
-	private static final int CANTTEST_HOURS = 6*60*60*1000;
-	private static final int TIMEOUT_SECOND = 30;
+	private static final int CANTTEST_HOURS = 6*60*60*1000; // 6 hours
+	//private static final int TIMEOUT_SECOND = 30;
 	//private static final int CAMERATIMEOUT = 10;
 	private static final int CONFIRM_SECOND = 5;
 	
@@ -742,7 +742,6 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
 				confirmCountDownTimer.cancel();
 				confirmCountDownTimer = null;
 			}
-						
 			img_bg.setVisibility(View.INVISIBLE);
 			img_ac.setVisibility(View.INVISIBLE);
 			img_btn.setVisibility(View.VISIBLE);
