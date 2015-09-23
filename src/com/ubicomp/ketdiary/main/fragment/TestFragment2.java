@@ -1612,6 +1612,7 @@ public class TestFragment2 extends Fragment implements BluetoothListener, Camera
     		String deviceid = Integer.toString(intID);
         	
         	setState(new FailState("連接逾時", "請確認"+deviceid+"號檢測器已開啟(綠燈亮起)"));
+        	img_help.setEnabled(true);
         }
     }
 
