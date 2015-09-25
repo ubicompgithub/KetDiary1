@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.graphics.Typeface;
 import android.os.Build;
+import android.os.Handler;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -19,6 +20,7 @@ import com.ubicomp.ketdiary.dialog.QuestionDialog;
 import com.ubicomp.ketdiary.main.fragment.StatisticFragment;
 import com.ubicomp.ketdiary.system.Config;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.ui.CustomToast;
 import com.ubicomp.ketdiary.ui.Typefaces;
 
 public class AnalysisCounterView extends StatisticPageView {
@@ -28,7 +30,7 @@ public class AnalysisCounterView extends StatisticPageView {
 	private TextView levelValue, levelText, couponValue, couponText;
 	private RelativeLayout titleLayout;
 	private FrameLayout frameLayout;
-	private ImageView levelCircle, QuestionButton;
+	public static ImageView levelCircle, QuestionButton;
 	
 	private DatabaseControl db;
 	private Typeface wordTypeface, digitTypefaceBold;
@@ -83,6 +85,7 @@ public class AnalysisCounterView extends StatisticPageView {
 			
 			@Override
 			public void onClick(View v) {
+				QuestionButton.setEnabled(false);
 				StatisticFragment.showQuestionTest();
 			}
 		});
@@ -90,7 +93,7 @@ public class AnalysisCounterView extends StatisticPageView {
 		frameLayout = (FrameLayout) view.findViewById(R.id.frameLayout1);
 		
 	}
-
+	
 	@Override
 	public void clear() {
 	}

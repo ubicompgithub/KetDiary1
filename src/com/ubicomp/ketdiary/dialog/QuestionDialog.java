@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,6 +25,7 @@ import com.ubicomp.ketdiary.system.clicklog.ClickLog;
 import com.ubicomp.ketdiary.system.clicklog.ClickLogId;
 import com.ubicomp.ketdiary.ui.CustomToast;
 import com.ubicomp.ketdiary.ui.Typefaces;
+import com.ubicomp.ketdiary.statistic.AnalysisCounterView;
 
 
 /**
@@ -72,6 +74,8 @@ public class QuestionDialog{
 	private static boolean change2 = true;
 	private static long last_visit= 0;
 	private static long last_visit2=0;
+	
+	private Handler mHandler = new Handler();
 	
 	private static final int[] iconId = {R.drawable.type_icon1, R.drawable.type_icon2, R.drawable.type_icon3,
 		R.drawable.type_icon4, R.drawable.type_icon5, R.drawable.type_icon6, R.drawable.type_icon7,
@@ -241,6 +245,12 @@ public class QuestionDialog{
 			mainLayout.removeView(boxLayout);
 	}
 	
+	public Runnable ableClickQuestion = new Runnable(){
+		public void run() {
+			AnalysisCounterView.QuestionButton.setEnabled(true);
+		}
+	};
+	
 	/** close the dialog */
 	public void close() {
 		resetAllImage();
@@ -327,7 +337,6 @@ public class QuestionDialog{
 		@Override
 		/**Cancel and dismiss the check check dialog*/
 		public void onClick(View v) {
-			
 			ClickLog.Log(ClickLogId.STATISTIC_QUESTIONTEST_CONFIRM);
 			
 			long ts = System.currentTimeMillis();
@@ -362,6 +371,8 @@ public class QuestionDialog{
 					PreferenceControl.setCouponChange(true);
 			}
 			MainActivity.getMainActivity().enableTabAndClick(true);
+			//mHandler.postDelayed(ableClickQuestion, CustomToast.getDuration());
+			mHandler.postDelayed(ableClickQuestion, 2000);
 			close();
 			//clear();	
 		}

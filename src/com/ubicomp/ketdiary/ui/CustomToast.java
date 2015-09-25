@@ -107,5 +107,10 @@ public class CustomToast {
 
 		toast.show();
 	}
+	public static int getDuration (){
+		if(toast != null)
+			return toast.getDuration ();
+		return 0;
+	}
 
 }
