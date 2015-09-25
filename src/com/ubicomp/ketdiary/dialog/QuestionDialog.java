@@ -387,6 +387,7 @@ public class QuestionDialog{
 			ClickLog.Log(ClickLogId.STATISTIC_QUESTIONTEST_CANCEL);
 			
 			MainActivity.getMainActivity().enableTabAndClick(true);
+			AnalysisCounterView.QuestionButton.setEnabled(true);
         	close();
 			//clear();
 		}
