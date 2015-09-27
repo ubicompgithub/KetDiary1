@@ -78,6 +78,8 @@ public class PreSettingActivity extends Activity {
 	private CheckBox skip_saliva_switch;
 	private CheckBox demo_switch;
 	
+	private AlertDialog.Builder builder;
+	
 	private File file;
 	
 	private static final int DATE_DIALOG_ID = 0;
@@ -155,6 +157,8 @@ public class PreSettingActivity extends Activity {
 		
 		addTestResultButton = (Button) this.findViewById(R.id.add_testResult_OK);
 		addTestResultButton.setOnClickListener(new AddTestResultOnClickListener());
+		
+		builder = new AlertDialog.Builder(this);
 		
 		changeButton = (Button) this.findViewById(R.id.changeNote);
 		changeButton.setOnClickListener(new OnClickListener(){
@@ -453,6 +457,63 @@ public class PreSettingActivity extends Activity {
 		}
 	}
 	
+	private void addTestResult(int result, int year,int month, int day,int intTime){
+		
+    	
+    	//add new result
+    	Calendar cal = Calendar.getInstance();
+		cal.set(year, month, day, (intTime + 1)*7, 0, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+    	
+    	long tv = cal.getTimeInMillis();
+    	String cassette_id = "Dummy";
+    	int isPrime = 1;
+		int isFilled = 0;
+		
+		TestResult testResult;
+		testResult = new TestResult(result, tv, cassette_id, isPrime, isFilled, 0, 0); 
+		
+		DatabaseControl db = new DatabaseControl();
+		
+		int addScore = db.insertTestResult(testResult, false);
+
+		//db.setTestResultUploaded(tv);
+		TestDetail testDetail = new TestDetail(cassette_id, tv, 0, 0, 0, 0, 0, 0, "Dummy", "Dummy");
+		
+		db.insertTestDetail(testDetail);
+		
+		File dir = MainStorage.getMainStorageDirectory();
+		
+		file = new File(dir + File.separator +String.valueOf(tv));
+		boolean success = true;
+		if (!file.exists()) {
+		    success = file.mkdirs();
+		}
+		File testFile = new File(file + File.separator + "voltage.txt");
+		File detectionFile = new File(file + File.separator + "color_raw.txt");
+		
+		try {
+			testFile.createNewFile();
+			detectionFile.createNewFile();
+		} catch (Exception e) {
+			Log.d("File",e.toString());
+		}
+		
+		//加分
+		Log.d(TAG,""+tv+" "+addScore);
+		
+		PreferenceControl.setPoint(addScore);
+		Log.d(TAG, "AddScore:"+addScore);
+		
+		//
+		long lastTV = PreferenceControl.getLatestTestCompleteTime();
+		Log.d("GG", "Last:" + lastTV + "  tv:" + tv);
+		if(tv > lastTV)
+			PreferenceControl.setLatestTestCompleteTime(tv);
+		
+		CustomToastSmall.generateToast("新增成功");
+	}
+	
 	private class AddTestResultOnClickListener implements OnClickListener {
 		@Override
 		public void onClick(View v) {
@@ -460,85 +521,74 @@ public class PreSettingActivity extends Activity {
 			sDate = addDate.getText().toString();
 			sTime = addTime.getText().toString();
 			sPass = addPass.getText().toString();
-	
+
 			long llDate = Long.parseLong(sDate);
 			if(llDate > 1e8){
 				CustomToastSmall.generateToast("時間格式錯誤");
 				return;
 			}
 			int intDate = (int)llDate;
-			int intTime = Integer.valueOf(sTime);
+			final int intTime = Integer.valueOf(sTime);
 			int intPass = Integer.valueOf(sPass);
-			int addScore;
-        	int result = intPass; // 1 is fail, 0 is pass
-        	int year = intDate / 10000;
-        	int month =( (intDate % 10000 ) / 100 )- 1;
-        	int day = intDate % 100;
-        	
-        	//check date or pass 
-        	if(year > 10000 || (month > 12 || month < 0) || (day > 31 || day < 0) || (intTime < 0 || intTime > 3)){
-        		//Toast.makeText(this, "時間格式錯誤", Toast.LENGTH_SHORT).show();
-        		CustomToastSmall.generateToast("時間格式錯誤");
-        		return;
-        	}
-        	if(result > 1 || result < 0){
-        		//Toast.makeText(this, "pass/fail請輸入0或1", Toast.LENGTH_SHORT).show();
-        		CustomToastSmall.generateToast("pass/fail請輸入0或1");
-        		return;
-        	}
-        	
-        	//add new result
-        	Calendar cal = Calendar.getInstance();
-    		cal.set(year, month, day, (intTime + 1)*7, 0, 0);
-    		cal.set(Calendar.MILLISECOND, 0);
-        	
-        	long tv = cal.getTimeInMillis();
-        	String cassette_id = "Dummy";
-        	int isPrime = 1;
-    		int isFilled = 0;
-    		
-    		TestResult testResult;
-    		testResult = new TestResult(result, tv, cassette_id, isPrime, isFilled, 0, 0); 
-    		
-    		DatabaseControl db = new DatabaseControl();
-    		
-    		addScore = db.insertTestResult(testResult, false);
-   
-    		//db.setTestResultUploaded(tv);
-    		TestDetail testDetail = new TestDetail(cassette_id, tv, 0, 0, 0, 0, 0, 0, "Dummy", "Dummy");
 			
-			db.insertTestDetail(testDetail);
+			final int result = intPass; // 1 is fail, 0 is pass
+			final int year = intDate / 10000;
+			final int month =( (intDate % 10000 ) / 100 )- 1;
+			final int day = intDate % 100;
+	    	
+	    	//check date or pass 
+	    	if(year > 10000 || (month > 12 || month < 0) || (day > 31 || day < 0) || (intTime < 0 || intTime > 3)){
+	    		//Toast.makeText(this, "時間格式錯誤", Toast.LENGTH_SHORT).show();
+	    		CustomToastSmall.generateToast("時間格式錯誤");
+	    		return;
+	    	}
+	    	if(result > 1 || result < 0){
+	    		//Toast.makeText(this, "pass/fail請輸入0或1", Toast.LENGTH_SHORT).show();
+	    		CustomToastSmall.generateToast("pass/fail請輸入0或1");
+	    		return;
+	    	}
 			
-			File dir = MainStorage.getMainStorageDirectory();
-			
-			file = new File(dir + File.separator +String.valueOf(tv));
-			boolean success = true;
-			if (!file.exists()) {
-			    success = file.mkdirs();
-			}
-			File testFile = new File(file + File.separator + "voltage.txt");
-			File detectionFile = new File(file + File.separator + "color_raw.txt");
-			
-			try {
-				testFile.createNewFile();
-				detectionFile.createNewFile();
-			} catch (Exception e) {
-				Log.d("File",e.toString());
-			}
-			
-			//加分
-			Log.d(TAG,""+tv+" "+addScore);
-			
-			PreferenceControl.setPoint(addScore);
-			Log.d(TAG, "AddScore:"+addScore);
-			
-			//
-			long lastTV = PreferenceControl.getLatestTestCompleteTime();
-			Log.d("GG", "Last:" + lastTV + "  tv:" + tv);
-			if(tv > lastTV)
-				PreferenceControl.setLatestTestCompleteTime(tv);
-			
-    		CustomToastSmall.generateToast("新增成功");
+	    	String mesg = "";
+	    	mesg += year + "/" + (month+1) + "/" + day + "/";
+	    	if(intTime == 0)
+	    		mesg += "上午\n";
+	    	if(intTime == 1)
+	    		mesg += "下午\n";
+	    	if(intTime == 2)
+	    		mesg += "晚上\n";
+	    	if(result == 0)
+	    		mesg += "檢測 : 通過\n";
+	    	if(result == 1)
+	    		mesg += "檢測 : 未通過\n";
+	    	
+	    	Log.d("GG", "jizz");
+	    	
+		    builder.setTitle("確定新增該事件?");
+		    builder.setMessage(mesg);
+		    //builder.setIcon(android.R.drawable.ic_dialog_info);
+		    builder.setPositiveButton("確定",
+		       new DialogInterface.OnClickListener()
+		       {
+		 
+		           @Override
+		           public void onClick(DialogInterface dialog, int which)
+		           {
+		        	   addTestResult(result, year, month, day, intTime);
+		           }
+		       });
+		    builder.setNegativeButton("取消",
+		       new DialogInterface.OnClickListener()
+		       {
+		 
+		           @Override
+		           public void onClick(DialogInterface dialog, int which)
+		           {
+		               //Toast.makeText(DialogTest2.this, "取消",
+		               //   Toast.LENGTH_LONG).show();
+		 
+		           }
+		       });
+		    builder.create().show();
 		}
 	};
 
@@ -604,4 +654,5 @@ public class PreSettingActivity extends Activity {
 		}
 		return null;
 	}
+	
 }
