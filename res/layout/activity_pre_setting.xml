@@ -776,6 +776,127 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/normal_title_size" />
             </LinearLayout>
+            
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/setting_title_bg_color"
+                android:padding="5dp"
+                android:text="Add Test Result"
+                android:textColor="@color/white"
+                android:textSize="@dimen/large_title_size" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Date(YYYYMMDD):"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+
+                    <EditText
+                        android:id="@+id/add_date_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/setting_edit_bg"
+                        android:ems="8"
+                        android:inputType="number"
+                        android:paddingBottom="3dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="3dp"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+                </LinearLayout>
+
+                  
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Time(0~2):"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+
+                    <EditText
+                        android:id="@+id/add_time_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/setting_edit_bg"
+                        android:ems="8"
+                        android:inputType="number"
+                        android:paddingBottom="3dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="3dp"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" >
+                    </EditText>
+                </LinearLayout>
+				
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pass/Fail(0/1):"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" />
+
+                    <EditText
+                        android:id="@+id/add_pass_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/setting_edit_bg"
+                        android:ems="8"
+                        android:inputType="number"
+                        android:paddingBottom="3dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="3dp"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_title_size" >
+                    </EditText>
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/add_testResult_OK"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:background="@drawable/setting_button"
+                android:paddingBottom="3dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:paddingTop="3dp"
+                android:text="Add"
+                android:textColor="@color/white"
+                android:textSize="@dimen/normal_title_size" />
         </LinearLayout>
     </ScrollView>
 

@@ -17,12 +17,23 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Calendar;
 
 import com.ubicomp.ketdiary.data.db.DatabaseRestore;
+import com.ubicomp.ketdiary.data.file.MainStorage;
 import com.ubicomp.ketdiary.data.file.ReadDummyData;
+import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.system.PreferenceControl;
 import com.ubicomp.ketdiary.system.cleaner.Cleaner;
 import com.ubicomp.ketdiary.ui.CustomToastSmall;
+import com.ubicomp.ketdiary.data.db.DatabaseControl;
+import com.ubicomp.ketdiary.data.db.DatabaseRestoreControl;
+import com.ubicomp.ketdiary.data.structure.NoteAdd;
+import com.ubicomp.ketdiary.data.structure.TestDetail;
 
 /**
  * The activity is for developer setting
@@ -35,9 +46,12 @@ public class PreSettingActivity extends Activity {
 	
 	private EditText uid, did, target_good, target_bad, drink;
 	private EditText voltage1, voltage2, ACountDown, VCountDown, V2CountDown;
-
+	private EditText addDate, addTime, addPass;
+	
 	private Button saveButton, exchangeButton, restoreButton, debugButton,
-			restoreVer1Button, dummyDataButton, changeButton, cleanButton, cassetteButton;
+			restoreVer1Button, dummyDataButton, changeButton, cleanButton, cassetteButton,
+			addTestResultButton;
+	
 	private boolean debug;
 	private Activity activity;
 	private static final int MIN_NAME_LENGTH = 9;
@@ -63,6 +77,8 @@ public class PreSettingActivity extends Activity {
 	private CheckBox collectdata_switch;
 	private CheckBox skip_saliva_switch;
 	private CheckBox demo_switch;
+	
+	private File file;
 	
 	private static final int DATE_DIALOG_ID = 0;
 	private static final int LOCK_DIALOG_ID = 1;
@@ -118,6 +134,12 @@ public class PreSettingActivity extends Activity {
 		mDateDisplay = (TextView) findViewById(R.id.date);
 		mPickDate = (Button) findViewById(R.id.date_button);
 
+		addDate = (EditText) this.findViewById(R.id.add_date_edit);
+		
+		addTime = (EditText) this.findViewById(R.id.add_time_edit);
+		
+		addPass = (EditText) this.findViewById(R.id.add_pass_edit);
+
 		int[] startDateData = PreferenceControl.getStartDateData();
 		mYear = startDateData[0];
 		mMonth = startDateData[1];
@@ -130,6 +152,9 @@ public class PreSettingActivity extends Activity {
 
 		saveButton = (Button) this.findViewById(R.id.uid_OK);
 		saveButton.setOnClickListener(new OKOnclickListener());
+		
+		addTestResultButton = (Button) this.findViewById(R.id.add_testResult_OK);
+		addTestResultButton.setOnClickListener(new AddTestResultOnClickListener());
 		
 		changeButton = (Button) this.findViewById(R.id.changeNote);
 		changeButton.setOnClickListener(new OnClickListener(){
@@ -427,6 +452,95 @@ public class PreSettingActivity extends Activity {
 			}
 		}
 	}
+	
+	private class AddTestResultOnClickListener implements OnClickListener {
+		@Override
+		public void onClick(View v) {
+			String sDate, sTime, sPass;
+			sDate = addDate.getText().toString();
+			sTime = addTime.getText().toString();
+			sPass = addPass.getText().toString();
+	
+			long llDate = Long.parseLong(sDate);
+			if(llDate > 1e8){
+				CustomToastSmall.generateToast("時間格式錯誤");
+				return;
+			}
+			int intDate = (int)llDate;
+			int intTime = Integer.valueOf(sTime);
+			int intPass = Integer.valueOf(sPass);
+			int addScore;
+        	int result = intPass; // 1 is fail, 0 is pass
+        	int year = intDate / 10000;
+        	int month =( (intDate % 10000 ) / 100 )- 1;
+        	int day = intDate % 100;
+        	
+        	//check date or pass 
+        	if(year > 10000 || (month > 12 || month < 0) || (day > 31 || day < 0) || (intTime < 0 || intTime > 3)){
+        		//Toast.makeText(this, "時間格式錯誤", Toast.LENGTH_SHORT).show();
+        		CustomToastSmall.generateToast("時間格式錯誤");
+        		return;
+        	}
+        	if(result > 1 || result < 0){
+        		//Toast.makeText(this, "pass/fail請輸入0或1", Toast.LENGTH_SHORT).show();
+        		CustomToastSmall.generateToast("pass/fail請輸入0或1");
+        		return;
+        	}
+        	
+        	//add new result
+        	Calendar cal = Calendar.getInstance();
+    		cal.set(year, month, day, (intTime + 1)*7, 0, 0);
+    		cal.set(Calendar.MILLISECOND, 0);
+        	
+        	long tv = cal.getTimeInMillis();
+        	String cassette_id = "Dummy";
+        	int isPrime = 1;
+    		int isFilled = 0;
+    		
+    		TestResult testResult;
+    		testResult = new TestResult(result, tv, cassette_id, isPrime, isFilled, 0, 0); 
+    		
+    		DatabaseControl db = new DatabaseControl();
+    		
+    		addScore = db.insertTestResult(testResult, false);
+   
+    		//db.setTestResultUploaded(tv);
+    		TestDetail testDetail = new TestDetail(cassette_id, tv, 0, 0, 0, 0, 0, 0, "Dummy", "Dummy");
+			
+			db.insertTestDetail(testDetail);
+			
+			File dir = MainStorage.getMainStorageDirectory();
+			
+			file = new File(dir + File.separator +String.valueOf(tv));
+			boolean success = true;
+			if (!file.exists()) {
+			    success = file.mkdirs();
+			}
+			File testFile = new File(file + File.separator + "voltage.txt");
+			File detectionFile = new File(file + File.separator + "color_raw.txt");
+			
+			try {
+				testFile.createNewFile();
+				detectionFile.createNewFile();
+			} catch (Exception e) {
+				Log.d("File",e.toString());
+			}
+			
+			//加分
+			Log.d(TAG,""+tv+" "+addScore);
+			
+			PreferenceControl.setPoint(addScore);
+			Log.d(TAG, "AddScore:"+addScore);
+			
+			//
+			long lastTV = PreferenceControl.getLatestTestCompleteTime();
+			Log.d("GG", "Last:" + lastTV + "  tv:" + tv);
+			if(tv > lastTV)
+				PreferenceControl.setLatestTestCompleteTime(tv);
+			
+    		CustomToastSmall.generateToast("新增成功");
+		}
+	};
 
 	private class AlertOnClickListener implements View.OnClickListener {
 

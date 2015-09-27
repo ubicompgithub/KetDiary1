@@ -281,6 +281,7 @@ public class DataUploader {
 			try {
 				DefaultHttpClient httpClient = HttpSecureClientGenerator
 						.getSecureHttpClient();
+				
 				HttpPost httpPost = HttpPostGenerator.genPost(data);
 				if (upload(httpClient, httpPost)){
 					db.setTestResultUploaded(data.getTv().getTimestamp());

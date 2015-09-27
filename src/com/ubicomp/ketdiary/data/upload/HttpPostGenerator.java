@@ -109,11 +109,12 @@ public class HttpPostGenerator {
 		builder.addTextBody("data[]", String.valueOf(data.getScore()));
 		builder.addTextBody("data[]", String.valueOf(data.getTv().getWeek()));
 		
-
+		
 		String _ts = String.valueOf(data.tv.getTimestamp());
 		File[] imageFiles;
 		File[] picFiles;
 		File testFile, detectionFile;
+		
 		int fileNum = new File(mainStorageDir.getPath() + File.separator + _ts
 				+ File.separator).listFiles().length;
 		
@@ -121,15 +122,30 @@ public class HttpPostGenerator {
 		
 		builder.addTextBody("data[]", String.valueOf(fileNum));
 		
-		imageFiles = new File[fileNum - PicNum];
-		picFiles = new File[PicNum];
 		
 		testFile = new File(mainStorageDir.getPath() + File.separator + _ts
 				+ File.separator + "voltage.txt");
 
 		detectionFile = new File(mainStorageDir.getPath() + File.separator
 				+ _ts + File.separator + "color_raw.txt");
-
+		
+		if (testFile.exists()){
+			fileNum--;
+			builder.addPart("file[]", new FileBody(testFile));
+		}
+		if (detectionFile.exists()){
+			fileNum--;
+			builder.addPart("file[]", new FileBody(detectionFile));
+		}
+		
+		if(fileNum == 0){
+			httpPost.setEntity(builder.build());
+			return httpPost;
+		}
+		
+		imageFiles = new File[fileNum - PicNum];
+		picFiles = new File[PicNum];
+		
 		for (int i = 0; i < imageFiles.length; ++i)
 			imageFiles[i] = new File(mainStorageDir.getPath() + File.separator
 					+ _ts + File.separator + "IMG_" + _ts + "_" + (i + 1)
@@ -140,10 +156,6 @@ public class HttpPostGenerator {
 					+ _ts + File.separator + "PIC_" + _ts + "_" + (i)
 					+ ".sob");
 
-		if (testFile.exists())
-			builder.addPart("file[]", new FileBody(testFile));
-		if (detectionFile.exists())
-			builder.addPart("file[]", new FileBody(detectionFile));
 		for (int i = 0; i < imageFiles.length; ++i)
 			if (imageFiles[i].exists()){
 				builder.addPart("file[]", new FileBody(imageFiles[i]));
