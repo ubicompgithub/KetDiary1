@@ -121,7 +121,33 @@ public class DatabaseControl {
 			return testResult;
 		}
 	}
+	
+	public TestResult getLatestTestResultID() {
+		synchronized (sqlLock) {
+			db = dbHelper.getReadableDatabase();
+			String sql = "SELECT * FROM TestResult ORDER BY id DESC LIMIT 1";
+			Cursor cursor = db.rawQuery(sql, null);
+			if (!cursor.moveToFirst()) {
+				cursor.close();
+				db.close();
+				return new TestResult(0, 0, "ket_default", 0, 0, 0, 0);
+			}
 
+			int result = cursor.getInt(1);
+			String cassetteId = cursor.getString(2);
+			long ts = cursor.getLong(6);
+			int isPrime = cursor.getInt(8);
+			int isFilled= cursor.getInt(9);
+			int weeklyScore = cursor.getInt(10);
+			int score = cursor.getInt(11);
+			TestResult testResult = new TestResult(result, ts, cassetteId, isPrime, isFilled, weeklyScore, score);
+
+			cursor.close();
+			db.close();
+			return testResult;
+		}
+	}
+	
 	/**
 	 * This method is used for inserting a result detection
 	 * 
@@ -138,13 +164,16 @@ public class DatabaseControl {
 		synchronized (sqlLock) {
 
 			TestResult prev_data = getLatestTestResult();
-			int weeklyScore = prev_data.getWeeklyScore();
+			TestResult prevID_data = getLatestTestResultID();
+			int weeklyScore = prevID_data.getWeeklyScore();
+			if (prevID_data.getTv().getWeek() < data.getTv().getWeek())
+				weeklyScore = prev_data.getWeeklyScore();
 			if (prev_data.getTv().getWeek() < data.getTv().getWeek())
 				weeklyScore = 0;
-			int score = prev_data.getScore();
+			int score = prevID_data.getScore();
 			db = dbHelper.getWritableDatabase();
 			if (!update) {
-				boolean isPrime = !(data.isSameDay(prev_data));
+				boolean isPrime = !(data.isSameDay(prev_data) || data.isSameDay(prevID_data));
 				// add by Andy
 				int result = data.getResult();
 //				if(isPrime){

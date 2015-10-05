@@ -28,7 +28,9 @@ import com.ubicomp.ketdiary.data.file.MainStorage;
 import com.ubicomp.ketdiary.data.file.ReadDummyData;
 import com.ubicomp.ketdiary.data.structure.TestResult;
 import com.ubicomp.ketdiary.system.PreferenceControl;
+import com.ubicomp.ketdiary.system.check.StartDateCheck;
 import com.ubicomp.ketdiary.system.cleaner.Cleaner;
+import com.ubicomp.ketdiary.ui.CustomToast;
 import com.ubicomp.ketdiary.ui.CustomToastSmall;
 import com.ubicomp.ketdiary.data.db.DatabaseControl;
 import com.ubicomp.ketdiary.data.db.DatabaseRestoreControl;
@@ -471,7 +473,7 @@ public class PreSettingActivity extends Activity {
 		int isFilled = 0;
 		
 		TestResult testResult;
-		testResult = new TestResult(result, tv, cassette_id, isPrime, isFilled, 0, 0); 
+		testResult = new TestResult(result, tv, cassette_id, isFilled, isPrime, 0, 0); 
 		
 		DatabaseControl db = new DatabaseControl();
 		
@@ -499,7 +501,7 @@ public class PreSettingActivity extends Activity {
 			Log.d("File",e.toString());
 		}
 		
-		//加分
+		//加分		
 		Log.d(TAG,""+tv+" "+addScore);
 		
 		PreferenceControl.setPoint(addScore);
@@ -507,9 +509,31 @@ public class PreSettingActivity extends Activity {
 		
 		//
 		long lastTV = PreferenceControl.getLatestTestCompleteTime();
-		Log.d("GG", "Last:" + lastTV + "  tv:" + tv);
+		
 		if(tv > lastTV)
 			PreferenceControl.setLatestTestCompleteTime(tv);
+		
+		//bar位置
+		int addPos = 0;
+		if (addScore == 0 && result == 1){ // TestFail & get no credit 
+			CustomToast.generateToast(R.string.after_test_fail, -1);
+			//addPos = -1;
+			addPos = 0;
+		}
+		else if(result == 1){
+			CustomToast.generateToast(R.string.after_test_fail, addScore);
+			//addPos = -1;
+			addPos = 0;
+		}
+		else{
+			CustomToast.generateToast(R.string.after_test_pass, addScore);
+			//addPos = 1;
+			addPos = 2;
+		}
+		
+		if(StartDateCheck.afterStartDate())
+			PreferenceControl.setPosition(addPos);
+		
 		
 		CustomToastSmall.generateToast("新增成功");
 	}
@@ -536,8 +560,18 @@ public class PreSettingActivity extends Activity {
 			final int month =( (intDate % 10000 ) / 100 )- 1;
 			final int day = intDate % 100;
 	    	
+			Calendar rightNow = Calendar.getInstance();
+			int now_year = rightNow.get(Calendar.YEAR);
+			int now_month = rightNow.get(Calendar.MONTH) + 1;
+			int now_day = rightNow.get(Calendar.DAY_OF_MONTH);
+			long now_Date = now_year*10000 + now_month*100 + now_day;
+			
 	    	//check date or pass 
-	    	if(year > 10000 || (month > 12 || month < 0) || (day > 31 || day < 0) || (intTime < 0 || intTime > 3)){
+			if(now_Date <= llDate){
+				CustomToastSmall.generateToast("只限新增今天以前");
+	    		return;
+			}
+	    	if(year > 10000 || (month > 11 || month < 0) || (day > 31 || day < 0) || (intTime < 0 || intTime > 3)){
 	    		//Toast.makeText(this, "時間格式錯誤", Toast.LENGTH_SHORT).show();
 	    		CustomToastSmall.generateToast("時間格式錯誤");
 	    		return;
@@ -561,7 +595,6 @@ public class PreSettingActivity extends Activity {
 	    	if(result == 1)
 	    		mesg += "檢測 : 未通過\n";
 	    	
-	    	Log.d("GG", "jizz");
 	    	
 		    builder.setTitle("確定新增該事件?");
 		    builder.setMessage(mesg);
