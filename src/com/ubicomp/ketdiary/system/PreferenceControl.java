@@ -248,6 +248,8 @@ public class PreferenceControl {
 		int questionScore = db.getLatestQuestionTest().getScore();
 		int copingScore = db.getLatestCopingSkill().getScore();
 		
+		Log.i(TAG, "result: "+resultScore + "note: "+noteScore + "question: "+questionScore +"coping: " +copingScore);
+
 		int total_point = resultScore + noteScore + questionScore + copingScore;
 		return total_point;	
 		//return sp.getInt("Point", 0);
@@ -260,8 +262,7 @@ public class PreferenceControl {
 		edit.putInt("Point", point);
 //		if(point % Config.COUPON_CREDITS == 0)
 //			setCouponChange(true);
-		Log.i(TAG, "result: "+resultScore + "note: "+noteScore + "question: "+questionScore +"coping: " +copingScore);
-
+		
 		Log.d(TAG, "point: " + point);
 		edit.commit();
 	}
