@@ -215,7 +215,9 @@ public class AnalysisProsConsView extends StatisticPageView {
 			
 			if(debug){
 				int today_situation = PreferenceControl.getPosition();
+				int now_point = PreferenceControl.getPoint();
 				Toast.makeText(context, "Position:"+(today_situation-10), Toast.LENGTH_LONG).show();
+				Toast.makeText(context, "Point:"+ now_point, Toast.LENGTH_LONG).show();
 			}
 			
 			long curTime = System.currentTimeMillis();

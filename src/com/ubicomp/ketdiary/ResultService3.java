@@ -252,6 +252,7 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 		        			}
 		        	}
 		        	else if(picNum == 0){
+		        		
 		        		setTestFail("過曝照片未傳成功");
 		        	}
 	        	}
@@ -263,6 +264,9 @@ public class ResultService3 extends Service implements BluetoothListener, ColorD
 	        else if(state == DETECT_STATE){
 	        	
 	        	if(seconds <= 10 && minutes == 0 && !checkResultOnce){
+	        		if(picNum == 1){
+	        			setTestFail("無法獲得照片");
+	        		}
 	        		result2 = checkResult();
 	        		writeToColorRawFile("checkResult");
 	        		checkResultOnce = true;
